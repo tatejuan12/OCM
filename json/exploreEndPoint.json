@@ -1,0 +1,84 @@
+{
+    "lastLedgerSequence": "7657657587687",
+    "lastLedgerTime": "Seconds since Epoch",
+    "NFTs":[
+        {
+            "tokenID": "87634298643297832",
+            "nftType": "number 1 to 5",
+            "totalBids": "6",
+            "highestBid": "10",
+            "recentSell":"4",
+            "name": "Your Collection #1",
+            "image": "ipfs://NewUriToReplace/1.png",
+            "attributes": [
+                  {
+                    "trait": "body",
+                    "value": "colourName"
+                  },
+                  {
+                    "trait": "chin",
+                    "value": "colourName"
+                  },
+                  {
+                    "trait": "shadow",
+                    "value": "colourName"
+                  },
+                  {
+                    "trait": "fin",
+                    "value": "colourName"
+                  },
+                  {
+                    "trait": "eye",
+                    "value": "colourName"
+                  },
+                  {
+                    "trait": "tail",
+                    "value": "colourName"
+                  },
+                  {
+                    "trait": "outline",
+                    "value": "colourName"
+                  }
+            ]
+        },
+        {
+          "tokenID": "87634298643297832",
+          "nftType": "number 1 to 5",
+          "totalBids": "6",
+          "highestBid": "10",
+          "recentSell":"4",
+          "name": "Your Collection #1",
+          "image": "ipfs://NewUriToReplace/1.png",
+          "attributes": [
+                {
+                  "trait": "body",
+                  "value": "colourName"
+                },
+                {
+                  "trait": "chin",
+                  "value": "colourName"
+                },
+                {
+                  "trait": "shadow",
+                  "value": "colourName"
+                },
+                {
+                  "trait": "fin",
+                  "value": "colourName"
+                },
+                {
+                  "trait": "eye",
+                  "value": "colourName"
+                },
+                {
+                  "trait": "tail",
+                  "value": "colourName"
+                },
+                {
+                  "trait": "outline",
+                  "value": "colourName"
+                }
+          ]
+        } 
+    ]
+}
