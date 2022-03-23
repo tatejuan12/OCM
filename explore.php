@@ -21,9 +21,12 @@
     <link rel="stylesheet" href="assets/css/vendor/nice-select.css">
     <link rel="stylesheet" href="assets/css/plugins/feature.css">
     <link rel="stylesheet" href="assets/css/plugins/jquery-ui.min.css">
-
     <!-- Style css -->
     <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <?php require_once 'assets/required/jsonInitializer.php' ?>
 </head>
 
 <body class="template-color-1">
@@ -39,150 +42,15 @@
         </div>
     </div>
 
-    <!-- Start Header -->
-    <header class="rn-header haeder-default black-logo-version header--fixed header--sticky">
-        <div class="container">
-            <div class="header-inner">
-                <div class="header-left">
-                    <div class="logo-thumbnail logo-custom-css">
-                        <a class="logo-light" href="index.html"><img src="assets/images/logo/Logo-blue.png" alt="ocw-logo"></a>
-                        <a class="logo-dark" href="index.html"><img src="assets/images/logo/Logo-blue.png" alt="ocw-logo"></a>
-                    </div>
-                    <div class="mainmenu-wrapper">
-                        <nav id="sideNav" class="mainmenu-nav d-none d-xl-block">
-                            <!-- Start Mainmanu Nav -->
-                            <ul class="mainmenu">
-                                <li>
-                                    <a class="its_new" href="index.html">Home</a>
-                                </li>
-                                <li><a href="about.html">About</a>
-                                </li>
-                                <li>
-                                    <a class="its_new" href="explore-one.html">Explore</a>
-                                </li>
-                                <li><a href="contact.html">Contact</a></li>
-                            </ul>
-                            <!-- End Mainmanu Nav -->
-                        </nav>
-                    </div>
-                </div>
-                <div class="header-right">
-                    <div class="setting-option d-none d-lg-block">
-                        <form class="search-form-wrapper" action="#">
-                            <input type="search" placeholder="Search Here" aria-label="Search">
-                            <div class="search-icon">
-                                <button><i class="feather-search"></i></button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="setting-option rn-icon-list d-block d-lg-none">
-                        <div class="icon-box search-mobile-icon">
-                            <button><i class="feather-search"></i></button>
-                        </div>
-                        <form id="header-search-1" action="#" method="GET" class="large-mobile-blog-search">
-                            <div class="rn-search-mobile form-group">
-                                <button type="submit" class="search-button"><i class="feather-search"></i></button>
-                                <input type="text" placeholder="Search ...">
-                            </div>
-                        </form>
-                    </div>
+    <?php require_once 'sections/header.php' ?>
 
-                    <div class="setting-option header-btn rbt-site-header" id="rbt-site-header">
-                        <div class="icon-box">
-                            <a id="connectbtn" class="btn btn-primary-alta btn-small" href="connect.html">Wallet connect</a>
-                        </div>
-                    </div>
-
-                    <div class="setting-option rn-icon-list notification-badge">
-                        <div class="icon-box">
-                            <a href="activity.html"><i class="feather-bell"></i><span class="badge">6</span></a>
-                        </div>
-                    </div>
-
-                    <div class="header_admin" id="header_admin">
-                        <div class="setting-option rn-icon-list user-account">
-                            <div class="icon-box">
-                                <a href="author.html"><img src="assets/images/icons/boy-avater.png" alt="Images"></a>
-                                <div class="rn-dropdown">
-                                    <div class="rn-inner-top">
-                                        <h4 class="title"><a href="product-details.html">Christopher William</a></h4>
-                                        <span><a href="#">Set Display Name</a></span>
-                                    </div>
-                                    <div class="rn-product-inner">
-                                        <ul class="product-list">
-                                            <li class="single-product-list">
-                                                <div class="thumbnail">
-                                                    <a href="product-details.html"><img src="assets/images/portfolio/portfolio-07.jpg" alt="Nft Product Images"></a>
-                                                </div>
-                                                <div class="content">
-                                                    <h6 class="title"><a href="product-details.html">Balance</a></h6>
-                                                    <span class="price">25 ETH</span>
-                                                </div>
-                                                <div class="button"></div>
-                                            </li>
-                                            <li class="single-product-list">
-                                                <div class="thumbnail">
-                                                    <a href="product-details.html"><img src="assets/images/portfolio/portfolio-01.jpg" alt="Nft Product Images"></a>
-                                                </div>
-                                                <div class="content">
-                                                    <h6 class="title"><a href="product-details.html">Balance</a></h6>
-                                                    <span class="price">25 ETH</span>
-                                                </div>
-                                                <div class="button"></div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="add-fund-button mt--20 pb--20">
-                                        <a class="btn btn-primary-alta w-100" href="connect.html">Add Your More Funds</a>
-                                    </div>
-                                    <ul class="list-inner">
-                                        <li><a href="author.html">My Profile</a></li>
-                                        <li><a href="edit-profile.html">Edit Profile</a></li>
-                                        <li><a href="connect.html">Manage funds</a></li>
-                                        <li><a href="login.html">Sign Out</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="setting-option mobile-menu-bar d-block d-xl-none">
-                        <div class="hamberger">
-                            <button class="hamberger-button">
-                                <i class="feather-menu"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div id="my_switcher" class="my_switcher setting-option">
-                        <ul>
-                            <li>
-                                <a href="javascript: void(0);" data-theme="light" class="setColor light">
-                                    <img class="sun-image" src="assets/images/icons/sun-01.svg" alt="Sun images">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript: void(0);" data-theme="dark" class="setColor dark">
-                                    <img class="Victor Image" src="assets/images/icons/vector.svg" alt="Vector Images">
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
-
-                </div>
-            </div>
-        </div>
-    </header>
-    <!-- End Header Area -->
 
     <div class="popup-mobile-menu">
         <div class="inner">
             <div class="header-top">
                 <div class="logo logo-custom-css">
-                    <a class="logo-light" href="index.html"><img src="assets/images/logo/logo-white.png" alt="nft-logo"></a>
-                    <a class="logo-dark" href="index.html"><img src="assets/images/logo/logo-dark.png" alt="nft-logo"></a>
+                    <a class="logo-light" href="index.php"><img src="assets/images/logo/logo-white.png" alt="nft-logo"></a>
+                    <a class="logo-dark" href="index.php"><img src="assets/images/logo/logo-dark.png" alt="nft-logo"></a>
                 </div>
                 <div class="close-menu">
                     <button class="close-button">
@@ -196,7 +64,7 @@
                     <li class="has-droupdown">
                         <a class="nav-link its_new" href="#">Home</a>
                         <ul class="submenu">
-                            <li><a href="index.html">Home page One <i class="feather-home"></i></a></li>
+                            <li><a href="index.php">Home page One <i class="feather-home"></i></a></li>
                             <li><a href="index-two.html">Home page Two<i class="feather-home"></i></a></li>
                             <li><a href="index-three.html">Home page Three<i class="feather-home"></i></a></li>
                             <li><a href="index-four.html">Home page Four<i class="feather-home"></i></a></li>
@@ -212,7 +80,7 @@
                     <li class="has-droupdown">
                         <a class="nav-link its_new" href="#">Explore</a>
                         <ul class="submenu">
-                            <li><a href="explore-one.html">Explore Filter<i class="feather-fast-forward"></i></a></li>
+                            <li><a href="explore.php">Explore Filter<i class="feather-fast-forward"></i></a></li>
                             <li><a href="explore-two.html">Explore Isotop<i class="feather-fast-forward"></i></a></li>
                             <li><a href="explore-three.html">Explore Carousel<i class="feather-fast-forward"></i></a></li>
                             <li><a href="explore-four.html">Explore Simple<i class="feather-fast-forward"></i></a></li>
@@ -303,7 +171,7 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-12">
                     <ul class="breadcrumb-list">
-                        <li class="item"><a href="index.html">Home</a></li>
+                        <li class="item"><a href="index.php">Home</a></li>
                         <li class="separator"><i class="feather-chevron-right"></i></li>
                         <li class="item current">Explore With Filter</li>
                     </ul>
@@ -876,7 +744,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- end single product -->
             </div>
         </div>
     </div>
@@ -924,141 +791,8 @@
             </div>
         </div>
     </div>
-    <!-- Start Footer Area -->
-    <div class="rn-footer-one rn-section-gap bg-color--1 mt--100 mt_md--80 mt_sm--80">
-        <div class="container">
-            <div class="row gx-5">
-                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                    <div class="widget-content-wrapper">
-                        <div class="footer-left">
-                            <div class="logo-thumbnail logo-custom-css">
-                                <a class="logo-light" href="index.html"><img src="assets/images/logo/logo-white.png" alt="nft-logo"></a>
-                                <a class="logo-dark" href="index.html"><img src="assets/images/logo/logo-dark.png" alt="nft-logo"></a>
-                            </div>
-                            <p class="rn-footer-describe">
-                                Created with the collaboration of over 60 of the world's best Nuron Artists.
-                            </p>
-                        </div>
-                        <div class="widget-bottom mt--40 pt--40">
-                            <h6 class="title">Get The Latest Nuron Updates </h6>
-                            <div class="input-group">
-                                <input type="text" class="form-control bg-color--2" placeholder="Your username" aria-label="Recipient's username">
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary-alta btn-outline-secondary" type="button">Subscribe</button>
-                                </div>
-                            </div>
-                            <div class="newsletter-dsc">
-                                <p>Email is safe. We don't spam.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col-lg-3 col-md-6 col-sm-6 col-12 mt_mobile--40">
-                    <div class="footer-widget widget-quicklink">
-                        <h6 class="widget-title">Nuron</h6>
-                        <ul class="footer-list-one">
-                            <li class="single-list"><a href="#">Protocol Explore</a></li>
-                            <li class="single-list"><a href="#">System Token</a></li>
-                            <li class="single-list"><a href="#">Otimize Time</a></li>
-                            <li class="single-list"><a href="#">Visual Checking</a></li>
-                            <li class="single-list"><a href="#">Fadeup System</a></li>
-                            <li class="single-list"><a href="#">Activity Log</a></li>
-                            <li class="single-list"><a href="#">System Auto Since</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-6 col-sm-6 col-12 mt_md--40 mt_sm--40">
-                    <div class="footer-widget widget-information">
-                        <h6 class="widget-title">Information</h6>
-                        <ul class="footer-list-one">
-                            <li class="single-list"><a href="#">Market Explore</a></li>
-                            <li class="single-list"><a href="#">Ready Token</a></li>
-                            <li class="single-list"><a href="#">Main Option</a></li>
-                            <li class="single-list"><a href="#">Product Checking</a></li>
-                            <li class="single-list"><a href="blog.html">Blog Grid</a></li>
-                            <li class="single-list"><a href="about.html">About Us</a></li>
-                            <li class="single-list"><a href="#">Fix Bug </a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-6 col-sm-6 col-12 mt_md--40 mt_sm--40">
-                    <div class="footer-widget">
-                        <h6 class="widget-title">Recent Sold Out</h6>
-                        <ul class="footer-recent-post">
-                            <li class="recent-post">
-                                <div class="thumbnail">
-                                    <a href="product-details.html">
-                                        <img src="assets/images/portfolio/portfolio-01.jpg" alt="Product Images">
-                                    </a>
-                                </div>
-                                <div class="content">
-                                    <h6 class="title"><a href="product-details.html">#21 The Wonder</a></h6>
-                                    <p>Highest bid 1/20</p>
-                                    <span class="price">0.244wETH</span>
-                                </div>
-                            </li>
-                            <li class="recent-post">
-                                <div class="thumbnail">
-                                    <a href="product-details.html">
-                                        <img src="assets/images/portfolio/portfolio-02.jpg" alt="Product Images">
-                                    </a>
-                                </div>
-                                <div class="content">
-                                    <h6 class="title"><a href="product-details.html">Diamond Dog</a></h6>
-                                    <p>Highest bid 1/20</p>
-                                    <span class="price">0.022wETH</span>
-                                </div>
-                            </li>
-                            <li class="recent-post">
-                                <div class="thumbnail">
-                                    <a href="product-details.html">
-                                        <img src="assets/images/portfolio/portfolio-03.jpg" alt="Product Images">
-                                    </a>
-                                </div>
-                                <div class="content">
-                                    <h6 class="title"><a href="product-details.html">Morgan11</a></h6>
-                                    <p>Highest bid 1/20</p>
-                                    <span class="price">0.892wETH</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Footer Area -->
-    <!-- Start Footer Area -->
-    <div class="copy-right-one ptb--20 bg-color--1">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 col-md-12 col-sm-12">
-                    <div class="copyright-left">
-                        <span>©2022 Nuron, Inc. All rights reserved.</span>
-                        <ul class="privacy">
-                            <li><a href="terms-condition.html">Terms</a></li>
-                            <li><a href="privacy-policy.html">Privacy Policy</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12 col-sm-12">
-                    <div class="copyright-right">
-                        <ul class="social-copyright">
-                            <li><a href="#"><i data-feather="facebook"></i></a></li>
-                            <li><a href="#"><i data-feather="twitter"></i></a></li>
-                            <li><a href="#"><i data-feather="instagram"></i></a></li>
-                            <li><a href="#"><i data-feather="linkedin"></i></a></li>
-                            <li><a href="#"><i data-feather="mail"></i></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Footer Area -->
+    <?php require_once 'sections/footer.php' ?>
     <div class="mouse-cursor cursor-outer"></div>
     <div class="mouse-cursor cursor-inner"></div>
     <!-- Start Top To Bottom Area  -->
