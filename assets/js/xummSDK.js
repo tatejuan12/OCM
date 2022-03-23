@@ -1,11 +1,19 @@
 const { XummSdk } = require("xumm-sdk");
 const Sdk = new XummSdk(
-  "d4d77457-1f7f-4c34-9665-6b8aa683ac2d",
-  "2bce5e29-6550-4c7a-abf4-9b19cb398cbe"
+  "621ce94c-d791-48ec-aa47-eeaf510b8d55",
+  "64c3bddb-ede6-41f9-9c60-7f43eca03bc0"
 );
 
 const main = async () => {
-  console.log(`Hi! This is where we'll be writing some code`);
+  const request = {
+    TransactionType: "Payment",
+    Destination: "rNsbajT8qaLJ5WiPHR92uATzybkcSSA3h4",
+    Amount: "500",
+  };
+  const payload = await Sdk.payload.createAndSubscribe(request, (event) => {
+    console.log(event.data);
+  });
+  console.log(payload);
 };
 
 main();
