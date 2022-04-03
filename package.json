@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "verify-xrpl-signature": "^0.4.0",
     "xumm-sdk": "^1.1.3"
   }
 }

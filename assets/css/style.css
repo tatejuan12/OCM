@@ -23112,3 +23112,15 @@ body.active-light-mode {
   background: #504b7852;
 }
 /*# sourceMappingURL=../maps/style.css.map */
+
+/* Custom CSS */
+.hidden {
+  display: none;
+}
+
+#xumm-signin-qr {
+  position: absolute;
+  top: 100%;
+  height: 200px;
+  text-align: center;
+}

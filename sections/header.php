@@ -51,6 +51,7 @@
                             <a id="xummSignin" onclick="xummSignin()" class="btn btn-primary-alta btn-small">Wallet connect</a>
                         </div>
                     </div>
+                    <img id="xumm-signin-qr" class="hidden" src="">
 
                     <div class="setting-option mobile-menu-bar d-block d-xl-none">
                         <div class="hamberger">
