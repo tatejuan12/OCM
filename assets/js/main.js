@@ -804,7 +804,7 @@ function xummSignin() {
       console.log(result);
       $.ajax({
         type: "POST",
-        url: "http://127.0.0.1:3001/sign-in",
+        url: "http://127.0.0.1:3001/subscription",
         data: result,
         success: function (resulty) {
           console.log(resulty);

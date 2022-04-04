@@ -26,13 +26,14 @@ app.post("/payload", async (req, res) => {
   res.send(payload);
 });
 app.post("/subscription", async (req, res) => {
-  // const subs = await getSubscription(req.body)
-  const subscription = await sdk.payload.subscribe(req.body, (event) => {
-    console.log(event.data);
-    if (event.payload.meta.resolved) {
-      if (event.payload.meta.signed) res.send(subscription);
-      else res.send("Transaction was cancelled or expired!");
-      event.resolve;
+  await sdk.payload.subscribe(req.body, (event) => {
+    console.log(event.data.signed);
+    if (event.data.signed) {
+      res.send(event);
+      event.resolve();
+    } else if (event.data.signed == false) {
+      res.send("Transaction was cancelled or expired!");
+      event.resolve();
     }
   });
 });
@@ -43,19 +44,6 @@ app.post("/sign-in-payload", async (req, res) => {
   };
   const payload = await getPayload(request);
   res.send(payload);
-});
-
-app.post("/sign-in", async (req, res) => {
-  const subscription = await sdk.payload.subscribe(req.body, (event) => {
-    console.log(event.data.signed);
-    if (event.data.signed) {
-      res.send(event);
-      return true;
-    } else if (event.data.signed == false) {
-      res.send("Transaction was cancelled or expired!");
-      return true;
-    }
-  });
 });
 
 app.listen(3001, () => {
