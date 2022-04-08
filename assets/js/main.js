@@ -820,13 +820,13 @@ function executeTransaction() {
 function xummSignin() {
   $.ajax({
     type: "POST",
-    url: "http://127.0.0.1:3001/sign-in-payload",
+    url: "http://172.105.169.145:3001/sign-in-payload",
     success: function (result) {
       setQrSignin(result.refs.qr_png);
       console.log(result);
       $.ajax({
         type: "POST",
-        url: "http://127.0.0.1:3001/sign-in-subscription",
+        url: "http://172.105.169.145:3001/sign-in-subscription",
         data: result,
         success: function (resulty) {
           console.log(resulty);

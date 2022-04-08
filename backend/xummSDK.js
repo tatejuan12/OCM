@@ -19,8 +19,6 @@ const sdk = new XummSdk(
   "621ce94c-d791-48ec-aa47-eeaf510b8d55",
   "5a809cea-021f-4bc9-aec5-9286508dd44d"
 );
-var router = express.Router();
-
 const app = express();
 app.use(
   cors({
@@ -38,7 +36,6 @@ app.use(
     cookie: { secure: false, maxAge: 1000 * 60 * 60 * 1 },
   })
 );
-app.use(router);
 app.post("/payload", async (req, res) => {
   const payload = await getPayload(req.body);
 
@@ -77,7 +74,7 @@ app.post("/sign-in-subscription", async (req, res) => {
         console.log("User signed in: " + event.data.payload_uuidv4);
         sdk.payload.get(event.data.payload_uuidv4).then((data) => {
           console.log("The data is");
-          cookie.console.log(data);
+          console.log(data);
           return true;
         });
         res.send(event.data);
@@ -98,11 +95,10 @@ app.post("/sign-in-payload", async (req, res) => {
   const payload = await getPayload(request);
   res.send(payload);
 });
-router.get("/", (req, res) => {
-  res.render("/public/404.html");
+app.get("/", (req, res) => {
+  res.redirect("http://172.105.169.145:3001/");
 });
-
-app.listen(3001, () => {
+app.listen(80, () => {
   console.log("Server listening ");
 });
 
