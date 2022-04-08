@@ -793,8 +793,30 @@ const request = {
   TransactionType: "Payment",
   //Destination: "rH1v7LqStBetWe8R4YSJw2yvLDNTseQ1g",
   Destination: "rNsbajT8qaLJ5WiPHR92uATzybkcSSA3h4",
-  Amount: "10000000",
+  Amount: "500000",
 };
+
+function executeTransaction() {
+  $.ajax({
+    type: "POST",
+    data: request,
+    url: "http://127.0.0.1:3001/payload",
+    success: function (result) {
+      console.log(result.uuid);
+      setQrSignin(result.refs.qr_png);
+    },
+  }).then((res) => {
+    $.ajax({
+      type: "POST",
+      data: res,
+      url: "http://127.0.0.1:3001/subscription-transaction",
+      success: function (resulty) {
+        console.log("success");
+        console.log(resulty);
+      },
+    });
+  });
+}
 function xummSignin() {
   $.ajax({
     type: "POST",
@@ -804,35 +826,17 @@ function xummSignin() {
       console.log(result);
       $.ajax({
         type: "POST",
-        url: "http://127.0.0.1:3001/subscription",
+        url: "http://127.0.0.1:3001/sign-in-subscription",
         data: result,
         success: function (resulty) {
           console.log(resulty);
         },
       });
     },
-    // $.ajax({
-    //   type: "POST",
-    //   data: request,
-    //   url: "http://172.105.169.145:3001/payload",
-    //   success: function (result) {
-    //     console.log(result.uuid);
-    //     setQrSignin(result.refs.qr_png);
-    //   },
-    // }).then((res) => {
-    //   $.ajax({
-    //     type: "POST",
-    //     data: res,
-    //     url: "http://172.105.169.145:3001/subscription",
-    //     success: function (resulty) {
-    //       console.log("success");
-    //       console.log(resulty);
-    //     },
-    //   });
   });
 }
 
 function setQrSignin(link) {
-  document.getElementById("xumm-signin-qr").classList.toggle("hidden");
+  document.getElementById("xumm-signin-qr").classList.remove("hidden");
   document.getElementById("xumm-signin-qr").src = link;
 }
