@@ -1,13 +1,14 @@
 const express = require("express");
 const res = require("express/lib/response");
 const bodyParser = require("body-parser");
-var path = require("path");
+const path = require("path");
 const session = require("express-session");
 const fs = require("fs");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const logger = require("express-logger");
 // const verifySignature = require("verify-xrpl-signature").verifySignature;
 const { TxData } = require("xrpl-txdata");
+const useragent = require("express-useragent");
 
 const verifySignature = new TxData();
 // const wildcardExpress = require("@wildcard-api/server/express");
@@ -46,6 +47,7 @@ app.use(
     store: mongoStore,
   })
 );
+app.use(useragent.express());
 app.use(defaultLocals); //Custom made middleware, sends locals to ejs without having to send it manually
 app.post("/payload", async (req, res) => {
   const payload = await getPayload(req.body);
@@ -88,7 +90,9 @@ app.post("/sign-in-subscription", async (req, res) => {
           console.log(data);
           req.session.login = true;
           req.session.wallet = data.response.account;
-          res.render(req.url);
+          req.session.user_token = data.application.issued_user_token;
+          res.send(true);
+          event.resolve;
           return true;
         });
       } else if (event.data.signed == false) {
@@ -130,6 +134,10 @@ app.get("/about", (req, res) => {
 app.get("/contact", (req, res) => {
   res.render("views/contact");
 });
+app.get("/logout", (req, res) => {
+  req.session.destroy();
+  res.redirect("/");
+});
 app.listen(80, () => {
   console.log("Server2 listening successfuly");
 });
@@ -140,5 +148,7 @@ function checkViews(req) {
 }
 function defaultLocals(req, res, next) {
   res.locals.login = req.session.login;
+  res.locals.wallet = req.session.wallet;
+  console.log(req.useragent);
   next();
 }

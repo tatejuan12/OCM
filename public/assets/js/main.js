@@ -830,6 +830,7 @@ function xummSignin() {
         data: result,
         success: function (resulty) {
           console.log(resulty);
+          location.reload();
         },
       });
     },

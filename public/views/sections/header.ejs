@@ -47,9 +47,11 @@
                 </div>
 
                 <div class="setting-option header-btn rbt-site-header" id="rbt-site-header">
-                    <div class="icon-box">
+                    <% if (!login) { %>
                         <a id="xummSignin" onclick="xummSignin()" class="btn btn-primary-alta btn-small">Wallet connect</a>
-                    </div>
+                        <% } else { %>
+                        <a href="/logout" id="logout"  class="btn btn-primary-alta btn-small">Log out</a>
+                        <% } %>
                 </div>
                 <img id="xumm-signin-qr" class="hidden" src="">
 
