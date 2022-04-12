@@ -1,11 +1,11 @@
 const express = require("express");
 const res = require("express/lib/response");
 const bodyParser = require("body-parser");
-const http = require("http");
 var path = require("path");
 const session = require("express-session");
-var MongoDBStore = require("connect-mongodb-session")(session);
-
+const fs = require("fs");
+const MongoDBStore = require("connect-mongodb-session")(session);
+const logger = require("express-logger");
 // const verifySignature = require("verify-xrpl-signature").verifySignature;
 const { TxData } = require("xrpl-txdata");
 
@@ -32,10 +32,10 @@ app.use(
 );
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-app.set("view engine", "pug");
+app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/public"));
 app.use(express.static(__dirname + "/public"));
-
+app.use(logger({ path: __dirname + "/logs/logs.log" }));
 app.use(
   session({
     secret: "some secret",
@@ -46,7 +46,7 @@ app.use(
     store: mongoStore,
   })
 );
-
+app.use(defaultLocals); //Custom made middleware, sends locals to ejs without having to send it manually
 app.post("/payload", async (req, res) => {
   const payload = await getPayload(req.body);
 
@@ -86,7 +86,9 @@ app.post("/sign-in-subscription", async (req, res) => {
         sdk.payload.get(event.data.payload_uuidv4).then((data) => {
           console.log("The data is");
           console.log(data);
-          res.send(data);
+          req.session.login = true;
+          req.session.wallet = data.response.account;
+          res.render(req.url);
           return true;
         });
       } else if (event.data.signed == false) {
@@ -122,6 +124,12 @@ app.get("/", (req, res) => {
 app.get("/explore", (req, res) => {
   res.render("views/explore");
 });
+app.get("/about", (req, res) => {
+  res.render("views/about");
+});
+app.get("/contact", (req, res) => {
+  res.render("views/contact");
+});
 app.listen(80, () => {
   console.log("Server2 listening successfuly");
 });
@@ -129,4 +137,8 @@ app.listen(80, () => {
 function checkViews(req) {
   if (!req.session.views) req.session.views = 1;
   else req.session.views += 1;
+}
+function defaultLocals(req, res, next) {
+  res.locals.login = req.session.login;
+  next();
 }

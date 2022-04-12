@@ -149,6 +149,7 @@ body {
   font-weight: var(--p-regular);
   position: relative;
   background: var(--background-color-2);
+  z-index: -1;
 }
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
   body {
