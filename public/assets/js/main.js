@@ -817,13 +817,22 @@ function executeTransaction() {
     });
   });
 }
-function xummSignin() {
+function xummSignin(mobile) {
   $.ajax({
     type: "POST",
     url: "/sign-in-payload",
     success: function (result) {
-      setQrSignin(result.refs.qr_png);
-      console.log(result);
+      console.log(mobile);
+      if (mobile == "false") {
+        console.log("1 runs");
+        setQrSignin(result.refs.qr_png);
+      }
+      if (mobile == "true") {
+        console.log("2 runs");
+        var mobileLink = result.next.always + "/deeplink";
+        mobileLink = mobileLink.replace("https", "xumm");
+        window.open(mobileLink, "location=yes");
+      }
       $.ajax({
         type: "POST",
         url: "/sign-in-subscription",
@@ -831,6 +840,9 @@ function xummSignin() {
         success: function (resulty) {
           console.log(resulty);
           location.reload();
+        },
+        error: function (resulty) {
+          console.warn("Sign in expired, failed or was cancelled.");
         },
       });
     },

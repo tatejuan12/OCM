@@ -82,7 +82,7 @@ app.post("/sign-in-subscription", async (req, res) => {
   var subscription = false;
   try {
     subscription = await sdk.payload.subscribe(req.body, (event) => {
-      console.log(event.data);
+      // console.log(event.data);
       if (event.data.signed) {
         console.log("User signed in: " + event.data.payload_uuidv4);
         sdk.payload.get(event.data.payload_uuidv4).then((data) => {
@@ -96,23 +96,25 @@ app.post("/sign-in-subscription", async (req, res) => {
           return true;
         });
       } else if (event.data.signed == false) {
-        res.send("Transaction was cancelled or expired!");
+        res.status(401).send(false);
         return true;
       }
     });
   } catch (error) {
     console.error("There was an error with the payload: \n" + error);
   }
-  console.log(subscription);
 });
 app.post("/sign-in-payload", async (req, res) => {
   const request = {
     TransactionType: "SignIn",
   };
   const payload = await getPayload(request);
+
   res.send(payload);
 });
-
+app.get("/test", (req, res) => {
+  res.redirect("xumm://xumm.app/sign/d491ffb5-7959-4cca-82d5-7e55bd5f3b06");
+});
 function getPayload(request) {
   const payload = sdk.payload.create(request);
 
@@ -122,7 +124,6 @@ function getPayload(request) {
 app.get("/", (req, res) => {
   console.log(req.url);
   checkViews(req);
-  req.session.save;
   res.render("views/index");
 });
 app.get("/explore", (req, res) => {
@@ -149,6 +150,6 @@ function checkViews(req) {
 function defaultLocals(req, res, next) {
   res.locals.login = req.session.login;
   res.locals.wallet = req.session.wallet;
-  console.log(req.useragent);
+  res.locals.mobile = req.useragent.isMobile;
   next();
 }
