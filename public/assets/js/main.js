@@ -822,16 +822,11 @@ function xummSignin(mobile) {
     type: "POST",
     url: "/sign-in-payload",
     success: function (result) {
-      console.log(mobile);
       if (mobile == "false") {
-        console.log("1 runs");
-        setQrSignin(result.refs.qr_png);
+        window.open(result.next.always);
       }
       if (mobile == "true") {
-        console.log("2 runs");
-        var mobileLink = result.next.always + "/deeplink";
-        mobileLink = mobileLink.replace("https", "xumm");
-        window.open(mobileLink, "location=yes");
+        window.location.href = result.next.always;
       }
       $.ajax({
         type: "POST",
@@ -847,9 +842,4 @@ function xummSignin(mobile) {
       });
     },
   });
-}
-
-function setQrSignin(link) {
-  document.getElementById("xumm-signin-qr").classList.remove("hidden");
-  document.getElementById("xumm-signin-qr").src = link;
 }

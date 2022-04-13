@@ -33,10 +33,10 @@ app.use(
 );
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "/public"));
-app.use(express.static(__dirname + "/public"));
-app.use(logger({ path: __dirname + "/logs/logs.log" }));
+app.set("view engine", "ejs"); // Setting rendering agent to ejs
+app.set("views", path.join(__dirname, "/public")); // Makes views for rendering the public dir
+app.use(express.static(__dirname + "/public")); // Essential so JS and CSS is acccessible by requests
+app.use(logger({ path: __dirname + "/logs/logs.log" })); // Logs data, every connection will log browser info and request url
 app.use(
   session({
     secret: "some secret",
@@ -46,8 +46,8 @@ app.use(
     cookie: { secure: false, maxAge: 1000 * 60 * 60 * 1 },
     store: mongoStore,
   })
-);
-app.use(useragent.express());
+); // Sets the use of cookies
+app.use(useragent.express()); // For browser data, like if it is mobile or not
 app.use(defaultLocals); //Custom made middleware, sends locals to ejs without having to send it manually
 app.post("/payload", async (req, res) => {
   const payload = await getPayload(req.body);
@@ -82,16 +82,13 @@ app.post("/sign-in-subscription", async (req, res) => {
   var subscription = false;
   try {
     subscription = await sdk.payload.subscribe(req.body, (event) => {
-      // console.log(event.data);
       if (event.data.signed) {
         console.log("User signed in: " + event.data.payload_uuidv4);
         sdk.payload.get(event.data.payload_uuidv4).then((data) => {
-          console.log("The data is");
-          console.log(data);
           req.session.login = true;
           req.session.wallet = data.response.account;
           req.session.user_token = data.application.issued_user_token;
-          res.send(true);
+          res.result(200).send(true);
           event.resolve;
           return true;
         });
@@ -106,14 +103,20 @@ app.post("/sign-in-subscription", async (req, res) => {
 });
 app.post("/sign-in-payload", async (req, res) => {
   const request = {
-    TransactionType: "SignIn",
+    options: {
+      submit: false,
+      expire: 240,
+      return_url: {
+        app: "http://172.105.169.145",
+      },
+    },
+    txjson: {
+      TransactionType: "SignIn",
+    },
   };
   const payload = await getPayload(request);
-
+  console.log(payload);
   res.send(payload);
-});
-app.get("/test", (req, res) => {
-  res.redirect("xumm://xumm.app/sign/d491ffb5-7959-4cca-82d5-7e55bd5f3b06");
 });
 function getPayload(request) {
   const payload = sdk.payload.create(request);

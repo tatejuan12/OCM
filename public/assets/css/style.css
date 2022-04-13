@@ -23118,10 +23118,3 @@ body.active-light-mode {
 .hidden {
   display: none;
 }
-
-#xumm-signin-qr {
-  position: absolute;
-  top: 100%;
-  height: 200px;
-  text-align: center;
-}
