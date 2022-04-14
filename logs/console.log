@@ -1,1 +1,83 @@
+nice!
 Server2 listening successfuly
+{
+  _id: new ObjectId("6253731fca516e68da8a7e6b"),
+  issuer: 'rJXU7rDx9rQEZK4ZYk6hhmtUzETP37GhBH',
+  tokenID: '00080000C030302B96AF4535D488B846166EB6822BBF146E0000099A00000000',
+  burnt: { status: false, txID: '', time: '' },
+  buyOffers: [],
+  currentOwner: 'rJXU7rDx9rQEZK4ZYk6hhmtUzETP37GhBH',
+  flags: 8,
+  httpsImage: 'https://ipfs.onchainwhales.net/ipfs/QmVjxVRFP9amqWcoEQGv6zDEX6G4ZZsoagPCbrukMDohtP/1_1.png',
+  httpsURI: 'https://ipfs.onchainwhales.net/ipfs/QmYq9kdekU9ZXMaDMRFdZs8SXPXNnQ23KacGcmwXC8jdvt/1_1.json',
+  nftSerial: 0,
+  sellHistory: [],
+  sellOffers: [],
+  taxon: 1,
+  timeOfUpdate: 1649659761947,
+  uri: 'ipfs://QmYq9kdekU9ZXMaDMRFdZs8SXPXNnQ23KacGcmwXC8jdvt/1_1.json',
+  uriMetadata: {
+    name: 'Original Whale #1, Card #1 TEST',
+    description: 'Yaribel the Whale \n' +
+      '\n' +
+      'Customise · Digitise · Equalise \n' +
+      'OnChain Whales NFTs, have created an NFT family, where users can express their creativity in an immutable form. Developing a system where investors determine the aesthetics and value of NFT art, bringing forward a new era of decentralisation. \n' +
+      'This excitement and individualism is also rewarded with bountiful utility, visit the website to learn more. \n' +
+      '\n' +
+      'Investors may opt to burn any combination of their collection to redeem a complete NFToken that mimics their design. Creating a deflationary collection of NFTs, that are redeemed for unique, holder created, artwork. \n' +
+      '\n' +
+      'Beauty is in the eye of the beholder, and you have a chance to make your beauty. \n' +
+      '\n' +
+      '**NONE OF THESE IMAGES WILL EVER BE SOLD OR RETAIN VALUE**',
+    image: 'ipfs://QmVjxVRFP9amqWcoEQGv6zDEX6G4ZZsoagPCbrukMDohtP/1_1.png',
+    edition: 1,
+    date: 1637713412775,
+    external_url: 'https://onchainwhales.net/',
+    attributes: [ [Object], [Object], [Object], [Object], [Object], [Object] ],
+    compiler: 'OnChain Whales',
+    collection: { name: 'Original OnChain Whale Cards', family: 'OnChain Whales' }
+  }
+}
+(node:2371) [DEP0066] DeprecationWarning: OutgoingMessage.prototype._headers is deprecated
+/
+/
+/
+{
+  uuid: 'eb0f7339-c828-49f9-a42e-6633b9f39463',
+  next: {
+    always: 'https://xumm.app/sign/eb0f7339-c828-49f9-a42e-6633b9f39463'
+  },
+  refs: {
+    qr_png: 'https://xumm.app/sign/eb0f7339-c828-49f9-a42e-6633b9f39463_q.png',
+    qr_matrix: 'https://xumm.app/sign/eb0f7339-c828-49f9-a42e-6633b9f39463_q.json',
+    qr_uri_quality_opts: [ 'm', 'q', 'h' ],
+    websocket_status: 'wss://xumm.app/sign/eb0f7339-c828-49f9-a42e-6633b9f39463'
+  },
+  pushed: false
+}
+User signed in: eb0f7339-c828-49f9-a42e-6633b9f39463
+/
+/
+/
+{
+  uuid: 'e1398575-9687-4244-9fed-944460d3876f',
+  next: {
+    always: 'https://xumm.app/sign/e1398575-9687-4244-9fed-944460d3876f'
+  },
+  refs: {
+    qr_png: 'https://xumm.app/sign/e1398575-9687-4244-9fed-944460d3876f_q.png',
+    qr_matrix: 'https://xumm.app/sign/e1398575-9687-4244-9fed-944460d3876f_q.json',
+    qr_uri_quality_opts: [ 'm', 'q', 'h' ],
+    websocket_status: 'wss://xumm.app/sign/e1398575-9687-4244-9fed-944460d3876f'
+  },
+  pushed: false
+}
+User signed in: e1398575-9687-4244-9fed-944460d3876f
+/
+/
+/
+/
+/
+/
+/
+/

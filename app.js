@@ -9,6 +9,7 @@ const logger = require("express-logger");
 // const verifySignature = require("verify-xrpl-signature").verifySignature;
 const { TxData } = require("xrpl-txdata");
 const useragent = require("express-useragent");
+const mongoClient = require("./mongo.js");
 
 const verifySignature = new TxData();
 // const wildcardExpress = require("@wildcard-api/server/express");
@@ -20,11 +21,13 @@ const sdk = new XummSdk(
   "621ce94c-d791-48ec-aa47-eeaf510b8d55",
   "5a809cea-021f-4bc9-aec5-9286508dd44d"
 );
-var mongoStore = new MongoDBStore({
+mongoClient.query.getNFT().then((data) => {
+  console.log(data);
+});
+const mongoStore = new MongoDBStore({
   uri: "mongodb+srv://ocw:9T6YNSUEh61zgCB6@ocw-test.jgpcr.mongodb.net/NFT-Devnet?retryWrites=true&w=majority",
   collection: "Sessions",
 });
-
 const app = express();
 app.use(
   cors({
@@ -88,7 +91,7 @@ app.post("/sign-in-subscription", async (req, res) => {
           req.session.login = true;
           req.session.wallet = data.response.account;
           req.session.user_token = data.application.issued_user_token;
-          res.result(200).send(true);
+          res.status(200).send(true);
           event.resolve;
           return true;
         });
