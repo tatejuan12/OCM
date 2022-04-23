@@ -21,9 +21,11 @@ const sdk = new XummSdk(
   "621ce94c-d791-48ec-aa47-eeaf510b8d55",
   "5a809cea-021f-4bc9-aec5-9286508dd44d"
 );
-mongoClient.query.getNFT().then((data) => {
-  console.log(data);
-});
+mongoClient.query
+  .getNFT("00080000C030302B96AF4535D488B846166EB6822BBF146E0000099A00000000")
+  .then((nft) => {
+    console.log(nft.issuer);
+  });
 const mongoStore = new MongoDBStore({
   uri: "mongodb+srv://ocw:9T6YNSUEh61zgCB6@ocw-test.jgpcr.mongodb.net/NFT-Devnet?retryWrites=true&w=majority",
   collection: "Sessions",

@@ -6,7 +6,7 @@ var mongoUri =
   "mongodb+srv://ocw:9T6YNSUEh61zgCB6@ocw-test.jgpcr.mongodb.net/NFT-Devnet?retryWrites=true&w=majority";
 
 var methods = {
-  getNFT: async function () {
+  getNFT: async function (id) {
     var result;
     const client = await mongoClient
       .connect(mongoUri, {
@@ -22,8 +22,7 @@ var methods = {
       let collection = db.collection("NFT-Details");
 
       let query = {
-        tokenID:
-          "00080000C030302B96AF4535D488B846166EB6822BBF146E0000099A00000000",
+        tokenID: id,
       };
 
       let res = await collection.findOne(query);

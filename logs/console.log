@@ -38,41 +38,123 @@ Server2 listening successfuly
     collection: { name: 'Original OnChain Whale Cards', family: 'OnChain Whales' }
   }
 }
-(node:2371) [DEP0066] DeprecationWarning: OutgoingMessage.prototype._headers is deprecated
+(node:46873) [DEP0066] DeprecationWarning: OutgoingMessage.prototype._headers is deprecated
+/
+{
+  uuid: '664dbddf-de06-44b3-97ec-d1853933eb58',
+  next: {
+    always: 'https://xumm.app/sign/664dbddf-de06-44b3-97ec-d1853933eb58'
+  },
+  refs: {
+    qr_png: 'https://xumm.app/sign/664dbddf-de06-44b3-97ec-d1853933eb58_q.png',
+    qr_matrix: 'https://xumm.app/sign/664dbddf-de06-44b3-97ec-d1853933eb58_q.json',
+    qr_uri_quality_opts: [ 'm', 'q', 'h' ],
+    websocket_status: 'wss://xumm.app/sign/664dbddf-de06-44b3-97ec-d1853933eb58'
+  },
+  pushed: false
+}
+User signed in: 664dbddf-de06-44b3-97ec-d1853933eb58
+/
+/
+/
+/?
+http://example.com/
+/
+/
+/
+TypeError: Cannot read property 'login' of undefined
+    at defaultLocals (/opt/lampp/htdocs/app.js:157:34)
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
+    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:341:12)
+    at next (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:275:10)
+    at /opt/lampp/htdocs/node_modules/express-useragent/index.js:48:9
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
+    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
+/
+{
+  uuid: '5ff15617-104d-4c47-a6f9-259892c66074',
+  next: {
+    always: 'https://xumm.app/sign/5ff15617-104d-4c47-a6f9-259892c66074'
+  },
+  refs: {
+    qr_png: 'https://xumm.app/sign/5ff15617-104d-4c47-a6f9-259892c66074_q.png',
+    qr_matrix: 'https://xumm.app/sign/5ff15617-104d-4c47-a6f9-259892c66074_q.json',
+    qr_uri_quality_opts: [ 'm', 'q', 'h' ],
+    websocket_status: 'wss://xumm.app/sign/5ff15617-104d-4c47-a6f9-259892c66074'
+  },
+  pushed: false
+}
+User signed in: 5ff15617-104d-4c47-a6f9-259892c66074
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+TypeError: Cannot read property 'login' of undefined
+    at defaultLocals (/opt/lampp/htdocs/app.js:157:34)
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
+    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:341:12)
+    at next (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:275:10)
+    at /opt/lampp/htdocs/node_modules/express-useragent/index.js:48:9
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
+    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
+http://example.com/
 /
 /
 /
 {
-  uuid: 'eb0f7339-c828-49f9-a42e-6633b9f39463',
+  uuid: '32b22087-4ee9-4b68-9279-93884cd8be9e',
   next: {
-    always: 'https://xumm.app/sign/eb0f7339-c828-49f9-a42e-6633b9f39463'
+    always: 'https://xumm.app/sign/32b22087-4ee9-4b68-9279-93884cd8be9e'
   },
   refs: {
-    qr_png: 'https://xumm.app/sign/eb0f7339-c828-49f9-a42e-6633b9f39463_q.png',
-    qr_matrix: 'https://xumm.app/sign/eb0f7339-c828-49f9-a42e-6633b9f39463_q.json',
+    qr_png: 'https://xumm.app/sign/32b22087-4ee9-4b68-9279-93884cd8be9e_q.png',
+    qr_matrix: 'https://xumm.app/sign/32b22087-4ee9-4b68-9279-93884cd8be9e_q.json',
     qr_uri_quality_opts: [ 'm', 'q', 'h' ],
-    websocket_status: 'wss://xumm.app/sign/eb0f7339-c828-49f9-a42e-6633b9f39463'
+    websocket_status: 'wss://xumm.app/sign/32b22087-4ee9-4b68-9279-93884cd8be9e'
   },
   pushed: false
 }
-User signed in: eb0f7339-c828-49f9-a42e-6633b9f39463
-/
-/
-/
-{
-  uuid: 'e1398575-9687-4244-9fed-944460d3876f',
-  next: {
-    always: 'https://xumm.app/sign/e1398575-9687-4244-9fed-944460d3876f'
-  },
-  refs: {
-    qr_png: 'https://xumm.app/sign/e1398575-9687-4244-9fed-944460d3876f_q.png',
-    qr_matrix: 'https://xumm.app/sign/e1398575-9687-4244-9fed-944460d3876f_q.json',
-    qr_uri_quality_opts: [ 'm', 'q', 'h' ],
-    websocket_status: 'wss://xumm.app/sign/e1398575-9687-4244-9fed-944460d3876f'
-  },
-  pushed: false
-}
-User signed in: e1398575-9687-4244-9fed-944460d3876f
+User signed in: 32b22087-4ee9-4b68-9279-93884cd8be9e
 /
 /
 /
@@ -81,3 +163,60 @@ User signed in: e1398575-9687-4244-9fed-944460d3876f
 /
 /
 /
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+TypeError: Cannot read property 'login' of undefined
+    at defaultLocals (/opt/lampp/htdocs/app.js:157:34)
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
+    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:341:12)
+    at next (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:275:10)
+    at /opt/lampp/htdocs/node_modules/express-useragent/index.js:48:9
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
+    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
+/
+/
+/opt/lampp/htdocs/node_modules/express-logger/logger.js:55
+            util.pump(is, os, cb);
+                 ^
+
+TypeError: util.pump is not a function
+    at /opt/lampp/htdocs/node_modules/express-logger/logger.js:55:18
+    at FSReqCallback.oncomplete (fs.js:169:5)
