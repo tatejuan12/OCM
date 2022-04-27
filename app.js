@@ -156,8 +156,11 @@ function checkViews(req) {
   else req.session.views += 1;
 }
 function defaultLocals(req, res, next) {
-  res.locals.login = req.session.login;
-  res.locals.wallet = req.session.wallet;
-  res.locals.mobile = req.useragent.isMobile;
+  var login = req.session.login;
+  var wallet = req.session.wallet;
+  var mobile = req.useragent.isMobile;
+  res.locals.login = req.session.login != null ? req.session.login : false;
+  res.locals.wallet = wallet != null ? wallet : false;
+  res.locals.mobile = mobile != null ? mobile : false;
   next();
 }

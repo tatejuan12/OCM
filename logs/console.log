@@ -1,69 +1,495 @@
 nice!
 Server2 listening successfuly
-{
-  _id: new ObjectId("6253731fca516e68da8a7e6b"),
-  issuer: 'rJXU7rDx9rQEZK4ZYk6hhmtUzETP37GhBH',
-  tokenID: '00080000C030302B96AF4535D488B846166EB6822BBF146E0000099A00000000',
-  burnt: { status: false, txID: '', time: '' },
-  buyOffers: [],
-  currentOwner: 'rJXU7rDx9rQEZK4ZYk6hhmtUzETP37GhBH',
-  flags: 8,
-  httpsImage: 'https://ipfs.onchainwhales.net/ipfs/QmVjxVRFP9amqWcoEQGv6zDEX6G4ZZsoagPCbrukMDohtP/1_1.png',
-  httpsURI: 'https://ipfs.onchainwhales.net/ipfs/QmYq9kdekU9ZXMaDMRFdZs8SXPXNnQ23KacGcmwXC8jdvt/1_1.json',
-  nftSerial: 0,
-  sellHistory: [],
-  sellOffers: [],
-  taxon: 1,
-  timeOfUpdate: 1649659761947,
-  uri: 'ipfs://QmYq9kdekU9ZXMaDMRFdZs8SXPXNnQ23KacGcmwXC8jdvt/1_1.json',
-  uriMetadata: {
-    name: 'Original Whale #1, Card #1 TEST',
-    description: 'Yaribel the Whale \n' +
-      '\n' +
-      'Customise · Digitise · Equalise \n' +
-      'OnChain Whales NFTs, have created an NFT family, where users can express their creativity in an immutable form. Developing a system where investors determine the aesthetics and value of NFT art, bringing forward a new era of decentralisation. \n' +
-      'This excitement and individualism is also rewarded with bountiful utility, visit the website to learn more. \n' +
-      '\n' +
-      'Investors may opt to burn any combination of their collection to redeem a complete NFToken that mimics their design. Creating a deflationary collection of NFTs, that are redeemed for unique, holder created, artwork. \n' +
-      '\n' +
-      'Beauty is in the eye of the beholder, and you have a chance to make your beauty. \n' +
-      '\n' +
-      '**NONE OF THESE IMAGES WILL EVER BE SOLD OR RETAIN VALUE**',
-    image: 'ipfs://QmVjxVRFP9amqWcoEQGv6zDEX6G4ZZsoagPCbrukMDohtP/1_1.png',
-    edition: 1,
-    date: 1637713412775,
-    external_url: 'https://onchainwhales.net/',
-    attributes: [ [Object], [Object], [Object], [Object], [Object], [Object] ],
-    compiler: 'OnChain Whales',
-    collection: { name: 'Original OnChain Whale Cards', family: 'OnChain Whales' }
-  }
-}
-(node:46873) [DEP0066] DeprecationWarning: OutgoingMessage.prototype._headers is deprecated
+rJXU7rDx9rQEZK4ZYk6hhmtUzETP37GhBH
+(node:167818) [DEP0066] DeprecationWarning: OutgoingMessage.prototype._headers is deprecated
+/
+/
 /
 {
-  uuid: '664dbddf-de06-44b3-97ec-d1853933eb58',
+  uuid: 'd714bc89-66e9-4c65-a179-2fd17a76a9f1',
   next: {
-    always: 'https://xumm.app/sign/664dbddf-de06-44b3-97ec-d1853933eb58'
+    always: 'https://xumm.app/sign/d714bc89-66e9-4c65-a179-2fd17a76a9f1'
   },
   refs: {
-    qr_png: 'https://xumm.app/sign/664dbddf-de06-44b3-97ec-d1853933eb58_q.png',
-    qr_matrix: 'https://xumm.app/sign/664dbddf-de06-44b3-97ec-d1853933eb58_q.json',
+    qr_png: 'https://xumm.app/sign/d714bc89-66e9-4c65-a179-2fd17a76a9f1_q.png',
+    qr_matrix: 'https://xumm.app/sign/d714bc89-66e9-4c65-a179-2fd17a76a9f1_q.json',
     qr_uri_quality_opts: [ 'm', 'q', 'h' ],
-    websocket_status: 'wss://xumm.app/sign/664dbddf-de06-44b3-97ec-d1853933eb58'
+    websocket_status: 'wss://xumm.app/sign/d714bc89-66e9-4c65-a179-2fd17a76a9f1'
   },
   pushed: false
 }
-User signed in: 664dbddf-de06-44b3-97ec-d1853933eb58
+{
+  uuid: '615b9448-7d11-4bdb-97b7-24801c2cae53',
+  next: {
+    always: 'https://xumm.app/sign/615b9448-7d11-4bdb-97b7-24801c2cae53'
+  },
+  refs: {
+    qr_png: 'https://xumm.app/sign/615b9448-7d11-4bdb-97b7-24801c2cae53_q.png',
+    qr_matrix: 'https://xumm.app/sign/615b9448-7d11-4bdb-97b7-24801c2cae53_q.json',
+    qr_uri_quality_opts: [ 'm', 'q', 'h' ],
+    websocket_status: 'wss://xumm.app/sign/615b9448-7d11-4bdb-97b7-24801c2cae53'
+  },
+  pushed: false
+}
+{
+  uuid: 'e903b66f-acc9-459f-8534-d517f9e32b3e',
+  next: {
+    always: 'https://xumm.app/sign/e903b66f-acc9-459f-8534-d517f9e32b3e'
+  },
+  refs: {
+    qr_png: 'https://xumm.app/sign/e903b66f-acc9-459f-8534-d517f9e32b3e_q.png',
+    qr_matrix: 'https://xumm.app/sign/e903b66f-acc9-459f-8534-d517f9e32b3e_q.json',
+    qr_uri_quality_opts: [ 'm', 'q', 'h' ],
+    websocket_status: 'wss://xumm.app/sign/e903b66f-acc9-459f-8534-d517f9e32b3e'
+  },
+  pushed: false
+}
+{
+  uuid: '4458afe4-bd0a-4bf8-91ae-1eb6f13b60c9',
+  next: {
+    always: 'https://xumm.app/sign/4458afe4-bd0a-4bf8-91ae-1eb6f13b60c9'
+  },
+  refs: {
+    qr_png: 'https://xumm.app/sign/4458afe4-bd0a-4bf8-91ae-1eb6f13b60c9_q.png',
+    qr_matrix: 'https://xumm.app/sign/4458afe4-bd0a-4bf8-91ae-1eb6f13b60c9_q.json',
+    qr_uri_quality_opts: [ 'm', 'q', 'h' ],
+    websocket_status: 'wss://xumm.app/sign/4458afe4-bd0a-4bf8-91ae-1eb6f13b60c9'
+  },
+  pushed: false
+}
+{
+  uuid: '49e0851b-e940-46ae-b400-511fd324b090',
+  next: {
+    always: 'https://xumm.app/sign/49e0851b-e940-46ae-b400-511fd324b090'
+  },
+  refs: {
+    qr_png: 'https://xumm.app/sign/49e0851b-e940-46ae-b400-511fd324b090_q.png',
+    qr_matrix: 'https://xumm.app/sign/49e0851b-e940-46ae-b400-511fd324b090_q.json',
+    qr_uri_quality_opts: [ 'm', 'q', 'h' ],
+    websocket_status: 'wss://xumm.app/sign/49e0851b-e940-46ae-b400-511fd324b090'
+  },
+  pushed: false
+}
+{
+  uuid: '26a856c5-01bb-4193-ad87-8cb49093e54b',
+  next: {
+    always: 'https://xumm.app/sign/26a856c5-01bb-4193-ad87-8cb49093e54b'
+  },
+  refs: {
+    qr_png: 'https://xumm.app/sign/26a856c5-01bb-4193-ad87-8cb49093e54b_q.png',
+    qr_matrix: 'https://xumm.app/sign/26a856c5-01bb-4193-ad87-8cb49093e54b_q.json',
+    qr_uri_quality_opts: [ 'm', 'q', 'h' ],
+    websocket_status: 'wss://xumm.app/sign/26a856c5-01bb-4193-ad87-8cb49093e54b'
+  },
+  pushed: false
+}
+{
+  uuid: '87c6cbc3-58fd-4850-bf97-8486c5a67140',
+  next: {
+    always: 'https://xumm.app/sign/87c6cbc3-58fd-4850-bf97-8486c5a67140'
+  },
+  refs: {
+    qr_png: 'https://xumm.app/sign/87c6cbc3-58fd-4850-bf97-8486c5a67140_q.png',
+    qr_matrix: 'https://xumm.app/sign/87c6cbc3-58fd-4850-bf97-8486c5a67140_q.json',
+    qr_uri_quality_opts: [ 'm', 'q', 'h' ],
+    websocket_status: 'wss://xumm.app/sign/87c6cbc3-58fd-4850-bf97-8486c5a67140'
+  },
+  pushed: false
+}
+{
+  uuid: '5c32e3d7-9b59-4c09-83bd-2230c6b84195',
+  next: {
+    always: 'https://xumm.app/sign/5c32e3d7-9b59-4c09-83bd-2230c6b84195'
+  },
+  refs: {
+    qr_png: 'https://xumm.app/sign/5c32e3d7-9b59-4c09-83bd-2230c6b84195_q.png',
+    qr_matrix: 'https://xumm.app/sign/5c32e3d7-9b59-4c09-83bd-2230c6b84195_q.json',
+    qr_uri_quality_opts: [ 'm', 'q', 'h' ],
+    websocket_status: 'wss://xumm.app/sign/5c32e3d7-9b59-4c09-83bd-2230c6b84195'
+  },
+  pushed: false
+}
+{
+  uuid: '2d4e4cb0-d239-4f67-a22a-23c9079f496d',
+  next: {
+    always: 'https://xumm.app/sign/2d4e4cb0-d239-4f67-a22a-23c9079f496d'
+  },
+  refs: {
+    qr_png: 'https://xumm.app/sign/2d4e4cb0-d239-4f67-a22a-23c9079f496d_q.png',
+    qr_matrix: 'https://xumm.app/sign/2d4e4cb0-d239-4f67-a22a-23c9079f496d_q.json',
+    qr_uri_quality_opts: [ 'm', 'q', 'h' ],
+    websocket_status: 'wss://xumm.app/sign/2d4e4cb0-d239-4f67-a22a-23c9079f496d'
+  },
+  pushed: false
+}
+/
+{
+  uuid: '5168293e-6a8c-4365-9dce-32e6d53244b2',
+  next: {
+    always: 'https://xumm.app/sign/5168293e-6a8c-4365-9dce-32e6d53244b2'
+  },
+  refs: {
+    qr_png: 'https://xumm.app/sign/5168293e-6a8c-4365-9dce-32e6d53244b2_q.png',
+    qr_matrix: 'https://xumm.app/sign/5168293e-6a8c-4365-9dce-32e6d53244b2_q.json',
+    qr_uri_quality_opts: [ 'm', 'q', 'h' ],
+    websocket_status: 'wss://xumm.app/sign/5168293e-6a8c-4365-9dce-32e6d53244b2'
+  },
+  pushed: false
+}
+{
+  uuid: 'a6176988-7b93-4200-b0be-5d70a38e1b08',
+  next: {
+    always: 'https://xumm.app/sign/a6176988-7b93-4200-b0be-5d70a38e1b08'
+  },
+  refs: {
+    qr_png: 'https://xumm.app/sign/a6176988-7b93-4200-b0be-5d70a38e1b08_q.png',
+    qr_matrix: 'https://xumm.app/sign/a6176988-7b93-4200-b0be-5d70a38e1b08_q.json',
+    qr_uri_quality_opts: [ 'm', 'q', 'h' ],
+    websocket_status: 'wss://xumm.app/sign/a6176988-7b93-4200-b0be-5d70a38e1b08'
+  },
+  pushed: false
+}
+{
+  uuid: '35782a7e-409d-4612-833d-36f3e8278a56',
+  next: {
+    always: 'https://xumm.app/sign/35782a7e-409d-4612-833d-36f3e8278a56'
+  },
+  refs: {
+    qr_png: 'https://xumm.app/sign/35782a7e-409d-4612-833d-36f3e8278a56_q.png',
+    qr_matrix: 'https://xumm.app/sign/35782a7e-409d-4612-833d-36f3e8278a56_q.json',
+    qr_uri_quality_opts: [ 'm', 'q', 'h' ],
+    websocket_status: 'wss://xumm.app/sign/35782a7e-409d-4612-833d-36f3e8278a56'
+  },
+  pushed: false
+}
+User signed in: 35782a7e-409d-4612-833d-36f3e8278a56
 /
 /
 /
-/?
+/
+/
+TypeError: Cannot read property 'login' of undefined
+    at defaultLocals (/opt/lampp/htdocs/app.js:159:34)
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
+    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:341:12)
+    at next (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:275:10)
+    at /opt/lampp/htdocs/node_modules/express-useragent/index.js:48:9
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
+    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/?a=fetch&content=<php>die(@md5(HelloThinkCMF))</php>
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+TypeError: Cannot read property 'login' of undefined
+    at defaultLocals (/opt/lampp/htdocs/app.js:159:34)
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
+    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:341:12)
+    at next (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:275:10)
+    at /opt/lampp/htdocs/node_modules/express-useragent/index.js:48:9
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
+    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+{
+  uuid: '18643ca0-7e53-4de3-a181-1030af3f89ce',
+  next: {
+    always: 'https://xumm.app/sign/18643ca0-7e53-4de3-a181-1030af3f89ce'
+  },
+  refs: {
+    qr_png: 'https://xumm.app/sign/18643ca0-7e53-4de3-a181-1030af3f89ce_q.png',
+    qr_matrix: 'https://xumm.app/sign/18643ca0-7e53-4de3-a181-1030af3f89ce_q.json',
+    qr_uri_quality_opts: [ 'm', 'q', 'h' ],
+    websocket_status: 'wss://xumm.app/sign/18643ca0-7e53-4de3-a181-1030af3f89ce'
+  },
+  pushed: false
+}
+User signed in: 18643ca0-7e53-4de3-a181-1030af3f89ce
+/
+/
+Util.pump errTypeError: util.pump is not a function
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/?XDEBUG_SESSION_START=phpstorm
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+{
+  uuid: '5842b4c7-96e5-4bcd-ab5e-5ee7804dffaa',
+  next: {
+    always: 'https://xumm.app/sign/5842b4c7-96e5-4bcd-ab5e-5ee7804dffaa'
+  },
+  refs: {
+    qr_png: 'https://xumm.app/sign/5842b4c7-96e5-4bcd-ab5e-5ee7804dffaa_q.png',
+    qr_matrix: 'https://xumm.app/sign/5842b4c7-96e5-4bcd-ab5e-5ee7804dffaa_q.json',
+    qr_uri_quality_opts: [ 'm', 'q', 'h' ],
+    websocket_status: 'wss://xumm.app/sign/5842b4c7-96e5-4bcd-ab5e-5ee7804dffaa'
+  },
+  pushed: false
+}
+User signed in: 5842b4c7-96e5-4bcd-ab5e-5ee7804dffaa
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/?attachment_id=2702
+/
+/
+/
+/
+/
+/
+Util.pump errTypeError: util.pump is not a function
+/
+/
+/
+/
+/
+/
+/
+/?fbclid=IwAR3XhcxGgvAWApwTZHXdl0Jk8iUEJOu2tGPd1gz25BdUGdU2ZcNF4r2F3Kc
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/?attachment_id=2702
+/
+/
+/
+TypeError: Cannot read property 'login' of undefined
+    at defaultLocals (/opt/lampp/htdocs/app.js:159:34)
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
+    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
+    at Function.process_params (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:341:12)
+    at next (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:275:10)
+    at /opt/lampp/htdocs/node_modules/express-useragent/index.js:48:9
+    at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
+    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
+    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/?a=fetch&content=<php>die(@md5(HelloThinkCMF))</php>
+/?XDEBUG_SESSION_START=phpstorm
 http://example.com/
 /
 /
 /
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+Util.pump errTypeError: util.pump is not a function
+/
+/
+/
+/
 TypeError: Cannot read property 'login' of undefined
-    at defaultLocals (/opt/lampp/htdocs/app.js:157:34)
+    at defaultLocals (/opt/lampp/htdocs/app.js:159:34)
     at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
     at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
     at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
@@ -74,20 +500,6 @@ TypeError: Cannot read property 'login' of undefined
     at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
     at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
 /
-{
-  uuid: '5ff15617-104d-4c47-a6f9-259892c66074',
-  next: {
-    always: 'https://xumm.app/sign/5ff15617-104d-4c47-a6f9-259892c66074'
-  },
-  refs: {
-    qr_png: 'https://xumm.app/sign/5ff15617-104d-4c47-a6f9-259892c66074_q.png',
-    qr_matrix: 'https://xumm.app/sign/5ff15617-104d-4c47-a6f9-259892c66074_q.json',
-    qr_uri_quality_opts: [ 'm', 'q', 'h' ],
-    websocket_status: 'wss://xumm.app/sign/5ff15617-104d-4c47-a6f9-259892c66074'
-  },
-  pushed: false
-}
-User signed in: 5ff15617-104d-4c47-a6f9-259892c66074
 /
 /
 /
@@ -119,89 +531,17 @@ User signed in: 5ff15617-104d-4c47-a6f9-259892c66074
 /
 /
 /
-/
-/
-/
-/
-/
-/
-/
-TypeError: Cannot read property 'login' of undefined
-    at defaultLocals (/opt/lampp/htdocs/app.js:157:34)
-    at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
-    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
-    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
-    at Function.process_params (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:341:12)
-    at next (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:275:10)
-    at /opt/lampp/htdocs/node_modules/express-useragent/index.js:48:9
-    at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
-    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
-    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
 http://example.com/
 /
 /
 /
-{
-  uuid: '32b22087-4ee9-4b68-9279-93884cd8be9e',
-  next: {
-    always: 'https://xumm.app/sign/32b22087-4ee9-4b68-9279-93884cd8be9e'
-  },
-  refs: {
-    qr_png: 'https://xumm.app/sign/32b22087-4ee9-4b68-9279-93884cd8be9e_q.png',
-    qr_matrix: 'https://xumm.app/sign/32b22087-4ee9-4b68-9279-93884cd8be9e_q.json',
-    qr_uri_quality_opts: [ 'm', 'q', 'h' ],
-    websocket_status: 'wss://xumm.app/sign/32b22087-4ee9-4b68-9279-93884cd8be9e'
-  },
-  pushed: false
-}
-User signed in: 32b22087-4ee9-4b68-9279-93884cd8be9e
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
-/
 /
 /
 /
 /
 /
 TypeError: Cannot read property 'login' of undefined
-    at defaultLocals (/opt/lampp/htdocs/app.js:157:34)
+    at defaultLocals (/opt/lampp/htdocs/app.js:159:34)
     at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
     at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
     at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
@@ -213,10 +553,51 @@ TypeError: Cannot read property 'login' of undefined
     at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
 /
 /
-/opt/lampp/htdocs/node_modules/express-logger/logger.js:55
-            util.pump(is, os, cb);
-                 ^
-
-TypeError: util.pump is not a function
-    at /opt/lampp/htdocs/node_modules/express-logger/logger.js:55:18
-    at FSReqCallback.oncomplete (fs.js:169:5)
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/
+/?a=fetch&content=<php>die(@md5(HelloThinkCMF))</php>
+/
+/
+/
+{
+  uuid: '89c6fea8-09f9-4ace-a47e-396757e44d44',
+  next: {
+    always: 'https://xumm.app/sign/89c6fea8-09f9-4ace-a47e-396757e44d44'
+  },
+  refs: {
+    qr_png: 'https://xumm.app/sign/89c6fea8-09f9-4ace-a47e-396757e44d44_q.png',
+    qr_matrix: 'https://xumm.app/sign/89c6fea8-09f9-4ace-a47e-396757e44d44_q.json',
+    qr_uri_quality_opts: [ 'm', 'q', 'h' ],
+    websocket_status: 'wss://xumm.app/sign/89c6fea8-09f9-4ace-a47e-396757e44d44'
+  },
+  pushed: false
+}
+User signed in: 89c6fea8-09f9-4ace-a47e-396757e44d44
+/
+http://azenv.net/
+/
+/?fbclid=IwAR2FDRj_8BS48512RQHUMQgzLyK_juC3NI7jZb3H7S2nvqeB36RqOYHQtis
+/?fbclid=IwAR3sqEuS2vVfpMgr6oPfXjzjOAtj63jlXNUiMXt_gOhjOWnsehBgdcZtvi4
+/?fbclid=IwAR2HxbFGYcX75XQtR668aigxUgIuv_88FJ9kZcaGS9I8c4ea2lQtgJDQVTc
+/
+/
+http://azenv.net/
