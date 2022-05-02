@@ -51,7 +51,6 @@ app.use(
 ); // Sets the use of cookies
 app.use(useragent.express()); // For browser data, like if it is mobile or not
 app.use(defaultLocals); //Custom made middleware, sends locals to ejs without having to send it manually
-
 app.post("/payload", async (req, res) => {
   const payload = await getPayload(req.body);
 
@@ -127,10 +126,8 @@ function getPayload(request) {
   return payload;
 }
 
-app.get("/index", (req, res) => {
-  console.log(req.url);
-  checkViews(req);
-  res.render("views/index");
+app.get("/", (req, res) => {
+  res.render("views/");
 });
 app.get("/explore", (req, res) => {
   res.render("views/explore");

@@ -93,14 +93,14 @@ http://azenv.net/
 TypeError: Cannot read property 'login' of undefined
     at defaultLocals (/opt/lampp/htdocs/app.js:162:27)
     at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
-    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
-    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
-    at Function.process_params (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:341:12)
-    at next (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:275:10)
-    at /opt/lampp/htdocs/node_modules/express-useragent/index.js:48:9
+    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/.js:323:13)
+    at /opt/lampp/htdocs/node_modules/express/lib/router/.js:284:7
+    at Function.process_params (/opt/lampp/htdocs/node_modules/express/lib/router/.js:341:12)
+    at next (/opt/lampp/htdocs/node_modules/express/lib/router/.js:275:10)
+    at /opt/lampp/htdocs/node_modules/express-useragent/.js:48:9
     at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
-    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
-    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
+    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/.js:323:13)
+    at /opt/lampp/htdocs/node_modules/express/lib/router/.js:284:7
 /
 /
 /
@@ -118,14 +118,14 @@ TypeError: Cannot read property 'login' of undefined
 TypeError: Cannot read property 'login' of undefined
     at defaultLocals (/opt/lampp/htdocs/app.js:162:27)
     at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
-    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
-    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
-    at Function.process_params (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:341:12)
-    at next (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:275:10)
-    at /opt/lampp/htdocs/node_modules/express-useragent/index.js:48:9
+    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/.js:323:13)
+    at /opt/lampp/htdocs/node_modules/express/lib/router/.js:284:7
+    at Function.process_params (/opt/lampp/htdocs/node_modules/express/lib/router/.js:341:12)
+    at next (/opt/lampp/htdocs/node_modules/express/lib/router/.js:275:10)
+    at /opt/lampp/htdocs/node_modules/express-useragent/.js:48:9
     at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
-    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
-    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
+    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/.js:323:13)
+    at /opt/lampp/htdocs/node_modules/express/lib/router/.js:284:7
 /
 /
 /
@@ -177,14 +177,14 @@ Util.pump errTypeError: util.pump is not a function
 TypeError: Cannot read property 'login' of undefined
     at defaultLocals (/opt/lampp/htdocs/app.js:162:27)
     at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
-    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
-    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
-    at Function.process_params (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:341:12)
-    at next (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:275:10)
-    at /opt/lampp/htdocs/node_modules/express-useragent/index.js:48:9
+    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/.js:323:13)
+    at /opt/lampp/htdocs/node_modules/express/lib/router/.js:284:7
+    at Function.process_params (/opt/lampp/htdocs/node_modules/express/lib/router/.js:341:12)
+    at next (/opt/lampp/htdocs/node_modules/express/lib/router/.js:275:10)
+    at /opt/lampp/htdocs/node_modules/express-useragent/.js:48:9
     at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
-    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
-    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
+    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/.js:323:13)
+    at /opt/lampp/htdocs/node_modules/express/lib/router/.js:284:7
 /
 /
 /
@@ -255,14 +255,14 @@ TypeError: Cannot read property 'login' of undefined
 TypeError: Cannot read property 'login' of undefined
     at defaultLocals (/opt/lampp/htdocs/app.js:162:27)
     at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
-    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
-    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
-    at Function.process_params (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:341:12)
-    at next (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:275:10)
-    at /opt/lampp/htdocs/node_modules/express-useragent/index.js:48:9
+    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/.js:323:13)
+    at /opt/lampp/htdocs/node_modules/express/lib/router/.js:284:7
+    at Function.process_params (/opt/lampp/htdocs/node_modules/express/lib/router/.js:341:12)
+    at next (/opt/lampp/htdocs/node_modules/express/lib/router/.js:275:10)
+    at /opt/lampp/htdocs/node_modules/express-useragent/.js:48:9
     at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
-    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
-    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
+    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/.js:323:13)
+    at /opt/lampp/htdocs/node_modules/express/lib/router/.js:284:7
 /
 /
 /
@@ -343,14 +343,14 @@ Util.pump errTypeError: util.pump is not a function
 TypeError: Cannot read property 'login' of undefined
     at defaultLocals (/opt/lampp/htdocs/app.js:162:27)
     at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
-    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
-    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
-    at Function.process_params (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:341:12)
-    at next (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:275:10)
-    at /opt/lampp/htdocs/node_modules/express-useragent/index.js:48:9
+    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/.js:323:13)
+    at /opt/lampp/htdocs/node_modules/express/lib/router/.js:284:7
+    at Function.process_params (/opt/lampp/htdocs/node_modules/express/lib/router/.js:341:12)
+    at next (/opt/lampp/htdocs/node_modules/express/lib/router/.js:275:10)
+    at /opt/lampp/htdocs/node_modules/express-useragent/.js:48:9
     at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
-    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
-    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
+    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/.js:323:13)
+    at /opt/lampp/htdocs/node_modules/express/lib/router/.js:284:7
 /
 /
 /
