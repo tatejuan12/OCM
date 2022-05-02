@@ -1,5 +1,4 @@
 const mongoClient = require("mongodb").MongoClient;
-console.log("nice!");
 
 //async reference https://stackoverflow.com/questions/47370487/node-js-mongodb-driver-async-await-queries
 var mongoUri =
@@ -29,7 +28,7 @@ var methods = {
 
       return res;
     } catch (err) {
-      console.log(err);
+      console.log("Database error" + err);
     } finally {
       client.close();
     }

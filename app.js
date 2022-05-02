@@ -6,15 +6,10 @@ const session = require("express-session");
 const fs = require("fs");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const logger = require("express-logger");
-// const verifySignature = require("verify-xrpl-signature").verifySignature;
 const { TxData } = require("xrpl-txdata");
 const useragent = require("express-useragent");
 const mongoClient = require("./mongo.js");
-
 const verifySignature = new TxData();
-// const wildcardExpress = require("@wildcard-api/server/express");
-// import "./endpoints.js";
-
 const { XummSdk } = require("xumm-sdk");
 const cors = require("cors");
 const sdk = new XummSdk(
@@ -24,12 +19,13 @@ const sdk = new XummSdk(
 mongoClient.query
   .getNFT("00080000C030302B96AF4535D488B846166EB6822BBF146E0000099A00000000")
   .then((nft) => {
-    console.log(nft.issuer);
+    console.log(nft);
   });
 const mongoStore = new MongoDBStore({
   uri: "mongodb+srv://ocw:9T6YNSUEh61zgCB6@ocw-test.jgpcr.mongodb.net/NFT-Devnet?retryWrites=true&w=majority",
   collection: "Sessions",
 });
+
 const app = express();
 app.use(
   cors({
@@ -48,12 +44,13 @@ app.use(
     resave: true,
     saveUninitialized: true,
     //! change to secure true once hosting
-    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 1 },
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 30 }, // ms/s, s/m, m/h, h/p, d/mnth
     store: mongoStore,
   })
 ); // Sets the use of cookies
 app.use(useragent.express()); // For browser data, like if it is mobile or not
 app.use(defaultLocals); //Custom made middleware, sends locals to ejs without having to send it manually
+
 app.post("/payload", async (req, res) => {
   const payload = await getPayload(req.body);
 
@@ -83,6 +80,23 @@ app.post("/subscription-transaction", async (req, res) => {
   console.log(subscription);
 });
 
+app.post("/sign-in-payload", async (req, res) => {
+  const request = {
+    options: {
+      submit: false,
+      expire: 240,
+      return_url: {
+        app: "http://172.105.169.145",
+      },
+    },
+    txjson: {
+      TransactionType: "SignIn",
+    },
+  };
+  const payload = await getPayload(request);
+  console.log(payload);
+  res.send(payload);
+});
 app.post("/sign-in-subscription", async (req, res) => {
   var subscription = false;
   try {
@@ -105,23 +119,6 @@ app.post("/sign-in-subscription", async (req, res) => {
   } catch (error) {
     console.error("There was an error with the payload: \n" + error);
   }
-});
-app.post("/sign-in-payload", async (req, res) => {
-  const request = {
-    options: {
-      submit: false,
-      expire: 240,
-      return_url: {
-        app: "http://172.105.169.145",
-      },
-    },
-    txjson: {
-      TransactionType: "SignIn",
-    },
-  };
-  const payload = await getPayload(request);
-  console.log(payload);
-  res.send(payload);
 });
 function getPayload(request) {
   const payload = sdk.payload.create(request);
@@ -147,6 +144,12 @@ app.get("/logout", (req, res) => {
   req.session.destroy();
   res.redirect("/");
 });
+
+// Renders 404 page if the request is send to undeclared location
+app.use((req, res, next) => {
+  res.status(404).render("views/404.ejs");
+});
+
 app.listen(80, () => {
   console.log("Server2 listening successfuly");
 });
