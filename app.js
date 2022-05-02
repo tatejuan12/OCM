@@ -12,6 +12,7 @@ const mongoClient = require("./mongo.js");
 const verifySignature = new TxData();
 const { XummSdk } = require("xumm-sdk");
 const cors = require("cors");
+const { application } = require("express");
 const sdk = new XummSdk(
   "621ce94c-d791-48ec-aa47-eeaf510b8d55",
   "5a809cea-021f-4bc9-aec5-9286508dd44d"
@@ -126,7 +127,7 @@ function getPayload(request) {
   return payload;
 }
 
-app.get("/", (req, res) => {
+app.get("/index", (req, res) => {
   console.log(req.url);
   checkViews(req);
   res.render("views/index");
@@ -137,12 +138,27 @@ app.get("/explore", (req, res) => {
 app.get("/about", (req, res) => {
   res.render("views/about");
 });
-app.get("/contact", (req, res) => {
-  res.render("views/contact");
-});
 app.get("/logout", (req, res) => {
   req.session.destroy();
   res.redirect("/");
+});
+app.get("/connect", (req, res) => {
+  res.render("views/connect");
+});
+app.get("/redeem", (req, res) => {
+  res.render("views/redeem");
+});
+app.get("/profile", (req, res) => {
+  res.render("views/profile");
+});
+app.get("/edit-profile", (req, res) => {
+  res.render("views/edit-profile");
+});
+app.get("/product-details", (req, res) => {
+  res.render("views/product-details");
+});
+app.get("/create-listing", (req, res) => {
+  res.render("views/create-listing");
 });
 
 // Renders 404 page if the request is send to undeclared location

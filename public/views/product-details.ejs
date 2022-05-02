@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>OCW || Product Details</title>
+    <meta name="robots" content="noindex, follow" />
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta name="theme-style-mode" content="0"> <!-- 0 == light, 1 == dark -->
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png">
+    <!-- CSS 
+    ============================================ -->
+    <link rel="stylesheet" href="assets/css/vendor/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/vendor/slick.css">
+    <link rel="stylesheet" href="assets/css/vendor/slick-theme.css">
+    <link rel="stylesheet" href="assets/css/vendor/nice-select.css">
+    <link rel="stylesheet" href="assets/css/plugins/feature.css">
+    <link rel="stylesheet" href="assets/css/plugins/jquery-ui.min.css">
+
+    <!-- Style css -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body class="template-color-1">
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class='loader'>
+            <div class='circle'></div>
+            <div class='circle'></div>
+            <div class='circle'></div>
+            <div class='circle'></div>
+            <div class='circle'></div>
+        </div>
+    </div>
+
+        <!--PHP Header call-->
+        <%- include('sections/header.ejs') -%>
+
+    <!-- start page title area -->
+    <div class="rn-breadcrumb-inner ptb--30">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-6 col-12">
+                    <h5 class="title text-center text-md-start">Product Details</h5>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12">
+                    <ul class="breadcrumb-list">
+                        <li class="item"><a href="index.html">Home</a></li>
+                        <li class="separator"><i class="feather-chevron-right"></i></li>
+                        <li class="item current">Product Details</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end page title area -->
+
+    <!-- start product details area -->
+    <div class="product-details-area rn-section-gapTop">
+        <div class="container">
+            <div class="row g-5">
+                <!-- product image area -->
+
+                <div class="col-lg-7 col-md-12 col-sm-12">
+                    <div class="product-tab-wrapper rbt-sticky-top-adjust">
+                        <div class="pd-tab-inner">
+
+
+                            <div class="tab-content rn-pd-content" id="v-pills-tabContent">
+                                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                                    <div class="rn-pd-thumbnail">
+                                        <img src="https://ipfs.onchainwhales.net/ipfs/QmVjxVRFP9amqWcoEQGv6zDEX6G4ZZsoagPCbrukMDohtP/1_1.png" alt="Nft_Profile">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- product image area end -->
+
+                <div class="col-lg-5 col-md-12 col-sm-12 mt_md--50 mt_sm--60">
+                    <div class="rn-pd-content-area">
+                        <div class="pd-title-area">
+                            <h4 class="title">NFT Name (uriMetadata.name)</h4>
+                            <div class="pd-react-area">
+                                <div class="heart-count">
+                                    <i data-feather="heart"></i>
+                                    <span># of likes</span>
+                                </div>
+                                <div class="count">
+                                    <div class="share-btn share-btn-activation dropdown">
+                                        <button class="icon" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <svg viewBox="0 0 14 4" fill="none" width="16" height="16" class="sc-bdnxRM sc-hKFxyN hOiKLt">
+                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z" fill="currentColor"></path>
+                                            </svg>
+                                        </button>
+
+                                        <div class="share-btn-setting dropdown-menu dropdown-menu-end">
+                                            <button type="button" class="btn-setting-text share-text" data-bs-toggle="modal" data-bs-target="#shareModal">
+                                                Share
+                                            </button>
+                                            <button type="button" class="btn-setting-text report-text" data-bs-toggle="modal" data-bs-target="#reportModal">
+                                                Report
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="bid">Highest bid <span class="price">buyOffers({limit(1)})(most recent) XRP</span></span>
+                        <h6 class="title-name">
+                            collection.family
+                        </h6>
+                        <div class="catagory-collection">
+                            
+                            <div class="collection">
+                                <span>Collection</span>
+                                <div class="top-seller-inner-one">
+                                    <div class="top-seller-wrapper">
+                                        <div class="thumbnail">
+                                            <!-- a tag should link to collection of the respective NFT collection associated with that image -->
+                                            <a href="collection/({collection.family})"><img src="assets/images/client/client-2.png" alt="Nft_Profile"></a>
+                                        </div>
+                                        <div class="top-seller-content">
+                                            <a href="collection/({collection.family})">
+                                                <h6 class="name">collection.family</h6>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rn-bid-details">
+                            <div class="tab-wrapper-one">
+                                <nav class="tab-button-one">
+                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                        <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Bids</button>
+                                        <button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="true">Details</button>
+                                        <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Purchase History</button>
+                                    </div>
+                                </nav>
+                                <div class="tab-content rn-bid-content" id="nav-tabContent">
+                                    <div class="tab-pane fade" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                        <!-- single creator -->
+                                        <div class="top-seller-inner-one">
+                                            <div class="top-seller-wrapper">
+                                                <div class="thumbnail">
+                                                    <a href="#"><img src="assets/images/client/client-3.png" alt="Nft_Profile"></a>
+                                                </div>
+                                                <div class="top-seller-content">
+                                                    <span>200XRP by rs7z1Qq18ysT1LyieUu3kPVTpeQLD2hWYn</span>
+                                                    <span class="count-number">
+                                                        1 hours ago
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- single creator -->
+                                        <!-- single creator -->
+                                        <div class="top-seller-inner-one">
+                                            <div class="top-seller-wrapper">
+                                                <div class="thumbnail">
+                                                    <a href="#"><img src="assets/images/client/client-4.png" alt="Nft_Profile"></a>
+                                                </div>
+                                                <div class="top-seller-content">
+                                                    <span>180XRP by rhMonsnFC4F55Ps6QUeHa44AW1hTSRt8dG</span>
+                                                    <span class="count-number">
+                                                        1.30 hours ago
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- single creator -->
+                                    </div>
+                                    <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                        <!-- single -->
+                                        <div class="rn-pd-bd-wrapper">
+                                            <div class="top-seller-inner-one">
+                                                <!-- <p class="disc">Lorem ipsum dolor, sit amet consectetur adipisicing
+                                                    elit. Doloribus debitis nemo deserunt.</p> -->
+                                                <h6 class="name-title">
+                                                    Owner
+                                                </h6>
+                                                <div class="top-seller-wrapper">
+                                                    <div class="thumbnail">
+                                                        <a href="#"><img src="assets/images/client/client-1.png" alt="Nft_Profile"></a>
+                                                    </div>
+                                                    <div class="top-seller-content">
+                                                        <a href="#">
+                                                            <h6 class="name">rJXU7rDx9rQEZK4ZYk6hhmtUzETP37GhBH</h6>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- single -->
+                                            <div class="rn-pd-sm-property-wrapper">
+                                                <h6 class="pd-property-title">
+                                                    Property
+                                                </h6>
+                                                <div class="property-wrapper" id="property">
+
+                                                    <!-- single property -->
+                                                    <div class="pd-property-inner">
+                                                        <span class="color-body type">Background</span>
+                                                        <span class="color-white value">Harvest Gold</span>
+                                                    </div>
+                                                    <!-- single property End -->
+                                                    <!-- single property -->
+                                                    <div class="pd-property-inner">
+                                                        <span class="color-body type">Body</span>
+                                                        <span class="color-white value">Antique Ruby</span>
+                                                    </div>
+                                                    <!-- single property End -->
+                                                    <!-- single property -->
+                                                    <div class="pd-property-inner">
+                                                        <span class="color-body type">Chin</span>
+                                                        <span class="color-white value">Middle Blue</span>
+                                                    </div>
+                                                    <!-- single property End -->
+                                                    <!-- single property -->
+                                                    <div class="pd-property-inner">
+                                                        <span class="color-body type">Tail</span>
+                                                        <span class="color-white value">Camel</span>
+                                                    </div>
+                                                    <!-- single property End -->
+                                                    <!-- single property -->
+                                                    <div class="pd-property-inner">
+                                                        <span class="color-body type">Fin</span>
+                                                        <span class="color-white value">Middle Blu</span>
+                                                    </div>
+                                                    <!-- single property End -->
+                                                    <!-- single property -->
+                                                    <div class="pd-property-inner">
+                                                        <span class="color-body type">Eye</span>
+                                                        <span class="color-white value">Royal Purple</span>
+                                                    </div>
+                                                    <!-- single property End -->
+       
+                                                </div>
+                                            </div>
+                                            <!-- single -->
+                                        </div>
+                                    </div>
+                                    <!-- Previous Owners area -->
+                                    <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+                                        <!-- single creator -->
+                                        <div class="top-seller-inner-one">
+                                            <div class="top-seller-wrapper">
+                                                <div class="thumbnail">
+                                                    <a href="#"><img src="assets/images/client/client-3.png" alt="Nft_Profile"></a>
+                                                </div>
+                                                <div class="top-seller-content">
+                                                    <span>250 XRP by<a href="#">Allen Waltker</a></span>
+                                                    <span class="count-number">
+                                                        1 hours ago
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- single creator -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="place-bet-area">
+                                <div class="rn-bet-create">
+                                    <div class="bid-list winning-bid">
+                                        <h6 class="title">Winning bid</h6>
+                                        <div class="top-seller-inner-one">
+                                            <div class="top-seller-wrapper">
+                                                <div class="thumbnail">
+                                                    <a href="#"><img src="assets/images/client/client-7.png" alt="Nft_Profile"></a>
+                                                </div>
+                                                <div class="top-seller-content">
+                                                    <span class="heighest-bid">Highest bid <a href="https://xrpscan.com/account/'account address here'">Bing Bong</a></span>
+                                                    <span class="count-number">
+                                                        300 XRP
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <!-- <a class="btn btn-primary-alta mt--30" href="#">Place a Bid</a> -->
+                                <button type="button" class="btn btn-primary-alta mt--30" data-bs-toggle="modal" data-bs-target="#placebidModal">Place a Bid</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- End product details area -->
+
+
+    <!-- New items Start -->
+    <div class="rn-new-items rn-section-gapTop">
+        <div class="container">
+            <div class="row mb--30 align-items-center">
+                <div class="col-12">
+                    <h3 class="title mb--0" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800">More Items</h3>
+                </div>
+            </div>
+            <script src="assets/js/vendor/moreItems.js"></script>
+            <div class="row g-5" id="moreItems">
+                <!-- start single product -->
+                <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12" style="display:block;">
+                    <div class="product-style-one no-overlay">
+                        <div class="card-thumbnail">
+                            <a href="product-details.php"><img src="${nftProperty.httpsImage}" alt="NFT_portfolio"></a>
+                        </div>
+                        <div class="product-share-wrapper">
+                            <div class="share-btn share-btn-activation dropdown">
+                                <button class="icon" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <svg viewBox="0 0 14 4" fill="none" width="16" height="16" class="sc-bdnxRM sc-hKFxyN hOiKLt">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z" fill="currentColor"></path>
+                                    </svg>
+                                </button>
+
+                                <div class="share-btn-setting dropdown-menu dropdown-menu-end">
+                                    <button type="button" class="btn-setting-text share-text" data-bs-toggle="modal" data-bs-target="#shareModal">
+                                        Share
+                                    </button>
+                                    <button type="button" class="btn-setting-text report-text" data-bs-toggle="modal" data-bs-target="#reportModal">
+                                        Report
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                        <a href="product-details.php"><span class="product-name">${nftProperty.uriMetadata.name}</span></a>
+                        <span class="latest-bid">Highest bid:</span>
+                        <div class="bid-react-area">
+                            <div class="last-bid">${nftProperty.sellHistory}</div>
+                            <div class="react-area">
+                                <svg viewBox="0 0 17 16" fill="none" width="16" height="16" class="sc-bdnxRM sc-hKFxyN kBvkOu">
+                                    <path d="M8.2112 14L12.1056 9.69231L14.1853 7.39185C15.2497 6.21455 15.3683 4.46116 14.4723 3.15121V3.15121C13.3207 1.46757 10.9637 1.15351 9.41139 2.47685L8.2112 3.5L6.95566 2.42966C5.40738 1.10976 3.06841 1.3603 1.83482 2.97819V2.97819C0.777858 4.36443 0.885104 6.31329 2.08779 7.57518L8.2112 14Z" stroke="currentColor" stroke-width="2"></path>
+                                </svg>
+                                <span class="number" id="likes">2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end single product -->
+            </div>
+        </div>
+    </div>
+    <!-- New items End -->
+    <!-- Modal -->
+    <div class="rn-popup-modal share-modal-wrapper modal fade" id="shareModal" tabindex="-1" aria-hidden="true">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i data-feather="x"></i></button>
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content share-wrapper">
+                <div class="modal-header share-area">
+                    <h5 class="modal-title">Share this NFT</h5>
+                </div>
+                <div class="modal-body">
+                    <ul class="social-share-default">
+                        <li><a href="#"><span class="icon"><i data-feather="facebook"></i></span><span class="text">facebook</span></a></li>
+                        <li><a href="#"><span class="icon"><i data-feather="twitter"></i></span><span class="text">twitter</span></a></li>
+                        <li><a href="#"><span class="icon"><i data-feather="linkedin"></i></span><span class="text">linkedin</span></a></li>
+                        <li><a href="#"><span class="icon"><i data-feather="instagram"></i></span><span class="text">instagram</span></a></li>
+                        <li><a href="#"><span class="icon"><i data-feather="youtube"></i></span><span class="text">youtube</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="rn-popup-modal report-modal-wrapper modal fade" id="reportModal" tabindex="-1" aria-hidden="true">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i data-feather="x"></i></button>
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content report-content-wrapper">
+                <div class="modal-header report-modal-header">
+                    <h5 class="modal-title">Why are you reporting?
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <p>Describe why you think this item should be removed from marketplace</p>
+                    <div class="report-form-box">
+                        <h6 class="title">Message</h6>
+                        <textarea name="message" placeholder="Write issues"></textarea>
+                        <div class="report-button">
+                            <button type="button" class="btn btn-primary mr--10 w-auto">Report</button>
+                            <button type="button" class="btn btn-primary-alta w-auto" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- PLACE BID MODAL -->
+    <div class="rn-popup-modal placebid-modal-wrapper modal fade" id="placebidModal" tabindex="-1" aria-hidden="true">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i data-feather="x"></i></button>
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Place a bid</h3>
+                </div>
+                <div class="modal-body">
+                    <p>You are about to place a Bid</p>
+                    <div class="placebid-form-box">
+                        <h5 class="title">Your bid</h5>
+                        <div class="bid-content">
+                            <div class="bid-content-top">
+                                <div class="bid-content-left" id="formData">
+                                    <input id="value" type="text" name="value">
+                                    <span>XRP</span>
+                                </div>
+                            </div>
+
+                            <div class="bid-content-mid">
+                                <div class="bid-content-left">
+                                    <span>Your Balance</span>
+                                    <!-- <span>Service fee</span> -->
+                                    <span>Total bid amount</span>
+                                </div>
+                                <div class="bid-content-right">
+                                    <span>connected wallet xrp or currency amount held</span>
+                                    <!-- <span id="serviceFee">2 XRP</span> -->
+                                    <span id="sum">
+                                        <?php
+                                        if(isset($_POST['submit'])){
+                                            $sum=0;
+                                            $one=$_POST['value'];
+                                            $two=$_POST['serviceFee'];
+
+                                            $sum=$one+$two;
+                                            echo $sum;
+                                        }                                        
+                                        ?>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bit-continue-button">
+                            <a href="connect.php" onclick="placeBid()" class="btn btn-primary w-100">Place a bid</a>
+                            <button type="button" class="btn btn-primary-alta mt--10" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PHP footer call -->
+    <%- include('sections/popup-modal.ejs') -%>
+    <%- include('sections/footer.ejs') -%>
+
+    <!-- Start Top To Bottom Area  -->
+    <div class="rn-progress-parent">
+        <svg class="rn-back-circle svg-inner" width="100%" height="100%" viewBox="-1 -1 102 102">
+            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
+        </svg>
+    </div>
+    <!-- End Top To Bottom Area  -->
+    <!-- JS ============================================ -->
+    <script src="assets/js/vendor/jquery.js"></script>
+    <script src="assets/js/vendor/jquery.nice-select.min.js"></script>
+    <script src="assets/js/vendor/jquery-ui.js"></script>
+    <script src="assets/js/vendor/modernizer.min.js"></script>
+    <script src="assets/js/vendor/feather.min.js"></script>
+    <script src="assets/js/vendor/slick.min.js"></script>
+    <script src="assets/js/vendor/bootstrap.min.js"></script>
+    <script src="assets/js/vendor/sal.min.js"></script>
+    <script src="assets/js/vendor/waypoint.js"></script>
+    <script src="assets/js/vendor/wow.js"></script>
+    <script src="assets/js/vendor/particles.js"></script>
+    <script src="assets/js/vendor/jquery.style.swicher.js"></script>
+    <script src="assets/js/vendor/js.cookie.js"></script>
+    <script src="assets/js/vendor/count-down.js"></script>
+    <script src="assets/js/vendor/counter-up.js"></script>
+    <script src="assets/js/vendor/isotop.js"></script>
+    <script src="assets/js/vendor/imageloaded.js"></script>
+    <script src="assets/js/vendor/backtoTop.js"></script>
+    <script src="assets/js/vendor/scrolltrigger.js"></script>
+    <script src="assets/js/vendor/jquery.custom-file-input.js"></script>
+    <script src="assets/js/vendor/savePopup.js"></script>
+    <!-- main JS -->
+    <script src="assets/js/main.js"></script>
+    <!-- Meta Mask  -->
+    <script src="assets/js/vendor/web3.min.js"></script>
+    <script src="assets/js/vendor/maralis.js"></script>
+    <script src="assets/js/vendor/nft.js"></script>
+</body>
+
+</html>

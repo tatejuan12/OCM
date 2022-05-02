@@ -1,0 +1,80 @@
+{
+  "_id":{
+     "$oid":"6253731fca516e68da8a7e6b"
+  },
+  "issuer":"rJXU7rDx9rQEZK4ZYk6hhmtUzETP37GhBH",
+  "tokenID":"00080000C030302B96AF4535D488B846166EB6822BBF146E0000099A00000000",
+  "burnt":{
+     "status":false,
+     "txID":"",
+     "time":""
+  },
+  "buyOffers":[
+     
+  ],
+  "currentOwner":"rJXU7rDx9rQEZK4ZYk6hhmtUzETP37GhBH",
+  "flags":{
+     "$numberInt":"8"
+  },
+  "httpsImage":"https://ipfs.onchainwhales.net/ipfs/QmVjxVRFP9amqWcoEQGv6zDEX6G4ZZsoagPCbrukMDohtP/1_1.png",
+  "httpsURI":"https://ipfs.onchainwhales.net/ipfs/QmYq9kdekU9ZXMaDMRFdZs8SXPXNnQ23KacGcmwXC8jdvt/1_1.json",
+  "nftSerial":{
+     "$numberInt":"0"
+  },
+  "sellHistory":[
+     
+  ],
+  "sellOffers":[
+     
+  ],
+  "taxon":{
+     "$numberInt":"1"
+  },
+  "timeOfUpdate":{
+     "$numberDouble":"1.6496597619470E+12"
+  },
+  "uri":"ipfs://QmYq9kdekU9ZXMaDMRFdZs8SXPXNnQ23KacGcmwXC8jdvt/1_1.json",
+  "uriMetadata":{
+     "name":"Original Whale #1, Card #1 TEST",
+     "description":"Yaribel the Whale \n\nCustomise · Digitise · Equalise \nOnChain Whales NFTs, have created an NFT family, where users can express their creativity in an immutable form. Developing a system where investors determine the aesthetics and value of NFT art, bringing forward a new era of decentralisation. \nThis excitement and individualism is also rewarded with bountiful utility, visit the website to learn more. \n\nInvestors may opt to burn any combination of their collection to redeem a complete NFToken that mimics their design. Creating a deflationary collection of NFTs, that are redeemed for unique, holder created, artwork. \n\nBeauty is in the eye of the beholder, and you have a chance to make your beauty. \n\n**NONE OF THESE IMAGES WILL EVER BE SOLD OR RETAIN VALUE**",
+     "image":"ipfs://QmVjxVRFP9amqWcoEQGv6zDEX6G4ZZsoagPCbrukMDohtP/1_1.png",
+     "edition":{
+        "$numberInt":"1"
+     },
+     "date":{
+        "$numberDouble":"1.6377134127750E+12"
+     },
+     "external_url":"https://onchainwhales.net/",
+     "attributes":[
+        {
+           "trait_type":"Background",
+           "value":"Harvest Gold"
+        },
+        {
+           "trait_type":"Body",
+           "value":"Antique Ruby"
+        },
+        {
+           "trait_type":"Chin",
+           "value":"Middle Blue"
+        },
+        {
+           "trait_type":"Tail",
+           "value":"Camel"
+        },
+        {
+           "trait_type":"Fin",
+           "value":"Middle Blue"
+        },
+        {
+           "trait_type":"Eye",
+           "value":"Royal Purple"
+        }
+     ],
+     "compiler":"OnChain Whales",
+     "collection":{
+        "name":"Original OnChain Whale Cards",
+        "family":"OnChain Whales"
+     }
+  }
+}

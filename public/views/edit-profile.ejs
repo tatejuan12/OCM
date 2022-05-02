@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>OCW || Edit Profile</title>
+    <meta name="robots" content="noindex, follow" />
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta name="theme-style-mode" content="0"> <!-- 0 == light, 1 == dark -->
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png">
+    <!-- CSS 
+    ============================================ -->
+    <link rel="stylesheet" href="assets/css/vendor/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/vendor/slick.css">
+    <link rel="stylesheet" href="assets/css/vendor/slick-theme.css">
+    <link rel="stylesheet" href="assets/css/vendor/nice-select.css">
+    <link rel="stylesheet" href="assets/css/plugins/feature.css">
+    <link rel="stylesheet" href="assets/css/plugins/jquery-ui.min.css">
+
+    <!-- Style css -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body class="template-color-1">
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class='loader'>
+            <div class='circle'></div>
+            <div class='circle'></div>
+            <div class='circle'></div>
+            <div class='circle'></div>
+            <div class='circle'></div>
+        </div>
+    </div>
+
+    <%- include('sections/header.ejs') -%>
+
+    <!-- start page title area -->
+    <div class="rn-breadcrumb-inner ptb--30">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-6 col-12">
+                    <h5 class="title text-center text-md-start">Edit Profile</h5>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12">
+                    <ul class="breadcrumb-list">
+                        <li class="item"><a href="index.html">Home</a></li>
+                        <li class="separator"><i class="feather-chevron-right"></i></li>
+                        <li class="item current">Edit Profile</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end page title area -->
+
+
+    <!-- Start tabs area -->
+    <div class="edit-profile-area rn-section-gapTop">
+        <div class="container">
+            <div class="row plr--70 padding-control-edit-wrapper pl_md--0 pr_md--0 pl_sm--0 pr_sm--0">
+                <div class="col-12 d-flex justify-content-between mb--30 align-items-center">
+                    <h4 class="title-left">Edit Your Profile</h4>
+                    <a href="profile" class="btn btn-primary ml--10"><i class="feather-eye mr--5"></i> Profile</a>
+                </div>
+            </div>
+            <div class="row plr--70 padding-control-edit-wrapper pl_md--0 pr_md--0 pl_sm--0 pr_sm--0">
+                <div class="col-lg-3 col-md-3 col-sm-12">
+                    <!-- Start tabs area -->
+                    <nav class="left-nav rbt-sticky-top-adjust-five">
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true"><i class="feather-edit"></i>Edit Profile Image</button>
+                            <button class="nav-link" id="nav-home-tabs" data-bs-toggle="tab" data-bs-target="#nav-homes" type="button" role="tab" aria-controls="nav-homes" aria-selected="false"><i class="feather-user"></i>Personal Information</button>
+                            <!-- <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false"><i class="feather-bell"></i>Notification Setting</button> -->
+                        </div>
+                    </nav>
+                    <!-- End tabs area -->
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-12 mt_sm--30">
+                    <div class="tab-content tab-content-edit-wrapepr" id="nav-tabContent">
+
+                        <!-- sigle tab content -->
+                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <!-- start personal information -->
+                            <div class="nuron-information">
+
+                                <div class="profile-change row g-5">
+                                    <div class="profile-left col-lg-4">
+                                        <div class="profile-image mb--30">
+                                            <h6 class="title">Change Your Profile Picture</h6>
+                                            <img id="rbtinput1" src="assets/images/profile/profile-01.jpg" alt="Profile-NFT">
+                                        </div>
+                                        <div class="button-area">
+                                            <div class="brows-file-wrapper">
+                                                <!-- actual upload which is hidden -->
+                                                <input name="fatima" id="fatima" type="file" id="fatima">
+                                                <!-- our custom upload button -->
+                                                <label for="fatima" title="No File Choosen">
+                                                    <fors class="text-center color-white">Upload Profile</fors>
+                                                </label>
+                                            </div>
+                                            <!-- <a href="#" class="btn-primary-alta btn" onclick="customAlert.alert('Confirm to Delete Your Profile Picture?')">Delete</a> -->
+                                        </div>
+                                    </div>
+
+                                    <div class="profile-left right col-lg-8">
+                                        <div class="profile-image mb--30">
+                                            <h6 class="title">Change Your Cover Photo</h6>
+                                            <img id="rbtinput2" src="assets/images/profile/cover-01.jpg" alt="Profile-NFT">
+                                        </div>
+                                        <div class="button-area">
+                                            <div class="brows-file-wrapper">
+                                                <!-- actual upload which is hidden -->
+                                                <input name="nipa" id="nipa" type="file" id="nipa">
+                                                <!-- our custom upload button -->
+                                                <label for="nipa" title="No File Choosen">
+                                                    <fors class="text-center color-white">Upload Cover</fors>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End personal information -->
+                        </div>
+                        <!-- End single tabv content -->
+                        <!-- sigle tab content -->
+                        <div class="tab-pane fade" id="nav-homes" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <!-- start personal information -->
+                            <div class="nuron-information">
+
+                                <div class="profile-form-wrapper">
+                                    <div class="input-two-wrapper mb--15">
+                                        <div class="first-name half-wid">
+                                            <label for="contact-name" class="form-label">First Name</label>
+                                            <input name="contact-name" id="contact-name" type="text" value="Wesley">
+                                        </div>
+                                        <div class="last-name half-wid">
+                                            <label for="contact-name-last" class="form-label">Last Name</label>
+                                            <input name="contact-name" id="contact-name-last" type="text" value="The Whale">
+                                        </div>
+                                    </div>
+                                    <div class="email-area">
+                                        <label for="Email" class="form-label">Change Your Email</label>
+                                        <input name="email" id="Email" type="email" value="example@gmail.com">
+                                    </div>
+                                </div>
+
+
+                                <!-- edit bio area Start-->
+                                <div class="edit-bio-area mt--30">
+                                    <label for="Discription" class="form-label">Edit Your Bio</label>
+                                    <textarea id="Discription">I'm having a whale of a time.</textarea>
+                                </div>
+                                <!-- edit bio area End -->
+
+                                <!--  -->
+                                <div class="input-two-wrapepr-prifile">
+                                    <!-- start Role area -->
+                                    <div class="role-area mt--15">
+                                        <label for="Role" class="form-label mb--10">Occupation</label>
+                                        <input name="Role" id="Role" type="text" value="">
+                                    </div>
+                                    <!-- End Role area -->
+                                    <!-- select gender -->
+                                    <select class="profile-edit-select">
+                                        <option selected>Select Your Gender</option>
+                                        <option value="1">Male</option>
+                                        <option value="2">Female</option>
+                                        <option value="3">Rather not say</option>
+                                    </select>
+                                    <!-- end gender -->
+                                </div>
+                                <div class="button-area save-btn-edit">
+                                    <a href="#" class="btn btn-primary-alta mr--15" onclick="customAlert.alert('Cancel Edit Profile?')">Cancel</a>
+                                    <a href="#" class="btn btn-primary" onclick="customAlert.alert('Successfully Saved Your Profile?')">Save</a>
+                                </div>
+
+                            </div>
+                            <!-- End personal information -->
+                        </div>
+                        <!-- End single tabv content -->
+                        <div class="tab-pane fade " id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+
+                            <!-- start Notification Setting  -->
+                            <div class="nuron-information">
+                                <h5 class="title">Make Sure Your Notification setting </h5>
+                                <p class="notice-disc">
+                                    Notification Center is where you can find app notifications and Quick Settings—which
+                                    give you quick access to commonly used settings and apps. You can change your
+                                    notification settings at any time from the Settings app. Select Start , then select
+                                    Settings
+                                </p>
+                                <hr />
+                                <!-- start notice wrapper parrent -->
+                                <div class="notice-parent-wrapper d-flex">
+                                    <div class="notice-child-wrapper">
+                                        <!-- single notice wrapper -->
+                                        <div class="single-notice-setting">
+                                            <div class="input">
+                                                <input type="checkbox" id="themeSwitch" name="theme-switch" class="theme-switch__input" />
+                                                <label for="themeSwitch" class="theme-switch__label">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                            <div class="content-text">
+                                                <p>Order Confirmation Notice</p>
+                                            </div>
+                                        </div>
+                                        <!-- single notice wrapper End -->
+
+                                        <!-- single notice wrapper -->
+                                        <div class="single-notice-setting mt--15">
+                                            <div class="input">
+                                                <input type="checkbox" id="themeSwitchs" name="theme-switch" class="theme-switch__input" />
+                                                <label for="themeSwitchs" class="theme-switch__label">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                            <div class="content-text">
+                                                <p>New Items Notification</p>
+                                            </div>
+                                        </div>
+                                        <!-- single notice wrapper End -->
+
+                                        <!-- single notice wrapper -->
+                                        <div class="single-notice-setting mt--15">
+                                            <div class="input">
+                                                <input type="checkbox" id="OrderNotice" name="theme-switch" class="theme-switch__input" />
+                                                <label for="OrderNotice" class="theme-switch__label">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                            <div class="content-text">
+                                                <p>New Bid Notification</p>
+                                            </div>
+                                        </div>
+                                        <!-- single notice wrapper End -->
+
+                                        <!-- single notice wrapper -->
+                                        <div class="single-notice-setting mt--15">
+                                            <div class="input">
+                                                <input type="checkbox" id="newPAy" name="theme-switch" class="theme-switch__input" />
+                                                <label for="newPAy" class="theme-switch__label">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                            <div class="content-text">
+                                                <p>Payment Card Notification</p>
+                                            </div>
+                                        </div>
+                                        <!-- single notice wrapper End -->
+
+                                        <!-- single notice wrapper -->
+                                        <div class="single-notice-setting mt--15">
+                                            <div class="input">
+                                                <input type="checkbox" id="EndBid" name="theme-switch" class="theme-switch__input" />
+                                                <label for="EndBid" class="theme-switch__label">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                            <div class="content-text">
+                                                <p>Ending Bid Notification Before 5 min</p>
+                                            </div>
+                                        </div>
+                                        <!-- single notice wrapper End -->
+
+                                        <!-- single notice wrapper -->
+                                        <div class="single-notice-setting mt--15">
+                                            <div class="input">
+                                                <input type="checkbox" id="Approve" name="theme-switch" class="theme-switch__input" />
+                                                <label for="Approve" class="theme-switch__label">
+                                                    <span></span>
+                                                </label>
+                                            </div>
+                                            <div class="content-text">
+                                                <p>Notification for approving product</p>
+                                            </div>
+                                        </div>
+                                        <!-- single notice wrapper End -->
+                                    </div>
+
+
+
+                                    <div class="notice-child-wrapper">
+                                    </div>
+                                </div>
+                                <!-- end notice wrapper parrent -->
+                                <a href="#" class="btn btn-primary save-btn-edit" onclick="customAlert.alert('Successfully saved Your Notificationm setting')">Save</a>
+                            </div>
+                            <!-- End Notification Setting  -->
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End tabs area -->
+        
+    <%- include('sections/footer.ejs') -%>
+    <!-- Start Top To Bottom Area  -->
+    <div class="rn-progress-parent">
+        <svg class="rn-back-circle svg-inner" width="100%" height="100%" viewBox="-1 -1 102 102">
+            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
+        </svg>
+    </div>
+    <!-- End Top To Bottom Area  -->
+    <!-- JS ============================================ -->
+    <script src="assets/js/vendor/jquery.js"></script>
+    <script src="assets/js/vendor/jquery.nice-select.min.js"></script>
+    <script src="assets/js/vendor/jquery-ui.js"></script>
+    <script src="assets/js/vendor/modernizer.min.js"></script>
+    <script src="assets/js/vendor/feather.min.js"></script>
+    <script src="assets/js/vendor/slick.min.js"></script>
+    <script src="assets/js/vendor/bootstrap.min.js"></script>
+    <script src="assets/js/vendor/sal.min.js"></script>
+    <script src="assets/js/vendor/waypoint.js"></script>
+    <script src="assets/js/vendor/wow.js"></script>
+    <script src="assets/js/vendor/particles.js"></script>
+    <script src="assets/js/vendor/jquery.style.swicher.js"></script>
+    <script src="assets/js/vendor/js.cookie.js"></script>
+    <script src="assets/js/vendor/count-down.js"></script>
+    <script src="assets/js/vendor/counter-up.js"></script>
+    <script src="assets/js/vendor/isotop.js"></script>
+    <script src="assets/js/vendor/imageloaded.js"></script>
+    <script src="assets/js/vendor/backtoTop.js"></script>
+    <script src="assets/js/vendor/scrolltrigger.js"></script>
+    <script src="assets/js/vendor/jquery.custom-file-input.js"></script>
+    <script src="assets/js/vendor/savePopup.js"></script>
+    <!-- main JS -->
+    <script src="assets/js/main.js"></script>
+    <!-- Meta Mask  -->
+    <script src="assets/js/vendor/web3.min.js"></script>
+    <script src="assets/js/vendor/maralis.js"></script>
+    <script src="assets/js/vendor/nft.js"></script>
+</body>
+
+</html>
