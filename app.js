@@ -17,11 +17,11 @@ const sdk = new XummSdk(
   "621ce94c-d791-48ec-aa47-eeaf510b8d55",
   "5a809cea-021f-4bc9-aec5-9286508dd44d"
 );
-mongoClient.query
-  .getNFT("00080000C030302B96AF4535D488B846166EB6822BBF146E0000099A00000000")
-  .then((nft) => {
-    console.log(nft);
-  });
+// mongoClient.query
+//   .getNFT("00080000C030302B96AF4535D488B846166EB6822BBF146E0000099A00000000")
+//   .then((nft) => {
+//     console.log(nft);
+//   });
 const mongoStore = new MongoDBStore({
   uri: "mongodb+srv://ocw:9T6YNSUEh61zgCB6@ocw-test.jgpcr.mongodb.net/NFT-Devnet?retryWrites=true&w=majority",
   collection: "Sessions",
@@ -129,8 +129,15 @@ function getPayload(request) {
 app.get("/", (req, res) => {
   res.render("views/");
 });
-app.get("/explore", (req, res) => {
-  res.render("views/explore");
+app.get("/explore", async (req, res) => {
+  var nfts;
+  await mongoClient.query.getNfts(req.session.wallet).then((result) => {
+    nfts = result;
+  });
+  res.render("views/explore", { nfts: nfts });
+});
+app.get("/profile-bak", (req, res) => {
+  res.render("views/profilebak");
 });
 app.get("/about", (req, res) => {
   res.render("views/about");
@@ -145,14 +152,23 @@ app.get("/connect", (req, res) => {
 app.get("/redeem", (req, res) => {
   res.render("views/redeem");
 });
-app.get("/profile", (req, res) => {
-  res.render("views/profile");
+app.get("/profile", async (req, res) => {
+  var ownerNfts;
+  await mongoClient.query.getOwnerNfts(req.session.wallet).then((result) => {
+    ownerNfts = result;
+  });
+  res.render("views/profile", { nfts: ownerNfts });
 });
 app.get("/edit-profile", (req, res) => {
   res.render("views/edit-profile");
 });
-app.get("/product-details", (req, res) => {
-  res.render("views/product-details");
+app.get("/product-details", async (req, res) => {
+  let nftId = req.query.id;
+  var nft;
+  await mongoClient.query.getNft(nftId).then((result) => {
+    nft = result;
+  });
+  res.render("views/product-details", { nft: nft });
 });
 app.get("/create-listing", (req, res) => {
   res.render("views/create-listing");
@@ -172,11 +188,16 @@ function checkViews(req) {
   else req.session.views += 1;
 }
 function defaultLocals(req, res, next) {
-  var login = req.session.login;
-  var wallet = req.session.wallet;
-  var mobile = req.useragent.isMobile;
-  res.locals.login = req.session.login != null ? req.session.login : false;
-  res.locals.wallet = wallet != null ? wallet : false;
-  res.locals.mobile = mobile != null ? mobile : false;
-  next();
+  try {
+    var login = req.session.login != null ? req.session.login : false;
+    var wallet = req.session.wallet != null ? req.session.wallet : false;
+    var mobile = req.useragent.isMobile;
+    res.locals.login = login;
+    res.locals.wallet = wallet;
+    res.locals.mobile = mobile;
+  } catch (err) {
+    console.error("Error settings locals: " + err);
+  } finally {
+    next();
+  }
 }
