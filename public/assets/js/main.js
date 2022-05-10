@@ -843,3 +843,14 @@ function xummSignin(mobile) {
     },
   });
 }
+function incrementLike(nftId, incDOM) {
+  $.ajax({
+    type: "POST",
+    url: "/increment-like",
+    data: { id: nftId },
+    success: function () {
+      const likes = incDOM.children[1];
+      likes.innerHTML = parseInt(likes.innerHTML) + 1;
+    },
+  });
+}

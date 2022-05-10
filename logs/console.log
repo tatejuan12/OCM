@@ -1,90 +1,16 @@
 Server2 listening successfuly
+(node:433909) [DEP0066] DeprecationWarning: OutgoingMessage.prototype._headers is deprecated
 {
-  _id: new ObjectId("6253731fca516e68da8a7e6b"),
-  issuer: 'rJXU7rDx9rQEZK4ZYk6hhmtUzETP37GhBH',
-  tokenID: '00080000C030302B96AF4535D488B846166EB6822BBF146E0000099A00000000',
-  burnt: { status: false, txID: '', time: '' },
-  buyOffers: [],
-  currentOwner: 'rJXU7rDx9rQEZK4ZYk6hhmtUzETP37GhBH',
-  flags: 8,
-  httpsImage: 'https://ipfs.onchainwhales.net/ipfs/QmVjxVRFP9amqWcoEQGv6zDEX6G4ZZsoagPCbrukMDohtP/1_1.png',
-  httpsURI: 'https://ipfs.onchainwhales.net/ipfs/QmYq9kdekU9ZXMaDMRFdZs8SXPXNnQ23KacGcmwXC8jdvt/1_1.json',
-  nftSerial: 0,
-  sellHistory: [],
-  sellOffers: [],
-  taxon: 1,
-  timeOfUpdate: 1649659761947,
-  uri: 'ipfs://QmYq9kdekU9ZXMaDMRFdZs8SXPXNnQ23KacGcmwXC8jdvt/1_1.json',
-  uriMetadata: {
-    name: 'Original Whale #1, Card #1 TEST',
-    description: 'Yaribel the Whale \n' +
-      '\n' +
-      'Customise · Digitise · Equalise \n' +
-      'OnChain Whales NFTs, have created an NFT family, where users can express their creativity in an immutable form. Developing a system where investors determine the aesthetics and value of NFT art, bringing forward a new era of decentralisation. \n' +
-      'This excitement and individualism is also rewarded with bountiful utility, visit the website to learn more. \n' +
-      '\n' +
-      'Investors may opt to burn any combination of their collection to redeem a complete NFToken that mimics their design. Creating a deflationary collection of NFTs, that are redeemed for unique, holder created, artwork. \n' +
-      '\n' +
-      'Beauty is in the eye of the beholder, and you have a chance to make your beauty. \n' +
-      '\n' +
-      '**NONE OF THESE IMAGES WILL EVER BE SOLD OR RETAIN VALUE**',
-    image: 'ipfs://QmVjxVRFP9amqWcoEQGv6zDEX6G4ZZsoagPCbrukMDohtP/1_1.png',
-    edition: 1,
-    date: 1637713412775,
-    external_url: 'https://onchainwhales.net/',
-    attributes: [ [Object], [Object], [Object], [Object], [Object], [Object] ],
-    compiler: 'OnChain Whales',
-    collection: { name: 'Original OnChain Whale Cards', family: 'OnChain Whales' }
-  }
-}
-(node:350933) [DEP0066] DeprecationWarning: OutgoingMessage.prototype._headers is deprecated
-Util.pump errTypeError: util.pump is not a function
-TypeError: Cannot read property 'login' of undefined
-    at defaultLocals (/opt/lampp/htdocs/app.js:175:27)
-    at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
-    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
-    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
-    at Function.process_params (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:341:12)
-    at next (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:275:10)
-    at /opt/lampp/htdocs/node_modules/express-useragent/index.js:48:9
-    at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
-    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
-    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
-Util.pump errTypeError: util.pump is not a function
-TypeError: Cannot read property 'login' of undefined
-    at defaultLocals (/opt/lampp/htdocs/app.js:175:27)
-    at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
-    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
-    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
-    at Function.process_params (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:341:12)
-    at next (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:275:10)
-    at /opt/lampp/htdocs/node_modules/express-useragent/index.js:48:9
-    at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
-    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
-    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
-{
-  uuid: '7af50ebc-77c4-46a0-8d0e-1aa6299c2de2',
+  uuid: '993ce4f2-50e1-4eec-824e-b13cee6dd734',
   next: {
-    always: 'https://xumm.app/sign/7af50ebc-77c4-46a0-8d0e-1aa6299c2de2'
+    always: 'https://xumm.app/sign/993ce4f2-50e1-4eec-824e-b13cee6dd734'
   },
   refs: {
-    qr_png: 'https://xumm.app/sign/7af50ebc-77c4-46a0-8d0e-1aa6299c2de2_q.png',
-    qr_matrix: 'https://xumm.app/sign/7af50ebc-77c4-46a0-8d0e-1aa6299c2de2_q.json',
+    qr_png: 'https://xumm.app/sign/993ce4f2-50e1-4eec-824e-b13cee6dd734_q.png',
+    qr_matrix: 'https://xumm.app/sign/993ce4f2-50e1-4eec-824e-b13cee6dd734_q.json',
     qr_uri_quality_opts: [ 'm', 'q', 'h' ],
-    websocket_status: 'wss://xumm.app/sign/7af50ebc-77c4-46a0-8d0e-1aa6299c2de2'
+    websocket_status: 'wss://xumm.app/sign/993ce4f2-50e1-4eec-824e-b13cee6dd734'
   },
   pushed: false
 }
-User signed in: 7af50ebc-77c4-46a0-8d0e-1aa6299c2de2
-Util.pump errTypeError: util.pump is not a function
-TypeError: Cannot read property 'login' of undefined
-    at defaultLocals (/opt/lampp/htdocs/app.js:175:27)
-    at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
-    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
-    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
-    at Function.process_params (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:341:12)
-    at next (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:275:10)
-    at /opt/lampp/htdocs/node_modules/express-useragent/index.js:48:9
-    at Layer.handle [as handle_request] (/opt/lampp/htdocs/node_modules/express/lib/router/layer.js:95:5)
-    at trim_prefix (/opt/lampp/htdocs/node_modules/express/lib/router/index.js:323:13)
-    at /opt/lampp/htdocs/node_modules/express/lib/router/index.js:284:7
+User signed in: 993ce4f2-50e1-4eec-824e-b13cee6dd734

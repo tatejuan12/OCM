@@ -173,6 +173,17 @@ app.get("/product-details", async (req, res) => {
 app.get("/create-listing", (req, res) => {
   res.render("views/create-listing");
 });
+app.post("/increment-like", async (req, res) => {
+  var success;
+  if (req.session.login) {
+    const nftId = req.body.id;
+    const userId = req.session.wallet;
+    await mongoClient.query.addLike(nftId, userId).then((result) => {
+      success = result;
+    });
+  } else success = false;
+  success ? res.status(200).end() : res.status(406).end();
+});
 
 // Renders 404 page if the request is send to undeclared location
 app.use((req, res, next) => {

@@ -74,7 +74,7 @@
               <div class="tab-content rn-pd-content" id="v-pills-tabContent">
                 <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
                   <div class="rn-pd-thumbnail">
-                    <img src="https://ipfs.onchainwhales.net/ipfs/QmVjxVRFP9amqWcoEQGv6zDEX6G4ZZsoagPCbrukMDohtP/1_1.png" alt="Nft_Profile">
+                    <img src="<%= nft.httpsImage%> " alt="Nft_Profile">
                   </div>
                 </div>
               </div>
@@ -89,9 +89,9 @@
             <div class="pd-title-area">
               <h4 class="title"><%=nft.uriMetadata.name%></h4>
               <div class="pd-react-area">
-                <div class="heart-count">
+                <div class="heart-count" onclick="incrementLike('<%=nft.tokenID%>', this)">
                   <i data-feather="heart"></i>
-                  <span># of likes</span>
+                  <span><%=nft.likes.length%></span>
                 </div>
                 <div class="count">
                   <div class="share-btn share-btn-activation dropdown">
@@ -114,7 +114,7 @@
                 </div>
               </div>
             </div>
-            <span class="bid">Latest bid <span class="price"><%- nft.buyOffers[0] ? nft.buyOffers[0] + "XRP": "No bids"%></span></span>
+            <span class="bid">Latest bid <span class="price"><%- nft.buyOffers[0] ? nft.buyOffers[0] + " XRP": "No bids"%></span></span>
             <h6 class="title-name">
               <%=nft.uriMetadata.collection.family%>
             </h6>
@@ -194,7 +194,7 @@
                           </div>
                           <div class="top-seller-content">
                             <a href="#">
-                              <h6 class="name"><%=nft.currentOwner%> </h6>
+                              <h6 class="name"><%=nft.currentOwner%></h6>
                             </a>
                           </div>
                         </div>
@@ -205,43 +205,14 @@
                           Property
                         </h6>
                         <div class="property-wrapper" id="property">
-
+                          <% nft.uriMetadata.attributes.forEach(function(res){%>
                           <!-- single property -->
                           <div class="pd-property-inner">
-                            <span class="color-body type">Background</span>
-                            <span class="color-white value">Harvest Gold</span>
+                            <span class="color-body type"><%=res.trait_type%></span>
+                            <span class="color-white value"><%=res.value%></span>
                           </div>
                           <!-- single property End -->
-                          <!-- single property -->
-                          <div class="pd-property-inner">
-                            <span class="color-body type">Body</span>
-                            <span class="color-white value">Antique Ruby</span>
-                          </div>
-                          <!-- single property End -->
-                          <!-- single property -->
-                          <div class="pd-property-inner">
-                            <span class="color-body type">Chin</span>
-                            <span class="color-white value">Middle Blue</span>
-                          </div>
-                          <!-- single property End -->
-                          <!-- single property -->
-                          <div class="pd-property-inner">
-                            <span class="color-body type">Tail</span>
-                            <span class="color-white value">Camel</span>
-                          </div>
-                          <!-- single property End -->
-                          <!-- single property -->
-                          <div class="pd-property-inner">
-                            <span class="color-body type">Fin</span>
-                            <span class="color-white value">Middle Blu</span>
-                          </div>
-                          <!-- single property End -->
-                          <!-- single property -->
-                          <div class="pd-property-inner">
-                            <span class="color-body type">Eye</span>
-                            <span class="color-white value">Royal Purple</span>
-                          </div>
-                          <!-- single property End -->
+                          <%}); %>
 
                         </div>
                       </div>
