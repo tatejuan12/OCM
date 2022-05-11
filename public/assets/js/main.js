@@ -843,14 +843,31 @@ function xummSignin(mobile) {
     },
   });
 }
-function incrementLike(nftId, incDOM) {
+function likeHandler(nftId, DOM) {
+  if (DOM.classList.contains("liked")) decrementLike(nftId, DOM);
+  else incrementLike(nftId, DOM);
+}
+function incrementLike(nftId, DOM) {
   $.ajax({
     type: "POST",
     url: "/increment-like",
     data: { id: nftId },
     success: function () {
-      const likes = incDOM.children[1];
+      const likes = DOM.children[1];
       likes.innerHTML = parseInt(likes.innerHTML) + 1;
+      DOM.classList.toggle("liked");
+    },
+  });
+}
+function decrementLike(nftId, DOM) {
+  $.ajax({
+    type: "POST",
+    url: "/decrement-like",
+    data: { id: nftId },
+    success: function () {
+      const likes = DOM.children[1];
+      likes.innerHTML = parseInt(likes.innerHTML) - 1;
+      DOM.classList.toggle("liked");
     },
   });
 }

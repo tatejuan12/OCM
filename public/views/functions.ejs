@@ -2,7 +2,7 @@
 nftLiked = function() {
     var checker = false;
     nft.likes.forEach(function(like){
-    like == wallet ? checker = true : checker = false;
+    if (like == wallet) checker = true;
 }); 
 return checker;
 }

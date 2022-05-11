@@ -91,7 +91,7 @@
               <h4 class="title"><%=nft.uriMetadata.name%></h4>
               <div class="pd-react-area">
 
-                <div class="heart-count <% if (nftLiked()) __append('liked')%>" onclick="incrementLike('<%=nft.tokenID%>', this)">
+                <div class="heart-count <% if (nftLiked()) __append('liked')%>" onclick="likeHandler('<%=nft.tokenID%>', this)">
                   <i data-feather="heart"></i>
                   <span><%=nft.likes.length%></span>
                 </div>
@@ -210,7 +210,7 @@
                           <% nft.uriMetadata.attributes.forEach(function(res){%>
                           <!-- single property -->
                           <div class="pd-property-inner">
-                            <span class="color-body type"><%=res.trait_type%></span>
+                            <span class="color-white type"><%=res.trait_type%></span>
                             <span class="color-white value"><%=res.value%></span>
                           </div>
                           <!-- single property End -->

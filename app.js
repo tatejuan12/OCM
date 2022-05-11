@@ -184,7 +184,17 @@ app.post("/increment-like", async (req, res) => {
   } else success = false;
   success ? res.status(200).end() : res.status(406).end();
 });
-
+app.post("/decrement-like", async (req, res) => {
+  var success;
+  if (req.session.login) {
+    const nftId = req.body.id;
+    const userId = req.session.wallet;
+    await mongoClient.query.removeLike(nftId, userId).then((result) => {
+      success = result;
+    });
+  } else success = false;
+  success ? res.status(200).end() : res.status(406).end();
+});
 // Renders 404 page if the request is send to undeclared location
 app.use((req, res, next) => {
   res.status(404).render("views/404.ejs");

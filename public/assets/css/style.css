@@ -23418,6 +23418,6 @@ body.active-light-mode {
 .btn2:active {
   opacity: 0.2;
 }
-/* .liked {
+.liked {
   background-color: var(--color-primary) !important;
-} */
+}
