@@ -91,7 +91,7 @@
               <h4 class="title"><%=nft.uriMetadata.name%></h4>
               <div class="pd-react-area">
 
-                <div class="heart-count <% if (nftLiked()) __append('liked')%>" onclick="likeHandler('<%=nft.tokenID%>', this)">
+                <div class="heart-count <% if (login && nftLiked()) __append('liked')%>" <%if(login) {%>onclick="likeHandler('<%=nft.tokenID%>', this)" <%}%>>
                   <i data-feather="heart"></i>
                   <span><%=nft.likes.length%></span>
                 </div>

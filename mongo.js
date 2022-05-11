@@ -108,6 +108,7 @@ var methods = {
       let collection = db.collection("NFT-Details");
 
       const liked = await alreadyLiked(collection, id, userWallet);
+      console.log(liked);
       if (!liked) {
         let filter = {
           tokenID: id,
