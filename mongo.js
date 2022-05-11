@@ -108,7 +108,6 @@ var methods = {
       let collection = db.collection("NFT-Details");
 
       const liked = await alreadyLiked(collection, id, userWallet);
-      console.log(liked);
       if (!liked) {
         let filter = {
           tokenID: id,
@@ -128,7 +127,45 @@ var methods = {
       return res;
     }
   },
+  removeLike: async function (body, wallet) {
+    const id = body;
+    const userWallet = wallet;
+    var res;
+    const client = await mongoClient
+      .connect(mongoUri, {
+        useNewUrlParser: true,
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    if (!client) return;
+    try {
+      const db = client.db("NFT-Devnet");
+
+      let collection = db.collection("NFT-Details");
+
+      const liked = await alreadyLiked(collection, id, userWallet);
+      if (!liked) {
+        let filter = {
+          tokenID: id,
+        };
+        let query = {
+          $pull: {
+            likes: userWallet,
+          },
+        };
+        const result = await collection.updateOne(filter, query);
+        result.modifiedCount > 0 ? (res = true) : (res = false);
+      } else res = false;
+    } catch (err) {
+      console.log("Database error" + err);
+    } finally {
+      client.close();
+      return res;
+    }
+  },
 };
+
 async function alreadyLiked(collection, id, wallet) {
   var checker = false;
   let filter = {

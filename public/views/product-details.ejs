@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="assets/css/vendor/nice-select.css">
   <link rel="stylesheet" href="assets/css/plugins/feature.css">
   <link rel="stylesheet" href="assets/css/plugins/jquery-ui.min.css">
+  <%- include('functions.ejs')%>
 
   <!-- Style css -->
   <link rel="stylesheet" href="assets/css/style.css">
@@ -89,7 +90,8 @@
             <div class="pd-title-area">
               <h4 class="title"><%=nft.uriMetadata.name%></h4>
               <div class="pd-react-area">
-                <div class="heart-count" onclick="incrementLike('<%=nft.tokenID%>', this)">
+
+                <div class="heart-count <% if (nftLiked()) __append('liked')%>" onclick="incrementLike('<%=nft.tokenID%>', this)">
                   <i data-feather="heart"></i>
                   <span><%=nft.likes.length%></span>
                 </div>
@@ -280,7 +282,6 @@
           <h3 class="title mb--0" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800">More Items</h3>
         </div>
       </div>
-      <script src="assets/js/vendor/moreItems.js"></script>
       <div class="row g-5" id="moreItems">
         <!-- start single product -->
         <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12" style="display:block;">

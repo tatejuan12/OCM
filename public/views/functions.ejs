@@ -1,0 +1,9 @@
+<%
+nftLiked = function() {
+    var checker = false;
+    nft.likes.forEach(function(like){
+    like == wallet ? checker = true : checker = false;
+}); 
+return checker;
+}
+%>
