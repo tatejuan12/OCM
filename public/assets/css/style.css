@@ -73,7 +73,7 @@
   --color-body: #acacac;
   --color-dark: rgb(29, 29, 29);
   --color-light-heading: #181c32;
-  --color-light-body: #ced0d4;
+  --color-light-body: #262627;
   --color-border-white: #00000024;
   --color-midgray: #878787;
   --color-light: #000000;
@@ -23420,4 +23420,5 @@ body.active-light-mode {
 }
 .liked {
   background-color: var(--color-primary) !important;
+  color: white;
 }

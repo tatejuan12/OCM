@@ -1,7 +1,3 @@
-const { log } = require("console");
-const res = require("express/lib/response");
-const { resolve } = require("path");
-
 const mongoClient = require("mongodb").MongoClient;
 
 //async reference https://stackoverflow.com/questions/47370487/node-js-mongodb-driver-async-await-queries
@@ -108,7 +104,6 @@ var methods = {
       let collection = db.collection("NFT-Details");
 
       const liked = await alreadyLiked(collection, id, userWallet);
-      console.log(liked);
       if (!liked) {
         let filter = {
           tokenID: id,
