@@ -23422,12 +23422,11 @@ body.active-light-mode {
   background-color: var(--color-primary) !important;
   color: white;
 }
-.paginaton-navigation {
+.pagination-navigation {
   text-align: center;
   width: max-content;
   padding: 5px 20px;
   margin: 30px auto;
-  background-color: white;
   border-radius: 10px;
 }
 .pagination-step {
@@ -23439,4 +23438,19 @@ body.active-light-mode {
 }
 .pagination-step:hover {
   transform: scale(1.5);
+}
+.pagination-step.step-active {
+  color: #883dff;
+}
+.active-dark-mode .pagination-step.step-active {
+  color: var(--color-white);
+}
+.active-light-mode .pagination-navigation {
+  background: var(--color-white);
+}
+.active-dark-mode .pagination-navigation {
+  background: var(--background-color-4);
+}
+#logout {
+  width: max-content;
 }

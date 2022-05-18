@@ -1,4 +1,11 @@
 {
+  "name":"ocw",
+  "description": "OCW Website",
+  "main": "/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "scss-compile": "node-sass public/assets/scss/style.scss -o css.css"
+  },
   "dependencies": {
     "connect-mongodb-session": "^3.1.1",
     "cors": "^2.8.5",
@@ -9,6 +16,7 @@
     "express-useragent": "^1.0.15",
     "fs": "^0.0.1-security",
     "mongodb": "^4.5.0",
+    "node-sass": "^7.0.1",
     "path": "^0.12.7",
     "verify-xrpl-signature": "^0.4.0",
     "xrpl": "^2.2.3",

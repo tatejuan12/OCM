@@ -171,6 +171,7 @@ function defaultLocals(req, res, next) {
     res.locals.login = login;
     res.locals.wallet = wallet;
     res.locals.mobile = mobile;
+    res.locals.url = req.path;
   } catch (err) {
     console.error("Error settings locals: " + err);
   } finally {

@@ -1,0 +1,8 @@
+<div class="pagination-navigation">
+  <%for(var i = page - 5 ; i < page + 5 ; i++) {
+    if (i < 0) i = 0;
+    if (page == i) {%><a href="<%=url +'?page='+ i%>"><span class="pagination-step step-active"><%=i%></span></a><%} else {%>
+
+  <a href="<%=url +'?page='+ i%>"><span class="pagination-step"><%=i%></span></a>
+  <%}}%>
+</div>
