@@ -23422,3 +23422,21 @@ body.active-light-mode {
   background-color: var(--color-primary) !important;
   color: white;
 }
+.paginaton-navigation {
+  text-align: center;
+  width: max-content;
+  padding: 5px 20px;
+  margin: 30px auto;
+  background-color: white;
+  border-radius: 10px;
+}
+.pagination-step {
+  color: var(--color-primary);
+  font-size: 20px;
+  display: inline-block;
+  transition: transform 0.2s;
+  padding: 0 5px;
+}
+.pagination-step:hover {
+  transform: scale(1.5);
+}

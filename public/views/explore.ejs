@@ -27,7 +27,7 @@
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <!-- <script src="assets/js/vendor/explore.js"></script> -->
-
+  <% include ('functions.ejs') %>
 </head>
 
 <body class="template-color-1">
@@ -124,8 +124,17 @@
         <% nfts.forEach(function(res){%>
         <%- include('models/nft-card.ejs', {nft:res})%>
         <%}); %>
+        <!-- <div style="height:100px; background-color: red;">
 
+          
+        </div> -->
+      </div>
 
+      <div class="paginaton-navigation">
+        <%for(var i = page - 5 ; i < page + 5 ; i++) {
+              if (i < 0) i = 0 %>
+        <a href="/explore?page=<%=i%>"><span class="pagination-step"><%=i%></span></a>
+        <%}%>
       </div>
     </div>
   </div>
@@ -133,41 +142,41 @@
   <!-- Modal require -->
   <%- include('sections/popup-modal.ejs') -%>
 
-  <%- include('sections/footer.ejs') -%>
-  <!-- Start Top To Bottom Area  -->
-  <div class="rn-progress-parent">
-    <svg class="rn-back-circle svg-inner" width="100%" height="100%" viewBox="-1 -1 102 102">
-      <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
-    </svg>
-  </div>
-  <!-- End Top To Bottom Area  -->
-  <!-- JS ============================================ -->
-  <script src="assets/js/vendor/jquery.js"></script>
-  <script src="assets/js/vendor/jquery.nice-select.min.js"></script>
-  <script src="assets/js/vendor/jquery-ui.js"></script>
-  <script src="assets/js/vendor/modernizer.min.js"></script>
-  <script src="assets/js/vendor/feather.min.js"></script>
-  <script src="assets/js/vendor/slick.min.js"></script>
-  <script src="assets/js/vendor/bootstrap.min.js"></script>
-  <script src="assets/js/vendor/sal.min.js"></script>
-  <script src="assets/js/vendor/waypoint.js"></script>
-  <script src="assets/js/vendor/wow.js"></script>
-  <script src="assets/js/vendor/particles.js"></script>
-  <script src="assets/js/vendor/jquery.style.swicher.js"></script>
-  <script src="assets/js/vendor/js.cookie.js"></script>
-  <script src="assets/js/vendor/count-down.js"></script>
-  <script src="assets/js/vendor/counter-up.js"></script>
-  <script src="assets/js/vendor/isotop.js"></script>
-  <script src="assets/js/vendor/imageloaded.js"></script>
-  <script src="assets/js/vendor/backtoTop.js"></script>
-  <script src="assets/js/vendor/scrolltrigger.js"></script>
-  <script src="assets/js/vendor/jquery.custom-file-input.js"></script>
-  <script src="assets/js/vendor/savePopup.js"></script>
-  <!-- main JS -->
-  <script src="assets/js/main.js"></script>
-  <!-- Meta Mask  -->
-  <script src="assets/js/vendor/web3.min.js"></script>
-  <script src="assets/js/vendor/maralis.js"></script>
-  <script src="assets/js/vendor/nft.js"></script>
+        <%- include('sections/footer.ejs') -%>
+        <!-- Start Top To Bottom Area  -->
+        <div class="rn-progress-parent">
+          <svg class="rn-back-circle svg-inner" width="100%" height="100%" viewBox="-1 -1 102 102">
+            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
+          </svg>
+        </div>
+        <!-- End Top To Bottom Area  -->
+        <!-- JS ============================================ -->
+        <script src="assets/js/vendor/jquery.js"></script>
+        <script src="assets/js/vendor/jquery.nice-select.min.js"></script>
+        <script src="assets/js/vendor/jquery-ui.js"></script>
+        <script src="assets/js/vendor/modernizer.min.js"></script>
+        <script src="assets/js/vendor/feather.min.js"></script>
+        <script src="assets/js/vendor/slick.min.js"></script>
+        <script src="assets/js/vendor/bootstrap.min.js"></script>
+        <script src="assets/js/vendor/sal.min.js"></script>
+        <script src="assets/js/vendor/waypoint.js"></script>
+        <script src="assets/js/vendor/wow.js"></script>
+        <script src="assets/js/vendor/particles.js"></script>
+        <script src="assets/js/vendor/jquery.style.swicher.js"></script>
+        <script src="assets/js/vendor/js.cookie.js"></script>
+        <script src="assets/js/vendor/count-down.js"></script>
+        <script src="assets/js/vendor/counter-up.js"></script>
+        <script src="assets/js/vendor/isotop.js"></script>
+        <script src="assets/js/vendor/imageloaded.js"></script>
+        <script src="assets/js/vendor/backtoTop.js"></script>
+        <script src="assets/js/vendor/scrolltrigger.js"></script>
+        <script src="assets/js/vendor/jquery.custom-file-input.js"></script>
+        <script src="assets/js/vendor/savePopup.js"></script>
+        <!-- main JS -->
+        <script src="assets/js/main.js"></script>
+        <!-- Meta Mask  -->
+        <script src="assets/js/vendor/web3.min.js"></script>
+        <script src="assets/js/vendor/maralis.js"></script>
+        <script src="assets/js/vendor/nft.js"></script>
 
 </html>

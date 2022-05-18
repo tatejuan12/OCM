@@ -24,6 +24,7 @@ const mongoStore = new MongoDBStore({
   uri: "mongodb+srv://ocw:9T6YNSUEh61zgCB6@ocw-test.jgpcr.mongodb.net/NFT-Devnet?retryWrites=true&w=majority",
   collection: "Sessions",
 });
+const NFTSPERPAGE = 10;
 //! ---------------------Imported middleware--------------------------------//
 const app = express();
 app.use(
@@ -59,10 +60,13 @@ app.get("/", (req, res) => {
 });
 app.get("/explore", async (req, res) => {
   var nfts;
-  await mongoClient.query.getNfts(req.session.wallet).then((result) => {
-    nfts = result;
-  });
-  res.render("views/explore", { nfts: nfts });
+  const page = parseInt(req.query.page);
+  if (!isNaN(page)) {
+    await mongoClient.query.getNfts(NFTSPERPAGE, page).then((result) => {
+      nfts = result;
+    });
+    res.render("views/explore", { nfts: nfts, page: page });
+  } else res.redirect("explore?page=0");
 });
 app.get("/profile-bak", (req, res) => {
   res.render("views/profilebak");

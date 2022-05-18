@@ -61,7 +61,7 @@ var methods = {
       client.close();
     }
   },
-  getNfts: async function () {
+  getNfts: async function (NFTSPERPAGE, page) {
     const client = await mongoClient
       .connect(mongoUri, {
         useNewUrlParser: true,
@@ -77,7 +77,10 @@ var methods = {
 
       let query = {};
 
-      const cursor = await collection.find(query).limit(10);
+      const cursor = await collection
+        .find(query)
+        .skip(NFTSPERPAGE * page)
+        .limit(NFTSPERPAGE);
 
       return await cursor.toArray();
     } catch (err) {
