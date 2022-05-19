@@ -3,8 +3,8 @@ const { TxData } = require("xrpl-txdata");
 const verifySignature = new TxData();
 const { XummSdk } = require("xumm-sdk");
 const sdk = new XummSdk(
-  "621ce94c-d791-48ec-aa47-eeaf510b8d55",
-  "5a809cea-021f-4bc9-aec5-9286508dd44d"
+  "b58d7023-14f2-4b64-a804-1c5d50215d6a",
+  "aeb73f38-4288-46dd-9c03-2a8c13635d09"
 );
 const xrpl = require("xrpl");
 const issuerSeed = "sanmTNafTvtjEDNhPnsGWJWkCnVwU";
@@ -26,6 +26,113 @@ var payloads = {
     };
     const payload = await getPayload(request);
     return payload;
+  },
+  redeemNftPayload: async function (req, res, address) {
+    const client = await getXrplClient();
+    try {
+      //wallet of issuer
+      var nftWallet = xrpl.Wallet.fromSeed(issuerSeed);
+
+      //console.log(`\nScanning NFTs held by ${nftWallet.classicAddress}`)
+      //Try Select an NFT up to 5 times
+      var count = 0;
+      while (count < 5) {
+        try {
+          var accountNFTs = await client.request({
+            method: "account_nfts",
+            ledger_index: "validated",
+            account: nftWallet.classicAddress,
+            limit: 400,
+          });
+
+          var nftSelection = accountNFTs.result.account_nfts;
+          var nftID =
+            nftSelection[
+              Math.floor(Math.random() * (nftSelection.length - 1 - 0 + 1) + 0)
+            ].NFTokenID;
+          break;
+        } catch (err) {
+          //console.log(`                    Failed ${count}`)
+          count += 1;
+        }
+      }
+
+      //If could no select NFT in 5 attempts
+      if (nftID == undefined) {
+        //console.log('Could Not Select NFT')
+        return;
+      }
+
+      //console.log(`\tRandom NFT selected -> NFTokenID: ${nftID}`);
+      //set expiry of offer 5 minutes from now
+      var expiry = +(Date.now() / 1000 - 946684800 + 300)
+        .toString()
+        .split(".")[0];
+
+      //mint NFT
+      //Try Place mint up to 5 times
+      //console.log(`\nSetting Sell Or or Chosen NFT`);
+      var count = 0;
+      while (count < 5) {
+        try {
+          var nftSellPrep = await client.autofill({
+            TransactionType: "NFTokenCreateOffer",
+            Account: nftWallet.classicAddress,
+            NFTokenID: nftID,
+            Amount: "12333",
+            Flags: 1,
+            Destination: address,
+            Expiration: expiry,
+          });
+          nftSellPrep.LastLedgerSequence -= 15;
+          var nftSellSigned = nftWallet.sign(nftSellPrep);
+          var nftSellResult = await client.submitAndWait(nftSellSigned.tx_blob);
+
+          if (nftSellResult.result.meta.TransactionResult == "tesSUCCESS") {
+            for (a in nftSellResult.result.meta.AffectedNodes) {
+              if ("CreatedNode" in nftSellResult.result.meta.AffectedNodes[a]) {
+                if (
+                  nftSellResult.result.meta.AffectedNodes[a].CreatedNode
+                    .LedgerEntryType == "NFTokenOffer"
+                ) {
+                  var nftOfferIndex =
+                    nftSellResult.result.meta.AffectedNodes[a].CreatedNode
+                      .LedgerIndex;
+                }
+              }
+            }
+          } else {
+            throw "Error wth acc";
+          }
+          break;
+        } catch (err) {
+          console.log(err);
+          //console.log(`                    Failed ${count}`)
+          count += 1;
+        }
+      }
+
+      //if could not sell NFT
+      if (nftOfferIndex == undefined) {
+        //console.log('Could Not Place order')
+        return;
+      }
+
+      //console.log(`\tOffer Index: ${nftOfferIndex}`)
+
+      //this object will be used in the Xumm object
+      //this allows to generate a relevant Xumm qrCode
+      var xummObj = {
+        TransactionType: "NFTokenAcceptOffer",
+        SellOffer: nftOfferIndex,
+      };
+      const payload = await getPayload(xummObj);
+      return payload;
+    } catch (error) {
+      return;
+    } finally {
+      await client.disconnect();
+    }
   },
 };
 var subscriptions = {
@@ -53,6 +160,29 @@ var subscriptions = {
     console.log(subscription);
   },
   signInSubscription: async function (req, res) {
+    var subscription = false;
+    try {
+      subscription = await sdk.payload.subscribe(req.body, (event) => {
+        if (event.data.signed) {
+          console.log("User signed in: " + event.data.payload_uuidv4);
+          sdk.payload.get(event.data.payload_uuidv4).then((data) => {
+            req.session.login = true;
+            req.session.wallet = data.response.account;
+            req.session.user_token = data.application.issued_user_token;
+            res.status(200).send(true);
+            event.resolve;
+            return true;
+          });
+        } else if (event.data.signed == false) {
+          res.status(401).send(false);
+          return true;
+        }
+      });
+    } catch (error) {
+      console.error("There was an error with the payload: \n" + error);
+    }
+  },
+  redeemNftSubscription: async function (req, res) {
     var subscription = false;
     try {
       subscription = await sdk.payload.subscribe(req.body, (event) => {
@@ -196,115 +326,7 @@ var xrpls = {
       await client.disconnect();
     }
   },
-  redeemNft: async function (address) {
-    const client = await getXrplClient();
-    try {
-      //wallet of issuer
-      var nftWallet = xrpl.Wallet.fromSeed(issuerSeed);
 
-      //console.log(`\nScanning NFTs held by ${nftWallet.classicAddress}`)
-      //Try Select an NFT up to 5 times
-      var count = 0;
-      while (count < 5) {
-        try {
-          var accountNFTs = await client.request({
-            method: "account_nfts",
-            ledger_index: "validated",
-            account: nftWallet.classicAddress,
-            limit: 400,
-          });
-
-          var nftSelection = accountNFTs.result.account_nfts;
-          var nftID =
-            nftSelection[
-              Math.floor(Math.random() * (nftSelection.length - 1 - 0 + 1) + 0)
-            ].NFTokenID;
-          break;
-        } catch (err) {
-          //console.log(`                    Failed ${count}`)
-          count += 1;
-        }
-      }
-
-      //If could no select NFT in 5 attempts
-      if (nftID == undefined) {
-        //console.log('Could Not Select NFT')
-        return;
-      }
-
-      //console.log(`\tRandom NFT selected -> NFTokenID: ${nftID}`)
-      //set expiry of offer 5 minutes from now
-      var expiry = +(Date.now() / 1000 - 946684800 + 300)
-        .toString()
-        .split(".")[0];
-
-      //mint NFT
-      //Try Place mint up to 5 times
-      //console.log(`\nSetting Sell Order For Chosen NFT`)
-      var count = 0;
-      while (count < 5) {
-        try {
-          var nftSellPrep = await client.autofill({
-            TransactionType: "NFTokenCreateOffer",
-            Account: nftWallet.classicAddress,
-            TokenID: nftID,
-            Amount: saleAmount,
-            Flags: 1,
-            Destination: address,
-            Expiration: expiry,
-          });
-
-          nftSellPrep.LastLedgerSequence -= 15;
-
-          var nftSellSigned = nftWallet.sign(nftSellPrep);
-          var nftSellResult = await client.submitAndWait(nftSellSigned.tx_blob);
-
-          if (nftSellResult.result.meta.TransactionResult == "tesSUCCESS") {
-            for (a in nftSellResult.result.meta.AffectedNodes) {
-              if ("CreatedNode" in nftSellResult.result.meta.AffectedNodes[a]) {
-                if (
-                  nftSellResult.result.meta.AffectedNodes[a].CreatedNode
-                    .LedgerEntryType == "NFTokenOffer"
-                ) {
-                  var nftOfferIndex =
-                    nftSellResult.result.meta.AffectedNodes[a].CreatedNode
-                      .LedgerIndex;
-                }
-              }
-            }
-          } else {
-            fakeFunctionToThrowError();
-          }
-          break;
-        } catch (err) {
-          //console.log(`                    Failed ${count}`)
-          count += 1;
-        }
-      }
-
-      //if could not sell NFT
-      if (nftOfferIndex == undefined) {
-        //console.log('Could Not Place order')
-        return;
-      }
-
-      //console.log(`\tOffer Index: ${nftOfferIndex}`)
-
-      //this object will be used in the Xumm object
-      //this allows to generate a relevant Xumm qrCode
-      var xummObj = {
-        TransactionType: "NFTokenAcceptOffer",
-        SellOffer: nftOfferIndex,
-      };
-      console.log("read");
-      console.log(xummObj);
-      return [xummObj, nftID];
-    } catch (error) {
-      return;
-    } finally {
-      await client.disconnect();
-    }
-  },
   getcurrentNftHolder: async function (NFTokenID, lastKnownHolder) {
     const client = await getXrplClient();
     try {

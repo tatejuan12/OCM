@@ -843,6 +843,34 @@ function xummSignin(mobile) {
     },
   });
 }
+function getRedeem(mobile) {
+  $.ajax({
+    type: "POST",
+    url: "/redeem-nft-payload",
+    success: function (result) {
+      console.log(mobile);
+      console.log(result.next.always);
+      if (mobile == "false") {
+        window.open(result.next.always);
+      }
+      if (mobile == "true") {
+        window.location.href = result.next.always;
+      }
+      $.ajax({
+        type: "POST",
+        url: "/redeem-nft-payload",
+        data: result,
+        success: function (resulty) {
+          console.log(resulty);
+          location.reload();
+        },
+        error: function (resulty) {
+          console.warn("Sign in expired, failed or was cancelled.");
+        },
+      });
+    },
+  });
+}
 function likeHandler(nftId, DOM) {
   if (DOM.classList.contains("liked")) decrementLike(nftId, DOM);
   else incrementLike(nftId, DOM);

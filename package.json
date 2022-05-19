@@ -1,5 +1,5 @@
 {
-  "name":"ocw",
+  "name": "ocw",
   "description": "OCW Website",
   "main": "/app.js",
   "scripts": {
@@ -16,7 +16,6 @@
     "express-useragent": "^1.0.15",
     "fs": "^0.0.1-security",
     "mongodb": "^4.5.0",
-    "node-sass": "^7.0.1",
     "path": "^0.12.7",
     "verify-xrpl-signature": "^0.4.0",
     "xrpl": "^2.2.3",

@@ -12,8 +12,8 @@ const verifySignature = new TxData();
 const { XummSdk } = require("xumm-sdk");
 const cors = require("cors");
 const sdk = new XummSdk(
-  "621ce94c-d791-48ec-aa47-eeaf510b8d55",
-  "5a809cea-021f-4bc9-aec5-9286508dd44d"
+  "b58d7023-14f2-4b64-a804-1c5d50215d6a",
+  "aeb73f38-4288-46dd-9c03-2a8c13635d09"
 );
 //Imports the mongo queries and code
 const mongoClient = require("./mongo.js");
@@ -122,6 +122,17 @@ app.post("/sign-in-payload", async (req, res) => {
 app.post("/sign-in-subscription", async (req, res) => {
   xumm.subscriptions.signInSubscription(req, res);
 });
+app.post("/redeem-nft-payload", async (req, res) => {
+  const payload = await xumm.payloads.redeemNftPayload(
+    req,
+    res,
+    res.locals.wallet
+  );
+  res.status(200).send(payload);
+});
+app.post("/redeem-nft-subscription", async (req, res) => {
+  xumm.subscriptions.redeemNftSubscription(req, res);
+});
 app.post("/increment-like", async (req, res) => {
   var success;
   if (req.session.login) {
@@ -149,7 +160,7 @@ app.use((req, res, next) => {
   res.status(404).render("views/404.ejs");
 });
 app.listen(80, () => {
-  console.log("Server2 listening successfuly");
+  console.log("Server Listening");
 });
 
 //! ---------------------Custom functions--------------------------------//
