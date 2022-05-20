@@ -3,8 +3,8 @@
   "description": "OCW Website",
   "main": "/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "scss-compile": "node-sass public/assets/scss/style.scss -o css.css"
+    "start": "sudo node app.js",
+    "watch": "sudo nodemon --exec 'npm start' --ignore 'logs/'"
   },
   "dependencies": {
     "connect-mongodb-session": "^3.1.1",
@@ -21,5 +21,8 @@
     "xrpl": "^2.2.3",
     "xrpl-txdata": "^1.2.1",
     "xumm-sdk": "^1.1.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
   }
 }

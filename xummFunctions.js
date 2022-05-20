@@ -7,23 +7,22 @@ const sdk = new XummSdk(
   "aeb73f38-4288-46dd-9c03-2a8c13635d09"
 );
 const xrpl = require("xrpl");
+const { json } = require("express/lib/response");
 const issuerSeed = "sanmTNafTvtjEDNhPnsGWJWkCnVwU";
 
 var payloads = {
   transactionPayload: async function () {},
-  signInPayload: async function () {
+  signInPayload: async function (path, mobile) {
     const request = {
       options: {
         submit: false,
         expire: 240,
-        return_url: {
-          app: "http://172.105.169.145",
-        },
       },
       txjson: {
         TransactionType: "SignIn",
       },
     };
+    if (mobile) request.options["return_url"] = { app: "http://172.16.10.63" };
     const payload = await getPayload(request);
     return payload;
   },
@@ -79,7 +78,7 @@ var payloads = {
             TransactionType: "NFTokenCreateOffer",
             Account: nftWallet.classicAddress,
             NFTokenID: nftID,
-            Amount: "12333",
+            Amount: "10000000",
             Flags: 1,
             Destination: address,
             Expiration: expiry,

@@ -119,16 +119,7 @@
         </div>
       </div>
 
-      <div class="row g-5" id="exploreSection">
-        <!-- Product -->
-        <% nfts.forEach(function(res){%>
-        <%- include('models/nft-card.ejs', {nft:res})%>
-        <%}); %>
-        <!-- <div style="height:100px; background-color: red;">
-
-          
-        </div> -->
-      </div>
+      <%- include ("models/nft-rows.ejs", {nfts:nfts}) %>
 
       <%- include ("models/pagination.ejs" , {page:page}) %>
     </div>

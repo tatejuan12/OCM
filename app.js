@@ -68,9 +68,6 @@ app.get("/explore", async (req, res) => {
     res.render("views/explore", { nfts: nfts, page: page });
   } else res.redirect("explore?page=0");
 });
-app.get("/profile-bak", (req, res) => {
-  res.render("views/profilebak");
-});
 app.get("/about", (req, res) => {
   res.render("views/about");
 });
@@ -97,10 +94,20 @@ app.get("/edit-profile", (req, res) => {
 app.get("/product-details", async (req, res) => {
   let nftId = req.query.id;
   var nft;
-  await mongoClient.query.getNft(nftId).then((result) => {
-    nft = result;
+  nftPromise = new Promise(function (resolve, reject) {
+    const nft = mongoClient.query.getNft(nftId);
+    resolve(nft);
   });
-  res.render("views/product-details", { nft: nft });
+  nftsPromise = new Promise(function (resolve, reject) {
+    const nfts = mongoClient.query.getNfts(NFTSPERPAGE / 2, 0);
+    resolve(nfts);
+  });
+
+  const promises = await Promise.all([nftPromise, nftsPromise]);
+  res.render("views/product-details", {
+    nft: promises[0],
+    nfts: promises[1],
+  });
 });
 app.get("/create-listing", (req, res) => {
   res.render("views/create-listing");
@@ -116,7 +123,10 @@ app.post("/subscription-transaction", async (req, res) => {
 });
 
 app.post("/sign-in-payload", async (req, res) => {
-  const payload = await xumm.payloads.signInPayload();
+  const payload = await xumm.payloads.signInPayload(
+    req.originalUrl,
+    req.useragent.isMobile
+  );
   res.send(payload);
 });
 app.post("/sign-in-subscription", async (req, res) => {
@@ -158,6 +168,9 @@ app.post("/decrement-like", async (req, res) => {
 // Renders 404 page if the request is send to undeclared location
 app.use((req, res, next) => {
   res.status(404).render("views/404.ejs");
+});
+app.use((err, req, res, next) => {
+  res.status(500).render("views/500.ejs");
 });
 app.listen(80, () => {
   console.log("Server Listening");
