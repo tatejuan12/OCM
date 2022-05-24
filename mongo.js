@@ -36,7 +36,11 @@ var methods = {
       if (email) query.$set["email"] = email;
       if (bio) query.$set["bio"] = bio;
       if (website) query.$set["website"] = website;
+      if (profileImg) query.$set["profile_img"] = profileImg[0];
+      // if (coverImg) query.$set["cover_img"] = CoverImg;
+      console.log(profileImg);
       let res = await collection.updateOne(filter, query);
+      console.log(res);
       return res.modifiedCount > 0 ? true : false;
       //   return res > 0 ? true : false;
     } catch (err) {
@@ -69,7 +73,28 @@ var methods = {
       client.close();
     }
   },
+  getUser: async function (wallet) {
+    var result;
+    const client = await getClient();
+    if (!client) return;
+    try {
+      const db = client.db("NFT-Devnet");
 
+      let collection = db.collection("Users");
+
+      let query = {
+        wallet: wallet,
+      };
+
+      let res = await collection.findOne(query);
+
+      return res;
+    } catch (err) {
+      console.log("Database error" + err);
+    } finally {
+      client.close();
+    }
+  },
   getNft: async function (id) {
     var result;
     const client = await getClient();

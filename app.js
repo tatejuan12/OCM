@@ -20,7 +20,8 @@ const mongoClient = require("./mongo.js");
 //Imports xumm code with queries and checks
 const xumm = require("./xummFunctions");
 const { log } = require("console");
-
+let multer = require("multer");
+let upload = multer({ limits: { fieldSize: "2mb" } }); //used to get form data which for some reason bodyParser doesn't get. used for user data changing!
 const mongoStore = new MongoDBStore({
   uri: "mongodb+srv://ocw:9T6YNSUEh61zgCB6@ocw-test.jgpcr.mongodb.net/NFT-Devnet?retryWrites=true&w=majority",
   collection: "Sessions",
@@ -93,10 +94,28 @@ app.get("/redeem", async (req, res) => {
 });
 app.get("/profile", async (req, res) => {
   var ownerNfts;
-  await mongoClient.query.getOwnerNfts(req.session.wallet).then((result) => {
-    ownerNfts = result;
+  var userInfo;
+  nftsPromise = new Promise(function (resolve, reject) {
+    const ownerNfts = mongoClient.query.getOwnerNfts(req.session.wallet);
+    resolve(ownerNfts);
   });
-  res.render("views/profile", { nfts: ownerNfts });
+  userPromise = new Promise(function (resolve, reject) {
+    console.time();
+    const ownerInfo = mongoClient.query.getUser(req.session.wallet);
+    resolve(ownerInfo);
+  });
+  const promises = await Promise.all([nftsPromise, userPromise]);
+  //   var obj = {
+  //     name: promises[0][0].originalname,
+  //     img: {
+  //         data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+  //         contentType: 'image/png'
+  //     }
+  // }
+  // var thumb = new Buffer.is(promises[1].profile_img.buffer);
+  console.log(promises[1].profile_img.buffer);
+  res.render("views/profile", { nfts: promises[0], user: promises[1] });
+  console.timeEnd();
 });
 app.get("/edit-profile", (req, res) => {
   res.render("views/edit-profile");
@@ -178,17 +197,25 @@ app.post("/decrement-like", async (req, res) => {
   } else success = false;
   success ? res.status(200).end() : res.status(406).end();
 });
-app.post("/update-user", async (req, res) => {
-  const formData = req.body;
-  const result = await mongoClient.query.updateUser(
-    req.session.wallet,
-    formData.project,
-    formData.email,
-    formData.bio,
-    formData.website
-  );
-  result ? res.status(200).send("Modified") : res.status(500).send("Failed");
-});
+app.post(
+  "/update-user",
+  upload.fields([{ name: "profile-img", maxCount: 1 }]),
+  async (req, res) => {
+    const formDataBody = req.body;
+    const formDataFiles = req.files;
+    console.log(formDataFiles);
+    console.log(formDataBody);
+    const result = await mongoClient.query.updateUser(
+      req.session.wallet,
+      formDataBody.project,
+      formDataBody.email,
+      formDataBody.bio,
+      formDataBody.website,
+      formDataFiles["profile-img"]
+    );
+    result ? res.status(200).send("Modified") : res.status(500).send("Failed");
+  }
+);
 // Renders 404 page if the request is send to undeclared location
 app.use((req, res, next) => {
   res.status(404).render("views/404.ejs");

@@ -332,7 +332,9 @@
       project: document.getElementById("Project").value,
       email: document.getElementById("Email").value,
       bio: document.getElementById("Description").value,
-      website: document.getElementById("Website").value
+      website: document.getElementById("Website").value,
+      profileImg: "dead",
+
     }
     $.ajax({
       type: "POST",
@@ -346,4 +348,26 @@
       },
     });
   }
+  $('#fatima').change(function() {
+    console.log(document.getElementById("fatima").files[0])
+    const formData = new FormData();
+    formData.append("project", document.getElementById("Project").value);
+    formData.append("email", document.getElementById("Email").value);
+    formData.append("description", document.getElementById("Description").value);
+    formData.append("website", document.getElementById("Website").value);
+    formData.append("profile-img", document.getElementById("fatima").files[0]);
+    $.ajax({
+      type: "POST",
+      url: "/update-user",
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function(resulty) {
+        customAlert.alert('Changes Saved')
+      },
+      error: function(resulty) {
+        customAlert.alert('Changes Were Not Saved')
+      },
+    });
+  })
 </script>

@@ -16,6 +16,7 @@
     "express-useragent": "^1.0.15",
     "fs": "^0.0.1-security",
     "mongodb": "^4.5.0",
+    "multer": "^1.4.4",
     "path": "^0.12.7",
     "verify-xrpl-signature": "^0.4.0",
     "xrpl": "^2.2.3",
