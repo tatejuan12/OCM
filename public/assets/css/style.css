@@ -6286,7 +6286,7 @@ input[type="submit"] {
 
 button[disabled],
 input[disabled] {
-  cursor: default;
+  cursor: not-allowed;
 }
 
 input[type="checkbox"],

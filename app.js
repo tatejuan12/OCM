@@ -82,8 +82,14 @@ app.get("/connect", (req, res) => {
 app.get("/redeem", async (req, res) => {
   const ocwBalance = await xumm.xrpl.getOcwBalance(req.session.wallet);
   ocwBalance
-    ? res.render("views/redeem", { ocwBalance: ocwBalance[0] })
-    : res.render("views/redeem", { ocwBalance: 0 });
+    ? res.render("views/redeem", {
+        ocwBalance: ocwBalance[0],
+        obtainableNfts: ocwBalance[1],
+      })
+    : res.render("views/redeem", {
+        ocwBalance: 0,
+        obtainableNfts: 0,
+      });
 });
 app.get("/profile", async (req, res) => {
   var ownerNfts;
