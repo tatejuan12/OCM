@@ -136,50 +136,37 @@
               <div class="nuron-information">
 
                 <div class="profile-form-wrapper">
-                  <div class="input-two-wrapper mb--15">
+                  <div class=" mb--15">
                     <div class="first-name half-wid">
-                      <label for="contact-name" class="form-label">First Name</label>
-                      <input name="contact-name" id="contact-name" type="text" value="Wesley">
-                    </div>
-                    <div class="last-name half-wid">
-                      <label for="contact-name-last" class="form-label">Last Name</label>
-                      <input name="contact-name" id="contact-name-last" type="text" value="The Whale">
+                      <label for="Project" class="form-label">Project Name:</label>
+                      <input name="Project" id="Project" type="text" placeholder="Wesley">
                     </div>
                   </div>
                   <div class="email-area">
-                    <label for="Email" class="form-label">Change Your Email</label>
-                    <input name="email" id="Email" type="email" value="example@gmail.com">
+                    <label for="Email" class="form-label">Change Your Email:</label>
+                    <input name="Email" id="Email" type="email" placeholder="example@gmail.com">
                   </div>
                 </div>
 
 
                 <!-- edit bio area Start-->
                 <div class="edit-bio-area mt--30">
-                  <label for="Discription" class="form-label">Edit Your Bio</label>
-                  <textarea id="Discription">I'm having a whale of a time.</textarea>
+                  <label for="Description" class="form-label">Edit Your Bio:</label>
+                  <textarea id="Description" placeholder="I'm having a whale of a time."></textarea>
                 </div>
                 <!-- edit bio area End -->
 
-                <!--  -->
-                <div class="input-two-wrapepr-prifile">
-                  <!-- start Role area -->
-                  <div class="role-area mt--15">
-                    <label for="Role" class="form-label mb--10">Occupation</label>
-                    <input name="Role" id="Role" type="text" value="">
-                  </div>
-                  <!-- End Role area -->
-                  <!-- select gender -->
-                  <select class="profile-edit-select">
-                    <option selected>Select Your Gender</option>
-                    <option value="1">Male</option>
-                    <option value="2">Female</option>
-                    <option value="3">Rather not say</option>
-                  </select>
-                  <!-- end gender -->
+
+                <!-- start Role area -->
+                <div class="role-area mt--15">
+                  <label for="Website" class="form-label mb--10">Link to Website:</label>
+                  <input name="Website" id="Website" type="text" placeholder="onchainwhales.net">
                 </div>
+                <!-- End Role area -->
+
                 <div class="button-area save-btn-edit">
                   <a href="#" class="btn btn-primary-alta mr--15" onclick="customAlert.alert('Cancel Edit Profile?')">Cancel</a>
-                  <a href="#" class="btn btn-primary" onclick="customAlert.alert('Successfully Saved Your Profile?')">Save</a>
+                  <a href="#" class="btn btn-primary" onclick="submitUpdateProfileForm()">Save</a>
                 </div>
 
               </div>
@@ -204,13 +191,7 @@
                     <!-- single notice wrapper -->
                     <div class="single-notice-setting">
                       <div class="input">
-                        <input type="checkbox" id="themeSwitch" name="theme-switch" class="theme-switch__input" />
-                        <label for="themeSwitch" class="theme-switch__label">
-                          <span></span>
-                        </label>
-                      </div>
-                      <div class="content-text">
-                        <p>Order Confirmation Notice</p>
+                        <input type="checkbox" id="themeSwi                  <!-- onclick=" customAlert.alert('Successfully Saved Your Profile?')"-->
                       </div>
                     </div>
                     <!-- single notice wrapper End -->
@@ -345,3 +326,24 @@
 </body>
 
 </html>
+<script>
+  function submitUpdateProfileForm() {
+    const formData = {
+      project: document.getElementById("Project").value,
+      email: document.getElementById("Email").value,
+      bio: document.getElementById("Description").value,
+      website: document.getElementById("Website").value
+    }
+    $.ajax({
+      type: "POST",
+      url: "/update-user",
+      data: formData,
+      success: function(resulty) {
+        customAlert.alert('Changes Saved')
+      },
+      error: function(resulty) {
+        customAlert.alert('Changes Were Not Saved')
+      },
+    });
+  }
+</script>

@@ -19,6 +19,7 @@ const sdk = new XummSdk(
 const mongoClient = require("./mongo.js");
 //Imports xumm code with queries and checks
 const xumm = require("./xummFunctions");
+const { log } = require("console");
 
 const mongoStore = new MongoDBStore({
   uri: "mongodb+srv://ocw:9T6YNSUEh61zgCB6@ocw-test.jgpcr.mongodb.net/NFT-Devnet?retryWrites=true&w=majority",
@@ -78,8 +79,11 @@ app.get("/logout", (req, res) => {
 app.get("/connect", (req, res) => {
   res.render("views/connect");
 });
-app.get("/redeem", (req, res) => {
-  res.render("views/redeem");
+app.get("/redeem", async (req, res) => {
+  const ocwBalance = await xumm.xrpl.getOcwBalance(req.session.wallet);
+  ocwBalance
+    ? res.render("views/redeem", { ocwBalance: ocwBalance[0] })
+    : res.render("views/redeem", { ocwBalance: 0 });
 });
 app.get("/profile", async (req, res) => {
   var ownerNfts;
@@ -130,7 +134,10 @@ app.post("/sign-in-payload", async (req, res) => {
   res.send(payload);
 });
 app.post("/sign-in-subscription", async (req, res) => {
-  xumm.subscriptions.signInSubscription(req, res);
+  const result = await xumm.subscriptions.signInSubscription(req, res);
+  if (result) {
+    mongoClient.query.initiateUser(req.session.wallet);
+  }
 });
 app.post("/redeem-nft-payload", async (req, res) => {
   const payload = await xumm.payloads.redeemNftPayload(
@@ -165,11 +172,23 @@ app.post("/decrement-like", async (req, res) => {
   } else success = false;
   success ? res.status(200).end() : res.status(406).end();
 });
+app.post("/update-user", async (req, res) => {
+  const formData = req.body;
+  const result = await mongoClient.query.updateUser(
+    req.session.wallet,
+    formData.project,
+    formData.email,
+    formData.bio,
+    formData.website
+  );
+  result ? res.status(200).send("Modified") : res.status(500).send("Failed");
+});
 // Renders 404 page if the request is send to undeclared location
 app.use((req, res, next) => {
   res.status(404).render("views/404.ejs");
 });
 app.use((err, req, res, next) => {
+  console.error(err);
   res.status(500).render("views/500.ejs");
 });
 app.listen(80, () => {

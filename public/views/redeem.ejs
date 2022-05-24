@@ -55,9 +55,9 @@
           <img draggable="false" src="assets/images/activity/qmark600.png" id="yourNFT">
           <div class="redeemDropDown">
             <span>Your OCW Holdings</span>
-            <span>3 OCW</span>
+            <span><% ocwBalance ? __append(ocwBalance)  : __append(0)%> OCW</span>
           </div>
-          <button class="btn2" id="redeem" onclick="getRedeem('<%= mobile %>')">SWAP</button>
+          <button class="btn2" id="redeem" onclick="getRedeem()">SWAP</button>
         </div>
       </div>
     </div>

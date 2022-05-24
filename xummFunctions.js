@@ -22,7 +22,8 @@ var payloads = {
         TransactionType: "SignIn",
       },
     };
-    if (mobile) request.options["return_url"] = { app: "http://172.16.10.63" };
+    if (mobile) request.options["return_url"] = { app: "http://localhost" };
+    else request.options["return_url"] = { web: "http://localhost" };
     const payload = await getPayload(request);
     return payload;
   },
@@ -160,23 +161,28 @@ var subscriptions = {
   },
   signInSubscription: async function (req, res) {
     var subscription = false;
-    try {
-      subscription = await sdk.payload.subscribe(req.body, (event) => {
+    var promise = new Promise(function (resolve) {
+      subscription = sdk.payload.subscribe(req.body, (event) => {
         if (event.data.signed) {
-          console.log("User signed in: " + event.data.payload_uuidv4);
           sdk.payload.get(event.data.payload_uuidv4).then((data) => {
             req.session.login = true;
             req.session.wallet = data.response.account;
             req.session.user_token = data.application.issued_user_token;
+            console.log(
+              "User signed in: " + data.application.issued_user_token
+            );
             res.status(200).send(true);
-            event.resolve;
-            return true;
+            resolve(true);
           });
         } else if (event.data.signed == false) {
           res.status(401).send(false);
-          return true;
+          resolve(false);
         }
       });
+    });
+    try {
+      await promise;
+      return promise;
     } catch (error) {
       console.error("There was an error with the payload: \n" + error);
     }
