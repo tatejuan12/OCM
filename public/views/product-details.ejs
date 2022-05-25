@@ -143,13 +143,14 @@
               <div class="tab-wrapper-one">
                 <nav class="tab-button-one">
                   <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Bids</button>
+                    <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Offers</button>
                     <button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="true">Details</button>
                     <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Purchase History</button>
                   </div>
                 </nav>
                 <div class="tab-content rn-bid-content" id="nav-tabContent">
                   <div class="tab-pane fade" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <span id="buyOffers" class="name-title mr--10">Buy Offers</span>
                     <!-- single creator -->
                     <div class="top-seller-inner-one">
                       <div class="top-seller-wrapper">
@@ -180,6 +181,7 @@
                       </div>
                     </div>
                     <!-- single creator -->
+                    <span id="sellOffers" class="name-title">Sell Offers</span>
                   </div>
                   <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                     <!-- single -->
@@ -188,15 +190,14 @@
                         <!-- <p class="disc">Lorem ipsum dolor, sit amet consectetur adipisicing
                                                     elit. Doloribus debitis nemo deserunt.</p> -->
                         <h6 class="name-title">
-                          Owner
+                          Issuer
                         </h6>
                         <div class="top-seller-wrapper">
-                          <div class="thumbnail">
-                            <a href="#"><img src="assets/images/client/client-1.png" alt="Nft_Profile"></a>
-                          </div>
+
                           <div class="top-seller-content">
+                            <!-- make link to issuer collection page on Marketplace if it exists -->
                             <a href="#">
-                              <h6 class="name"><%=nft.currentOwner%></h6>
+                              <h6 class="name"><%=nft.issuer%></h6>
                             </a>
                           </div>
                         </div>
@@ -219,6 +220,12 @@
                         </div>
                       </div>
                       <!-- single -->
+                      <div class="top-seller-content">
+                        <h6 class="pd-property-title">
+                          Description
+                        </h6>
+                          <div class="pd-property-inner"><p style="font-size: 15px;"><%= nft.uriMetadata.description %></p></div>
+                      </div>
                     </div>
                   </div>
                   <!-- Previous Owners area -->
