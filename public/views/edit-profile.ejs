@@ -164,10 +164,6 @@
                 </div>
                 <!-- End Role area -->
 
-                <div class="button-area save-btn-edit">
-                  <a href="#" class="btn btn-primary-alta mr--15" onclick="customAlert.alert('Cancel Edit Profile?')">Cancel</a>
-                  <a href="#" class="btn btn-primary" onclick="submitUpdateProfileForm()">Save</a>
-                </div>
 
               </div>
               <!-- End personal information -->
@@ -191,7 +187,7 @@
                     <!-- single notice wrapper -->
                     <div class="single-notice-setting">
                       <div class="input">
-                        <input type="checkbox" id="themeSwi                  <!-- onclick=" customAlert.alert('Successfully Saved Your Profile?')"-->
+                        <input type="checkbox" id="themeSwitchs" name="theme-switch" class="theme-switch__input" />
                       </div>
                     </div>
                     <!-- single notice wrapper End -->
@@ -281,6 +277,10 @@
             </div>
           </div>
 
+        </div>
+        <div class="button-area save-btn-edit">
+          <button class="btn btn-primary-alta mr--15" onclick="customAlert.alert('Cancel Edit Profile?')">Cancel</button>
+          <button class="btn btn-primary" onclick="submitUpdateProfileForm()">Save</button>
         </div>
       </div>
     </div>

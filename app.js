@@ -205,16 +205,19 @@ app.post(
     const formDataBody = req.body;
     const formDataFiles = req.files;
     var result = false;
-    if (formDataFiles["profile-img"])
-      result = digitalOcean.functions.uploadProfile(
-        req,
-        formDataFiles["profile-img"][0]
-      );
-    if (formDataFiles["cover-img"])
-      result = digitalOcean.functions.uploadCover(
-        req,
-        formDataFiles["cover-img"][0]
-      );
+    if (formDataFiles) {
+      console.log("run!");
+      if (formDataFiles["profile-img"])
+        result = digitalOcean.functions.uploadProfile(
+          req,
+          formDataFiles["profile-img"][0]
+        );
+      if (formDataFiles["cover-img"])
+        result = digitalOcean.functions.uploadCover(
+          req,
+          formDataFiles["cover-img"][0]
+        );
+    }
     result ? res.status(200).send("Modified") : res.status(500).send("Failed");
   }
 );
