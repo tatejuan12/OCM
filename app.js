@@ -15,8 +15,9 @@ const sdk = new XummSdk(
   "b58d7023-14f2-4b64-a804-1c5d50215d6a",
   "aeb73f38-4288-46dd-9c03-2a8c13635d09"
 );
+const digitalOcean = require("./digitalOceanFunctions");
 //Imports the mongo queries and code
-const mongoClient = require("./mongo.js");
+const mongoClient = require("./mongo");
 //Imports xumm code with queries and checks
 const xumm = require("./xummFunctions");
 const { log } = require("console");
@@ -113,7 +114,7 @@ app.get("/profile", async (req, res) => {
   //     }
   // }
   // var thumb = new Buffer.is(promises[1].profile_img.buffer);
-  console.log(promises[1].profile_img.buffer);
+  // console.log(promises[1].profile_img.buffer);
   res.render("views/profile", { nfts: promises[0], user: promises[1] });
   console.timeEnd();
 });
@@ -199,20 +200,21 @@ app.post("/decrement-like", async (req, res) => {
 });
 app.post(
   "/update-user",
-  upload.fields([{ name: "profile-img", maxCount: 1 }]),
+  upload.fields([{ name: "profile-img", maxCount: 1 }, { name: "cover-img" }]),
   async (req, res) => {
     const formDataBody = req.body;
     const formDataFiles = req.files;
-    console.log(formDataFiles);
-    console.log(formDataBody);
-    const result = await mongoClient.query.updateUser(
-      req.session.wallet,
-      formDataBody.project,
-      formDataBody.email,
-      formDataBody.bio,
-      formDataBody.website,
-      formDataFiles["profile-img"]
-    );
+    var result = false;
+    if (formDataFiles["profile-img"])
+      result = digitalOcean.functions.uploadProfile(
+        req,
+        formDataFiles["profile-img"][0]
+      );
+    if (formDataFiles["cover-img"])
+      result = digitalOcean.functions.uploadCover(
+        req,
+        formDataFiles["cover-img"][0]
+      );
     result ? res.status(200).send("Modified") : res.status(500).send("Failed");
   }
 );

@@ -356,12 +356,14 @@
     formData.append("description", document.getElementById("Description").value);
     formData.append("website", document.getElementById("Website").value);
     formData.append("profile-img", document.getElementById("fatima").files[0]);
+    formData.append("cover-img", document.getElementById("nipa").files[0]);
     $.ajax({
       type: "POST",
       url: "/update-user",
       data: formData,
       processData: false,
       contentType: false,
+      enctype: "multipart/form-data",
       success: function(resulty) {
         customAlert.alert('Changes Saved')
       },
