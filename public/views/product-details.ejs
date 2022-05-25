@@ -233,15 +233,15 @@
                     <!-- single creator -->
                     <div class="top-seller-inner-one">
                       <div class="top-seller-wrapper">
-                        <div class="thumbnail">
-                          <a href="#"><img src="assets/images/client/client-3.png" alt="Nft_Profile"></a>
-                        </div>
-                        <div class="top-seller-content">
-                          <span>250 XRP by<a href="#">Allen Waltker</a></span>
-                          <span class="count-number">
-                            1 hours ago
-                          </span>
-                        </div>
+                        <a href="bithomp.com/explorer/[sale hash here]" target="_blank">
+                          <div class="top-seller-content">
+                            <!-- needs to be XRP value at time of sale -->
+                            <span>250 XRP</span>
+                            <span class="count-number">
+                              <!-- DATE -->
+                            </span>
+                          </div>
+                        </a>                        
                       </div>
                     </div>
                     <!-- single creator -->
@@ -251,16 +251,16 @@
               <div class="place-bet-area">
                 <div class="rn-bet-create">
                   <div class="bid-list winning-bid">
-                    <h6 class="title">Winning bid</h6>
+                    <h6 class="title">Last Sale</h6>
                     <div class="top-seller-inner-one">
                       <div class="top-seller-wrapper">
                         <div class="thumbnail">
                           <a href="#"><img src="assets/images/client/client-7.png" alt="Nft_Profile"></a>
                         </div>
                         <div class="top-seller-content">
-                          <span class="heighest-bid">Highest bid <a href="https://xrpscan.com/account/'account address here'">Bing Bong</a></span>
+                          <span class="heighest-bid"><a href="https://xrpscan.com/account/'account address here'">Wesley The Whale</a></span>
                           <span class="count-number">
-                            300 XRP
+                            <%= nft.sellHistory[0] + " " + nft.sellHistory[0]%>
                           </span>
                         </div>
                       </div>
