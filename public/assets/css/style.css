@@ -6927,7 +6927,7 @@ Background Image
 }
 
 .bg_image--9 {
-  background-image: url(../images/bg/bg-image-9.jpg);
+  background-image: url(../images/bg/bg-image-9.png);
 }
 
 .bg_image--10 {
@@ -23185,10 +23185,11 @@ body.active-light-mode {
 .bio .bioOcean {
   background-color: #00000039;
   padding: 10px 15px;
-  height: 400px;
 }
 .bio img {
   max-width: 200px;
+  border-radius: 61% 39% 68% 32% / 30% 54% 46% 70% ;
+  margin-bottom: -50px;
 }
 .bio h2 {
   text-transform: uppercase;
