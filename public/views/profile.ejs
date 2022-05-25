@@ -87,9 +87,6 @@
         <% nfts.forEach(function(res){%>
         <%- include('models/nft-card.ejs', {nft:res})%>
         <%}); %>
-        <%thumb = new Buffer(user.profile_img.buffer).toString('base64')%>
-        <img src="data:<%=user.profile_img.mimetype%>;base64,/<%=user.profile_img.buffer%>">
-        <%=user.profile_img.buffer%>
 
       </div>
     </div>
