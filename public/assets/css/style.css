@@ -23219,6 +23219,7 @@ body.active-light-mode {
   background-color: inherit;
   width: 50%;
 }
+
 .timelineContainer::after {
   content: "";
   position: absolute;
@@ -23230,6 +23231,9 @@ body.active-light-mode {
   top: 15px;
   border-radius: 50%;
   z-index: 100;
+}
+.green::after {
+  background-color: #3eff1e;
 }
 .left {
   left: 0;
