@@ -590,7 +590,7 @@ ol ul {
 }
 
 .rn-section-gapTop {
-  padding-top: 100px;
+  padding-top: 50px;
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .rn-section-gapTop {
@@ -6927,7 +6927,7 @@ Background Image
 }
 
 .bg_image--9 {
-  background-image: url(../images/bg/bg-image-9.jpg);
+  background-image: url(../images/bg/bg-image-9.png);
 }
 
 .bg_image--10 {
@@ -18599,6 +18599,7 @@ button .small-image {
 }
 .rn-pd-content-area .catagory-collection {
   display: flex;
+  justify-content: space-around;
   margin-bottom: 20px;
 }
 .rn-pd-content-area .catagory-collection .top-seller-wrapper .thumbnail {
@@ -18790,7 +18791,7 @@ button .small-image {
 .place-bet-area .rn-bet-create {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   margin: -15px;
 }
 .place-bet-area .rn-bet-create .bid-list {
@@ -18800,10 +18801,10 @@ button .small-image {
   .place-bet-area .rn-bet-create {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     flex-direction: column;
     justify-content: center;
-    transform: translateX(25%);
+    /* transform: translateX(25%); */
     text-align: center;
   }
 }
@@ -18811,10 +18812,10 @@ button .small-image {
   .place-bet-area .rn-bet-create {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     flex-direction: column;
     justify-content: center;
-    transform: translateX(14%);
+    /* transform: translateX(14%); */
     text-align: center;
   }
 }
@@ -18894,6 +18895,7 @@ button .small-image {
   display: flex;
   flex-wrap: wrap;
   margin: -7px;
+  margin-bottom: 10px;
 }
 .rn-pd-sm-property-wrapper .property-wrapper .pd-property-inner,
 .rn-pd-sm-property-wrapper .catagory-wrapper .pd-property-inner {
@@ -23183,10 +23185,11 @@ body.active-light-mode {
 .bio .bioOcean {
   background-color: #00000039;
   padding: 10px 15px;
-  height: 400px;
 }
 .bio img {
   max-width: 200px;
+  border-radius: 61% 39% 68% 32% / 30% 54% 46% 70% ;
+  margin-bottom: -50px;
 }
 .bio h2 {
   text-transform: uppercase;
