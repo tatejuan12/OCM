@@ -94,7 +94,7 @@
                   <div class="profile-left col-lg-4">
                     <div class="profile-image mb--30">
                       <h6 class="title">Change Your Profile Picture</h6>
-                      <img id="rbtinput1" src="assets/images/profile/profile-01.jpg" alt="Profile-NFT">
+                      <img id="rbtinput1" src="<%= profile_pic%>" alt="Profile-NFT" onerror="this.src='assets/images/icons/unknown-user.png'">
                     </div>
                     <div class="button-area">
                       <div class="brows-file-wrapper">
@@ -105,7 +105,7 @@
                           <fors class="text-center color-white">Upload Profile</fors>
                         </label>
                       </div>
-                      <!-- <a href="#" class="btn-primary-alta btn" onclick="customAlert.alert('Confirm to Delete Your Profile Picture?')">Delete</a> -->
+
                     </div>
                   </div>
 
@@ -286,7 +286,6 @@
     </div>
   </div>
   <!-- End tabs area -->
-
   <%- include('sections/footer.ejs') -%>
   <!-- Start Top To Bottom Area  -->
   <div class="rn-progress-parent">
@@ -325,31 +324,10 @@
   <script src="assets/js/vendor/nft.js"></script>
 </body>
 
+
 </html>
 <script>
   function submitUpdateProfileForm() {
-    const formData = {
-      project: document.getElementById("Project").value,
-      email: document.getElementById("Email").value,
-      bio: document.getElementById("Description").value,
-      website: document.getElementById("Website").value,
-      profileImg: "dead",
-
-    }
-    $.ajax({
-      type: "POST",
-      url: "/update-user",
-      data: formData,
-      success: function(resulty) {
-        customAlert.alert('Changes Saved')
-      },
-      error: function(resulty) {
-        customAlert.alert('Changes Were Not Saved')
-      },
-    });
-  }
-  $('#fatima').change(function() {
-    console.log(document.getElementById("fatima").files[0])
     const formData = new FormData();
     formData.append("project", document.getElementById("Project").value);
     formData.append("email", document.getElementById("Email").value);
@@ -371,5 +349,5 @@
         customAlert.alert('Changes Were Not Saved')
       },
     });
-  })
+  }
 </script>

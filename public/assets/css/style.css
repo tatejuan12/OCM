@@ -20600,8 +20600,7 @@ tbody.ranking tr td .thumbnail img {
   img {
   border-radius: 5px;
   border: 5px solid var(--color-border);
-  height: 260px;
-  max-height: 260px;
+  max-width: 170px;
   width: 100%;
   object-fit: cover;
 }
@@ -23188,7 +23187,7 @@ body.active-light-mode {
 }
 .bio img {
   max-width: 200px;
-  border-radius: 61% 39% 68% 32% / 30% 54% 46% 70% ;
+  border-radius: 61% 39% 68% 32% / 30% 54% 46% 70%;
   margin-bottom: -50px;
 }
 .bio h2 {

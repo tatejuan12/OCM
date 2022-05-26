@@ -59,6 +59,7 @@ app.use((req, res, next) => {
 });
 //! ---------------------Browser endpoints--------------------------------//
 app.get("/", (req, res) => {
+  console.log();
   res.render("views/");
 });
 app.get("/explore", async (req, res) => {
@@ -82,7 +83,10 @@ app.get("/connect", (req, res) => {
   res.render("views/connect");
 });
 app.get("/redeem", async (req, res) => {
-  const ocwBalance = await xumm.xrpl.getOcwBalance(req.session.wallet);
+  const ocwBalance = await xumm.xrpl.getOcwBalance(
+    req.session.wallet,
+    req.useragent.isMobile
+  );
   ocwBalance
     ? res.render("views/redeem", {
         ocwBalance: ocwBalance[0],
@@ -96,30 +100,25 @@ app.get("/redeem", async (req, res) => {
 app.get("/profile", async (req, res) => {
   var ownerNfts;
   var userInfo;
+  const profile_pic = digitalOcean.functions.getProfileLink(req);
   nftsPromise = new Promise(function (resolve, reject) {
     const ownerNfts = mongoClient.query.getOwnerNfts(req.session.wallet);
     resolve(ownerNfts);
   });
   userPromise = new Promise(function (resolve, reject) {
-    console.time();
     const ownerInfo = mongoClient.query.getUser(req.session.wallet);
     resolve(ownerInfo);
   });
   const promises = await Promise.all([nftsPromise, userPromise]);
-  //   var obj = {
-  //     name: promises[0][0].originalname,
-  //     img: {
-  //         data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
-  //         contentType: 'image/png'
-  //     }
-  // }
-  // var thumb = new Buffer.is(promises[1].profile_img.buffer);
-  // console.log(promises[1].profile_img.buffer);
-  res.render("views/profile", { nfts: promises[0], user: promises[1] });
-  console.timeEnd();
+  res.render("views/profile", {
+    nfts: promises[0],
+    user: promises[1],
+    profile_pic: profile_pic,
+  });
 });
-app.get("/edit-profile", (req, res) => {
-  res.render("views/edit-profile");
+app.get("/edit-profile", async (req, res) => {
+  const profile_pic = digitalOcean.functions.getProfileLink(req);
+  res.render("views/edit-profile", { profile_pic: profile_pic });
 });
 app.get("/product-details", async (req, res) => {
   let nftId = req.query.id;
@@ -206,18 +205,35 @@ app.post(
     const formDataFiles = req.files;
     var result = false;
     if (formDataFiles) {
-      console.log("run!");
-      if (formDataFiles["profile-img"])
-        result = digitalOcean.functions.uploadProfile(
-          req,
-          formDataFiles["profile-img"][0]
-        );
+      if (formDataFiles["profile-img"]) {
+        if (
+          (result = await digitalOcean.functions.uploadProfile(
+            req,
+            formDataFiles["profile-img"][0]
+          ))
+        )
+          result = true;
+      }
+
       if (formDataFiles["cover-img"])
-        result = digitalOcean.functions.uploadCover(
-          req,
-          formDataFiles["cover-img"][0]
-        );
+        if (
+          await digitalOcean.functions.uploadCover(
+            req,
+            formDataFiles["cover-img"][0]
+          )
+        )
+          result = true;
     }
+    if (
+      await mongoClient.query.updateUser(
+        req.session.wallet,
+        formDataBody["project"],
+        formDataBody["email"],
+        formDataBody["description"],
+        formDataBody["website"]
+      )
+    )
+      result = true;
     result ? res.status(200).send("Modified") : res.status(500).send("Failed");
   }
 );

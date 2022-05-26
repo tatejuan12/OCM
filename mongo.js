@@ -12,15 +12,7 @@ var methods = {
     if (!exists) {
     }
   },
-  updateUser: async function (
-    wallet,
-    project,
-    email,
-    bio,
-    website,
-    profileImg,
-    coverImg
-  ) {
+  updateUser: async function (wallet, project, email, bio, website) {
     const client = await getClient();
     if (!client) return;
     try {
@@ -36,9 +28,7 @@ var methods = {
       if (email) query.$set["email"] = email;
       if (bio) query.$set["bio"] = bio;
       if (website) query.$set["website"] = website;
-      if (profileImg) query.$set["profile_img"] = profileImg[0];
-      // if (coverImg) query.$set["cover_img"] = CoverImg;
-      console.log(profileImg);
+
       let res = await collection.updateOne(filter, query);
       console.log(res);
       return res.modifiedCount > 0 ? true : false;

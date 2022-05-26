@@ -27,7 +27,7 @@ var payloads = {
     const payload = await getPayload(request);
     return payload;
   },
-  redeemNftPayload: async function (req, res, address) {
+  redeemNftPayload: async function (req, res, address, mobile) {
     const client = await getXrplClient();
     try {
       //wallet of issuer
@@ -122,11 +122,19 @@ var payloads = {
 
       //this object will be used in the Xumm object
       //this allows to generate a relevant Xumm qrCode
-      var xummObj = {
-        TransactionType: "NFTokenAcceptOffer",
-        SellOffer: nftOfferIndex,
+      const request = {
+        options: {
+          submit: false,
+          expire: 240,
+        },
+        txjson: {
+          TransactionType: "NFTokenAcceptOffer",
+          NFTokenSellOffer: nftOfferIndex,
+        },
       };
-      const payload = await getPayload(xummObj);
+      if (mobile) request.options["return_url"] = { app: "http://localhost" };
+      else request.options["return_url"] = { web: "http://localhost" };
+      const payload = await getPayload(request);
       return payload;
     } catch (error) {
       return;

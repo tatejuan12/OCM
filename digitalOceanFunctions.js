@@ -1,11 +1,14 @@
 const aws = require("aws-sdk");
 let multer = require("multer");
 let multerS3 = require("multer-s3");
+const {
+  validateEscrowCancel,
+} = require("xrpl/dist/npm/models/transactions/escrowCancel");
 var s3 = new aws.S3({ endpoint: "sgp1.digitaloceanspaces.com" });
 
 aws.config.update({
-  accessKeyId: "IM5OSWEGBNJDM3RIYNJY",
-  secretAccessKey: "ChMYOHqfYa2AE23kxRpdYbusIFpWMaJsFy+uShV4Og4",
+  accessKeyId: "S62NNA7GQ4VOPLM5XW26",
+  secretAccessKey: "IANufU+Pc3DPT+WkI8Gg4MRYVfYXt3qdZdON89soijY",
   region: "sgp1",
 });
 const upload = multer({
@@ -26,33 +29,61 @@ const upload = multer({
 }).single("upload");
 
 var methods = {
-  uploadProfile: function (req, img) {
+  uploadProfile: async function (req, img) {
+    var result = false;
     const param = {
       Bucket: "ocw-space/profile-img",
       Key: req.session.wallet + "_profile.png",
       Body: img.buffer,
       ACL: "public-read",
     };
-    s3.upload(param, function (err, data) {
-      result = true;
-      if (err) console.log(err);
+    const uploadPromise = new Promise(function (resolve, reject) {
+      s3.upload(param, function (err, data) {
+        if (err) reject("Coudn't save image");
+        else resolve(true);
+      });
     });
+
+    result = await uploadPromise.catch((err) => {
+      return false;
+    });
+
+    return result;
   },
-  uploadCover: function (req, img) {
+  uploadCover: async function (req, img) {
     var result = false;
     const param = {
       Bucket: "ocw-space/cover-img",
-      Key: req.session.wallet + "_profile.png",
+      Key: req.session.wallet + "_cover.png",
       Body: img.buffer,
       ACL: "public-read",
     };
-    s3.upload(param, function (err, data) {
-      result = true;
-      console.log(result);
-      if (err) console.log(err);
+    const uploadPromise = new Promise(function (resolve, reject) {
+      s3.upload(param, function (err, data) {
+        if (err) reject("Coudn't save image");
+        else resolve(true);
+      });
     });
-    console.log(result);
+
+    result = await uploadPromise.catch((err) => {
+      return false;
+    });
+
     return result;
+  },
+  getProfileLink: function (req) {
+    return (
+      "https://ocw-space.sgp1.digitaloceanspaces.com/profile-img/" +
+      req.session.wallet +
+      "_profile.png"
+    );
+  },
+  getCover: function (req) {
+    return (
+      "https://ocw-space.sgp1.digitaloceanspaces.com/cover-img/" +
+      req.session.wallet +
+      "_cover.png"
+    );
   },
 };
 exports.functions = methods;

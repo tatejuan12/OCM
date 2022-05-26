@@ -4,7 +4,7 @@
   "main": "/app.js",
   "scripts": {
     "start": "sudo node app.js",
-    "watch": "nodemon --exec 'npm start' --ignore 'logs/'"
+    "watch": "sudo nodemon --exec 'npm start' --ignore 'logs/'"
   },
   "dependencies": {
     "aws-sdk": "^2.1142.0",
