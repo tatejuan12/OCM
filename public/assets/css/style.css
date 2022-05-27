@@ -23492,4 +23492,5 @@ body.active-light-mode {
 }
 .logoGrid img{
   max-width: 250px;
+  margin: 8px;
 }
