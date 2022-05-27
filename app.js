@@ -88,19 +88,21 @@ app.get("/connect", (req, res) => {
   res.render("views/connect");
 });
 app.get("/redeem", async (req, res) => {
-  const ocwBalance = await xumm.xrpl.getOcwBalance(
-    req.session.wallet,
-    req.useragent.isMobile
-  );
-  ocwBalance
-    ? res.render("views/redeem", {
-        ocwBalance: ocwBalance[0],
-        obtainableNfts: ocwBalance[1],
-      })
-    : res.render("views/redeem", {
-        ocwBalance: 0,
-        obtainableNfts: 0,
-      });
+  if (req.session.login) {
+    const ocwBalance = await xumm.xrpl.getOcwBalance(
+      req.session.wallet,
+      req.useragent.isMobile
+    );
+    ocwBalance
+      ? res.render("views/redeem", {
+          ocwBalance: ocwBalance[0],
+          obtainableNfts: ocwBalance[1],
+        })
+      : res.render("views/redeem", {
+          ocwBalance: 0,
+          obtainableNfts: 0,
+        });
+  } else res.status(401).redirect("/");
 });
 app.get("/profile", async (req, res) => {
   var ownerNfts;
@@ -122,8 +124,10 @@ app.get("/profile", async (req, res) => {
   });
 });
 app.get("/edit-profile", async (req, res) => {
-  const profile_pic = digitalOcean.functions.getProfileLink(req);
-  res.render("views/edit-profile", { profile_pic: profile_pic });
+  if (req.session.login) {
+    const profile_pic = digitalOcean.functions.getProfileLink(req);
+    res.render("views/edit-profile", { profile_pic: profile_pic });
+  } else res.status(401).redirect("/");
 });
 app.get("/product-details", async (req, res) => {
   let nftId = req.query.id;
@@ -146,6 +150,7 @@ app.get("/product-details", async (req, res) => {
 app.get("/create-listing", (req, res) => {
   res.render("views/create-listing");
 });
+
 //! ---------------------OCW API--------------------------------//
 app.post("/payload", async (req, res) => {
   const payload = await getPayload(req.body);
@@ -242,6 +247,12 @@ app.post(
     result ? res.status(200).send("Modified") : res.status(500).send("Failed");
   }
 );
+app.get("/report-nft", (req, res) => {
+  if (req.session.login) res.render("views/reportNft");
+  else res.status(401).redirect("/");
+});
+
+//! ---------------------Server Essentials--------------------------------//
 // Renders 404 page if the request is send to undeclared location
 app.use((req, res, next) => {
   res.status(404).render("views/404.ejs");

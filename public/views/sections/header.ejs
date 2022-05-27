@@ -24,17 +24,16 @@
                     </ul>
                   </li>
                   <li>
-                    <a href="redeem" class="its_new">Redeem</a>
+                    <a class="nav-link its_new" href="<%login ? __append("redeem") : __append('#')%>" <%if (!login) __append("onclick=\"customAlert.alert('Connect Wallet to Redeem')\"")%>>Redeem</a>
                   </li>
                   <li class="has-droupdown has-menu-child">
-                    <a href="profile">Account</a>
+                    <a href="<%login ? __append("profile") : __append('#')%>" <%if (!login) __append("onclick=\"customAlert.alert('Connect Wallet to View Profile')\"")%>>Account</a>
                     <ul class="submenu">
-                      <li><a href="profile">Your Profile</a></li>
-                      <li><a href="edit-profile">Update Profile</a></li>
+                      <li><a href="<%login ? __append("profile") : __append('#')%>" <%if (!login) __append("onclick=\"customAlert.alert('Connect Wallet to View Profile')\"")%>>Account</a></li>
+                      <li><a href="<%login ? __append("edit-profile") : __append('#')%>" <%if (!login) __append("onclick=\"customAlert.alert('Connect Wallet to Update Profile')\"")%>>Update Profile</a></li>
                     </ul>
                   </li>
-                </ul>
-                <!-- End Mainmanu Nav -->
+                  <!-- End Mainmanu Nav -->
               </nav>
             </div>
           </div>
@@ -120,16 +119,17 @@
                 <ul class="submenu">
                   <li><a href="explore">NFTokens</a></li>
                   <li><a href="create-listing">Mint NFToken</a></li>
+
                 </ul>
               </li>
               <li>
-                <a class="nav-link its_new" href="redeem">Redeem</a>
+                <a class="nav-link its_new" href="<%login ? __append("redeem") : __append('#')%>" <%if (!login) __append("onclick=\"customAlert.alert('Connect Wallet to Redeem')\"")%>>Redeem</a>
               </li>
               <li class="has-droupdown has-menu-child">
-                <a href="profile">Account</a>
+                <a href="<%login ? __append("profile") : __append('#')%>" <%if (!login) __append("onclick=\"customAlert.alert('Connect Wallet to View Profile')\"")%>>Account</a>
                 <ul class="submenu">
                   <li><a href="profile">Your Profile</a></li>
-                  <li><a href="edit-profile">Update Profile</a></li>
+                  <li><a href="<%login ? __append("edit-profile") : __append('#')%>" <%if (!login) __append("onclick=\"customAlert.alert('Connect Wallet to Update Profile')\"")%>>Update Profile</a></li>
                 </ul>
               </li>
             </ul>

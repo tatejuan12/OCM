@@ -20,11 +20,11 @@ var payloads = {
     };
     if (mobile)
       request.options["return_url"] = {
-        app: process.env.SERVER_URL.toString(),
+        app: process.env.SERVER_URL,
       };
     else
       request.options["return_url"] = {
-        web: process.env.SERVER_URL.toString(),
+        web: process.env.SERVER_URL,
       };
     const payload = await getPayload(request);
     return payload;
@@ -136,11 +136,11 @@ var payloads = {
       };
       if (mobile)
         request.options["return_url"] = {
-          app: process.env.SERVER_URL.toString(),
+          app: process.env.SERVER_URL,
         };
       else
         request.options["return_url"] = {
-          web: process.env.SERVER_URL.toString(),
+          web: process.env.SERVER_URL,
         };
       const payload = await getPayload(request);
       return payload;
@@ -772,7 +772,7 @@ async function getXrplClient() {
 
     try {
       await client.connect();
-      console.log(`\tConnected`);
+      // console.log(`\tConnected`);
       break;
     } catch (err) {
       //console.log(`                    Failed ${count}`)

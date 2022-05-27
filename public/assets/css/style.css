@@ -12034,6 +12034,9 @@ input[type="search"]::-webkit-search-results-button,
 input[type="search"]::-webkit-search-results-decoration {
   display: none;
 }
+input[type="search"]::placeholder {
+  color: var(--color-light-body);
+}
 
 .left-header-style .logo-area a img {
   max-width: 110px;
@@ -21186,7 +21189,7 @@ tbody.ranking tr td .thumbnail img {
   box-shadow: 0 4px 8px 0 #000;
   transition: 0.3s;
   width: 40%;
-  z-index: 10;
+  z-index: 100000000;
   top: 0;
   left: 0;
   right: 0;

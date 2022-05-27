@@ -2,10 +2,6 @@ const { MongoDBNamespace } = require("mongodb");
 
 const mongoClient = require("mongodb").MongoClient;
 
-//async reference https://stackoverflow.com/questions/47370487/node-js-mongodb-driver-async-await-queries
-var mongoUri =
-  "mongodb+srv://ocw:9T6YNSUEh61zgCB6@ocw-test.jgpcr.mongodb.net/NFT-Devnet?retryWrites=true&w=majority";
-
 var methods = {
   signinHandler: async function (id) {
     const exists = userExistsChecker(id);
@@ -230,7 +226,7 @@ async function alreadyLiked(collection, id, wallet) {
 }
 async function getClient() {
   const client = await mongoClient
-    .connect(mongoUri, {
+    .connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
     })
     .catch((err) => {
