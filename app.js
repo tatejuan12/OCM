@@ -75,6 +75,9 @@ app.get("/explore", async (req, res) => {
 app.get("/about", (req, res) => {
   res.render("views/about");
 });
+app.get("/partners", (req, res) => {
+  res.render("views/partners");
+});
 app.get("/logout", (req, res) => {
   req.session.destroy();
   res.redirect("/");
