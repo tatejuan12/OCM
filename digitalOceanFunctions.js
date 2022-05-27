@@ -4,11 +4,11 @@ let multerS3 = require("multer-s3");
 const {
   validateEscrowCancel,
 } = require("xrpl/dist/npm/models/transactions/escrowCancel");
-var s3 = new aws.S3({ endpoint: "sgp1.digitaloceanspaces.com" });
 
+var s3 = new aws.S3({ endpoint: process.env.S3_ENDPOINT });
 aws.config.update({
-  accessKeyId: "S62NNA7GQ4VOPLM5XW26",
-  secretAccessKey: "IANufU+Pc3DPT+WkI8Gg4MRYVfYXt3qdZdON89soijY",
+  accessKeyId: process.env.AWS_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: "sgp1",
 });
 const upload = multer({
@@ -22,7 +22,6 @@ const upload = multer({
       });
     },
     key: (req, file, cb) => {
-      console.log(file);
       cb(file.originalname);
     },
   }),
@@ -39,12 +38,13 @@ var methods = {
     };
     const uploadPromise = new Promise(function (resolve, reject) {
       s3.upload(param, function (err, data) {
-        if (err) reject("Coudn't save image");
+        if (err) reject(err);
         else resolve(true);
       });
     });
 
     result = await uploadPromise.catch((err) => {
+      console.log(err);
       return false;
     });
 

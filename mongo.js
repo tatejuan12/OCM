@@ -30,7 +30,7 @@ var methods = {
       if (website) query.$set["website"] = website;
 
       let res = await collection.updateOne(filter, query);
-      console.log(res);
+
       return res.modifiedCount > 0 ? true : false;
       //   return res > 0 ? true : false;
     } catch (err) {

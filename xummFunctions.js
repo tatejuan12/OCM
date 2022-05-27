@@ -2,13 +2,9 @@
 const { TxData } = require("xrpl-txdata");
 const verifySignature = new TxData();
 const { XummSdk } = require("xumm-sdk");
-const sdk = new XummSdk(
-  "b58d7023-14f2-4b64-a804-1c5d50215d6a",
-  "aeb73f38-4288-46dd-9c03-2a8c13635d09"
-);
+const sdk = new XummSdk(process.env.XUMM_ACCESS, process.env.XUMM_SECRET);
 const xrpl = require("xrpl");
 const { json } = require("express/lib/response");
-const issuerSeed = "sanmTNafTvtjEDNhPnsGWJWkCnVwU";
 
 var payloads = {
   transactionPayload: async function () {},
@@ -22,8 +18,14 @@ var payloads = {
         TransactionType: "SignIn",
       },
     };
-    if (mobile) request.options["return_url"] = { app: "http://localhost" };
-    else request.options["return_url"] = { web: "http://localhost" };
+    if (mobile)
+      request.options["return_url"] = {
+        app: process.env.SERVER_URL.toString(),
+      };
+    else
+      request.options["return_url"] = {
+        web: process.env.SERVER_URL.toString(),
+      };
     const payload = await getPayload(request);
     return payload;
   },
@@ -31,7 +33,7 @@ var payloads = {
     const client = await getXrplClient();
     try {
       //wallet of issuer
-      var nftWallet = xrpl.Wallet.fromSeed(issuerSeed);
+      var nftWallet = xrpl.Wallet.fromSeed(process.env.XRPL_ISSUER_SEED);
 
       //console.log(`\nScanning NFTs held by ${nftWallet.classicAddress}`)
       //Try Select an NFT up to 5 times
@@ -132,8 +134,14 @@ var payloads = {
           NFTokenSellOffer: nftOfferIndex,
         },
       };
-      if (mobile) request.options["return_url"] = { app: "http://localhost" };
-      else request.options["return_url"] = { web: "http://localhost" };
+      if (mobile)
+        request.options["return_url"] = {
+          app: process.env.SERVER_URL.toString(),
+        };
+      else
+        request.options["return_url"] = {
+          web: process.env.SERVER_URL.toString(),
+        };
       const payload = await getPayload(request);
       return payload;
     } catch (error) {
@@ -681,14 +689,14 @@ var xrpls = {
             command: "account_lines",
             account: address,
             limit: 400,
-            peer: "rK9DrarGKnVEo2nYp5MfVRXRYf5yRX3mwD",
+            peer: process.env.XRPL_ISSUER_ADDRESS,
             ledger_index: "validated",
           });
           for (a in xrplResponse.result.lines) {
             if (xrplResponse.result.lines[a].currency == "OCW") {
               if (
                 xrplResponse.result.lines[a].account ==
-                "rK9DrarGKnVEo2nYp5MfVRXRYf5yRX3mwD"
+                process.env.XRPL_ISSUER_ADDRESS
               ) {
                 var ocwHoldings = xrplResponse.result.lines[a].balance;
               }
@@ -741,7 +749,7 @@ async function getXrplClientMain() {
 
     try {
       await client.connect();
-      console.log(`\tConnected`);
+      // console.log(`\tConnected`);
       break;
     } catch (err) {
       //console.log(`                    Failed ${count}`)

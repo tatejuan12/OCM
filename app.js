@@ -1,5 +1,6 @@
 //* Main application, run this to run the application
 //! ---------------------Imports modules/packages--------------------------------//
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
@@ -52,6 +53,7 @@ app.use(
   })
 ); // Sets the use of cookies
 app.use(useragent.express()); // For browser data, like if it is mobile or not
+
 //! ---------------------Custom middleware--------------------------------//
 app.use(defaultLocals); //Custom made middleware, sends locals to ejs without having to send it manually
 app.use((req, res, next) => {
