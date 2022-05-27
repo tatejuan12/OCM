@@ -57,9 +57,9 @@
             <span>Your OCW Holdings</span>
             <span><% ocwBalance ? __append(ocwBalance)  : __append(0)%> OCW</span>
           </div>
-          <%if (login && obtainableNfts >= 1) {%><button class="btn2" id="redeem" onclick="getRedeem()">SWAP</button> <%} else {%> <button class="btn2" id="redeem" disabled><span>SWAP</span></button><%}%>
+          <%if (login && obtainableNfts >= 1) {%><button class="btn2" id="redeem" onclick="getRedeem(this, this.nextElementSibling);">SWAP</button> <%} else {%> <button class="btn2" id="redeem" disabled><span>SWAP</span></button><%}%>
           <!-- bellow div will give you a spinning loader anywhere on the website -->
-          <!-- <div class="loading"></div> -->
+          <div class="loading hidden"></div>
         </div>
       </div>
     </div>

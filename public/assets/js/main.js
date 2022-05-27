@@ -839,7 +839,9 @@ function xummSignin() {
     },
   });
 }
-function getRedeem() {
+function getRedeem(redeemElement, loadingElement) {
+  redeemElement.classList.add("hidden");
+  loadingElement.classList.remove("hidden");
   $.ajax({
     type: "POST",
     url: "/redeem-nft-payload",

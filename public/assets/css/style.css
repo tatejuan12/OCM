@@ -23463,7 +23463,7 @@ body.active-light-mode {
 #logout {
   width: max-content;
 }
-.loading{
+.loading {
   border: 4px solid #f4f4f3;
   border-radius: 50%;
   border-top: 4px solid #015774;
@@ -23474,15 +23474,23 @@ body.active-light-mode {
   animation: spin 2s linear infinite;
 }
 @-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
-.logoGrid{
+.logoGrid {
   display: grid;
   grid-template-columns: auto auto auto;
   max-width: 900px;
@@ -23490,7 +23498,10 @@ body.active-light-mode {
   align-items: center;
   margin: 0 auto;
 }
-.logoGrid img{
+.logoGrid img {
   max-width: 250px;
   margin: 8px;
+}
+.hidden {
+  display: none !important;
 }
