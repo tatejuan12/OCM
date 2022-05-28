@@ -19229,11 +19229,13 @@ body.modal-open {
 ----------------------------------*/
 .modal-backdrop {
   background-color: #000;
+  z-index: -1;
 }
 
 .modal-backdrop.show {
   background-color: #000;
   opacity: 0.75;
+  z-index: -1;
 }
 
 .rn-popup-modal .modal-content {
@@ -19241,6 +19243,7 @@ body.modal-open {
   border: 0 none;
   padding: 40px 20px;
   border-radius: 10px;
+  z-index: -1;
 }
 @media only screen and (max-width: 767px) {
   .rn-popup-modal .modal-content {

@@ -209,6 +209,46 @@ var methods = {
       return res;
     }
   },
+  reportNft: async function (id, message, login, wallet) {
+    var res = false;
+    const client = await getClient();
+    if (!client) return;
+    try {
+      const db = client.db("NFT-Devnet");
+
+      let collection = db.collection("NFT-Details");
+
+      if (login) {
+        let queryAlreadyReported = {
+          $and: [
+            { "reports.wallet": wallet },
+            {
+              tokenID: id,
+            },
+          ],
+        };
+        const alreadyReported = await collection.count(queryAlreadyReported);
+        if (alreadyReported == 0) {
+          let filterTwo = {
+            tokenID: id,
+          };
+          let queryTwo = {
+            $push: {
+              reports: { wallet: wallet, message: message },
+            },
+          };
+          const result = await collection.updateOne(filterTwo, queryTwo);
+          result.modifiedCount > 0 ? (res = true) : (res = false);
+        } else res = false;
+      } else res = false;
+    } catch (err) {
+      console.log("Database error" + err);
+    } finally {
+      client.close();
+
+      return res;
+    }
+  },
 };
 
 async function alreadyLiked(collection, id, wallet) {

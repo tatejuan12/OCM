@@ -23,7 +23,7 @@ const mongoClient = require("./mongo");
 const xumm = require("./xummFunctions");
 const { log } = require("console");
 let multer = require("multer");
-let upload = multer({ limits: { fieldSize: "2mb" } }); //used to get form data which for some reason bodyParser doesn't get. used for user data changing!
+let upload = multer({ limits: { fieldSize: "16mb" } }); //used to get form data which for some reason bodyParser doesn't get. used for user data changing!
 const mongoStore = new MongoDBStore({
   uri: "mongodb+srv://ocw:9T6YNSUEh61zgCB6@ocw-test.jgpcr.mongodb.net/NFT-Devnet?retryWrites=true&w=majority",
   collection: "Sessions",
@@ -247,9 +247,15 @@ app.post(
     result ? res.status(200).send("Modified") : res.status(500).send("Failed");
   }
 );
-app.get("/report-nft", (req, res) => {
-  if (req.session.login) res.render("views/reportNft");
-  else res.status(401).redirect("/");
+app.post("/report-nft", upload.any(), async (req, res) => {
+  const formData = req.body;
+  const result = await mongoClient.query.reportNft(
+    formData["token-id"],
+    formData["message"],
+    req.session.login,
+    req.session.wallet
+  );
+  result ? res.status(200).send("Modified") : res.status(500).send("Failed");
 });
 
 //! ---------------------Server Essentials--------------------------------//

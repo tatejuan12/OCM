@@ -22,9 +22,10 @@
           <button type="button" class="btn-setting-text share-text" data-bs-toggle="modal" data-bs-target="#shareModal">
             Share
           </button>
-          <button type="button" class="btn-setting-text report-text" data-bs-toggle="modal" data-bs-target="#reportModal">
+          <button type="button" class="btn-setting-text report-text" onclick="setCurrNft(this)" data-bs-toggle="modal" data-bs-target="#reportModal">
             Report
           </button>
+          <input type="hidden" class="token-id" value="<%=nft.tokenID%>">
         </div>
       </div>
     </div>
