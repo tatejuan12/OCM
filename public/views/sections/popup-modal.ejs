@@ -22,12 +22,11 @@
 
 <!--Report-->
 <div class="rn-popup-modal report-modal-wrapper modal fade" id="reportModal" tabindex="-1" aria-hidden="true">
-  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i data-feather="x"></i></button>
   <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
     <div class="modal-content report-content-wrapper">
       <div class="modal-header report-modal-header">
-        <h5 class="modal-title">Make a Report
-        </h5>
+        <h5 class="modal-title">Make a Report</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i data-feather="x"></i></button>
       </div>
       <div class="modal-body">
         <p>Type your reason below.</p>
@@ -35,7 +34,7 @@
           <h6 class="title">Reason</h6>
           <textarea name="message" id="message" placeholder="Reason for reporting..."></textarea>
           <div class="report-button">
-            <button type="button" class="btn btn-primary mr--10 w-auto" onclick="submitNftReportForm(currNft);">Report</button>
+            <button type="button" class="btn btn-primary mr--10 w-auto" onclick="submitNftReportForm(currNft);" data-bs-dismiss="modal">Report</button>
             <button type="button" class="btn btn-primary-alta w-auto" data-bs-dismiss="modal">Cancel</button>
           </div>
         </div>
