@@ -18445,6 +18445,8 @@ button .small-image {
 }
 .product-tab-wrapper .pd-tab-inner {
   display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 .product-tab-wrapper .rn-pd-nav {
   max-width: 100%;
