@@ -21186,13 +21186,13 @@ tbody.ranking tr td .thumbnail img {
 
 #dialogbox {
   display: none;
-  position: absolute;
+  position: fixed;
   background: var(--background-color-4);
   border-radius: 7px;
   box-shadow: 0 4px 8px 0 #000;
   transition: 0.3s;
   width: 40%;
-  z-index: 100000000;
+  z-index: 10;
   top: 0;
   left: 0;
   right: 0;

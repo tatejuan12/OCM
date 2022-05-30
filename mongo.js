@@ -1,4 +1,5 @@
 const { MongoDBNamespace } = require("mongodb");
+const { resolve } = require("path");
 
 const mongoClient = require("mongodb").MongoClient;
 
@@ -12,9 +13,9 @@ var methods = {
     const client = await getClient();
     if (!client) return;
     try {
-      const db = client.db("NFT-Devnet");
+      const db = client.db("OCM-Data");
 
-      let collection = db.collection("Users");
+      let collection = db.collection("Elegible-Issuers");
 
       let filter = {
         wallet: wallet,
@@ -40,9 +41,9 @@ var methods = {
     const client = await getClient();
     if (!client) return;
     try {
-      const db = client.db("NFT-Devnet");
+      const db = client.db("OCM-Data");
 
-      let collection = db.collection("Users");
+      let collection = db.collection("Elegible-Issuers");
       const exists = await userExistsChecker(wallet);
       if (!exists) {
         let query = {
@@ -64,9 +65,9 @@ var methods = {
     const client = await getClient();
     if (!client) return;
     try {
-      const db = client.db("NFT-Devnet");
+      const db = client.db("OCM-Data");
 
-      let collection = db.collection("Users");
+      let collection = db.collection("Elegible-Issuers");
 
       let query = {
         wallet: wallet,
@@ -86,7 +87,7 @@ var methods = {
     const client = await getClient();
     if (!client) return;
     try {
-      const db = client.db("NFT-Devnet");
+      const db = client.db("OCM-Data");
 
       let collection = db.collection("NFT-Details");
 
@@ -108,7 +109,7 @@ var methods = {
     const client = await getClient();
     if (!client) return;
     try {
-      const db = client.db("NFT-Devnet");
+      const db = client.db("OCM-Data");
 
       let collection = db.collection("NFT-Details");
 
@@ -129,7 +130,7 @@ var methods = {
     const client = await getClient();
     if (!client) return;
     try {
-      const db = client.db("NFT-Devnet");
+      const db = client.db("OCM-Data");
 
       let collection = db.collection("NFT-Details");
 
@@ -154,7 +155,7 @@ var methods = {
     const client = await getClient();
     if (!client) return;
     try {
-      const db = client.db("NFT-Devnet");
+      const db = client.db("OCM-Data");
 
       let collection = db.collection("NFT-Details");
 
@@ -185,7 +186,7 @@ var methods = {
     const client = await getClient();
     if (!client) return;
     try {
-      const db = client.db("NFT-Devnet");
+      const db = client.db("OCM-Data");
 
       let collection = db.collection("NFT-Details");
 
@@ -214,7 +215,7 @@ var methods = {
     const client = await getClient();
     if (!client) return;
     try {
-      const db = client.db("NFT-Devnet");
+      const db = client.db("OCM-Data");
 
       let collection = db.collection("NFT-Details");
 
@@ -241,6 +242,58 @@ var methods = {
           result.modifiedCount > 0 ? (res = true) : (res = false);
         } else res = false;
       } else res = false;
+    } catch (err) {
+      console.log("Database error" + err);
+    } finally {
+      client.close();
+
+      return res;
+    }
+  },
+  getSearchResultsJSON: async function (searchQuery) {
+    var res = {
+      nfts: {},
+      users: {},
+      collections: {},
+    };
+    const client = await getClient();
+    if (!client) return;
+    try {
+      const db = client.db("OCM-Data");
+
+      let nftDetailsCol = db.collection("NFT-Details");
+      let usersCol = db.collection("Elegible-Issuers");
+      let verifiedCol = db.collection("Verified-Collections");
+      let queryNftDetails = { $text: { $search: searchQuery } };
+      let queryUsers = { wallet: new RegExp(`.*${searchQuery}.*`, "i") };
+      let queryVerifiedCol = {
+        projectName: new RegExp(`.*${searchQuery}.*`, "i"),
+      };
+      promiseNfts = new Promise(function (resolve, reject) {
+        const nftCursor = nftDetailsCol.find(queryNftDetails).limit(10);
+        const result = nftCursor.toArray();
+        resolve(result);
+      });
+      promiseUsers = new Promise(function (resolve, reject) {
+        const userCursor = usersCol.find(queryUsers).limit(10);
+        const result = userCursor.toArray();
+        resolve(result);
+      });
+      promiseVerified = new Promise(function (resolve, reject) {
+        const verifiedCursor = verifiedCol.find(queryVerifiedCol).limit(10);
+        const result = verifiedCursor.toArray();
+        resolve(result);
+      });
+
+      const promise = await Promise.all([
+        promiseNfts,
+        promiseUsers,
+        promiseVerified,
+      ]);
+      res.nfts = promise[0];
+      res.users = promise[1];
+      res.collections = promise[2];
+      return res;
     } catch (err) {
       console.log("Database error" + err);
     } finally {
@@ -279,9 +332,9 @@ async function userExistsChecker(wallet) {
   const client = await getClient();
   if (!client) return;
   try {
-    const db = client.db("NFT-Devnet");
+    const db = client.db("OCM-Data");
 
-    let collection = db.collection("Users");
+    let collection = db.collection("Elegible-Issuers");
 
     let query = {
       wallet: wallet,

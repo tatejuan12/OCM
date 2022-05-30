@@ -8,7 +8,7 @@ const { json } = require("express/lib/response");
 
 var payloads = {
   transactionPayload: async function () {},
-  signInPayload: async function (path, mobile) {
+  signInPayload: async function (mobile) {
     const request = {
       options: {
         submit: false,
@@ -29,7 +29,7 @@ var payloads = {
     const payload = await getPayload(request);
     return payload;
   },
-  redeemNftPayload: async function (req, res, address, mobile) {
+  redeemNftPayload: async function (address, mobile) {
     const client = await getXrplClient();
     try {
       //wallet of issuer
@@ -134,11 +134,11 @@ var payloads = {
           NFTokenSellOffer: nftOfferIndex,
         },
       };
-      if (mobile)
+      if (mobile) {
         request.options["return_url"] = {
           app: process.env.SERVER_URL,
         };
-      else
+      } else
         request.options["return_url"] = {
           web: process.env.SERVER_URL,
         };
@@ -677,6 +677,58 @@ var xrpls = {
     }
   },
   getOcwBalance: async function (address) {
+    const client = await getXrplClientMain();
+    try {
+      //try to request XRPL for balances of OCW
+      //the try{}catch{}, is if the address is not active on the mainnet, it returns an error
+      //Try Get balance up to 5 times
+      var count = 0;
+      while (count < 5) {
+        try {
+          var xrplResponse = await client.request({
+            command: "account_lines",
+            account: address,
+            limit: 400,
+            peer: process.env.XRPL_ISSUER_ADDRESS,
+            ledger_index: "validated",
+          });
+          for (a in xrplResponse.result.lines) {
+            if (xrplResponse.result.lines[a].currency == "OCW") {
+              if (
+                xrplResponse.result.lines[a].account ==
+                process.env.XRPL_ISSUER_ADDRESS
+              ) {
+                var ocwHoldings = xrplResponse.result.lines[a].balance;
+              }
+            }
+          }
+          break;
+        } catch (err) {
+          //console.log(`                    Failed ${count}`)
+          count += 1;
+        }
+      }
+
+      if (ocwHoldings == undefined) {
+        return;
+      }
+
+      var ocwHoldings = sigRound(ocwHoldings, 2);
+
+      //filter to find how many NFTs they are eligible for
+      if (ocwHoldings.includes(".")) {
+        var eligibleNFTs = ocwHoldings.split(".")[0];
+      } else {
+        var eligibleNFTs = ocwHoldings;
+      }
+      return [ocwHoldings, eligibleNFTs];
+    } catch (error) {
+      return;
+    } finally {
+      await client.disconnect();
+    }
+  },
+  getXrpBalance: async function (address) {
     const client = await getXrplClientMain();
     try {
       //try to request XRPL for balances of OCW

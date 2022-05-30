@@ -1,4 +1,4 @@
-//* Main application, run this to run the application
+//* Main serverlication, run this to run the serverlication
 //! ---------------------Imports modules/packages--------------------------------//
 require("dotenv").config();
 const express = require("express");
@@ -25,46 +25,46 @@ const { log } = require("console");
 let multer = require("multer");
 let upload = multer({ limits: { fieldSize: "16mb" } }); //used to get form data which for some reason bodyParser doesn't get. used for user data changing!
 const mongoStore = new MongoDBStore({
-  uri: "mongodb+srv://ocw:9T6YNSUEh61zgCB6@ocw-test.jgpcr.mongodb.net/NFT-Devnet?retryWrites=true&w=majority",
+  uri: process.env.MONGO_URI,
   collection: "Sessions",
 });
 const NFTSPERPAGE = 10;
 //! ---------------------Imported middleware--------------------------------//
-const app = express();
-app.use(
+const server = express();
+server.use(
   cors({
     origin: "*",
   })
 );
-app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-app.set("view engine", "ejs"); // Setting rendering agent to ejs
-app.set("views", path.join(__dirname, "/public")); // Makes views for rendering the public dir
-app.use(express.static(__dirname + "/public")); // Essential so JS and CSS is acccessible by requests
-app.use(logger({ path: __dirname + "/logs/logs.log" })); // Logs data, every connection will log browser info and request url
-app.use(
+server.use(bodyParser.json()); // for parsing serverlication/json
+server.use(bodyParser.urlencoded({ extended: true })); // for parsing serverlication/x-www-form-urlencoded
+server.set("view engine", "ejs"); // Setting rendering agent to ejs
+server.set("views", path.join(__dirname, "/public")); // Makes views for rendering the public dir
+server.use(express.static(__dirname + "/public")); // Essential so JS and CSS is acccessible by requests
+server.use(logger({ path: __dirname + "/logs/logs.log" })); // Logs data, every connection will log browser info and request url
+server.use(
   session({
     secret: "some secret",
     resave: true,
     saveUninitialized: true,
     //! change to secure true once hosting
-    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 30 }, // ms/s, s/m, m/h, h/p, d/mnth
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 30 }, // ms/s, s/m, m/h, h/d, d/mnth
     store: mongoStore,
   })
 ); // Sets the use of cookies
-app.use(useragent.express()); // For browser data, like if it is mobile or not
+server.use(useragent.express()); // For browser data, like if it is mobile or not
 
 //! ---------------------Custom middleware--------------------------------//
-app.use(defaultLocals); //Custom made middleware, sends locals to ejs without having to send it manually
-app.use((req, res, next) => {
+server.use(defaultLocals); //Custom made middleware, sends locals to ejs without having to send it manually
+server.use((req, res, next) => {
   checkViews(req, next); // Increments session.views by one every time user interacts with website
 });
 //! ---------------------Browser endpoints--------------------------------//
-app.get("/", (req, res) => {
+server.get("/", (req, res) => {
   console.log();
   res.render("views/");
 });
-app.get("/explore", async (req, res) => {
+server.get("/explore", async (req, res) => {
   var nfts;
   const page = parseInt(req.query.page);
   if (!isNaN(page)) {
@@ -74,20 +74,20 @@ app.get("/explore", async (req, res) => {
     res.render("views/explore", { nfts: nfts, page: page });
   } else res.redirect("explore?page=0");
 });
-app.get("/about", (req, res) => {
+server.get("/about", (req, res) => {
   res.render("views/about");
 });
-app.get("/partners", (req, res) => {
+server.get("/partners", (req, res) => {
   res.render("views/partners");
 });
-app.get("/logout", (req, res) => {
+server.get("/logout", (req, res) => {
   req.session.destroy();
   res.redirect("/");
 });
-app.get("/connect", (req, res) => {
+server.get("/connect", (req, res) => {
   res.render("views/connect");
 });
-app.get("/redeem", async (req, res) => {
+server.get("/redeem", async (req, res) => {
   if (req.session.login) {
     const ocwBalance = await xumm.xrpl.getOcwBalance(
       req.session.wallet,
@@ -104,7 +104,7 @@ app.get("/redeem", async (req, res) => {
         });
   } else res.status(401).redirect("/");
 });
-app.get("/profile", async (req, res) => {
+server.get("/profile", async (req, res) => {
   var ownerNfts;
   var userInfo;
   const profile_pic = digitalOcean.functions.getProfileLink(req);
@@ -123,13 +123,13 @@ app.get("/profile", async (req, res) => {
     profile_pic: profile_pic,
   });
 });
-app.get("/edit-profile", async (req, res) => {
+server.get("/edit-profile", async (req, res) => {
   if (req.session.login) {
     const profile_pic = digitalOcean.functions.getProfileLink(req);
     res.render("views/edit-profile", { profile_pic: profile_pic });
   } else res.status(401).redirect("/");
 });
-app.get("/product-details", async (req, res) => {
+server.get("/product-details", async (req, res) => {
   let nftId = req.query.id;
   var nft;
   nftPromise = new Promise(function (resolve, reject) {
@@ -147,45 +147,44 @@ app.get("/product-details", async (req, res) => {
     nfts: promises[1],
   });
 });
-app.get("/create-listing", (req, res) => {
+server.get("/create-listing", (req, res) => {
   res.render("views/create-listing");
 });
 
 //! ---------------------OCW API--------------------------------//
-app.post("/payload", async (req, res) => {
+server.post("/payload", async (req, res) => {
   const payload = await getPayload(req.body);
 
   res.send(payload);
 });
-app.post("/subscription-transaction", async (req, res) => {
+server.post("/subscription-transaction", async (req, res) => {
   xumm.subscriptions.transactionSubscription(req, res);
 });
 
-app.post("/sign-in-payload", async (req, res) => {
+server.post("/sign-in-payload", async (req, res) => {
   const payload = await xumm.payloads.signInPayload(
     req.originalUrl,
     req.useragent.isMobile
   );
   res.send(payload);
 });
-app.post("/sign-in-subscription", async (req, res) => {
+server.post("/sign-in-subscription", async (req, res) => {
   const result = await xumm.subscriptions.signInSubscription(req, res);
   if (result) {
     mongoClient.query.initiateUser(req.session.wallet);
   }
 });
-app.post("/redeem-nft-payload", async (req, res) => {
+server.post("/redeem-nft-payload", async (req, res) => {
   const payload = await xumm.payloads.redeemNftPayload(
-    req,
-    res,
-    res.locals.wallet
+    req.session.wallet,
+    req.useragent.isMobile
   );
   res.status(200).send(payload);
 });
-app.post("/redeem-nft-subscription", async (req, res) => {
+server.post("/redeem-nft-subscription", async (req, res) => {
   xumm.subscriptions.redeemNftSubscription(req, res);
 });
-app.post("/increment-like", async (req, res) => {
+server.post("/increment-like", async (req, res) => {
   var success;
   if (req.session.login) {
     const nftId = req.body.id;
@@ -196,7 +195,7 @@ app.post("/increment-like", async (req, res) => {
   } else success = false;
   success ? res.status(200).end() : res.status(406).end();
 });
-app.post("/decrement-like", async (req, res) => {
+server.post("/decrement-like", async (req, res) => {
   var success;
   if (req.session.login) {
     const nftId = req.body.id;
@@ -207,7 +206,7 @@ app.post("/decrement-like", async (req, res) => {
   } else success = false;
   success ? res.status(200).end() : res.status(406).end();
 });
-app.post(
+server.post(
   "/update-user",
   upload.fields([{ name: "profile-img", maxCount: 1 }, { name: "cover-img" }]),
   async (req, res) => {
@@ -247,7 +246,7 @@ app.post(
     result ? res.status(200).send("Modified") : res.status(500).send("Failed");
   }
 );
-app.post("/report-nft", upload.any(), async (req, res) => {
+server.post("/report-nft", upload.any(), async (req, res) => {
   const formData = req.body;
   const result = await mongoClient.query.reportNft(
     formData["token-id"],
@@ -260,14 +259,14 @@ app.post("/report-nft", upload.any(), async (req, res) => {
 
 //! ---------------------Server Essentials--------------------------------//
 // Renders 404 page if the request is send to undeclared location
-app.use((req, res, next) => {
+server.use((req, res, next) => {
   res.status(404).render("views/404.ejs");
 });
-app.use((err, req, res, next) => {
+server.use((err, req, res, next) => {
   console.error(err);
   res.status(500).render("views/500.ejs");
 });
-app.listen(80, () => {
+server.listen(80, () => {
   console.log("Server Listening");
 });
 
