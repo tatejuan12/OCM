@@ -15,7 +15,7 @@ var methods = {
     try {
       const db = client.db("OCM-Data");
 
-      let collection = db.collection("Elegible-Issuers");
+      let collection = db.collection("Account-Details");
 
       let filter = {
         wallet: wallet,
@@ -43,7 +43,7 @@ var methods = {
     try {
       const db = client.db("OCM-Data");
 
-      let collection = db.collection("Elegible-Issuers");
+      let collection = db.collection("Account-Details");
       const exists = await userExistsChecker(wallet);
       if (!exists) {
         let query = {
@@ -67,7 +67,7 @@ var methods = {
     try {
       const db = client.db("OCM-Data");
 
-      let collection = db.collection("Elegible-Issuers");
+      let collection = db.collection("Account-Details");
 
       let query = {
         wallet: wallet,
@@ -262,7 +262,7 @@ var methods = {
       const db = client.db("OCM-Data");
 
       let nftDetailsCol = db.collection("NFT-Details");
-      let usersCol = db.collection("Elegible-Issuers");
+      let usersCol = db.collection("Account-Details");
       let verifiedCol = db.collection("Verified-Collections");
       let queryNftDetails = { $text: { $search: searchQuery } };
       let queryUsers = { wallet: new RegExp(`.*${searchQuery}.*`, "i") };
@@ -334,7 +334,7 @@ async function userExistsChecker(wallet) {
   try {
     const db = client.db("OCM-Data");
 
-    let collection = db.collection("Elegible-Issuers");
+    let collection = db.collection("Account-Details");
 
     let query = {
       wallet: wallet,

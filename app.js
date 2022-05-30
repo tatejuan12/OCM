@@ -162,10 +162,7 @@ server.post("/subscription-transaction", async (req, res) => {
 });
 
 server.post("/sign-in-payload", async (req, res) => {
-  const payload = await xumm.payloads.signInPayload(
-    req.originalUrl,
-    req.useragent.isMobile
-  );
+  const payload = await xumm.payloads.signInPayload(req.useragent.isMobile);
   res.send(payload);
 });
 server.post("/sign-in-subscription", async (req, res) => {
