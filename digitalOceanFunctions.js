@@ -71,17 +71,17 @@ var methods = {
 
     return result;
   },
-  getProfileLink: function (req) {
+  getProfileLink: function (wallet) {
     return (
       "https://ocw-space.sgp1.digitaloceanspaces.com/profile-img/" +
-      req.session.wallet +
+      wallet +
       "_profile.png"
     );
   },
-  getCover: function (req) {
+  getCover: function (wallet) {
     return (
       "https://ocw-space.sgp1.digitaloceanspaces.com/cover-img/" +
-      req.session.wallet +
+      wallet +
       "_cover.png"
     );
   },

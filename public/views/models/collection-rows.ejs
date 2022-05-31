@@ -1,0 +1,6 @@
+  <div class="row g-5 " id="exploreSection">
+    <!-- Product -->
+    <% collections.forEach(function(res){%>
+    <%- include('collection-card.ejs', {collection:res})%>
+    <%}); %>
+  </div>

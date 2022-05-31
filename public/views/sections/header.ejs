@@ -39,10 +39,10 @@
           </div>
           <div class="header-right">
             <div class="setting-option d-none d-lg-block">
-              <form class="search-form-wrapper" action="#">
-                <input type="search" placeholder="Search Here" aria-label="Search">
+              <form class="search-form-wrapper" action="/search" method="get">
+                <input type="search" placeholder="Search Here" name="q" aria-label="Search">
                 <div class="search-icon">
-                  <button><i class="feather-search"></i></button>
+                  <button type="submit"><i class="feather-search"></i></button>
                 </div>
               </form>
             </div>
@@ -50,10 +50,10 @@
               <div class="icon-box search-mobile-icon">
                 <button><i class="feather-search"></i></button>
               </div>
-              <form id="header-search-1" action="#" method="GET" class="large-mobile-blog-search">
+              <form id="header-search-1" action="/search" method="GET" class="large-mobile-blog-search">
                 <div class="rn-search-mobile form-group">
                   <button type="submit" class="search-button"><i class="feather-search"></i></button>
-                  <input type="text" placeholder="Search ...">
+                  <input type="text" name="q" placeholder="Search ...">
                 </div>
               </form>
             </div>

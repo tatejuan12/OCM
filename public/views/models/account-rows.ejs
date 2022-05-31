@@ -1,0 +1,6 @@
+<div class="row g-5 " id="exploreSection">
+  <!-- Product -->
+  <% accounts.forEach(function(res){%>
+  <%- include('account-card.ejs', {account:res})%>
+  <%}); %>
+</div>

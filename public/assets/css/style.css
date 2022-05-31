@@ -17508,6 +17508,7 @@ button .small-image {
   border-radius: 5px;
   position: relative;
   margin: -15px;
+  text-align: center;
 }
 .product-style-one .card-thumbnail a img {
   border-radius: 5px;
@@ -17533,6 +17534,7 @@ button .small-image {
   font-weight: 500;
   font-size: 18px;
   transition: 0.4s;
+  overflow:hidden;
 }
 .product-style-one a .product-name:hover {
   color: var(--color-primary) !important;
@@ -20556,7 +20558,8 @@ tbody.ranking tr td .thumbnail img {
   box-shadow: none;
 }
 
-.tab-content-edit-wrapepr .tab-pane {
+.tab-content-edit-wrapepr .tab-pane,
+.search-row {
   padding: 30px;
   background: var(--background-color-1);
   border-radius: 8px;
@@ -23510,4 +23513,19 @@ body.active-light-mode {
 }
 .hidden {
   display: none !important;
+}
+.search-row {
+  color: var(--color-primary);
+
+  transition: transform 0.2s;
+}
+.search-row:hover {
+  transform: scale(1.01);
+}
+.active-light-mode .search-row {
+  background: unset;
+  border: solid thin var(--color-border-white);
+}
+.search-row .product-style-one .card-thumbnail a img {
+  width: 200px;
 }

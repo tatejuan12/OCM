@@ -105,15 +105,19 @@ server.get("/redeem", async (req, res) => {
   } else res.status(401).redirect("/");
 });
 server.get("/profile", async (req, res) => {
-  var ownerNfts;
-  var userInfo;
-  const profile_pic = digitalOcean.functions.getProfileLink(req);
+  var wallet;
+  if (req.query.wallet) wallet = req.query.wallet;
+  else {
+    if (!req.session.login) res.status(401).redirect("/");
+    wallet = req.session.wallet;
+  }
+  const profile_pic = digitalOcean.functions.getProfileLink(wallet);
   nftsPromise = new Promise(function (resolve, reject) {
-    const ownerNfts = mongoClient.query.getOwnerNfts(req.session.wallet);
+    const ownerNfts = mongoClient.query.getOwnerNfts(wallet);
     resolve(ownerNfts);
   });
   userPromise = new Promise(function (resolve, reject) {
-    const ownerInfo = mongoClient.query.getUser(req.session.wallet);
+    const ownerInfo = mongoClient.query.getUser(wallet);
     resolve(ownerInfo);
   });
   const promises = await Promise.all([nftsPromise, userPromise]);
@@ -125,7 +129,9 @@ server.get("/profile", async (req, res) => {
 });
 server.get("/edit-profile", async (req, res) => {
   if (req.session.login) {
-    const profile_pic = digitalOcean.functions.getProfileLink(req);
+    const profile_pic = digitalOcean.functions.getProfileLink(
+      req.session.wallet
+    );
     res.render("views/edit-profile", { profile_pic: profile_pic });
   } else res.status(401).redirect("/");
 });
@@ -149,6 +155,13 @@ server.get("/product-details", async (req, res) => {
 });
 server.get("/create-listing", (req, res) => {
   res.render("views/create-listing");
+});
+server.get("/search", async (req, res) => {
+  const searchResults = await mongoClient.query.getSearchResultsJSON(
+    req.query.q
+  );
+
+  res.render("views/search", { res: searchResults });
 });
 
 //! ---------------------OCW API--------------------------------//

@@ -295,7 +295,7 @@ var methods = {
       res.collections = promise[2];
       return res;
     } catch (err) {
-      console.log("Database error" + err);
+      console.log("Database error: " + err);
     } finally {
       client.close();
 
