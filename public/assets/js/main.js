@@ -695,18 +695,18 @@
 
       $("#slider-range").slider({
         range: true,
-        min: 10,
-        max: 500,
-        values: [100, 300],
+        min: 1,
+        max: 10000,
+        values: [100, 500],
         slide: function (event, ui) {
-          $("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
+          $("#amount").val(ui.values[0] + " XRP" + " - " + ui.values[1] + " XRP");
         },
       });
       $("#amount").val(
-        "$" +
           $("#slider-range").slider("values", 0) +
-          " - $" +
-          $("#slider-range").slider("values", 1)
+          " XRP - " +
+          $("#slider-range").slider("values", 1) + 
+          " XRP"
       );
     },
 
