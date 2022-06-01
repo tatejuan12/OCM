@@ -1,5 +1,6 @@
 const { MongoDBNamespace } = require("mongodb");
 const { resolve } = require("path");
+const { XummSdk } = require("xumm-sdk");
 
 const mongoClient = require("mongodb").MongoClient;
 
@@ -13,9 +14,9 @@ var methods = {
     const client = await getClient();
     if (!client) return;
     try {
-      const db = client.db("OCM-Data");
+      const db = client.db("Accounts");
 
-      let collection = db.collection("Account-Details");
+      let collection = db.collection("Elegible-Accounts");
 
       let filter = {
         wallet: wallet,
@@ -41,9 +42,9 @@ var methods = {
     const client = await getClient();
     if (!client) return;
     try {
-      const db = client.db("OCM-Data");
+      const db = client.db("Accounts");
 
-      let collection = db.collection("Account-Details");
+      let collection = db.collection("Elegible-Accounts");
       const exists = await userExistsChecker(wallet);
       if (!exists) {
         let query = {
@@ -65,9 +66,9 @@ var methods = {
     const client = await getClient();
     if (!client) return;
     try {
-      const db = client.db("OCM-Data");
+      const db = client.db("Accounts");
 
-      let collection = db.collection("Account-Details");
+      let collection = db.collection("Elegible-Accounts");
 
       let query = {
         wallet: wallet,
@@ -87,9 +88,9 @@ var methods = {
     const client = await getClient();
     if (!client) return;
     try {
-      const db = client.db("OCM-Data");
+      const db = client.db("NFTokens");
 
-      let collection = db.collection("NFT-Details");
+      let collection = db.collection("Eligible-Listings");
 
       let query = {
         tokenID: id,
@@ -104,21 +105,19 @@ var methods = {
       client.close();
     }
   },
-  getOwnerNfts: async function (owner) {
+  getOwnerNfts: async function (owner, tokenIds) {
     var result;
     const client = await getClient();
     if (!client) return;
     try {
-      const db = client.db("OCM-Data");
+      const db = client.db("NFTokens");
 
-      let collection = db.collection("NFT-Details");
+      let collection = db.collection("Eligible-Listings");
 
       let query = {
-        currentOwner: owner,
+        $or: [{ tokenID: { $in: tokenIds } }],
       };
-
       const cursor = await collection.find(query);
-
       return await cursor.toArray();
     } catch (err) {
       console.log("Database error" + err);
@@ -130,9 +129,9 @@ var methods = {
     const client = await getClient();
     if (!client) return;
     try {
-      const db = client.db("OCM-Data");
+      const db = client.db("NFTokens");
 
-      let collection = db.collection("NFT-Details");
+      let collection = db.collection("Eligible-Listings");
 
       let query = {};
 
@@ -155,9 +154,9 @@ var methods = {
     const client = await getClient();
     if (!client) return;
     try {
-      const db = client.db("OCM-Data");
+      const db = client.db("NFTokens");
 
-      let collection = db.collection("NFT-Details");
+      let collection = db.collection("Eligible-Listings");
 
       const liked = await alreadyLiked(collection, id, userWallet);
       if (!liked) {
@@ -186,9 +185,9 @@ var methods = {
     const client = await getClient();
     if (!client) return;
     try {
-      const db = client.db("OCM-Data");
+      const db = client.db("NFTokens");
 
-      let collection = db.collection("NFT-Details");
+      let collection = db.collection("Eligible-Listings");
 
       const liked = await alreadyLiked(collection, id, userWallet);
       if (liked) {
@@ -215,9 +214,9 @@ var methods = {
     const client = await getClient();
     if (!client) return;
     try {
-      const db = client.db("OCM-Data");
+      const db = client.db("NFTokens");
 
-      let collection = db.collection("NFT-Details");
+      let collection = db.collection("Eligible-Listings");
 
       if (login) {
         let queryAlreadyReported = {
@@ -259,11 +258,13 @@ var methods = {
     const client = await getClient();
     if (!client) return;
     try {
-      const db = client.db("OCM-Data");
+      const dbNfts = client.db("NFTokens");
+      const dbAccounts = client.db("Accounts");
+      const dbCollections = client.db("Additional-Traits");
 
-      let nftDetailsCol = db.collection("NFT-Details");
-      let usersCol = db.collection("Account-Details");
-      let verifiedCol = db.collection("Verified-Collections");
+      let nftDetailsCol = dbNfts.collection("Eligible-Listings");
+      let usersCol = dbAccounts.collection("Elegible-Accounts");
+      let verifiedCol = dbCollections.collection("Verified-Issuers");
       let queryNftDetails = { $text: { $search: searchQuery } };
       let queryUsers = { wallet: new RegExp(`.*${searchQuery}.*`, "i") };
       let queryVerifiedCol = {
@@ -332,10 +333,10 @@ async function userExistsChecker(wallet) {
   const client = await getClient();
   if (!client) return;
   try {
-    const db = client.db("OCM-Data");
+    const db = client.db("Accounts");
 
-    let collection = db.collection("Account-Details");
-
+    let collection = db.collection("Elegible-Accounts");
+    //Make a check later on for inelegible-accounts
     let query = {
       wallet: wallet,
     };

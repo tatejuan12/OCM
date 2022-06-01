@@ -26,6 +26,7 @@ let multer = require("multer");
 let upload = multer({ limits: { fieldSize: "16mb" } }); //used to get form data which for some reason bodyParser doesn't get. used for user data changing!
 const mongoStore = new MongoDBStore({
   uri: process.env.MONGO_URI,
+  databaseName: "Sessions",
   collection: "Sessions",
 });
 const NFTSPERPAGE = 10;
@@ -60,8 +61,9 @@ server.use((req, res, next) => {
   checkViews(req, next); // Increments session.views by one every time user interacts with website
 });
 //! ---------------------Browser endpoints--------------------------------//
-server.get("/", (req, res) => {
-  console.log();
+server.get("/", async (req, res) => {
+  // const result = await xumm.xrpl.getAccountsNfts(req.session.wallet);
+  // res.send(result);
   res.render("views/");
 });
 server.get("/explore", async (req, res) => {
@@ -113,16 +115,17 @@ server.get("/profile", async (req, res) => {
   }
   const profile_pic = digitalOcean.functions.getProfileLink(wallet);
   nftsPromise = new Promise(function (resolve, reject) {
-    const ownerNfts = mongoClient.query.getOwnerNfts(wallet);
-    resolve(ownerNfts);
+    const tokenIds = xumm.xrpl.getAccountsNfts(wallet);
+    resolve(tokenIds);
   });
   userPromise = new Promise(function (resolve, reject) {
     const ownerInfo = mongoClient.query.getUser(wallet);
     resolve(ownerInfo);
   });
   const promises = await Promise.all([nftsPromise, userPromise]);
+  const ownerNfts = await mongoClient.query.getOwnerNfts(wallet, promises[0]);
   res.render("views/profile", {
-    nfts: promises[0],
+    nfts: ownerNfts,
     user: promises[1],
     profile_pic: profile_pic,
   });
@@ -293,9 +296,11 @@ function checkViews(req, next) {
 }
 function defaultLocals(req, res, next) {
   try {
-    var login = req.session.login != null ? req.session.login : false;
+    var login =
+      req.session.login != undefined && req.session ? req.session.login : false;
     var wallet = req.session.wallet != null ? req.session.wallet : false;
     var mobile = req.useragent.isMobile;
+    req.session.login = login;
     res.locals.login = login;
     res.locals.wallet = wallet;
     res.locals.mobile = mobile;

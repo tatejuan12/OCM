@@ -11,7 +11,7 @@ var payloads = {
   signInPayload: async function (mobile) {
     const request = {
       options: {
-        submit: false,
+        submit: true,
         expire: 240,
       },
       txjson: {
@@ -126,7 +126,7 @@ var payloads = {
       //this allows to generate a relevant Xumm qrCode
       const request = {
         options: {
-          submit: false,
+          submit: true,
           expire: 240,
         },
         txjson: {
@@ -143,6 +143,7 @@ var payloads = {
           web: process.env.SERVER_URL,
         };
       const payload = await getPayload(request);
+      console.log(payload);
       return payload;
     } catch (error) {
       return;
