@@ -23510,6 +23510,7 @@ body.active-light-mode {
 .logoGrid img {
   max-width: 250px;
   margin: 8px;
+  transition: all .5s ease;
 }
 .hidden {
   display: none !important;
@@ -23528,4 +23529,7 @@ body.active-light-mode {
 }
 .search-row .product-style-one .card-thumbnail a img {
   width: 200px;
+}
+.logoGrid img:hover{
+  transform: scale(1.05);
 }
