@@ -77,6 +77,9 @@ server.get("/explore", async (req, res) => {
 server.get("/about", (req, res) => {
   res.render("views/about");
 });
+server.get("/verified", (req, res) => {
+  res.render("views/verified");
+});
 server.get("/partners", (req, res) => {
   res.render("views/partners");
 });
