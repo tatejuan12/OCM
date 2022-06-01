@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>OCM || Profile</title>
+  <title>OCM || Collection</title>
   <meta name="robots" content="noindex, follow" />
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -54,10 +54,10 @@
           <div class="author-wrapper">
             <div class="author-inner">
               <div class="user-thumbnail">
-                <img src="<%=profile_pic%>" alt="Stack Overflow logo and icons and such" onerror="this.src='assets/images/icons/unknown-user.png'">
+                <img src="" alt="Stack Overflow logo and icons and such" onerror="this.src='assets/images/icons/unknown-user.png'">
               </div>
               <div class="rn-author-info-content">
-                <h4 class="title"><%= wallet %></h4>
+                <h4 class="title">Collection Name</h4>
               </div>
             </div>
           </div>
@@ -73,17 +73,16 @@
           <div class="tab-wrapper-one">
             <nav class="tab-button-one">
               <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Listed</button>
-                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="true">Un-Listed</button>
-                <button class="nav-link" id="nav-liked-tab" data-bs-toggle="tab" data-bs-target="#nav-liked" type="button" role="tab" aria-controls="nav-liked" aria-selected="false">Liked</button>
-                <button class="nav-link" id="nav-liked-tab" data-bs-toggle="tab" data-bs-target="#nav-accountOffers" type="button" role="tab" aria-controls="nav-accountOffers" aria-selected="false">Account Offers</button>
+                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Description</button>
+                <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Items</button>
               </div>
             </nav>
           </div>
         </div>
       </div>
-
-      <%- include ("models/nft-rows.ejs", {nfts:nfts}) %>
+      <div>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur enim placeat quod animi temporibus voluptatibus incidunt cupiditate vitae excepturi optio. Impedit saepe corrupti modi optio aspernatur eaque, dolorum repellendus commodi odit accusamus nam ducimus eveniet corporis aperiam praesentium deleniti qui explicabo ullam nostrum expedita minus quae possimus fugit harum. Exercitationem?</p>
+      </div>
     </div>
   </div>
   <!-- Modal require -->

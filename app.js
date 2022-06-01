@@ -83,6 +83,9 @@ server.get("/verified", (req, res) => {
 server.get("/partners", (req, res) => {
   res.render("views/partners");
 });
+server.get("/collection", (req, res) => {
+  res.render("views/collection");
+});
 server.get("/logout", (req, res) => {
   req.session.destroy();
   res.redirect("/");
