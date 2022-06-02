@@ -23533,3 +23533,14 @@ body.active-light-mode {
 .logoGrid img:hover{
   transform: scale(1.05);
 }
+
+.mintModal{
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: auto;
+  z-index: 1000;
+  max-height: 800px;
+  max-width: 700px;
+}
