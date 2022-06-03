@@ -699,13 +699,15 @@
         max: 10000,
         values: [100, 500],
         slide: function (event, ui) {
-          $("#amount").val(ui.values[0] + " XRP" + " - " + ui.values[1] + " XRP");
+          $("#amount").val(
+            ui.values[0] + " XRP" + " - " + ui.values[1] + " XRP"
+          );
         },
       });
       $("#amount").val(
-          $("#slider-range").slider("values", 0) +
+        $("#slider-range").slider("values", 0) +
           " XRP - " +
-          $("#slider-range").slider("values", 1) + 
+          $("#slider-range").slider("values", 1) +
           " XRP"
       );
     },
@@ -836,6 +838,56 @@ function xummSignin() {
           console.warn("Sign in expired, failed or was cancelled.");
         },
       });
+    },
+  });
+}
+function setBuyOfferBid(NFToken) {
+  console.log(document.getElementById("value").value);
+  const value = document.getElementById("value").value;
+  $.ajax({
+    type: "POST",
+    url: "/transaction-payload",
+    data: { NFToken: NFToken, value: value },
+    success: function (result) {
+      console.log(result);
+      window.location.href = result.next.always;
+      console.log("succeeded");
+      // $.ajax({
+      //   type: "POST",
+      //   url: "/sign-in-subscription",
+      //   data: result,
+      //   success: function (resulty) {
+      //     console.log(resulty);
+      //     location.reload();
+      //   },
+      //   error: function (resulty) {
+      //     console.warn("Sign in expired, failed or was cancelled.");
+      //   },
+      // });
+    },
+  });
+}
+function acceptBuyOffer(index, NFToken) {
+  $.ajax({
+    type: "POST",
+    url: "/accept-buy-offer",
+    data: { index: index, NFToken: NFToken },
+    success: function (result) {
+      console.log(result);
+      window.location.href = result.next.always;
+      console.log("succeeded");
+      // $.ajax({
+      //   type: "POST",
+      //   url: "/sign-in-subscription",
+      //   data: result,
+      //   success: function (resulty) {
+      //     console.log(resulty);
+      //     location.reload();
+      //   },
+      //   error: function (resulty) {
+      //     console.warn("Sign in expired, failed or was cancelled.");
+      //   },
+      // });
     },
   });
 }

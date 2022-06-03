@@ -17534,7 +17534,7 @@ button .small-image {
   font-weight: 500;
   font-size: 18px;
   transition: 0.4s;
-  overflow:hidden;
+  overflow: hidden;
 }
 .product-style-one a .product-name:hover {
   color: var(--color-primary) !important;
@@ -18726,10 +18726,17 @@ button .small-image {
 }
 .rn-bid-details .rn-bid-content {
   display: block;
+  margin-top: 20px;
 }
 .rn-bid-details .rn-bid-content .top-seller-inner-one {
-  padding-top: 20px;
+  padding-top: 10px;
 }
+.rn-bid-details .rn-bid-content .top-seller-inner-one .offer-wrapper {
+  background-color: var(--background-color-1);
+  border-radius: 6px;
+  padding: 5px 0 5px 0;
+}
+
 .rn-bid-details .rn-bid-content .top-seller-inner-one + .top-seller-inner-one {
   margin-top: 20px;
   border-top: 1px solid var(--color-border);
@@ -21496,6 +21503,13 @@ body.active-light-mode {
 .active-light-mode .color-body {
   color: var(--color-light-body) !important;
 }
+.active-light-mode
+  .rn-bid-details
+  .rn-bid-content
+  .top-seller-inner-one
+  .offer-wrapper {
+  background-color: var(--color-white);
+}
 .active-light-mode h1,
 .active-light-mode h2,
 .active-light-mode h3,
@@ -21869,6 +21883,7 @@ body.active-light-mode {
 .active-light-mode .place-bet-area.into-banner {
   background: var(--background-color-1);
 }
+
 .active-light-mode .place-bet-area.into-banner .winning-bid h6 {
   color: var(--color-white);
 }
@@ -23510,7 +23525,7 @@ body.active-light-mode {
 .logoGrid img {
   max-width: 250px;
   margin: 8px;
-  transition: all .5s ease;
+  transition: all 0.5s ease;
 }
 .hidden {
   display: none !important;
@@ -23530,6 +23545,21 @@ body.active-light-mode {
 .search-row .product-style-one .card-thumbnail a img {
   width: 200px;
 }
-.logoGrid img:hover{
+.logoGrid img:hover {
   transform: scale(1.05);
+}
+.transition {
+  transition: var(--transition);
+}
+.profile-thumbnail {
+  display: inline-block;
+  width: 75px;
+  border-radius: 50px;
+  border-width: 5px;
+  border-color: var(--background-color-1);
+  border-style: solid;
+  margin-right: 10px;
+}
+.active-light-mode .profile-thumbnail {
+  border-color: var(--color-white);
 }

@@ -1,0 +1,13 @@
+<!-- single creator -->
+<div class="top-seller-inner-one">
+  <div class="top-seller-wrapper offer-wrapper transition">
+    <div class="top-seller-content">
+      <span><%=buyOffer.price%> <%=buyOffer.token%></span>
+      <% if (isOwner){%>
+      <button class="btn btn-primary" value="<%=buyOffer.index%>" onclick="acceptBuyOffer(this.value, '<%=NFToken%>')">Accept Offer
+      </button>
+      <%}%>
+    </div>
+  </div>
+</div>
+<!-- single creator -->

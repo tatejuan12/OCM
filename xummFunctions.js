@@ -1,3 +1,5 @@
+//* Imports getNft function to return nft from mongodb to use for getCurrentNftHolder() function
+const { getNft } = require("./mongo.js").query;
 //* Contains the Xumm functions and xrpl interactions
 const { TxData } = require("xrpl-txdata");
 const verifySignature = new TxData();
@@ -7,7 +9,39 @@ const xrpl = require("xrpl");
 const { json } = require("express/lib/response");
 
 var payloads = {
-  transactionPayload: async function () {},
+  transactionPayload: async function (NFToken, value, mobile) {
+    const nftOwner = await xrpls.getcurrentNftHolder(NFToken);
+    try {
+      value = parseInt(value);
+      value = value * 1000000;
+      value = value.toString();
+    } catch (err) {
+      console.error("Error parsing Value: " + err);
+      return false;
+    }
+    const request = {
+      options: {
+        submit: true,
+        expire: 240,
+      },
+      txjson: {
+        TransactionType: "NFTokenCreateOffer",
+        NFTokenID: NFToken,
+        Owner: nftOwner,
+        Amount: value,
+      },
+    };
+    if (mobile)
+      request.options["return_url"] = {
+        app: process.env.SERVER_URL,
+      };
+    else
+      request.options["return_url"] = {
+        web: process.env.SERVER_URL,
+      };
+    const payload = await getPayload(request);
+    return payload;
+  },
   signInPayload: async function (mobile) {
     const request = {
       options: {
@@ -16,6 +50,28 @@ var payloads = {
       },
       txjson: {
         TransactionType: "SignIn",
+      },
+    };
+    if (mobile)
+      request.options["return_url"] = {
+        app: process.env.SERVER_URL,
+      };
+    else
+      request.options["return_url"] = {
+        web: process.env.SERVER_URL,
+      };
+    const payload = await getPayload(request);
+    return payload;
+  },
+  acceptBuyOfferPayload: async function (index, mobile) {
+    const request = {
+      options: {
+        submit: true,
+        expire: 240,
+      },
+      txjson: {
+        TransactionType: "NFTokenAcceptOffer",
+        NFTokenBuyOffer: index,
       },
     };
     if (mobile)
@@ -339,8 +395,8 @@ var xrpls = {
       });
 
       //return findings
-      console.log(sellOffers);
-      console.log(buyOffers);
+      // console.log(sellOffers);
+      // console.log(buyOffers);
       return [sellOffers, buyOffers];
     } catch (error) {
       return;
@@ -348,8 +404,10 @@ var xrpls = {
       await client.disconnect();
     }
   },
-
-  getcurrentNftHolder: async function (NFTokenID, lastKnownHolder) {
+  getcurrentNftHolder: async function (NFTokenID) {
+    const lastKnownHolder = await getNft(NFTokenID).then((nft) => {
+      return nft.currentOwner;
+    });
     const client = await getXrplClient();
     try {
       //attempt 5 times if necessary
@@ -523,7 +581,7 @@ var xrpls = {
       } else if (burnt) {
         return;
       } else {
-        console.log(account);
+        // console.log("Account is: " + account);
         return account;
       }
     } catch (error) {
