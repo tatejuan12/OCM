@@ -23548,6 +23548,7 @@ body.active-light-mode {
 .logoGrid img:hover {
   transform: scale(1.05);
 }
+<<<<<<< HEAD
 .transition {
   transition: var(--transition);
 }
@@ -23563,3 +23564,16 @@ body.active-light-mode {
 .active-light-mode .profile-thumbnail {
   border-color: var(--color-white);
 }
+=======
+
+.mintModal{
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: auto;
+  z-index: 1000;
+  max-height: 800px;
+  max-width: 700px;
+}
+>>>>>>> d0bbf5d4cb698728a3fa433e7cf5e5c847730926
