@@ -23535,7 +23535,6 @@ body.active-light-mode {
 .logoGrid img:hover {
   transform: scale(1.05);
 }
-<<<<<<< Updated upstream
 .transition {
   transition: var(--transition);
 }
@@ -23552,8 +23551,6 @@ body.active-light-mode {
   border-color: var(--color-white);
 }
 
-=======
->>>>>>> Stashed changes
 .mintModal{
   display: block;
   position: fixed;
@@ -23564,8 +23561,6 @@ body.active-light-mode {
   max-height: 800px;
   max-width: 700px;
 }
-<<<<<<< Updated upstream
-=======
 .listItem{
   z-index: 1051;
   display: none;
@@ -23699,4 +23694,3 @@ body.active-light-mode {
     padding: 4px;
   }
 }
->>>>>>> Stashed changes
