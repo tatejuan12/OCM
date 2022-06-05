@@ -23308,20 +23308,7 @@ body.active-light-mode {
   font-size: 18px;
   color: inherit;
 }
-@media only screen and (max-width: 768px) and (max-width: 991px) {
-  .timelineContainer {
-    width: 100%;
-  }
-  .timeline::after {
-    display: none;
-  }
-  .timelineContainer::after {
-    display: none;
-  }
-  .right {
-    left: 0;
-  }
-}
+
 .custom-shape-divider-bottom-1649551808 {
   position: relative;
   left: 0;
@@ -23548,6 +23535,7 @@ body.active-light-mode {
 .logoGrid img:hover {
   transform: scale(1.05);
 }
+<<<<<<< Updated upstream
 .transition {
   transition: var(--transition);
 }
@@ -23564,6 +23552,8 @@ body.active-light-mode {
   border-color: var(--color-white);
 }
 
+=======
+>>>>>>> Stashed changes
 .mintModal{
   display: block;
   position: fixed;
@@ -23574,3 +23564,139 @@ body.active-light-mode {
   max-height: 800px;
   max-width: 700px;
 }
+<<<<<<< Updated upstream
+=======
+.listItem{
+  z-index: 1051;
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  background-color: #fff;
+  padding: 8px;
+  border-radius: 0.5rem;
+  transform: translate(-50%, -50%);
+  box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;}
+[show]{
+  display: block;
+}
+.contentWrap{
+  max-width: 100%;
+}
+.NFTDeets img{
+  max-width: 250px;
+  margin: 10px 20px;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+.NFTDeets{
+  display: flex;
+  flex-direction: row;
+  margin: 10px auto;
+}
+.modalHead{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.modalHead button{
+  max-width: 20px;
+}
+.NFTDeets input{
+  background-color: #00000010;
+  margin: 8px 0;
+  cursor: default;
+}
+.listButtons{
+  display: flex;
+  flex-direction: row;
+  max-width: 100%;
+  position: relative;
+}
+.listButtons button{
+  border-radius: 0.5rem;
+  height: 40px;
+  background-color: var(--color-primary);
+  color: #fff;
+}
+.listButtons img{
+  position: absolute;
+  top: -20%;
+  right: -1%;
+  background-color: #00000024;
+  border-radius: 50%;
+  width: 20px;
+  background-color: #fff;
+}
+.aboutListing{
+  display: none;
+  position: fixed;
+  top: 62%;
+  left: 75%;
+  max-width: 150px;
+  position: fixed;
+  background-color: #00000050;
+  padding: 4px;
+}
+.aboutListing[ghost]{
+  display: block;
+}
+.aboutListing p{
+  color: #fff;
+}
+.qmark:active + .aboutListing{
+  display: block;
+}
+.listButtons button:first-of-type{
+  margin-right: 8px;
+  width: 170%;
+  float: right;
+}
+.listButtons button:last-of-type{
+  background-color: var(--color-primary-alta);
+}
+.LIInner{
+  display: flex;
+  flex-direction: column;
+}
+.autofills{
+  display: flex;
+  flex-direction: column;
+}
+.NFImage{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+#price{
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+  cursor: pointer;
+}
+@media only screen and (max-width: 768px) and (max-width: 991px) {
+  .timelineContainer {
+    width: 100%;
+  }
+  .timeline::after {
+    display: none;
+  }
+  .timelineContainer::after {
+    display: none;
+  }
+  .right {
+    left: 0;
+  }
+  .listItem{
+    width: 380px;
+    max-width: 95%;
+    overflow: scroll;
+  }
+  .NFTDeets{
+    flex-direction: column;
+  }
+  .aboutListing{
+    top: 65%;
+    left: 60%;
+    padding: 4px;
+  }
+}
+>>>>>>> Stashed changes

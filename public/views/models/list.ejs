@@ -1,0 +1,53 @@
+<div class="modalLI">
+    <div class="listItem" id="listItem" show>
+        <div class="contentWrap">
+            <div class="modalHead">
+                <h2>List Item</h2>
+                <button type="button" onclick="fuckOff()" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="margin-bottom: 20px;"></button>
+            </div>            
+            <div class="NFTDeets">
+                <div class="NFImage">
+                    <img draggable="false" src="assets/images/activity/qmark600.png" id="yourNFT">
+                </div>
+                <div class="LIInner">
+                    <div class="autofills">
+                        <label for="tokenID">Token ID:&nbsp;</label>
+                        <input type="text" id="LIInput tokenID" readonly>
+                        <label for="issuer">Issuer:&nbsp;</label>
+                        <input type="text" id="LIInput issuer" readonly>
+                        <label for="taxon">TAXON:&nbsp;</label>
+                        <input type="text" id="LIInput taxon" readonly>
+                        <label for="currentHolder">Current Holder:&nbsp;</label>
+                        <input type="text" id="LIInput currentHolder" readonly>
+                    </div>
+                    <div class="monies">
+                        <label for="price">List Price (XRP):&nbsp;</label>
+                        <input type="number" id="price">
+                        <p class="finePrint">*optional, leave blank to list on open market.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="listButtons">
+                <img class="qmark" onclick="peekaboo()" src="assets/images/icons/question-circle-solid.svg" alt="information hover">
+                <button class="listButton">Temporary Listing</button>
+                <button class="listButton">Permanent Listing</button>
+            </div>
+            <div class="aboutListing" id="aboutListing">
+                <p class="finePrint"><strong>Permanent</strong>: 2 XRP fee. This item will live permanently in our database. <br>
+                <strong>Temporary</strong>: 1 XRP fee. This item will be removed from our database upon sale or offer cancel.</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        function peekaboo(){
+            var box = document.getElementById("aboutListing")
+            box.toggleAttribute("ghost");
+        }
+        function fuckOff(){
+            var box = document.getElementById("listItem")
+            var overlay = document.querySelectorAll("modal-backdrop")
+            box.toggleAttribute("show")
+            overlay.toggleAttribute("show")
+        }
+    </script>
+</div>
