@@ -105,7 +105,11 @@ var methods = {
       client.close();
     }
   },
-  getOwnerNfts: async function (owner, tokenIds) {
+  getOwnerNfts: async function (owner, nfts) {
+    const tokenIds = [];
+    nfts.forEach((nft) => {
+      tokenIds.push(nft.NFTokenID);
+    });
     var result;
     const client = await getClient();
     if (!client) return;

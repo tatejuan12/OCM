@@ -1,0 +1,39 @@
+<script>
+  var currNft;
+
+  function setCurrNft(element) {
+    currNft = element.nextElementSibling.value;
+  }
+
+  function submitNftReportForm(currNft) {
+    var formData = new FormData();
+    formData.append("message", document.getElementById("message").value);
+    formData.append("token-id", currNft);
+    $.ajax({
+      type: "POST",
+      url: "/report-nft",
+      data: formData,
+      processData: false,
+      contentType: false,
+      enctype: "multipart/form-data",
+      success: function(resulty) {
+        customAlert.alert('NFT Reported')
+      },
+      error: function(resulty) {
+        customAlert.alert('Failure Reporting NFT')
+      },
+    });
+
+  }
+</script>
+
+<div class="row g-5" id="exploreSection">
+  <!-- Product -->
+  <% nfts.forEach(function(res){%>
+  <%- include('unlisted-nft-card.ejs', {nft:res})%>
+  <%}); %>
+  <!-- <div style="height:100px; background-color: red;">
+
+      
+    </div> -->
+</div>

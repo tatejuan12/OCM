@@ -131,8 +131,8 @@ server.get("/profile", async (req, res) => {
   }
   const profile_pic = digitalOcean.functions.getProfileLink(wallet);
   nftsPromise = new Promise(function (resolve, reject) {
-    const tokenIds = xumm.xrpl.getAccountsNfts(wallet);
-    resolve(tokenIds);
+    const nfts = xumm.xrpl.getAccountsNfts(wallet);
+    resolve(nfts);
   });
   userPromise = new Promise(function (resolve, reject) {
     const ownerInfo = mongoClient.query.getUser(wallet);
@@ -181,8 +181,6 @@ server.get("/product-details", async (req, res, next) => {
     offersPromise,
     ownerPromise,
   ]);
-  console.log("After its: " + req.session.wallet);
-  console.log(promises[3]);
   defaultLocals(req, res);
   res.render("views/product-details", {
     nft: promises[0],
@@ -327,9 +325,30 @@ server.post("/report-nft", upload.any(), async (req, res) => {
   );
   result ? res.status(200).send("Modified") : res.status(500).send("Failed");
 });
+server.get("/get-account-unlisted-nfts", async (req, res) => {
+  var wallet;
+  var unlistedNfts = [];
+  var unlistedNftsToReturn = [];
+  if (req.query.wallet) wallet = req.query.wallet;
+  else wallet = req.session.wallet;
+  const nfts = await xumm.xrpl.getAccountsNfts(wallet);
+  for (let nft of nfts) {
+    const returnedNft = await mongoClient.query.getNft(nft.NFTokenID);
+    if (returnedNft == null) unlistedNfts.push(nft);
+  }
+  // console.log(unlistedNfts[0]);
+  for (let nft of unlistedNfts) {
+    const data = await xumm.xrpl.getNftImage(nft.URI);
+    unlistedNftsToReturn.push(data);
+  }
+  res.render("views/models/unlisted-nft-rows.ejs", {
+    nfts: unlistedNftsToReturn,
+  });
+  // console.log(unlistedNfts);
+});
 
 //! ---------------------Server Essentials--------------------------------//
-// Renders 404 page if the request is send to undeclared location
+// Renders 404                                                     page if the request is send to undeclared location
 server.use((req, res, next) => {
   res.status(404).render("views/404.ejs");
 });
@@ -352,17 +371,7 @@ function checkViews(req, next) {
     next();
   }
 }
-function getLocals(req, res) {
-  try {
-    var login =
-      req.session.login != undefined && req.session ? req.session.login : false;
-    var wallet = req.session.wallet != null ? req.session.wallet : false;
-    var mobile = req.useragent.isMobile;
-    return { login: login, wallet: wallet, mobile: mobile };
-  } catch (err) {
-    console.error("Error settings locals: " + err);
-  }
-}
+
 function defaultLocals(req, res) {
   try {
     var login =

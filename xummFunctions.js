@@ -7,6 +7,7 @@ const { XummSdk } = require("xumm-sdk");
 const sdk = new XummSdk(process.env.XUMM_ACCESS, process.env.XUMM_SECRET);
 const xrpl = require("xrpl");
 const { json } = require("express/lib/response");
+const https = require("https");
 
 var payloads = {
   transactionPayload: async function (NFToken, value, mobile) {
@@ -285,6 +286,72 @@ var subscriptions = {
   },
 };
 var xrpls = {
+  getNftImage: async function (nftURI, retryCount = 0) {
+    var json = {};
+    async function httpAPI(url, retryCount = 0) {
+      return new Promise((resolve, reject) => {
+        https.get(url, (res) => {
+          let body = "";
+          res.on("data", (d) => {
+            body += d;
+          });
+          res.on("end", () => {
+            if (res.statusCode == 200) {
+              json = JSON.parse(body);
+              resolve(json);
+            } else {
+              reject(null);
+            }
+          });
+        });
+      });
+    }
+    try {
+      var nftURI = xrpl.convertHexToString(nftURI);
+
+      if (nftURI.startsWith("ipfs://")) {
+        var httpURI = nftURI.replace(
+          "ipfs://",
+          "https://ipfs.onchainwhales.net/ipfs/"
+        );
+      } else if (nftURI.startsWith("https://")) {
+        var httpURI = nftURI;
+      } else {
+        randomFunctionToThrowError();
+      }
+
+      //get metadata
+      var uriMetadata = await httpAPI(httpURI);
+
+      //find image
+      if (uriMetadata.constructor != Object) {
+        return httpURI;
+      } else {
+        if ("image" in uriMetadata) {
+          var imagePointer = uriMetadata.image;
+
+          if (imagePointer.startsWith("ipfs://")) {
+            var httpImage = imagePointer.replace(
+              "ipfs://",
+              "https://ipfs.onchainwhales.net/ipfs/"
+            );
+          } else if (imagePointer.startsWith("https://")) {
+            var httpImage = imagePointer;
+          } else {
+            randomFunctionToThrowError();
+          }
+        } else {
+          randomFunctionToThrowError();
+        }
+      }
+      json["http_image"] = httpImage;
+      json["http_uri"] = httpURI;
+      return json;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  },
   getnftOffers: async function (tokenId) {
     const client = await getXrplClient();
     try {
@@ -620,7 +687,7 @@ var xrpls = {
             }
 
             for (a in accountNFTs.result.account_nfts) {
-              allNFTs.push(accountNFTs.result.account_nfts[a].NFTokenID);
+              allNFTs.push(accountNFTs.result.account_nfts[a]);
             }
             var marker = accountNFTs.result.marker;
           }
