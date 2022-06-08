@@ -23765,3 +23765,9 @@ body.active-light-mode {
   background-color: red;
   color: #fff;
 }
+.expired.true{
+  display: block;
+}
+.expired.false{
+  display: none;
+}
