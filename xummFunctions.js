@@ -706,6 +706,88 @@ var xrpls = {
   },
   getAccountOffers: async function (address) {
     const client = await getXrplClient();
+    //FUNCTION TO GET THE XRP VALUE OF A TOKE TRADE
+    let tokenXRPValue = async function (
+      client,
+      ledgerindex,
+      hex,
+      issuer,
+      totalTokens
+    ) {
+      var totalTokens = Math.abs(Number(totalTokens));
+      var drops = 0;
+
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
+      var orders = await client.request({
+        command: "book_offers",
+        ledger_index: ledgerindex,
+        taker_gets: {
+          currency: "XRP",
+        },
+        taker_pays: {
+          currency: hex,
+          issuer: issuer,
+        },
+        limit: 400,
+      });
+
+      var markerme = orders.result.marker;
+
+      for (a in orders.result.offers) {
+        if (totalTokens == 0) break;
+
+        if (totalTokens >= orders.result.offers[a].TakerPays.value) {
+          drops += Number(orders.result.offers[a].TakerGets);
+          totalTokens -= Number(orders.result.offers[a].TakerPays.value);
+        } else {
+          var ratio =
+            totalTokens / Number(orders.result.offers[a].TakerPays.value);
+          drops += ratio * Number(orders.result.offers[a].TakerGets);
+          totalTokens -= totalTokens;
+        }
+      }
+
+      while (markerme != null && totalTokens > 0) {
+        await new Promise((resolve) => setTimeout(resolve, 300));
+
+        var orders = await client.request({
+          command: "book_offers",
+          ledger_index: ledgerindex,
+          taker_gets: {
+            currency: "XRP",
+          },
+          taker_pays: {
+            currency: hex,
+            issuer: issuer,
+          },
+          limit: 400,
+          marker: markerme,
+        });
+
+        var markerme = orders.result.marker;
+
+        for (a in orders.result.offers) {
+          if (totalTokens == 0) break;
+
+          if (totalTokens >= orders.result.offers[a].TakerPays.value) {
+            drops += Number(orders.result.offers[a].TakerGets);
+            totalTokens -= Number(orders.result.offers[a].TakerPays.value);
+          } else {
+            var ratio =
+              totalTokens / Number(orders.result.offers[a].TakerPays.value);
+            drops += ratio * Number(orders.result.offers[a].TakerGets);
+            totalTokens -= totalTokens;
+          }
+        }
+      }
+
+      var totalXRP = drops / 1000000;
+
+      return totalXRP;
+    };
+
+    //CONNECT
     try {
       //try 5 times to get all account objects
       var count = 0;
@@ -750,7 +832,7 @@ var xrpls = {
         }
       }
 
-      //filter and narrow buy and sell offers
+      //FILTER AND CLEAN OFFERS
       var sellOffers = [];
       var buyOffers = [];
 
@@ -768,9 +850,18 @@ var xrpls = {
           } else {
             var token = allNFTokenOffers[a].Amount.currency;
           }
+
+          var xrpValue = await tokenXRPValue(
+            client,
+            "validated",
+            allNFTokenOffers[a].Amount.currency,
+            allNFTokenOffers[a].Amount.issuer,
+            allNFTokenOffers[a].Amount.value
+          );
         } else {
           var price = Number(allNFTokenOffers[a].Amount) / 1000000;
           var token = "XRP";
+          var xrpValue = price;
         }
 
         if (allNFTokenOffers[a].Expiration + 946684800 <= Date.now() / 1000) {
@@ -779,13 +870,23 @@ var xrpls = {
           var expired = false;
         }
 
+        if (allNFTokenOffers[a].Flags == 1) {
+          var type = "SELL";
+        } else {
+          var type = "BUY";
+        }
+
         var data = {
           nftID: nftID,
           price: price,
           token: token,
           index: index,
           destination: destination,
+          expiration:
+            (Number(allNFTokenOffers[a].Expiration) + 946684800) * 1000,
           expired: expired,
+          xrpValue: xrpValue,
+          type: type,
         };
 
         if (allNFTokenOffers[a].Flags == 1) {
@@ -794,10 +895,11 @@ var xrpls = {
           buyOffers.push(data);
         }
       }
+
       return [sellOffers, buyOffers];
     } catch (error) {
       console.log(error);
-      return;
+      return null;
     } finally {
       await client.disconnect();
     }

@@ -1,0 +1,19 @@
+<div class="offer-sliver">
+  <div class="offerContainer">
+    <div class="offerContent">
+      <div class="Oleft">
+        <h5 class="offerType buy">BUY</h5>
+        <a href="https://xls20.bithomp.com/explorer/<%=offer.nftID%>" id="NFTID"><%=offer.nftID%></a>
+        <span>Offer: <span id="offerAmount"><%=offer.price%> <span id="offerToken"><%=offer.token%></span></span></span>
+        <%if (offer.token != "XRP"){%>
+        <span>Offer Value: <span id="offerVal"><%=offer.xrpValue%> <span>XRP</span></span></span>
+        <%}%>
+      </div>
+      <div class="Oright">
+        <span class="expired <%=offer.expired%>">Expired</span>
+        <a href="#" id="offerCancel" class="offerCancel">Cancel Offer</a>
+      </div>
+    </div>
+    <a class="offerLink" href="/"></a>
+  </div>
+</div>

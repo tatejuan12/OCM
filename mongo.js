@@ -151,6 +151,21 @@ var methods = {
       client.close();
     }
   },
+  getAccountLikedNfts: async function (wallet) {
+    const client = await getClient();
+    if (!client) return;
+    try {
+      const db = client.db("NFTokens");
+      let collection = db.collection("Eligible-Listings");
+      const query = { likes: new RegExp(`.*${wallet}.*`, "i") };
+      const result = await collection.find(query);
+      return await result.toArray();
+    } catch (err) {
+      console.log("Database error" + err);
+    } finally {
+      client.close();
+    }
+  },
   addLike: async function (body, wallet) {
     const id = body;
     const userWallet = wallet;

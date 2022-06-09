@@ -138,13 +138,29 @@ server.get("/profile", async (req, res) => {
     const ownerInfo = mongoClient.query.getUser(wallet);
     resolve(ownerInfo);
   });
-  const promises = await Promise.all([nftsPromise, userPromise]);
+  offersPromise = new Promise(function (resolve, reject) {
+    const offers = xumm.xrpl.getAccountOffers(wallet);
+    resolve(offers);
+  });
+  likedNftsPromise = new Promise(function (resolve, reject) {
+    const nfts = mongoClient.query.getAccountLikedNfts(wallet);
+    resolve(nfts);
+  });
+  const promises = await Promise.all([
+    nftsPromise,
+    userPromise,
+    offersPromise,
+    likedNftsPromise,
+  ]);
   const ownerNfts = await mongoClient.query.getOwnerNfts(wallet, promises[0]);
   defaultLocals(req, res);
   res.render("views/profile", {
     nfts: ownerNfts,
     user: promises[1],
     profile_pic: profile_pic,
+    buyOffers: promises[2][1],
+    sellOffers: promises[2][0],
+    likedNfts: promises[3],
   });
 });
 server.get("/edit-profile", async (req, res) => {
@@ -344,7 +360,6 @@ server.get("/get-account-unlisted-nfts", async (req, res) => {
   res.render("views/models/unlisted-nft-rows.ejs", {
     nfts: unlistedNftsToReturn,
   });
-  // console.log(unlistedNfts);
 });
 
 //! ---------------------Server Essentials--------------------------------//
