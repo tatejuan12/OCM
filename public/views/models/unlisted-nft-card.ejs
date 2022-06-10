@@ -1,14 +1,16 @@
 <%- include('../functions.ejs')%>
-<% owner = nft.Issuer == wallet ? true : false %>
+<% owner = nft.currentHolder == wallet ? true : false %>
 
 <!-- start single product -->
 <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12">
   <div class="product-style-one no-overlay with-placeBid">
     <div class="card-thumbnail">
       <a href="product-details?id=<%=nft.NFTokenID%>"><img draggable="false" src="<%= nft.http_image %> " alt="NFT_portfolio" /></a>
-      <% if(!owner) {%>
-      <a href="product-details?id=<%=nft.NFTokenID%>" class="btn btn-primary">Place Bid</a>
+      <% if(owner) {%>
+      <a class="btn btn-primary">List Nft</a>
+      <%- include('list.ejs', {nft: nft}) -%>
       <% } %>
+
     </div>
     <div class="product-share-wrapper">
       <div class="share-btn share-btn-activation dropdown">

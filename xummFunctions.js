@@ -904,6 +904,26 @@ var xrpls = {
       await client.disconnect();
     }
   },
+  getXrplReserve: async function () {
+    try {
+      const client = getXrplClient();
+      //GET LEDGER RESERVE
+      var serverstate = await client.request({
+        command: "server_state",
+        ledger_index: "validated",
+      });
+
+      var reserve =
+        Number(serverstate.result.state.validated_ledger.reserve_inc) / 1000000;
+
+      return reserve;
+    } catch (error) {
+      console.log(error);
+      return null;
+    } finally {
+      await client.disconnect();
+    }
+  },
   getOcwBalance: async function (address) {
     const client = await getXrplClientMain();
     try {

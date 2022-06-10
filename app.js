@@ -352,10 +352,13 @@ server.get("/get-account-unlisted-nfts", async (req, res) => {
     const returnedNft = await mongoClient.query.getNft(nft.NFTokenID);
     if (returnedNft == null) unlistedNfts.push(nft);
   }
-  // console.log(unlistedNfts[0]);
-  for (let nft of unlistedNfts) {
-    const data = await xumm.xrpl.getNftImage(nft.URI);
-    unlistedNftsToReturn.push(data);
+  for (var i = 0; i < unlistedNfts.length; i++) {
+    const data = await xumm.xrpl.getNftImage(unlistedNfts[i].URI);
+    unlistedNftsToReturn[i] = data;
+    unlistedNftsToReturn[i].taxon = unlistedNfts[i].NFTokenTaxon;
+    unlistedNftsToReturn[i].issuer = unlistedNfts[i].Issuer;
+    unlistedNftsToReturn[i].currentHolder = wallet;
+    unlistedNftsToReturn[i].NFTokenID = unlistedNfts[i].NFTokenID;
   }
   res.render("views/models/unlisted-nft-rows.ejs", {
     nfts: unlistedNftsToReturn,
@@ -378,7 +381,8 @@ server.listen(80, () => {
 //! ---------------------Custom functions--------------------------------//
 function checkViews(req, next) {
   try {
-    if (!req.session.views) req.session.views = 1;
+    if (!req.session.views || req.session.views == undefined)
+      req.session.views = 1;
     else req.session.views += 1;
   } catch (err) {
     console.error("Error settings views:\n" + err);
