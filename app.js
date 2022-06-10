@@ -102,6 +102,14 @@ server.get("/connect", (req, res) => {
   defaultLocals(req, res);
   res.render("views/connect");
 });
+server.get("/metadata", (req, res) => {
+  defaultLocals(req, res);
+  res.render("views/metadata");
+});
+server.get("/minting-help", (req, res) => {
+  defaultLocals(req, res);
+  res.render("views/minting-help");
+});
 server.get("/redeem", async (req, res) => {
   if (req.session.login) {
     const ocwBalance = await xumm.xrpl.getOcwBalance(
