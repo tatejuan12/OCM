@@ -7,7 +7,7 @@
     <div class="card-thumbnail">
       <a href="product-details?id=<%=nft.NFTokenID%>"><img draggable="false" src="<%= nft.http_image %> " alt="NFT_portfolio" /></a>
       <% if(owner) {%>
-      <a class="btn btn-primary">List Nft</a>
+      <a class="btn btn-primary">List NFT</a>
       <%- include('list.ejs', {nft: nft}) -%>
       <% } %>
 
