@@ -10,7 +10,7 @@ const { json } = require("express/lib/response");
 const https = require("https");
 
 var payloads = {
-  transactionPayload: async function (NFToken, value, mobile) {
+  transactionPayload: async function (NFToken, value, mobile, return_url) {
     const nftOwner = await xrpls.getcurrentNftHolder(NFToken);
     try {
       value = parseInt(value);
@@ -34,16 +34,16 @@ var payloads = {
     };
     if (mobile)
       request.options["return_url"] = {
-        app: process.env.SERVER_URL,
+        app: return_url,
       };
     else
       request.options["return_url"] = {
-        web: process.env.SERVER_URL,
+        web: return_url,
       };
     const payload = await getPayload(request);
     return payload;
   },
-  signInPayload: async function (mobile) {
+  signInPayload: async function (mobile, return_url) {
     const request = {
       options: {
         submit: true,
@@ -55,11 +55,11 @@ var payloads = {
     };
     if (mobile)
       request.options["return_url"] = {
-        app: process.env.SERVER_URL,
+        app: return_url,
       };
     else
       request.options["return_url"] = {
-        web: process.env.SERVER_URL,
+        web: return_url,
       };
     const payload = await getPayload(request);
     return payload;
@@ -77,16 +77,16 @@ var payloads = {
     };
     if (mobile)
       request.options["return_url"] = {
-        app: process.env.SERVER_URL,
+        app: return_url,
       };
     else
       request.options["return_url"] = {
-        web: process.env.SERVER_URL,
+        web: return_url,
       };
     const payload = await getPayload(request);
     return payload;
   },
-  redeemNftPayload: async function (address, mobile) {
+  redeemNftPayload: async function (address, mobile, return_url) {
     const client = await getXrplClient();
     try {
       //wallet of issuer
@@ -193,14 +193,13 @@ var payloads = {
       };
       if (mobile) {
         request.options["return_url"] = {
-          app: process.env.SERVER_URL,
+          app: return_url,
         };
       } else
         request.options["return_url"] = {
-          web: process.env.SERVER_URL,
+          web: return_url,
         };
       const payload = await getPayload(request);
-      console.log(payload);
       return payload;
     } catch (error) {
       return;
@@ -259,6 +258,28 @@ var subscriptions = {
       return promise;
     } catch (error) {
       console.error("There was an error with the payload: \n" + error);
+    }
+  },
+  watchSubscripion: async function (payload) {
+    var subscription = false;
+    var promise = new Promise(function (resolve, reject) {
+      subscription = sdk.payload.subscribe(payload, (event) => {
+        if (event.data.signed) {
+          sdk.payload.get(event.data.payload_uuidv4).then((data) => {
+            // res.status(200).send(true);
+            resolve("Signed subscription");
+          });
+        } else if (event.data.signed == false) {
+          // res.status(401).send(false);
+          console.log("nope");
+          reject("User did not sign subscription");
+        }
+      });
+    });
+    try {
+      return await promise;
+    } catch (error) {
+      return false;
     }
   },
   redeemNftSubscription: async function (req, res) {

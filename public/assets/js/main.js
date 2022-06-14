@@ -798,31 +798,11 @@ const request = {
   Amount: "500000",
 };
 
-function executeTransaction() {
-  $.ajax({
-    type: "POST",
-    data: request,
-    url: "http://127.0.0.1:3001/payload",
-    success: function (result) {
-      console.log(result.uuid);
-      setQrSignin(result.refs.qr_png);
-    },
-  }).then((res) => {
-    $.ajax({
-      type: "POST",
-      data: res,
-      url: "http://127.0.0.1:3001/subscription-transaction",
-      success: function (resulty) {
-        console.log("success");
-        console.log(resulty);
-      },
-    });
-  });
-}
 function xummSignin() {
   $.ajax({
     type: "POST",
     url: "/sign-in-payload",
+    data: { return_url: window.location.href },
     success: function (result) {
       window.location.href = result.next.always;
 
@@ -847,23 +827,9 @@ function setBuyOfferBid(NFToken) {
   $.ajax({
     type: "POST",
     url: "/transaction-payload",
-    data: { NFToken: NFToken, value: value },
+    data: { NFToken: NFToken, value: value, return_url: window.location.href },
     success: function (result) {
-      console.log(result);
       window.location.href = result.next.always;
-      console.log("succeeded");
-      // $.ajax({
-      //   type: "POST",
-      //   url: "/sign-in-subscription",
-      //   data: result,
-      //   success: function (resulty) {
-      //     console.log(resulty);
-      //     location.reload();
-      //   },
-      //   error: function (resulty) {
-      //     console.warn("Sign in expired, failed or was cancelled.");
-      //   },
-      // });
     },
   });
 }
@@ -871,23 +837,10 @@ function acceptBuyOffer(index, NFToken) {
   $.ajax({
     type: "POST",
     url: "/accept-buy-offer",
-    data: { index: index, NFToken: NFToken },
+    data: { index: index, NFToken: NFToken, return_url: window.location.href },
     success: function (result) {
       console.log(result);
       window.location.href = result.next.always;
-      console.log("succeeded");
-      // $.ajax({
-      //   type: "POST",
-      //   url: "/sign-in-subscription",
-      //   data: result,
-      //   success: function (resulty) {
-      //     console.log(resulty);
-      //     location.reload();
-      //   },
-      //   error: function (resulty) {
-      //     console.warn("Sign in expired, failed or was cancelled.");
-      //   },
-      // });
     },
   });
 }
@@ -897,21 +850,9 @@ function getRedeem(redeemElement, loadingElement) {
   $.ajax({
     type: "POST",
     url: "/redeem-nft-payload",
+    data: { return_url: window.location.href },
     success: function (result) {
       window.location.href = result.next.always;
-
-      $.ajax({
-        type: "POST",
-        url: "/redeem-nft-payload",
-        data: result,
-        success: function (resulty) {
-          console.log(resulty);
-          location.reload();
-        },
-        error: function (resulty) {
-          console.warn("Sign in expired, failed or was cancelled.");
-        },
-      });
     },
   });
 }

@@ -239,7 +239,8 @@ server.post("/transaction-payload", async (req, res) => {
   const payload = await xumm.payloads.transactionPayload(
     NFToken,
     value,
-    req.useragent.isMobile
+    req.useragent.isMobile,
+    req.body.return_url
   );
   res.status(200).send(payload);
 });
@@ -251,14 +252,18 @@ server.post("/accept-buy-offer", async (req, res) => {
   if (owner == req.session.wallet) {
     const payload = await xumm.payloads.acceptBuyOfferPayload(
       req.body.index,
-      req.useragent.isMobile
+      req.useragent.isMobile,
+      req.body.return_url
     );
     res.status(200).send(payload);
   } else res.sendStatus(400);
 });
 
 server.post("/sign-in-payload", async (req, res) => {
-  const payload = await xumm.payloads.signInPayload(req.useragent.isMobile);
+  const payload = await xumm.payloads.signInPayload(
+    req.useragent.isMobile,
+    req.body.return_url
+  );
   res.send(payload);
 });
 server.post("/sign-in-subscription", async (req, res) => {
@@ -270,12 +275,18 @@ server.post("/sign-in-subscription", async (req, res) => {
 server.post("/redeem-nft-payload", async (req, res) => {
   const payload = await xumm.payloads.redeemNftPayload(
     req.session.wallet,
-    req.useragent.isMobile
+    req.useragent.isMobile,
+    req.body.return_url
   );
   res.status(200).send(payload);
+  console.log(payload);
+  const result = await xumm.subscriptions.watchSubscripion(payload);
 });
 server.post("/redeem-nft-subscription", async (req, res) => {
-  xumm.subscriptions.redeemNftSubscription(req, res);
+  const payload = await xumm.subscriptions.redeemNftSubscription(req, res);
+  // console.log(payload);
+  // const result = await xumm.subscriptions.watchSubscripion(payload);
+  // console.log(result);
 });
 server.post("/increment-like", async (req, res) => {
   var success;
