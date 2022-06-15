@@ -10,20 +10,16 @@ const logger = require("express-logger");
 const { TxData } = require("xrpl-txdata");
 const useragent = require("express-useragent");
 const verifySignature = new TxData();
-const { XummSdk } = require("xumm-sdk");
 const cors = require("cors");
-const sdk = new XummSdk(
-  "b58d7023-14f2-4b64-a804-1c5d50215d6a",
-  "aeb73f38-4288-46dd-9c03-2a8c13635d09"
-);
 const digitalOcean = require("./digitalOceanFunctions");
 //Imports the mongo queries and code
 const mongoClient = require("./mongo");
 //Imports xumm code with queries and checks
 const xumm = require("./xummFunctions");
 const { log } = require("console");
-let multer = require("multer");
-let upload = multer({ limits: { fieldSize: "16mb" } }); //used to get form data which for some reason bodyParser doesn't get. used for user data changing!
+const multer = require("multer");
+const upload = multer({ limits: { fieldSize: "16mb" } }); //used to get form data which for some reason bodyParser doesn't get. used for user data changing!
+const minifyHtml = require("express-minify-html");
 const mongoStore = new MongoDBStore({
   uri: process.env.MONGO_URI,
   databaseName: "Sessions",
@@ -54,7 +50,20 @@ server.use(
   })
 ); // Sets the use of cookies
 server.use(useragent.express()); // For browser data, like if it is mobile or not
-
+// server.use(
+//   minifyHtml({
+//     override: true,
+//     exception_url: false,
+//     htmlMinifier: {
+//       removeComments: true,
+//       collapseWhitespace: true,
+//       collapseBooleanAttributes: true,
+//       removeAttributeQuotes: true,
+//       removeEmptyAttributes: true,
+//       minifyJS: true,
+//     },
+//   })
+// );
 //! ---------------------Custom middleware--------------------------------//
 // server.use(defaultLocals); //Custom made middleware, sends locals to ejs without having to send it manually
 server.use((req, res, next) => {
@@ -182,7 +191,6 @@ server.get("/edit-profile", async (req, res) => {
 });
 server.get("/product-details", async (req, res, next) => {
   let nftId = req.query.id;
-  var nft;
   nftPromise = new Promise(function (resolve, reject) {
     const nft = mongoClient.query.getNft(nftId);
     resolve(nft);
@@ -197,14 +205,17 @@ server.get("/product-details", async (req, res, next) => {
   });
   ownerPromise = new Promise(function (resolve, reject) {
     const owner = xumm.xrpl.getcurrentNftHolder(nftId);
+    console.log(owner);
     resolve(owner);
   });
+  console.time();
   const promises = await Promise.all([
     nftPromise,
     nftsPromise,
     offersPromise,
     ownerPromise,
   ]);
+  console.timeEnd();
   defaultLocals(req, res);
   res.render("views/product-details", {
     nft: promises[0],
