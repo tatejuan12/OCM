@@ -54,12 +54,19 @@
           <p>1 $OCW for 1 OCW NFT quarter</p>
           <img draggable="false" src="assets/images/activity/qmark600.png" id="yourNFT">
           <div class="redeemDropDown">
-            <span>Your OCW Holdings</span>
+            <span>
+              <select name="redeem-menu" id="redeem-menu">
+                <option value="0">select project</option>
+                <option value="1">OnChain Whales</option>
+                <option value="2">Test Token 1</option>
+              </select>
+            </span>
             <span><% ocwBalance ? __append(ocwBalance)  : __append(0)%> OCW</span>
           </div>
           <%if (login && obtainableNfts >= 1) {%><button class="btn2" id="redeem" onclick="getRedeem(this, this.nextElementSibling);">SWAP</button> <%} else {%> <button class="btn2" id="redeem" disabled><span>SWAP</span></button><%}%>
           <!-- bellow div will give you a spinning loader anywhere on the website -->
           <div class="loading hidden"></div>
+          
         </div>
       </div>
     </div>
