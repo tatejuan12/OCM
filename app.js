@@ -205,7 +205,6 @@ server.get("/product-details", async (req, res, next) => {
   });
   ownerPromise = new Promise(function (resolve, reject) {
     const owner = xumm.xrpl.getcurrentNftHolder(nftId);
-    console.log(owner);
     resolve(owner);
   });
   console.time();
