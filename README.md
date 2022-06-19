@@ -1,3 +1,3 @@
-# OCW
+# OCM
 
-On Chain Whales website. Underway
+On Chain Whales Marketplace website. Underway
