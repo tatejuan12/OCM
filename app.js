@@ -79,9 +79,8 @@ server.get("/explore", async (req, res) => {
   var nfts;
   const page = parseInt(req.query.page);
   if (!isNaN(page)) {
-    await mongoClient.query.getNfts(NFTSPERPAGE, page).then((result) => {
-      nfts = result;
-    });
+    nfts = await mongoClient.query.getNfts(NFTSPERPAGE, page);
+
     defaultLocals(req, res);
     res.render("views/explore", { nfts: nfts, page: page });
   } else res.redirect("explore?page=0");
