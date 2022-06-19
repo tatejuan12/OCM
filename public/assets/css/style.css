@@ -18609,7 +18609,7 @@ button .small-image {
 }
 .rn-pd-content-area .catagory-collection {
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
   margin-bottom: 20px;
 }
 .rn-pd-content-area .catagory-collection .top-seller-wrapper .thumbnail {
@@ -18628,6 +18628,9 @@ button .small-image {
 @media only screen and (max-width: 479px) {
   .rn-pd-content-area .catagory-collection .collection {
     text-align: center;
+  }
+  .rn-pd-content-area .catagory-collection{
+    justify-content: space-around;
   }
 }
 .rn-pd-content-area .catagory-collection .collection span {
@@ -23558,7 +23561,7 @@ body.active-light-mode {
 }
 .profile-thumbnail {
   display: inline-block;
-  width: 75px;
+  width: 35px;
   border-radius: 50px;
   border-width: 5px;
   border-color: var(--background-color-1);
