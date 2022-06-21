@@ -56,14 +56,14 @@
           <div class="redeemDropDown">
             <span>
               <select name="redeem-menu" id="redeem-menu">
-                <option selected disabled>Select Project</option>
-                <option value="1">OnChain Whales</option>
-                <option value="2">Test Token 1</option>
+                <option value=false selected disabled>Select Project</option>
+                <option value="OCW">OnChain Whales</option>
+                <option value="localhost">Test Token 1</option>
               </select>
             </span>
             <span><% ocwBalance ? __append(ocwBalance)  : __append(0)%> OCW</span>
           </div>
-          <%if (login && obtainableNfts >= 1) {%><button class="btn2" id="redeem" onclick="getRedeem(this, this.nextElementSibling);">SWAP</button> <%} else {%> <button class="btn2" id="redeem" disabled><span>SWAP</span></button><%}%>
+          <%if (login) {%><button class="btn2" id="redeem" onclick="getRedeem(this, this.nextElementSibling, document.getElementById('redeem-menu').value);">SWAP</button> <%} else {%> <button class="btn2" id="redeem" disabled><span>SWAP</span></button><%}%>
           <!-- bellow div will give you a spinning loader anywhere on the website -->
           <div class="loader hidden"></div>
         </div>
