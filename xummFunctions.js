@@ -216,7 +216,6 @@ var payloads = {
         request.txjson["NFTokenSellOffer"] = obj[0].NFTokenSellOffer;
         payload = await getPayload(request);
       }
-      console.log(request);
       if (payload) {
         return payload;
       } else throw "Couldn't get payload";
@@ -232,12 +231,9 @@ var subscriptions = {
     const subscription = false;
     try {
       subscription = await sdk.payload.subscribe(req.body, (event) => {
-        console.log(event.data);
         if (event.data.signed) {
           verifySignature.getOne(event.data.txid).then((data) => {
-            console.log("Transaction verification:" + data.result);
             res.send(data);
-            console.log("TXID: " + event.data.txid);
             return true;
           });
           event.resolve();
