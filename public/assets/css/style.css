@@ -18637,7 +18637,7 @@ button .small-image {
   .rn-pd-content-area .catagory-collection .collection {
     text-align: center;
   }
-  .rn-pd-content-area .catagory-collection{
+  .rn-pd-content-area .catagory-collection {
     justify-content: space-around;
   }
 }
@@ -23448,7 +23448,7 @@ body.active-light-mode {
   align-items: center;
 }
 .active-dark-mode .btn2 {
-  background: grey;
+  background: var(--color-primary-alta);
 }
 .btn2:active {
   opacity: 0.2;
@@ -23490,12 +23490,13 @@ body.active-light-mode {
   width: max-content;
 }
 .loader {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  margin: 20px auto 20px auto;
+  border-radius: 10px;
   display: block;
   position: relative;
-  color: #FFF;
+  color: #fff;
   left: -100px;
   box-sizing: border-box;
   animation: shadowRolling 2s linear infinite;
@@ -23503,31 +23504,39 @@ body.active-light-mode {
 
 @keyframes shadowRolling {
   0% {
-    box-shadow: 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+    box-shadow: 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0),
+      0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
   }
   12% {
-    box-shadow: 100px 0 white, 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+    box-shadow: 100px 0 white, 0px 0 rgba(255, 255, 255, 0),
+      0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
   }
   25% {
-    box-shadow: 110px 0 white, 100px 0 white, 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+    box-shadow: 110px 0 white, 100px 0 white, 0px 0 rgba(255, 255, 255, 0),
+      0px 0 rgba(255, 255, 255, 0);
   }
   36% {
-    box-shadow: 120px 0 white, 110px 0 white, 100px 0 white, 0px 0 rgba(255, 255, 255, 0);
+    box-shadow: 120px 0 white, 110px 0 white, 100px 0 white,
+      0px 0 rgba(255, 255, 255, 0);
   }
   50% {
     box-shadow: 130px 0 white, 120px 0 white, 110px 0 white, 100px 0 white;
   }
   62% {
-    box-shadow: 200px 0 rgba(255, 255, 255, 0), 130px 0 white, 120px 0 white, 110px 0 white;
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 130px 0 white, 120px 0 white,
+      110px 0 white;
   }
   75% {
-    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 130px 0 white, 120px 0 white;
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0),
+      130px 0 white, 120px 0 white;
   }
   87% {
-    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 130px 0 white;
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0),
+      200px 0 rgba(255, 255, 255, 0), 130px 0 white;
   }
   100% {
-    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0);
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0),
+      200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0);
   }
 }
 .logoGrid {

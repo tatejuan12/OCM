@@ -285,7 +285,8 @@ server.post("/redeem-nft-payload", async (req, res) => {
   const payload = await xumm.payloads.redeemNftPayload(
     req.session.wallet,
     req.useragent.isMobile,
-    req.body.return_url
+    req.body.return_url,
+    req.body.ipAddress
   );
   res.status(200).send(payload);
   console.log(payload);
@@ -402,7 +403,7 @@ server.use((err, req, res, next) => {
   console.error(err);
   res.status(500).render("views/500.ejs");
 });
-server.listen(80, () => {
+server.listen(process.env.PORT, () => {
   console.log("Server Listening");
 });
 

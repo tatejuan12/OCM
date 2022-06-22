@@ -839,22 +839,23 @@ function acceptBuyOffer(index, NFToken) {
     url: "/accept-buy-offer",
     data: { index: index, NFToken: NFToken, return_url: window.location.href },
     success: function (result) {
-      console.log(result);
       window.location.href = result.next.always;
     },
   });
 }
-function getRedeem(redeemElement, loadingElement) {
-  redeemElement.classList.add("hidden");
-  loadingElement.classList.remove("hidden");
-  $.ajax({
-    type: "POST",
-    url: "/redeem-nft-payload",
-    data: { return_url: window.location.href },
-    success: function (result) {
-      window.location.href = result.next.always;
-    },
-  });
+function getRedeem(redeemElement, loadingElement, ipAddress) {
+  if (ipAddress) {
+    redeemElement.classList.add("hidden");
+    loadingElement.classList.remove("hidden");
+    $.ajax({
+      type: "POST",
+      url: "/redeem-nft-payload",
+      data: { return_url: window.location.href, ipAddress: ipAddress },
+      success: function (result) {
+        window.location.href = result.next.always;
+      },
+    });
+  }
 }
 function likeHandler(nftId, DOM) {
   if (DOM.classList.contains("liked")) decrementLike(nftId, DOM);
