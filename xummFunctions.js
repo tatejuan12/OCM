@@ -1068,7 +1068,6 @@ var xrpls = {
 
 function getPayload(request) {
   const payload = sdk.payload.create(request);
-
   return payload;
 }
 async function getXrplClientMain() {
