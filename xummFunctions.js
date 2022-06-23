@@ -66,7 +66,7 @@ var payloads = {
     const payload = await getPayload(request);
     return payload;
   },
-  acceptBuyOfferPayload: async function (index, mobile) {
+  acceptBuyOfferPayload: async function (index, mobile, return_url) {
     const request = {
       options: {
         submit: true,

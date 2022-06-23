@@ -3,8 +3,8 @@
   "description": "OCW Website",
   "main": "/app.js",
   "scripts": {
-    "start": "node app.js",
-    "watch": "nodemon --exec 'npm start' --ignore 'logs/' --ignore 'main.js'"
+    "start": "sudo node app.js",
+    "watch": "sudo nodemon --exec 'npm start' --ignore 'logs/' --ignore 'main.js'"
   },
   "dependencies": {
     "aws-sdk": "^2.1142.0",

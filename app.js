@@ -198,31 +198,62 @@ server.get("/product-details", async (req, res, next) => {
     const nfts = mongoClient.query.getNfts(NFTSPERPAGE / 2, 0);
     resolve(nfts);
   });
-  offersPromise = new Promise(function (resolve, reject) {
-    const offers = xumm.xrpl.getnftOffers(nftId);
-    resolve(offers);
-  });
-  ownerPromise = new Promise(function (resolve, reject) {
-    const owner = xumm.xrpl.getcurrentNftHolder(nftId);
-    resolve(owner);
-  });
   console.time();
-  const promises = await Promise.all([
-    nftPromise,
-    nftsPromise,
-    offersPromise,
-    ownerPromise,
-  ]);
+  const promises = await Promise.all([nftPromise, nftsPromise]);
   console.timeEnd();
   defaultLocals(req, res);
   res.render("views/product-details", {
     nft: promises[0],
     nfts: promises[1],
-    buyOffers: promises[2][1],
-    sellOffers: promises[2][0],
-    owner: promises[3],
-    owner_pic: digitalOcean.functions.getProfileLink(promises[3]),
   });
+});
+server.post("/test", async (req, res, next) => {
+  try {
+    console.log(req.query.id);
+    const nftId = req.query.id;
+    console.log(nftId);
+    offersPromise = new Promise(function (resolve, reject) {
+      const offers = xumm.xrpl.getnftOffers(nftId);
+      resolve(offers);
+    });
+    ownerPromise = new Promise(function (resolve, reject) {
+      const owner = xumm.xrpl.getcurrentNftHolder(nftId);
+      resolve(owner);
+    });
+    console.time();
+    const promises = await Promise.all([offersPromise, ownerPromise]);
+    console.timeEnd();
+    var returnHtml = [];
+    defaultLocals(req, res);
+    const isOwner = promises[1] == req.session.wallet ? true : false;
+    const profile_img = digitalOcean.functions.getProfileLink(promises[1]);
+    res.render(
+      "views/models/product-details/buy-offers-container.ejs",
+      {
+        buyOffers: promises[0][1],
+        owner: promises[1],
+        isOwner: isOwner,
+        NFToken: nftId,
+      },
+      function (err, html) {
+        if (err) throw "Couldn't get buy offers\n" + err;
+        returnHtml.push(html);
+      }
+    );
+    res.render(
+      "views/models/product-details/sell-offers-container.ejs",
+      function (err, html) {
+        if (err) throw "Couldn't get sell offers\n" + err;
+        returnHtml.push(html);
+      }
+    );
+    returnHtml.push(promises[1]);
+    returnHtml.push(profile_img);
+    returnHtml.push(isOwner);
+    res.send(returnHtml);
+  } catch (err) {
+    return next(err);
+  }
 });
 server.get("/create-listing", (req, res) => {
   defaultLocals(req, res);
@@ -257,6 +288,7 @@ server.post("/subscription-transaction", async (req, res) => {
   xumm.subscriptions.transactionSubscription(req, res);
 });
 server.post("/accept-buy-offer", async (req, res) => {
+  console.log(req.body);
   const owner = await xumm.xrpl.getcurrentNftHolder(req.body.NFToken);
   if (owner == req.session.wallet) {
     const payload = await xumm.payloads.acceptBuyOfferPayload(
@@ -426,6 +458,7 @@ function defaultLocals(req, res) {
       req.session.login != undefined && req.session ? req.session.login : false;
     var wallet = req.session.wallet != null ? req.session.wallet : false;
     var mobile = req.useragent.isMobile;
+    res.locals.serverUrl = process.env.SERVER_URL;
     req.session.login = login;
     res.locals.login = login;
     res.locals.wallet = wallet;
