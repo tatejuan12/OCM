@@ -4,7 +4,7 @@
     <div class="top-seller-content">
       <span><%=buyOffer.price%> <%=buyOffer.token%></span>
       <% if (isOwner){%>
-      <button class="btn btn-primary" value="<%=buyOffer.index%>" onclick="acceptBuyOffer(this.value, '<%=NFToken%>')">Accept Offer
+      <button class="btn btn-primary" onclick="NFTokenAcceptOffer('<%=buyOffer.index%>', '<%=NFToken%>')">Accept Offer
       </button>
       <%}%>
     </div>

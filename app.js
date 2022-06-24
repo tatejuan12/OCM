@@ -273,10 +273,10 @@ server.post("/payload", async (req, res) => {
 
   res.send(payload);
 });
-server.post("/transaction-payload", async (req, res) => {
+server.post("/nftoken-create-offer", async (req, res) => {
   const NFToken = req.body.NFToken;
   const value = req.body.value;
-  const payload = await xumm.payloads.transactionPayload(
+  const payload = await xumm.payloads.NFTokenCreateOffer(
     NFToken,
     value,
     req.useragent.isMobile,
@@ -287,11 +287,10 @@ server.post("/transaction-payload", async (req, res) => {
 server.post("/subscription-transaction", async (req, res) => {
   xumm.subscriptions.transactionSubscription(req, res);
 });
-server.post("/accept-buy-offer", async (req, res) => {
-  console.log(req.body);
+server.post("/NFTokenAcceptOffer", async (req, res) => {
   const owner = await xumm.xrpl.getcurrentNftHolder(req.body.NFToken);
   if (owner == req.session.wallet) {
-    const payload = await xumm.payloads.acceptBuyOfferPayload(
+    const payload = await xumm.payloads.NFTokenAcceptOffer(
       req.body.index,
       req.useragent.isMobile,
       req.body.return_url
@@ -299,7 +298,16 @@ server.post("/accept-buy-offer", async (req, res) => {
     res.status(200).send(payload);
   } else res.sendStatus(400);
 });
-
+server.post("/NFTokenCancelOffer", async (req, res) => {
+  if (req.session.login) {
+    const payload = await xumm.payloads.NFTokenCancelOffer(
+      req.body.index,
+      req.useragent.isMobile,
+      req.body.return_url
+    );
+    res.status(200).send(payload);
+  } else res.status(400).send("Not logged in");
+});
 server.post("/sign-in-payload", async (req, res) => {
   const payload = await xumm.payloads.signInPayload(
     req.useragent.isMobile,

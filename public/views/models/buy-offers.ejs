@@ -8,10 +8,10 @@
         <%if (offer.token != "XRP"){%>
         <span>Offer Value: <span id="offerVal"><%=offer.xrpValue%> <span>XRP</span></span></span>
         <%}%>
-      </div>
-      <div class="Oright">
-        <span class="expired <%=offer.expired%>">Expired</span>
-        <a href="#" id="offerCancel" class="offerCancel">Cancel Offer</a>
+        </div>
+        <div class="Oright">
+          <span class="expired <%=offer.expired%>">Expired</span>
+        <a id="offerCancel" class="offerCancel" onclick="NFTokenCancelOffer('<%=offer.index%>')">Cancel Offer</a>
       </div>
     </div>
     <a class="offerLink" href="/"></a>

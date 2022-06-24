@@ -11,7 +11,41 @@ const https = require("https");
 const http = require("http");
 
 var payloads = {
-  transactionPayload: async function (NFToken, value, mobile, return_url) {
+  NFTokenCreateOffer: async function (NFToken, value, mobile, return_url) {
+    const nftOwner = await xrpls.getcurrentNftHolder(NFToken);
+    try {
+      value = parseInt(value);
+      value = value * 1000000;
+      value = value.toString();
+    } catch (err) {
+      console.error("Error parsing Value: " + err);
+      return false;
+    }
+    const request = {
+      options: {
+        submit: true,
+        expire: 240,
+      },
+      txjson: {
+        TransactionType: "NFTokenCreateOffer",
+        NFTokenID: NFToken,
+        Owner: nftOwner,
+        Amount: value,
+      },
+    };
+    if (mobile)
+      request.options["return_url"] = {
+        app: return_url,
+      };
+    else
+      request.options["return_url"] = {
+        web: return_url,
+      };
+
+    const payload = await getPayload(request);
+    return payload;
+  },
+  NFTokenAcceptOffer: async function (NFToken, value, mobile, return_url) {
     const nftOwner = await xrpls.getcurrentNftHolder(NFToken);
     try {
       value = parseInt(value);
@@ -66,7 +100,7 @@ var payloads = {
     const payload = await getPayload(request);
     return payload;
   },
-  acceptBuyOfferPayload: async function (index, mobile, return_url) {
+  NFTokenAcceptOffer: async function (index, mobile, return_url) {
     const request = {
       options: {
         submit: true,
@@ -75,6 +109,28 @@ var payloads = {
       txjson: {
         TransactionType: "NFTokenAcceptOffer",
         NFTokenBuyOffer: index,
+      },
+    };
+    if (mobile)
+      request.options["return_url"] = {
+        app: return_url,
+      };
+    else
+      request.options["return_url"] = {
+        web: return_url,
+      };
+    const payload = await getPayload(request);
+    return payload;
+  },
+  NFTokenCancelOffer: async function (index, mobile, return_url) {
+    const request = {
+      options: {
+        submit: true,
+        expire: 240,
+      },
+      txjson: {
+        TransactionType: "NFTokenCancelOffer",
+        NFTokenOffers: [index],
       },
     };
     if (mobile)

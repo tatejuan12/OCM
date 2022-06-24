@@ -826,18 +826,28 @@ function setBuyOfferBid(NFToken) {
   const value = document.getElementById("value").value;
   $.ajax({
     type: "POST",
-    url: "/transaction-payload",
+    url: "/nftoken-create-offer",
     data: { NFToken: NFToken, value: value, return_url: window.location.href },
     success: function (result) {
       window.location.href = result.next.always;
     },
   });
 }
-function acceptBuyOffer(index, NFToken) {
+function NFTokenAcceptOffer(index, NFToken) {
   $.ajax({
     type: "POST",
-    url: "/accept-buy-offer",
+    url: "/NFTokenAcceptOffer",
     data: { index: index, NFToken: NFToken, return_url: window.location.href },
+    success: function (result) {
+      window.location.href = result.next.always;
+    },
+  });
+}
+function NFTokenCancelOffer(index) {
+  $.ajax({
+    type: "POST",
+    url: "/NFTokenCancelOffer",
+    data: { index: index, return_url: window.location.href },
     success: function (result) {
       window.location.href = result.next.always;
     },
