@@ -16260,7 +16260,7 @@ button .small-image {
 .message-area .form-wrapper-one.registration-area {
   width: 100%;
 }
-.upload-area{
+.upload-area {
   margin-bottom: 20px;
 }
 .upload-area label {
@@ -17520,6 +17520,7 @@ button .small-image {
   position: relative;
   margin: -15px;
   text-align: center;
+  background-color: #00a3ff5b;
 }
 .product-style-one .card-thumbnail a img {
   border-radius: 5px;
@@ -23730,7 +23731,7 @@ body.active-light-mode {
     left: 60%;
     padding: 4px;
   }
-  .list-buttons{
+  .list-buttons {
     display: flex;
     flex-direction: column-reverse;
   }
