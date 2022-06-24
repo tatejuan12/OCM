@@ -85,7 +85,7 @@
 
       <div id="pane-listed-nfts" class="tab-pane fade active show" aria-labelledby="nav-listed-tab" role="tabpanel"><%- include ("models/nft-rows.ejs", {nfts:nfts}) %></div>
       <div id="pane-unlisted-nfts" class="tab-pane fade" aria-labelledby="nav-unlisted-tab" role="tabpanel">
-        <div class="loading"></div>
+        <div class="loader"></div>
       </div>
       <div id="pane-liked-nfts" class="tab-pane fade" aria-labelledby="nav-liked-tab" role="tabpanel">
         <%- include ("models/nft-rows.ejs", {nfts: likedNfts}) %>
@@ -137,7 +137,7 @@
   <script src="assets/js/main.js"></script>
 
   <script>
-    $("#pane-unlisted-nfts").load("http://165.232.173.55/get-account-unlisted-nfts?wallet=<%=user.wallet%>",
+    $("#pane-unlisted-nfts").load("<%=url%>/get-account-unlisted-nfts?wallet=<%=user.wallet%>",
       function() {
         const cards = document.getElementById("pane-unlisted-nfts").querySelectorAll(".col-5");
         cards.forEach(element => {
