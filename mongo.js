@@ -284,23 +284,59 @@ var methods = {
       let nftDetailsCol = dbNfts.collection("Eligible-Listings");
       let usersCol = dbAccounts.collection("Elegible-Accounts");
       let verifiedCol = dbCollections.collection("Verified-Issuers");
-      let queryNftDetails = { $text: { $search: searchQuery } };
-      let queryUsers = { wallet: new RegExp(`.*${searchQuery}.*`, "i") };
-      let queryVerifiedCol = {
-        projectName: new RegExp(`.*${searchQuery}.*`, "i"),
-      };
+      let queryNftDetails = [
+        {
+          $search: {
+            index: "NFT_Search",
+            text: {
+              query: searchQuery,
+              path: {
+                wildcard: "*",
+              },
+            },
+          },
+        },
+      ];
+      let queryUsers = [
+        {
+          $search: {
+            index: "Account_Search",
+            text: {
+              query: searchQuery,
+              path: {
+                wildcard: "*",
+              },
+            },
+          },
+        },
+      ];
+      let queryVerifiedCol = [
+        {
+          $search: {
+            index: "Collections_Search",
+            text: {
+              query: searchQuery,
+              path: {
+                wildcard: "*",
+              },
+            },
+          },
+        },
+      ];
       promiseNfts = new Promise(function (resolve, reject) {
-        const nftCursor = nftDetailsCol.find(queryNftDetails).limit(10);
+        const nftCursor = nftDetailsCol.aggregate(queryNftDetails).limit(10);
         const result = nftCursor.toArray();
         resolve(result);
       });
       promiseUsers = new Promise(function (resolve, reject) {
-        const userCursor = usersCol.find(queryUsers).limit(10);
+        const userCursor = usersCol.aggregate(queryUsers).limit(10);
         const result = userCursor.toArray();
         resolve(result);
       });
       promiseVerified = new Promise(function (resolve, reject) {
-        const verifiedCursor = verifiedCol.find(queryVerifiedCol).limit(10);
+        const verifiedCursor = verifiedCol
+          .aggregate(queryVerifiedCol)
+          .limit(10);
         const result = verifiedCursor.toArray();
         resolve(result);
       });
