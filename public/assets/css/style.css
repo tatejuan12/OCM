@@ -16874,6 +16874,7 @@ button .small-image {
 }
 .top-seller-inner-one .top-seller-wrapper .top-seller-content {
   margin-left: 12px;
+
 }
 @media only screen and (max-width: 479px) {
   .top-seller-inner-one .top-seller-wrapper .top-seller-content {
@@ -20263,6 +20264,7 @@ button.slide-arrow:hover.slide-arrow i {
   .upload-variant-title-wrapper p {
     width: 100%;
   }
+
 }
 .upload-variant-title-wrapper p span {
   color: var(--color-white);
@@ -23489,9 +23491,9 @@ body.active-light-mode {
 #logout {
   width: max-content;
 }
-.loader {
-  width: 20px;
-  height: 20px;
+.loader-content {
+  width: 10px;
+  height: 10px;
   margin: 20px auto 20px auto;
   border-radius: 10px;
   display: block;
@@ -23737,6 +23739,9 @@ body.active-light-mode {
   .form-wrapper-one .input-box {
     display: block;
     margin: 10px 0;
+  }
+  .profile-thumbnail{
+    margin-right: 0;
   }
 }
 .tab-pane {
