@@ -31,11 +31,7 @@ const csrfProtection = csurf({});
 const NFTSPERPAGE = 10;
 //! ---------------------Imported middleware--------------------------------//
 const server = express();
-// server.use(
-//   cors({
-//     origin: "*",
-//   })
-// );
+
 server.use(bodyParser.json()); // for parsing serverlication/json
 server.use(bodyParser.urlencoded({ extended: true })); // for parsing serverlication/x-www-form-urlencoded
 server.set("view engine", "ejs"); // Setting rendering agent to ejs
