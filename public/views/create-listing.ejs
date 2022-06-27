@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <meta name="theme-style-mode" content="0"> <!-- 0 == light, 1 == dark -->
-
+  <meta name="csrf-token" content="<%=csrfToken%>">
   <!-- Favicon -->
   <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png">
   <!-- CSS 
@@ -62,111 +62,111 @@
   <h1 style="text-align: center; margin-top: 30px;">Coming Soon...</h1>
 
   <div class="col-lg-7 mintModal">
-          <div class="form-wrapper-one mintModalContent">
-            <form class="row" action="#">
-              <div class="upload-area">
+    <div class="form-wrapper-one mintModalContent">
+      <form class="row" action="#">
+        <div class="upload-area">
 
-                <div class="upload-formate mb--30">
-                  <h6 class="title">
-                    Upload file
-                  </h6>
-                  <p class="formate">
-                    Drag or choose your file to upload
-                  </p>
-                </div>
-    
-                <div class="brows-file-wrapper">
-                  <input name="createinputfile" id="createinputfile" type="file" class="inputfile" />
-                  <img id="createfileImage" data-black-overlay="6">
-                  <label for="createinputfile" title="No File Choosen">
-                    <i class="feather-upload"></i>
-                    <span class="text-center">Choose a File</span>
-                    <p class="text-center mt--10">PNG, GIF, WEBP, MP4 or MP3. <br> Max 100MB</p>
-                  </label>
-                </div>
-              </div>
+          <div class="upload-formate mb--30">
+            <h6 class="title">
+              Upload file
+            </h6>
+            <p class="formate">
+              Drag or choose your file to upload
+            </p>
+          </div>
 
-              <div class="col-md-12">
-                <div class="input-box pb--20">
-                  <label for="name" class="form-label">Product Name</label>
-                  <input id="name" placeholder="e. g. `Wesley The Whale`">
-                </div>
-              </div>
+          <div class="brows-file-wrapper">
+            <input name="createinputfile" id="createinputfile" type="file" class="inputfile" />
+            <img id="createfileImage" data-black-overlay="6">
+            <label for="createinputfile" title="No File Choosen">
+              <i class="feather-upload"></i>
+              <span class="text-center">Choose a File</span>
+              <p class="text-center mt--10">PNG, GIF, WEBP, MP4 or MP3. <br> Max 100MB</p>
+            </label>
+          </div>
+        </div>
 
-              <div class="col-md-12">
-                <div class="input-box pb--20">
-                  <label for="Description" class="form-label">Description</label>
-                  <textarea id="Description" rows="3" placeholder="e. g. “Worlds best NFT...”"></textarea>
-                </div>
-              </div>
+        <div class="col-md-12">
+          <div class="input-box pb--20">
+            <label for="name" class="form-label">Product Name</label>
+            <input id="name" placeholder="e. g. `Wesley The Whale`">
+          </div>
+        </div>
 
-              <div class="col-md-4">
-                <div class="input-box pb--20">
-                  <label for="dollarValue" class="form-label">Item Price in XRP</label>
-                  <input id="dollarValue" placeholder="e. g. 100">
-                </div>
-              </div>
+        <div class="col-md-12">
+          <div class="input-box pb--20">
+            <label for="Description" class="form-label">Description</label>
+            <textarea id="Description" rows="3" placeholder="e. g. “Worlds best NFT...”"></textarea>
+          </div>
+        </div>
 
-              <div class="col-md-4">
-                <div class="input-box pb--20">
-                  <label for="Properties" class="form-label">Properties</label>
-                  <input id="Properties" placeholder="separate with a commma...">
-                  <button>properties</button>
-                </div>
-              </div>
+        <div class="col-md-4">
+          <div class="input-box pb--20">
+            <label for="dollarValue" class="form-label">Item Price in XRP</label>
+            <input id="dollarValue" placeholder="e. g. 100">
+          </div>
+        </div>
 
-              <!-- <div class="col-md-12">
+        <div class="col-md-4">
+          <div class="input-box pb--20">
+            <label for="Properties" class="form-label">Properties</label>
+            <input id="Properties" placeholder="separate with a commma...">
+            <button>properties</button>
+          </div>
+        </div>
+
+        <!-- <div class="col-md-12">
                 <div class="input-box pb--20">
                   <label for="royalty" class="form-label">Royalty</label>
                   <input id="royalty" placeholder="e. g. `20%`">
                 </div>
               </div> -->
 
-              <div class="col-md-4 col-sm-4">
-                <div class="input-box pb--20 rn-check-box">
-                  <input class="rn-check-box-input" type="checkbox" id="putonsale">
-                  <label class="rn-check-box-label" for="putonsale">
-                    Put on Sale
-                  </label>
-                </div>
-              </div>
-
-              <div class="col-md-4 col-sm-4">
-                <div class="input-box pb--20 rn-check-box">
-                  <input class="rn-check-box-input" type="checkbox" id="instantsaleprice">
-                  <label class="rn-check-box-label" for="instantsaleprice">
-                    Instant Sale
-                  </label>
-                </div>
-              </div>
-
-              <div class="col-md-4 col-sm-4">
-                <div class="input-box pb--20 rn-check-box">
-                  <input class="rn-check-box-input" type="checkbox" id="unlockpurchased">
-                  <label class="rn-check-box-label" for="unlockpurchased">
-                    Unlock Purchased
-                  </label>
-                </div>
-              </div>
-              <div class="advanced-mint">
-                <span>advanced</span>
-                <div>
-                  <ul>
-                    <li>royalty</li>
-                    <li>taxon</li>
-                    <li>flages</li>
-                  </ul>
-                </div>
-              </div>
-              
-              <div class="col-md-12 col-xl-4">
-                <div class="input-box">
-                  <button class="btn btn-primary btn-large w-100">MINT</button>
-                </div>
-              </div>
-            </form>
+        <div class="col-md-4 col-sm-4">
+          <div class="input-box pb--20 rn-check-box">
+            <input class="rn-check-box-input" type="checkbox" id="putonsale">
+            <label class="rn-check-box-label" for="putonsale">
+              Put on Sale
+            </label>
           </div>
         </div>
+
+        <div class="col-md-4 col-sm-4">
+          <div class="input-box pb--20 rn-check-box">
+            <input class="rn-check-box-input" type="checkbox" id="instantsaleprice">
+            <label class="rn-check-box-label" for="instantsaleprice">
+              Instant Sale
+            </label>
+          </div>
+        </div>
+
+        <div class="col-md-4 col-sm-4">
+          <div class="input-box pb--20 rn-check-box">
+            <input class="rn-check-box-input" type="checkbox" id="unlockpurchased">
+            <label class="rn-check-box-label" for="unlockpurchased">
+              Unlock Purchased
+            </label>
+          </div>
+        </div>
+        <div class="advanced-mint">
+          <span>advanced</span>
+          <div>
+            <ul>
+              <li>royalty</li>
+              <li>taxon</li>
+              <li>flages</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-md-12 col-xl-4">
+          <div class="input-box">
+            <button class="btn btn-primary btn-large w-100">MINT</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
   <!-- create new product area -->
 
 

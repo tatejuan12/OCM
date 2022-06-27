@@ -19,23 +19,27 @@ const xumm = require("./xummFunctions");
 const { log } = require("console");
 const multer = require("multer");
 const upload = multer({ limits: { fieldSize: "16mb" } }); //used to get form data which for some reason bodyParser doesn't get. used for user data changing!
+const csurf = require("csurf");
+const helmet = require("helmet");
 const minifyHtml = require("express-minify-html");
 const mongoStore = new MongoDBStore({
   uri: process.env.MONGO_URI,
   databaseName: "Sessions",
   collection: "Sessions",
 });
+const csrfProtection = csurf({});
 const NFTSPERPAGE = 10;
 //! ---------------------Imported middleware--------------------------------//
 const server = express();
-server.use(
-  cors({
-    origin: "*",
-  })
-);
+// server.use(
+//   cors({
+//     origin: "*",
+//   })
+// );
 server.use(bodyParser.json()); // for parsing serverlication/json
 server.use(bodyParser.urlencoded({ extended: true })); // for parsing serverlication/x-www-form-urlencoded
 server.set("view engine", "ejs"); // Setting rendering agent to ejs
+server.use(helmet({ contentSecurityPolicy: false }));
 server.set("views", path.join(__dirname, "/public")); // Makes views for rendering the public dir
 server.use(express.static(__dirname + "/public")); // Essential so JS and CSS is acccessible by requests
 server.use(logger({ path: __dirname + "/logs/logs.log" })); // Logs data, every connection will log browser info and request url
@@ -48,34 +52,38 @@ server.use(
     cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 30 }, // ms/s, s/m, m/h, h/d, d/mnth
     store: mongoStore,
   })
-); // Sets the use of cookies
+);
 server.use(useragent.express()); // For browser data, like if it is mobile or not
-// server.use(
-//   minifyHtml({
-//     override: true,
-//     exception_url: false,
-//     htmlMinifier: {
-//       removeComments: true,
-//       collapseWhitespace: true,
-//       collapseBooleanAttributes: true,
-//       removeAttributeQuotes: true,
-//       removeEmptyAttributes: true,
-//       minifyJS: true,
-//     },
-//   })
-// );
+server.use(
+  minifyHtml({
+    override: true,
+    exception_url: false,
+    htmlMinifier: {
+      removeComments: true,
+      collapseWhitespace: true,
+      collapseBooleanAttributes: true,
+      removeAttributeQuotes: true,
+      removeEmptyAttributes: true,
+      minifyJS: true,
+    },
+  })
+);
 //! ---------------------Custom middleware--------------------------------//
-// server.use(defaultLocals); //Custom made middleware, sends locals to ejs without having to send it manually
 server.use((req, res, next) => {
   checkViews(req, next); // Increments session.views by one every time user interacts with website
 });
+server.use((req, res, next) => {
+  res.setHeader("Cross-Origin-Embedder-Policy", "same-origin");
+  next();
+});
 //! ---------------------Browser endpoints--------------------------------//
 
-server.get("/", async (req, res) => {
+server.get("/", csrfProtection, async (req, res) => {
+  console.log(req.session);
   defaultLocals(req, res);
   res.render("views/");
 });
-server.get("/explore", async (req, res) => {
+server.get("/explore", csrfProtection, async (req, res) => {
   var nfts;
   const page = parseInt(req.query.page);
   if (!isNaN(page)) {
@@ -85,40 +93,40 @@ server.get("/explore", async (req, res) => {
     res.render("views/explore", { nfts: nfts, page: page });
   } else res.redirect("explore?page=0");
 });
-server.get("/about", (req, res) => {
+server.get("/about", csrfProtection, (req, res) => {
   defaultLocals(req, res);
   res.render("views/about");
 });
-server.get("/verified", (req, res) => {
+server.get("/verified", csrfProtection, (req, res) => {
   defaultLocals(req, res);
   res.render("views/verified");
 });
-server.get("/partners", (req, res) => {
+server.get("/partners", csrfProtection, (req, res) => {
   defaultLocals(req, res);
   res.render("views/partners");
 });
-server.get("/collection", (req, res) => {
+server.get("/collection", csrfProtection, (req, res) => {
   defaultLocals(req, res);
   res.render("views/collection");
 });
-server.get("/logout", (req, res) => {
+server.get("/logout", csrfProtection, (req, res) => {
   req.session.destroy();
   defaultLocals(req, res);
   res.redirect("/");
 });
-server.get("/connect", (req, res) => {
+server.get("/connect", csrfProtection, (req, res) => {
   defaultLocals(req, res);
   res.render("views/connect");
 });
-server.get("/metadata", (req, res) => {
+server.get("/metadata", csrfProtection, (req, res) => {
   defaultLocals(req, res);
   res.render("views/metadata");
 });
-server.get("/minting-help", (req, res) => {
+server.get("/minting-help", csrfProtection, (req, res) => {
   defaultLocals(req, res);
   res.render("views/minting-help");
 });
-server.get("/redeem", async (req, res) => {
+server.get("/redeem", csrfProtection, async (req, res) => {
   if (req.session.login) {
     const ocwBalance = await xumm.xrpl.getOcwBalance(
       req.session.wallet,
@@ -136,7 +144,7 @@ server.get("/redeem", async (req, res) => {
         });
   } else res.status(401).redirect("/");
 });
-server.get("/profile", async (req, res) => {
+server.get("/profile", csrfProtection, async (req, res) => {
   var wallet;
   if (req.query.wallet) wallet = req.query.wallet;
   else {
@@ -179,7 +187,7 @@ server.get("/profile", async (req, res) => {
     likedNfts: promises[3],
   });
 });
-server.get("/edit-profile", async (req, res) => {
+server.get("/edit-profile", csrfProtection, async (req, res) => {
   if (req.session.login) {
     const profile_pic = digitalOcean.functions.getProfileLink(
       req.session.wallet
@@ -188,7 +196,7 @@ server.get("/edit-profile", async (req, res) => {
     res.render("views/edit-profile", { profile_pic: profile_pic });
   } else res.status(401).redirect("/");
 });
-server.get("/product-details", async (req, res, next) => {
+server.get("/product-details", csrfProtection, async (req, res, next) => {
   let nftId = req.query.id;
   nftPromise = new Promise(function (resolve, reject) {
     const nft = mongoClient.query.getNft(nftId);
@@ -207,11 +215,22 @@ server.get("/product-details", async (req, res, next) => {
     nfts: promises[1],
   });
 });
-server.post("/test", async (req, res, next) => {
+server.get("/create-listing", csrfProtection, (req, res) => {
+  defaultLocals(req, res);
+  res.render("views/create-listing");
+});
+server.get("/search", csrfProtection, async (req, res) => {
+  const searchResults = await mongoClient.query.getSearchResultsJSON(
+    req.query.q
+  );
+  defaultLocals(req, res);
+  res.render("views/search", { res: searchResults });
+});
+
+//! ---------------------OCW API--------------------------------//
+server.post("/get-profile-info", csrfProtection, async (req, res, next) => {
   try {
-    console.log(req.query.id);
     const nftId = req.query.id;
-    console.log(nftId);
     offersPromise = new Promise(function (resolve, reject) {
       const offers = xumm.xrpl.getnftOffers(nftId);
       resolve(offers);
@@ -255,25 +274,12 @@ server.post("/test", async (req, res, next) => {
     return next(err);
   }
 });
-server.get("/create-listing", (req, res) => {
-  defaultLocals(req, res);
-  res.render("views/create-listing");
-});
-server.get("/search", async (req, res) => {
-  const searchResults = await mongoClient.query.getSearchResultsJSON(
-    req.query.q
-  );
-  defaultLocals(req, res);
-  res.render("views/search", { res: searchResults });
-});
-
-//! ---------------------OCW API--------------------------------//
-server.post("/payload", async (req, res) => {
+server.post("/payload", csrfProtection, async (req, res) => {
   const payload = await getPayload(req.body);
 
   res.send(payload);
 });
-server.post("/nftoken-create-offer", async (req, res) => {
+server.post("/nftoken-create-offer", csrfProtection, async (req, res) => {
   const NFToken = req.body.NFToken;
   const value = req.body.value;
   const payload = await xumm.payloads.NFTokenCreateOffer(
@@ -284,7 +290,7 @@ server.post("/nftoken-create-offer", async (req, res) => {
   );
   res.status(200).send(payload);
 });
-server.post("/subscription-transaction", async (req, res) => {
+server.post("/subscription-transaction", csrfProtection, async (req, res) => {
   xumm.subscriptions.transactionSubscription(req, res);
 });
 server.post("/NFTokenAcceptOffer", async (req, res) => {
@@ -298,7 +304,7 @@ server.post("/NFTokenAcceptOffer", async (req, res) => {
     res.status(200).send(payload);
   } else res.sendStatus(400);
 });
-server.post("/NFTokenCancelOffer", async (req, res) => {
+server.post("/NFTokenCancelOffer", csrfProtection, async (req, res) => {
   if (req.session.login) {
     const payload = await xumm.payloads.NFTokenCancelOffer(
       req.body.index,
@@ -308,20 +314,20 @@ server.post("/NFTokenCancelOffer", async (req, res) => {
     res.status(200).send(payload);
   } else res.status(400).send("Not logged in");
 });
-server.post("/sign-in-payload", async (req, res) => {
+server.post("/sign-in-payload", csrfProtection, async (req, res) => {
   const payload = await xumm.payloads.signInPayload(
     req.useragent.isMobile,
     req.body.return_url
   );
   res.send(payload);
 });
-server.post("/sign-in-subscription", async (req, res) => {
+server.post("/sign-in-subscription", csrfProtection, async (req, res) => {
   const result = await xumm.subscriptions.signInSubscription(req, res);
   if (result) {
     mongoClient.query.initiateUser(req.session.wallet);
   }
 });
-server.post("/redeem-nft-payload", async (req, res) => {
+server.post("/redeem-nft-payload", csrfProtection, async (req, res) => {
   const payload = await xumm.payloads.redeemNftPayload(
     req.session.wallet,
     req.useragent.isMobile,
@@ -332,13 +338,13 @@ server.post("/redeem-nft-payload", async (req, res) => {
   console.log(payload);
   const result = await xumm.subscriptions.watchSubscripion(payload);
 });
-server.post("/redeem-nft-subscription", async (req, res) => {
+server.post("/redeem-nft-subscription", csrfProtection, async (req, res) => {
   const payload = await xumm.subscriptions.redeemNftSubscription(req, res);
   // console.log(payload);
   // const result = await xumm.subscriptions.watchSubscripion(payload);
   // console.log(result);
 });
-server.post("/increment-like", async (req, res) => {
+server.post("/increment-like", csrfProtection, async (req, res) => {
   var success;
   if (req.session.login) {
     const nftId = req.body.id;
@@ -349,7 +355,7 @@ server.post("/increment-like", async (req, res) => {
   } else success = false;
   success ? res.status(200).end() : res.status(406).end();
 });
-server.post("/decrement-like", async (req, res) => {
+server.post("/decrement-like", csrfProtection, async (req, res) => {
   var success;
   if (req.session.login) {
     const nftId = req.body.id;
@@ -400,7 +406,7 @@ server.post(
     result ? res.status(200).send("Modified") : res.status(500).send("Failed");
   }
 );
-server.post("/report-nft", upload.any(), async (req, res) => {
+server.post("/report-nft", upload.any(), csrfProtection, async (req, res) => {
   const formData = req.body;
   const result = await mongoClient.query.reportNft(
     formData["token-id"],
@@ -410,7 +416,7 @@ server.post("/report-nft", upload.any(), async (req, res) => {
   );
   result ? res.status(200).send("Modified") : res.status(500).send("Failed");
 });
-server.get("/get-account-unlisted-nfts", async (req, res) => {
+server.get("/get-account-unlisted-nfts", csrfProtection, async (req, res) => {
   var wallet;
   var unlistedNfts = [];
   var unlistedNftsToReturn = [];
@@ -437,10 +443,18 @@ server.get("/get-account-unlisted-nfts", async (req, res) => {
 //! ---------------------Server Essentials--------------------------------//
 // Renders 404                                                     page if the request is send to undeclared location
 server.use((req, res, next) => {
+  defaultLocals(req, res);
   res.status(404).render("views/404.ejs");
+});
+server.use(function (err, req, res, next) {
+  if (err.code !== "EBADCSRFTOKEN") return next(err);
+
+  // handle CSRF token errors here
+  res.status(403).render("views/500.ejs");
 });
 server.use((err, req, res, next) => {
   console.error(err);
+  defaultLocals(req, res);
   res.status(500).render("views/500.ejs");
 });
 server.listen(process.env.PORT, () => {
@@ -465,13 +479,17 @@ function defaultLocals(req, res) {
     var login =
       req.session.login != undefined && req.session ? req.session.login : false;
     var wallet = req.session.wallet != null ? req.session.wallet : false;
-    var mobile = req.useragent.isMobile;
+    var mobile =
+      req.useragent.isMobile != undefined && req.useragent.isMobile
+        ? req.useragent.isMobile
+        : false;
     res.locals.serverUrl = process.env.SERVER_URL;
     req.session.login = login;
     res.locals.login = login;
     res.locals.wallet = wallet;
     res.locals.mobile = mobile;
     res.locals.url = process.env.SERVER_URL;
+    res.locals.csrfToken = req.csrfToken();
   } catch (err) {
     console.error("Error settings locals: " + err);
   } finally {

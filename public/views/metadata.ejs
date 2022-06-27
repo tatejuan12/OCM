@@ -1,32 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OCM metadata layout</title>
-</head>
-<body>
-    <p>{<br>
-        &quot;name&quot;: string input name of the NFT,<br>
-        &quot;description&quot;: string input, description to accompany nft,<br>
-        &quot;image&quot;: string input that points to the NFT image, typically -> ipfs://&gt;CID&lt;/1.png,<br>
-        &quot;edition&quot;: Number/Double input, number of the NFT edition,<br>
-        &quot;date&quot;: Number/Double input, ms since epoch time of the NFT creation/inception,<br>
-        &quot;external_url&quot;: string input, http link to personal url,<br>
-        &quot;attributes&quot;: [ -> contains all attributes of the NFT <br>
-        {<br>
-        &quot;trait_type&quot;: String input of the trait type (location, author, creator, colour, ect&#8230;),<br>
-        &quot;value&quot;: string input of trait value<br>
-        }<br>
-        ],<br>
-        &quot;collection&quot;: {<br>
-        &quot;name&quot;: string, particular name of the NFT collection,<br>
-        &quot;family&quot;: Over-aching family the collection originates from<br>
-        }<br>
-       }<br>
-       </p>
 
-       <a href="https://docs.opensea.io/docs/metadata-standards" target="_blank">Opensea Metadata Standards</a>
-    </body>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="<%=csrfToken%>">
+  <title>OCM metadata layout</title>
+</head>
+
+<body>
+  <p>{<br>
+    &quot;name&quot;: string input name of the NFT,<br>
+    &quot;description&quot;: string input, description to accompany nft,<br>
+    &quot;image&quot;: string input that points to the NFT image, typically -> ipfs://&gt;CID&lt;/1.png,<br>
+    &quot;edition&quot;: Number/Double input, number of the NFT edition,<br>
+    &quot;date&quot;: Number/Double input, ms since epoch time of the NFT creation/inception,<br>
+    &quot;external_url&quot;: string input, http link to personal url,<br>
+    &quot;attributes&quot;: [ -> contains all attributes of the NFT <br>
+    {<br>
+    &quot;trait_type&quot;: String input of the trait type (location, author, creator, colour, ect&#8230;),<br>
+    &quot;value&quot;: string input of trait value<br>
+    }<br>
+    ],<br>
+    &quot;collection&quot;: {<br>
+    &quot;name&quot;: string, particular name of the NFT collection,<br>
+    &quot;family&quot;: Over-aching family the collection originates from<br>
+    }<br>
+    }<br>
+  </p>
+
+  <a href="https://docs.opensea.io/docs/metadata-standards" target="_blank">Opensea Metadata Standards</a>
+</body>
+
 </html>

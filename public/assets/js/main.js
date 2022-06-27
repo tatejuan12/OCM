@@ -797,7 +797,14 @@ const request = {
   Destination: "rNsbajT8qaLJ5WiPHR92uATzybkcSSA3h4",
   Amount: "500000",
 };
-
+$.ajaxSetup({
+  beforeSend: function (xhr) {
+    xhr.setRequestHeader(
+      "CSRF-Token",
+      document.querySelector('meta[name="csrf-token"]').getAttribute("content")
+    );
+  },
+});
 function xummSignin() {
   $.ajax({
     type: "POST",

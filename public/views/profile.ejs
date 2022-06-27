@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <meta name="theme-style-mode" content="0"> <!-- 0 == light, 1 == dark -->
-
+  <meta name="csrf-token" content="<%=csrfToken%>">
   <!-- Favicon -->
   <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png">
   <!-- CSS 
@@ -85,7 +85,7 @@
 
       <div id="pane-listed-nfts" class="tab-pane fade active show" aria-labelledby="nav-listed-tab" role="tabpanel"><%- include ("models/nft-rows.ejs", {nfts:nfts}) %></div>
       <div id="pane-unlisted-nfts" class="tab-pane fade" aria-labelledby="nav-unlisted-tab" role="tabpanel">
-        <div class="loader"></div>
+        <div class="loader-content"></div>
       </div>
       <div id="pane-liked-nfts" class="tab-pane fade" aria-labelledby="nav-liked-tab" role="tabpanel">
         <%- include ("models/nft-rows.ejs", {nfts: likedNfts}) %>

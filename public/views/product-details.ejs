@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <meta name="theme-style-mode" content="0"> <!-- 0 == light, 1 == dark -->
-
+  <meta name="csrf-token" content="<%=csrfToken%>">
   <!-- Favicon -->
   <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png">
   <!-- CSS 
@@ -175,7 +175,7 @@
                             <div id="profile-thumbnail-container"></div>
 
                             <a href="#" id="owner-name">
-                              <div class="loader"></div>
+                              <div class="loader-content"></div>
                             </a>
                           </div>
                         </div>
@@ -383,7 +383,7 @@
     <!-- main JS -->
     <script src="assets/js/main.js"></script>
     <script>
-      $.post("/test?id=<%-nft.tokenID%>", function(data) {
+      $.post("/get-profile-info?id=<%-nft.tokenID%>", function(data) {
         $("#buy-offer-container").html(data[0]);
         $("#owner-name").html(`<h6 class = "name" style = "display: inline-block" >${data[2]}</h6>`);
         $("#profile-thumbnail-container").html(`<img src="${data[3]}" class="profile-thumbnail transition" onerror="this.src='assets/images/icons/unknown-user.png'">`)
