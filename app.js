@@ -75,7 +75,6 @@ server.use((req, res, next) => {
 //! ---------------------Browser endpoints--------------------------------//
 
 server.get("/", csrfProtection, async (req, res) => {
-  console.log(req.session);
   defaultLocals(req, res);
   res.render("views/");
 });
@@ -202,9 +201,7 @@ server.get("/product-details", csrfProtection, async (req, res, next) => {
     const nfts = mongoClient.query.getNfts(NFTSPERPAGE / 2, 0);
     resolve(nfts);
   });
-  console.time();
   const promises = await Promise.all([nftPromise, nftsPromise]);
-  console.timeEnd();
   defaultLocals(req, res);
   res.render("views/product-details", {
     nft: promises[0],
@@ -235,9 +232,7 @@ server.post("/get-profile-info", csrfProtection, async (req, res, next) => {
       const owner = xumm.xrpl.getcurrentNftHolder(nftId);
       resolve(owner);
     });
-    console.time();
     const promises = await Promise.all([offersPromise, ownerPromise]);
-    console.timeEnd();
     var returnHtml = [];
     defaultLocals(req, res);
     const isOwner = promises[1] == req.session.wallet ? true : false;
@@ -289,7 +284,7 @@ server.post("/nftoken-create-offer", csrfProtection, async (req, res) => {
 server.post("/subscription-transaction", csrfProtection, async (req, res) => {
   xumm.subscriptions.transactionSubscription(req, res);
 });
-server.post("/NFTokenAcceptOffer", async (req, res) => {
+server.post("/NFTokenAcceptOffer", csrfProtection, async (req, res) => {
   const owner = await xumm.xrpl.getcurrentNftHolder(req.body.NFToken);
   if (owner == req.session.wallet) {
     const payload = await xumm.payloads.NFTokenAcceptOffer(
@@ -331,7 +326,6 @@ server.post("/redeem-nft-payload", csrfProtection, async (req, res) => {
     req.body.ipAddress
   );
   res.status(200).send(payload);
-  console.log(payload);
   const result = await xumm.subscriptions.watchSubscripion(payload);
 });
 server.post("/redeem-nft-subscription", csrfProtection, async (req, res) => {
