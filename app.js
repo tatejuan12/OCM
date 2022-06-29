@@ -500,7 +500,9 @@ function defaultLocals(req, res) {
     res.locals.wallet = wallet;
     res.locals.mobile = mobile;
     res.locals.url = process.env.SERVER_URL;
-    res.locals.csrfToken = req.csrfToken();
+    if (typeof req.csrfToken === "function") {
+      res.locals.csrfToken = req.csrfToken();
+    }
   } catch (err) {
     console.error("Error settings locals: " + err);
   } finally {
