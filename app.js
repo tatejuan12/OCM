@@ -2,6 +2,8 @@
 //! ---------------------Imports modules/packages--------------------------------//
 require("dotenv").config();
 const express = require("express");
+const https = require("https");
+const fs = require("fs");
 const bodyParser = require("body-parser");
 const path = require("path");
 const session = require("express-session");
@@ -37,7 +39,7 @@ server.use(bodyParser.urlencoded({ extended: true })); // for parsing serverlica
 server.set("view engine", "ejs"); // Setting rendering agent to ejs
 server.use(helmet({ contentSecurityPolicy: false }));
 server.set("views", path.join(__dirname, "/public")); // Makes views for rendering the public dir
-server.use(express.static(__dirname + "/public")); // Essential so JS and CSS is acccessible by requests
+server.use(express.static(__dirname + "/public", { dotfiles: "allow" })); // Essential so JS and CSS is acccessible by requests
 server.use(logger({ path: __dirname + "/logs/logs.log" })); // Logs data, every connection will log browser info and request url
 server.use(
   session({
@@ -431,6 +433,9 @@ server.get("/get-account-unlisted-nfts", csrfProtection, async (req, res) => {
 });
 
 //! ---------------------Server Essentials--------------------------------//
+server.get("/node", (req, res) => {
+  res.send("OK");
+});
 // Renders 404                                                     page if the request is send to undeclared location
 server.use((req, res, next) => {
   defaultLocals(req, res);
@@ -447,7 +452,23 @@ server.use((err, req, res, next) => {
   defaultLocals(req, res);
   res.status(500).render("views/500.ejs");
 });
-server.listen(process.env.PORT, () => {
+serverSecure = https.createServer(
+  {
+    key: fs.readFileSync(
+      `${process.env.SSL_CERTIFICATE_PATH}privkey.pem`,
+      "utf8"
+    ),
+    cert: fs.readFileSync(
+      `${process.env.SSL_CERTIFICATE_PATH}fullchain.pem`,
+      "utf8"
+    ),
+  },
+  server
+);
+serverSecure.listen(443, () => {
+  console.log("Server Listening");
+});
+server.listen(80, () => {
   console.log("Server Listening");
 });
 
