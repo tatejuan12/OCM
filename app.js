@@ -461,22 +461,26 @@ server.use((err, req, res, next) => {
   defaultLocals(req, res);
   res.status(500).render("views/500.ejs");
 });
-serverSecure = proxiedHttps.createServer(
-  {
-    key: fs.readFileSync(
-      `${process.env.SSL_CERTIFICATE_PATH}privkey.pem`,
-      "utf8"
-    ),
-    cert: fs.readFileSync(
-      `${process.env.SSL_CERTIFICATE_PATH}fullchain.pem`,
-      "utf8"
-    ),
-  },
-  server
-);
-serverSecure.listen(443, () => {
-  console.log("Server Listening on Port 443");
-});
+try {
+  serverSecure = proxiedHttps.createServer(
+    {
+      key: fs.readFileSync(
+        `${process.env.SSL_CERTIFICATE_PATH}privkey.pem`,
+        "utf8"
+      ),
+      cert: fs.readFileSync(
+        `${process.env.SSL_CERTIFICATE_PATH}fullchain.pem`,
+        "utf8"
+      ),
+    },
+    server
+  );
+  serverSecure.listen(443, () => {
+    console.log("Server Listening on Port 443");
+  });
+} catch (err) {
+  console.warn("SSL not found");
+}
 server.listen(80, () => {
   console.log("Server Listening on Port 80");
 });
