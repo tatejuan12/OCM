@@ -67,7 +67,7 @@ server.use(
     },
   })
 );
-const authorizedIps = ["14.201.212.126", undefined];
+const authorizedIps = ["14.201.212.126", undefined, "1.145.188.214"];
 //! ---------------------Custom middleware--------------------------------//
 server.use((req, res, next) => {
   checkViews(req, next); // Increments session.views by one every time user interacts with website
