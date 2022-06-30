@@ -3,6 +3,7 @@
 require("dotenv").config();
 const express = require("express");
 const https = require("https");
+const proxiedHttps = require("proxywrap").proxy(https);
 const fs = require("fs");
 const bodyParser = require("body-parser");
 const path = require("path");
@@ -47,7 +48,7 @@ server.use(
     resave: false,
     saveUninitialized: false,
     //! change to secure true once hosting
-    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 30 }, // ms/s, s/m, m/h, h/d, d/mnth
+    cookie: { secure: true, maxAge: 1000 * 60 * 60 * 24 * 30 }, // ms/s, s/m, m/h, h/d, d/mnth
     store: mongoStore,
   })
 );
@@ -66,14 +67,22 @@ server.use(
     },
   })
 );
+const authorizedIps = ["14.201.212.126", undefined];
 //! ---------------------Custom middleware--------------------------------//
 server.use((req, res, next) => {
   checkViews(req, next); // Increments session.views by one every time user interacts with website
 });
-server.use((req, res, next) => {
+server.get("*", (req, res, next) => {
   res.setHeader("Cross-Origin-Embedder-Policy", "same-origin");
-  next();
+  if (
+    req.path != "/node" &&
+    !authorizedIps.includes(req.header("x-forwarded-for"))
+  ) {
+    defaultLocals(req, res);
+    res.status(404).render("views/404.ejs");
+  } else next();
 });
+
 //! ---------------------Browser endpoints--------------------------------//
 
 server.get("/", csrfProtection, async (req, res) => {
@@ -434,7 +443,7 @@ server.get("/get-account-unlisted-nfts", csrfProtection, async (req, res) => {
 
 //! ---------------------Server Essentials--------------------------------//
 server.get("/node", (req, res) => {
-  res.send("OK");
+  res.send();
 });
 // Renders 404                                                     page if the request is send to undeclared location
 server.use((req, res, next) => {
@@ -452,7 +461,7 @@ server.use((err, req, res, next) => {
   defaultLocals(req, res);
   res.status(500).render("views/500.ejs");
 });
-serverSecure = https.createServer(
+serverSecure = proxiedHttps.createServer(
   {
     key: fs.readFileSync(
       `${process.env.SSL_CERTIFICATE_PATH}privkey.pem`,
@@ -466,20 +475,20 @@ serverSecure = https.createServer(
   server
 );
 serverSecure.listen(443, () => {
-  console.log("Server Listening");
+  console.log("Server Listening on Port 443");
 });
 server.listen(80, () => {
-  console.log("Server Listening");
+  console.log("Server Listening on Port 80");
 });
 
 //! ---------------------Custom functions--------------------------------//
 function checkViews(req, next) {
   try {
-    if (!req.session.views || req.session.views == undefined)
+    if (req.session && (!req.session.views || req.session.views == undefined))
       req.session.views = 1;
     else req.session.views += 1;
   } catch (err) {
-    console.error("Error settings views:\n" + err);
+    console.error("Error settings views:" + err);
   } finally {
     next();
   }
