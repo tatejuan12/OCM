@@ -16874,7 +16874,6 @@ button .small-image {
 }
 .top-seller-inner-one .top-seller-wrapper .top-seller-content {
   margin-left: 12px;
-
 }
 @media only screen and (max-width: 479px) {
   .top-seller-inner-one .top-seller-wrapper .top-seller-content {
@@ -20264,7 +20263,6 @@ button.slide-arrow:hover.slide-arrow i {
   .upload-variant-title-wrapper p {
     width: 100%;
   }
-
 }
 .upload-variant-title-wrapper p span {
   color: var(--color-white);
@@ -23740,7 +23738,7 @@ body.active-light-mode {
     display: block;
     margin: 10px 0;
   }
-  .profile-thumbnail{
+  .profile-thumbnail {
     margin-right: 0;
   }
 }
@@ -23809,6 +23807,10 @@ body.active-light-mode {
 }
 .offerCancel:hover {
   color: #fff;
+  cursor: pointer;
+}
+.active-light-mode .offerCancel:hover {
+  color: var(--color-primary);
 }
 .expired.true {
   display: block;

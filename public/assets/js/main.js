@@ -861,6 +861,7 @@ function NFTokenCancelOffer(index) {
   });
 }
 function getRedeem(redeemElement, loadingElement, ipAddress) {
+  ipAddress = JSON.parse(ipAddress).ip;
   if (ipAddress) {
     redeemElement.classList.add("hidden");
     loadingElement.classList.remove("hidden");

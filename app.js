@@ -67,12 +67,17 @@ server.use(
     },
   })
 );
+server.use(cors("*"));
 const authorizedIps = ["14.201.212.126", undefined, "1.145.188.214"];
 //! ---------------------Custom middleware--------------------------------//
 server.use((req, res, next) => {
   checkViews(req, next); // Increments session.views by one every time user interacts with website
 });
 server.get("*", (req, res, next) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://onchainmarketplace.net/"
+  );
   res.setHeader("Cross-Origin-Embedder-Policy", "same-origin");
   if (
     req.path != "/node" &&
@@ -87,15 +92,21 @@ server.get("*", (req, res, next) => {
 
 server.get("/", csrfProtection, async (req, res) => {
   defaultLocals(req, res);
+  xumm.xrpl
+    .getTokenBalance("rNsbajT8qaLJ5WiPHR92uATzybkcSSA3h4", "XRP", "XRP")
+    .then((data) => {
+      console.log(data);
+    });
+
   res.render("views/");
 });
 server.get("/explore", csrfProtection, async (req, res) => {
+  defaultLocals(req, res);
   var nfts;
   const page = parseInt(req.query.page);
   if (!isNaN(page)) {
     nfts = await mongoClient.query.getNfts(NFTSPERPAGE, page);
 
-    defaultLocals(req, res);
     res.render("views/explore", { nfts: nfts, page: page });
   } else res.redirect("explore?page=0");
 });
@@ -134,11 +145,11 @@ server.get("/minting-help", csrfProtection, (req, res) => {
 });
 server.get("/redeem", csrfProtection, async (req, res) => {
   if (req.session.login) {
+    defaultLocals(req, res);
     const ocwBalance = await xumm.xrpl.getOcwBalance(
       req.session.wallet,
       req.useragent.isMobile
     );
-    defaultLocals(req, res);
     ocwBalance
       ? res.render("views/redeem", {
           ocwBalance: ocwBalance[0],
@@ -159,6 +170,7 @@ server.get("/profile", csrfProtection, async (req, res) => {
       wallet = req.session.wallet;
     }
   }
+  defaultLocals(req, res);
   const profile_pic = digitalOcean.functions.getProfileLink(wallet);
   nftsPromise = new Promise(function (resolve, reject) {
     const nfts = xumm.xrpl.getAccountsNfts(wallet);
@@ -183,7 +195,6 @@ server.get("/profile", csrfProtection, async (req, res) => {
     likedNftsPromise,
   ]);
   const ownerNfts = await mongoClient.query.getOwnerNfts(wallet, promises[0]);
-  defaultLocals(req, res);
   res.render("views/profile", {
     nfts: ownerNfts,
     user: promises[1],
@@ -195,14 +206,15 @@ server.get("/profile", csrfProtection, async (req, res) => {
 });
 server.get("/edit-profile", csrfProtection, async (req, res) => {
   if (req.session.login) {
+    defaultLocals(req, res);
     const profile_pic = digitalOcean.functions.getProfileLink(
       req.session.wallet
     );
-    defaultLocals(req, res);
     res.render("views/edit-profile", { profile_pic: profile_pic });
   } else res.status(401).redirect("/");
 });
 server.get("/product-details", csrfProtection, async (req, res, next) => {
+  defaultLocals(req, res);
   let nftId = req.query.id;
   nftPromise = new Promise(function (resolve, reject) {
     const nft = mongoClient.query.getNft(nftId);
@@ -213,7 +225,6 @@ server.get("/product-details", csrfProtection, async (req, res, next) => {
     resolve(nfts);
   });
   const promises = await Promise.all([nftPromise, nftsPromise]);
-  defaultLocals(req, res);
   res.render("views/product-details", {
     nft: promises[0],
     nfts: promises[1],
@@ -224,10 +235,10 @@ server.get("/create-listing", csrfProtection, (req, res) => {
   res.render("views/create-listing");
 });
 server.get("/search", csrfProtection, async (req, res) => {
+  defaultLocals(req, res);
   const searchResults = await mongoClient.query.getSearchResultsJSON(
     req.query.q
   );
-  defaultLocals(req, res);
   res.render("views/search", { res: searchResults });
 });
 
@@ -439,6 +450,18 @@ server.get("/get-account-unlisted-nfts", csrfProtection, async (req, res) => {
   res.render("views/models/unlisted-nft-rows.ejs", {
     nfts: unlistedNftsToReturn,
   });
+});
+server.get("/get-token-balance", csrfProtection, async (req, res) => {
+  const hex = req.query.hex;
+  const issuer = req.query.issuer;
+  var balance = await xumm.xrpl.getTokenBalance(
+    req.session.wallet,
+    issuer,
+    hex
+  );
+  balance = parseFloat(balance);
+  balance = balance.toFixed(2);
+  res.send(balance);
 });
 
 //! ---------------------Server Essentials--------------------------------//

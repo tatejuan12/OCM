@@ -55,13 +55,13 @@
           <img draggable="false" src="assets/images/activity/qmark600.png" id="yourNFT">
           <div class="redeemDropDown">
             <span>
-              <select name="redeem-menu" id="redeem-menu">
+              <select name="redeem-menu" id="redeem-menu" onchange="(getCurrencyBalance(this.value))">
                 <option value=false selected disabled>Select Project</option>
-                <option value="OCW">OnChain Whales</option>
-                <option value="143.198.200.122">Test Token 1</option>
+                <option value=' {"ip":"OCW","issuer": "rK9DrarGKnVEo2nYp5MfVRXRYf5yRX3mwD", "hex": "OCW"}'>OnChain Whales</option>
+                <option value=' {"ip":"143.198.200.122","issuer": "rfVTbKsRgyurPddRiWaReuiK9Tvms8XGj1" , "hex" : "58424C4144450000000000000000000000000000"}'>Test Token 1</option>
               </select>
             </span>
-            <span><% ocwBalance ? __append(ocwBalance)  : __append(0)%> OCW</span>
+            <span id="currency-balance"></span>
           </div>
           <%if (login) {%><button class="btn2" id="redeem" onclick="getRedeem(this, this.nextElementSibling, document.getElementById('redeem-menu').value);">SWAP</button> <%} else {%> <button class="btn2" id="redeem" disabled><span>SWAP</span></button><%}%>
           <!-- bellow div will give you a spinning loader anywhere on the website -->
@@ -105,6 +105,17 @@
           <script src="assets/js/vendor/savePopup.js"></script>
           <!-- main JS -->
           <script src="assets/js/main.js"></script>
+          <script>
+            function getCurrencyBalance(data) {
+              try {
+
+                data = JSON.parse(data);
+                $("#currency-balance").load(`<%=url%>get-token-balance?issuer=${data.issuer}&hex=${data.hex}`);
+              } catch (err) {
+                console.error("Couldn't parse balance");
+              }
+            }
+          </script>
 </body>
 
 </html>
