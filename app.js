@@ -92,12 +92,6 @@ server.get("*", (req, res, next) => {
 
 server.get("/", csrfProtection, async (req, res) => {
   defaultLocals(req, res);
-  xumm.xrpl
-    .getTokenBalance("rNsbajT8qaLJ5WiPHR92uATzybkcSSA3h4", "XRP", "XRP")
-    .then((data) => {
-      console.log(data);
-    });
-
   res.render("views/");
 });
 server.get("/explore", csrfProtection, async (req, res) => {
