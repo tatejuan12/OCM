@@ -21,7 +21,7 @@ const mongoClient = require("./mongo");
 const xumm = require("./xummFunctions");
 const { log } = require("console");
 const multer = require("multer");
-const upload = multer({ limits: { fieldSize: "16mb" } }); //used to get form data which for some reason bodyParser doesn't get. used for user data changing!
+const upload = multer({ limits: { fieldSize: "16mb" } }); //used to get multipart-formdata doesn't get. used for user data changing!
 const csurf = require("csurf");
 const helmet = require("helmet");
 const minifyHtml = require("express-minify-html");
@@ -68,7 +68,12 @@ server.use(
   })
 );
 server.use(cors("*"));
-const authorizedIps = ["14.201.212.126", undefined, "1.145.188.214"];
+const authorizedIps = [
+  "14.201.212.126",
+  undefined,
+  "1.145.188.214",
+  "103.231.88.10",
+];
 //! ---------------------Custom middleware--------------------------------//
 server.use((req, res, next) => {
   checkViews(req, next); // Increments session.views by one every time user interacts with website
@@ -219,10 +224,12 @@ server.get("/product-details", csrfProtection, async (req, res, next) => {
     resolve(nfts);
   });
   const promises = await Promise.all([nftPromise, nftsPromise]);
-  res.render("views/product-details", {
-    nft: promises[0],
-    nfts: promises[1],
-  });
+  if (promises[0]) {
+    res.render("views/product-details", {
+      nft: promises[0],
+      nfts: promises[1],
+    });
+  } else next();
 });
 server.get("/create-listing", csrfProtection, (req, res) => {
   defaultLocals(req, res);

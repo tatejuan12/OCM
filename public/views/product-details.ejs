@@ -389,6 +389,7 @@
         $("#profile-thumbnail-container").html(`<img src="${data[3]}" class="profile-thumbnail transition" onerror="this.src='assets/images/icons/unknown-user.png'">`)
         if (!data[4]) $("#buy-offer-btn-container").html('<button type="button" class="btn btn-primary-alta mt--30" data-bs-toggle="modal" data-bs-target="#placebidModal">Place an Offer</button>');
       })
+      currNft = '<%=nft.tokenID%>';
     </script>
 
 </body>
