@@ -17658,6 +17658,13 @@ button .small-image {
   height: 35px;
   display: flex;
   align-items: center;
+  justify-content: space-around;
+}
+.verified{
+  position: absolute;
+  right: 0;
+  margin: 5px;
+  max-width: 28px;
 }
 .product-share-wrapper .share-btn .icon {
   padding: 0;
