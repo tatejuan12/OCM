@@ -23841,3 +23841,92 @@ body.active-light-mode {
   bottom: 0;
   left: 0;
 }
+.collection-manager{
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  -webkit-box-align: center;
+  align-items: center;
+}
+.collection-manager-container{
+  max-width: 1280px;
+  padding: 28px;
+  margin: 0 auto;
+  align-items: flex-start;
+}
+.collection-manager-container .cmcH2{
+  margin-bottom: 20px;
+}
+.collection-manager-container header{
+  display: flex;
+  flex-direction: column;
+}
+.collection-manager-container button{
+  max-width: 200px;
+  margin: 20px 0;
+}
+.collection-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.collection-card{
+  display: inline-block;
+  border: 5px solid rgb(255, 255, 255);
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  padding-bottom: 20px;
+}
+.active-dark-mode .collection-card{
+  border: 5px solid var(--background-color-4);
+  background-color: var(--background-color-4);
+}
+.collection-card img{
+  border-radius: 5px;
+  overflow: hidden;
+}
+.collection-card-content{
+  margin-top: -34px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.collection-card-content .CCC-icon{
+  max-width: 64px;
+  border-radius: 50%;
+  border: 2px solid rgb(255, 255, 255);
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+.active-dark-mode .collection-card-content .CCC-icon{
+  border: 2px solid var(--background-color-4);
+}
+.CCC-collection-name{
+  margin-top: 15px;
+}
+.CCC-collection-name h4{
+  margin-bottom: 0;
+}
+.CCC-owner p{
+  font-size: 14px;
+}
+.CCC-owner a{
+  color: rgb(18, 86, 233);
+}
+.CCC-description{
+  text-align: center;
+  margin-top: 20px;
+}
+.CCC-item-count{
+  margin-top: 20px;
+}
+.collection-form{
+}
+.required-comment{
+  display: flex;
+  flex-direction: row;
+}
+.required-label{
+  color: red;
+}
