@@ -23775,6 +23775,7 @@ body.active-light-mode {
 .Oleft {
   display: flex;
   flex-direction: column;
+  max-width: 75%;
 }
 .Oleft a {
   color: var(--color-primary);
@@ -23794,6 +23795,9 @@ body.active-light-mode {
 }
 .offerType.sell {
   color: red;
+}
+#NFTID {
+  overflow-wrap: break-word;
 }
 .offerCancel {
   margin: auto 0;
