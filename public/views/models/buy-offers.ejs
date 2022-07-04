@@ -4,7 +4,7 @@
       <div class="Oleft">
         <h5 class="offerType buy">BUY</h5>
         <a href="https://xls20.bithomp.com/explorer/<%=offer.nftID%>" id="NFTID"><%=offer.nftID%></a>
-        <div class="offer-links"><a class="btn btn-primary">NFT</a><a class="btn btn-primary">Transaction</a></div>
+        <div class="offer-links"><a class="btn btn-primary" href="/product-details?id=<%=offer.ntID%>">NFT</a><a class="btn btn-primary" href="https://xls20.bithomp.com/explorer/<%=offer.nftID%>">Transaction</a></div>
         <span>Offer: <span id="offerAmount"><%=offer.price%> <span id="offerToken"><%=offer.token%></span></span></span>
         <%if (offer.token != "XRP"){%>
         <span>Offer Value: <span id="offerVal"><%=offer.xrpValue%> <span>XRP</span></span></span>

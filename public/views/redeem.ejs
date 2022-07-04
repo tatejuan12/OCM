@@ -110,7 +110,6 @@
               try {
 
                 data = JSON.parse(data);
-                console.log(data.token);
                 $("#currency-balance").load(`<%=url%>get-token-balance?issuer=${data.issuer}&hex=${data.hex}&token=${data.token}`);
               } catch (err) {
                 console.error("Couldn't parse balance");

@@ -73,6 +73,7 @@ const authorizedIps = [
   undefined,
   "1.145.188.214",
   "103.231.88.10",
+  "27.99.115.205",
 ];
 //! ---------------------Custom middleware--------------------------------//
 server.use((req, res, next) => {
