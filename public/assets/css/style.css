@@ -23841,36 +23841,36 @@ body.active-light-mode {
   bottom: 0;
   left: 0;
 }
-.collection-manager{
+.collection-manager {
   overflow: auto;
   display: flex;
   flex-direction: column;
   -webkit-box-align: center;
   align-items: center;
 }
-.collection-manager-container{
+.collection-manager-container {
   max-width: 1280px;
   padding: 28px;
   margin: 0 auto;
   align-items: flex-start;
 }
-.collection-manager-container .cmcH2{
+.collection-manager-container .cmcH2 {
   margin-bottom: 20px;
 }
-.collection-manager-container header{
+.collection-manager-container header {
   display: flex;
   flex-direction: column;
 }
-.collection-manager-container button{
+.collection-manager-container button {
   max-width: 200px;
   margin: 20px 0;
 }
-.collection-grid{
+.collection-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
-.collection-card{
+.collection-card {
   display: inline-block;
   border: 5px solid rgb(255, 255, 255);
   background-color: rgb(255, 255, 255);
@@ -23879,54 +23879,94 @@ body.active-light-mode {
   width: 100%;
   padding-bottom: 20px;
 }
-.active-dark-mode .collection-card{
+.active-dark-mode .collection-card {
   border: 5px solid var(--background-color-4);
   background-color: var(--background-color-4);
 }
-.collection-card img{
+.collection-card img {
   border-radius: 5px;
   overflow: hidden;
 }
-.collection-card-content{
+.collection-card-content {
   margin-top: -34px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.collection-card-content .CCC-icon{
+.collection-card-content .CCC-icon {
   max-width: 64px;
   border-radius: 50%;
   border: 2px solid rgb(255, 255, 255);
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
-.active-dark-mode .collection-card-content .CCC-icon{
+.active-dark-mode .collection-card-content .CCC-icon {
   border: 2px solid var(--background-color-4);
 }
-.CCC-collection-name{
+.CCC-collection-name {
   margin-top: 15px;
 }
-.CCC-collection-name h4{
+.CCC-collection-name h4 {
   margin-bottom: 0;
 }
-.CCC-owner p{
+.CCC-owner p {
   font-size: 14px;
 }
-.CCC-owner a{
+.CCC-owner a {
   color: rgb(18, 86, 233);
 }
-.CCC-description{
+.CCC-description {
   text-align: center;
   margin-top: 20px;
 }
-.CCC-item-count{
+.CCC-item-count {
   margin-top: 20px;
 }
-.collection-form{
+.collection-form {
 }
-.required-comment{
+.required-comment {
   display: flex;
   flex-direction: row;
 }
-.required-label{
+.required-label {
   color: red;
+}
+.loader-data {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  position: relative;
+  animation: rotate 1s linear infinite;
+}
+.loader-data::before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  inset: 0px;
+  border-radius: 50%;
+  border: 5px solid #fff;
+  animation: prixClipFix 2s linear infinite;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes prixClipFix {
+  0% {
+    clip-path: polygon(50% 50%, 0 0, 0 0, 0 0, 0 0, 0 0);
+  }
+  25% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 0, 100% 0, 100% 0);
+  }
+  50% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 100% 100%, 100% 100%);
+  }
+  75% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 100%);
+  }
+  100% {
+    clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0);
+  }
 }

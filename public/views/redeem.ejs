@@ -55,13 +55,15 @@
           <img draggable="false" src="assets/images/activity/qmark600.png" id="yourNFT">
           <div class="redeemDropDown">
             <span>
-              <select name="redeem-menu" id="redeem-menu" onchange="(getCurrencyBalance(this.value))">
+              <select name="redeem-menu" id="redeem-menu" onchange="setLoaderBalance();(getCurrencyBalance(this.value))">
                 <option value=false selected disabled>Select Project</option>
                 <option value=' {"ip":"OCW","issuer": "rK9DrarGKnVEo2nYp5MfVRXRYf5yRX3mwD", "hex": "OCW", "token": "OCW"}'>OnChain Whales</option>
                 <option value=' {"ip":"143.198.200.122","issuer": "rfVTbKsRgyurPddRiWaReuiK9Tvms8XGj1" , "hex" : "58424C4144450000000000000000000000000000", "token": "XBLADE"}'>Test Token 1</option>
               </select>
             </span>
-            <span id="currency-balance"></span>
+            <span id="currency-balance">
+
+            </span>
           </div>
           <%if (login) {%><button class="btn2" id="redeem" onclick="getRedeem(this, this.nextElementSibling, document.getElementById('redeem-menu').value);">SWAP</button> <%} else {%> <button class="btn2" id="redeem" disabled><span>SWAP</span></button><%}%>
           <!-- bellow div will give you a spinning loader anywhere on the website -->
@@ -106,6 +108,10 @@
           <!-- main JS -->
           <script src="assets/js/main.js"></script>
           <script>
+            function setLoaderBalance() {
+              $("#currency-balance").html("<div class='loader-data'></div>");
+            }
+
             function getCurrencyBalance(data) {
               try {
 

@@ -74,6 +74,7 @@ const authorizedIps = [
   "1.145.188.214",
   "103.231.88.10",
   "27.99.115.205",
+  "220.235.196.107",
 ];
 //! ---------------------Custom middleware--------------------------------//
 server.use((req, res, next) => {
@@ -471,6 +472,7 @@ server.get("/get-token-balance", csrfProtection, async (req, res) => {
     hex
   );
   balance = parseFloat(balance);
+  if (isNaN(balance)) balance = 0;
   balance = balance.toFixed(2);
   res.send(balance + " " + token);
 });
