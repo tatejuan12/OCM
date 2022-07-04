@@ -23799,6 +23799,17 @@ body.active-light-mode {
 #NFTID {
   overflow-wrap: break-word;
 }
+.offer-links {
+  text-align: center;
+  margin: 10px 0 10px 0;
+}
+.offer-links > * {
+  color: var(--color-white) !important;
+}
+.offer-links > :nth-child(1) {
+  margin-right: 10px;
+}
+
 .offerCancel {
   margin: auto 0;
   align-items: center;

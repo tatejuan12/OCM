@@ -57,8 +57,8 @@
             <span>
               <select name="redeem-menu" id="redeem-menu" onchange="(getCurrencyBalance(this.value))">
                 <option value=false selected disabled>Select Project</option>
-                <option value=' {"ip":"OCW","issuer": "rK9DrarGKnVEo2nYp5MfVRXRYf5yRX3mwD", "hex": "OCW"}'>OnChain Whales</option>
-                <option value=' {"ip":"143.198.200.122","issuer": "rfVTbKsRgyurPddRiWaReuiK9Tvms8XGj1" , "hex" : "58424C4144450000000000000000000000000000"}'>Test Token 1</option>
+                <option value=' {"ip":"OCW","issuer": "rK9DrarGKnVEo2nYp5MfVRXRYf5yRX3mwD", "hex": "OCW", "token": "OCW"}'>OnChain Whales</option>
+                <option value=' {"ip":"143.198.200.122","issuer": "rfVTbKsRgyurPddRiWaReuiK9Tvms8XGj1" , "hex" : "58424C4144450000000000000000000000000000", "token": "XBLADE"}'>Test Token 1</option>
               </select>
             </span>
             <span id="currency-balance"></span>
@@ -110,7 +110,8 @@
               try {
 
                 data = JSON.parse(data);
-                $("#currency-balance").load(`<%=url%>get-token-balance?issuer=${data.issuer}&hex=${data.hex}`);
+                console.log(data.token);
+                $("#currency-balance").load(`<%=url%>get-token-balance?issuer=${data.issuer}&hex=${data.hex}&token=${data.token}`);
               } catch (err) {
                 console.error("Couldn't parse balance");
               }

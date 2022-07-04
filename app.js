@@ -455,6 +455,7 @@ server.get("/get-account-unlisted-nfts", csrfProtection, async (req, res) => {
 server.get("/get-token-balance", csrfProtection, async (req, res) => {
   const hex = req.query.hex;
   const issuer = req.query.issuer;
+  const token = req.query.token;
   var balance = await xumm.xrpl.getTokenBalance(
     req.session.wallet,
     issuer,
@@ -462,7 +463,7 @@ server.get("/get-token-balance", csrfProtection, async (req, res) => {
   );
   balance = parseFloat(balance);
   balance = balance.toFixed(2);
-  res.send(balance);
+  res.send(balance + " " + token);
 });
 
 //! ---------------------Server Essentials--------------------------------//
