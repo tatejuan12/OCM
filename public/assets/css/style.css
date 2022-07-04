@@ -23860,6 +23860,7 @@ body.active-light-mode {
 .collection-manager-container header {
   display: flex;
   flex-direction: column;
+  margin-bottom: 20px;
 }
 .collection-manager-container button {
   max-width: 200px;
