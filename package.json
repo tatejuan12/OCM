@@ -3,8 +3,8 @@
   "description": "OCW Website",
   "main": "/app.js",
   "scripts": {
-    "start": "sudo node app.js",
-    "watch": "sudo nodemon --exec 'npm start' --ignore 'logs/' --ignore 'main.js'"
+    "start": "node app.js",
+    "watch": "nodemon --exec 'npm start' --ignore 'logs/' --ignore 'main.js'"
   },
   "dependencies": {
     "aws-sdk": "^2.1142.0",
@@ -13,7 +13,7 @@
     "csurf": "^1.11.0",
     "dotenv": "^8.6.0",
     "ejs": "^3.1.6",
-    "express": "^4.17.3",
+    "express": "^4.18.1",
     "express-logger": "^0.0.3",
     "express-minify-html": "^0.12.0",
     "express-session": "^1.17.2",

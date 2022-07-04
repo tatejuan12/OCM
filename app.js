@@ -125,6 +125,14 @@ server.get("/collection", csrfProtection, (req, res) => {
   defaultLocals(req, res);
   res.render("views/collection");
 });
+server.get("/collections", csrfProtection, (req, res) => {
+  defaultLocals(req, res);
+  res.render("views/collections");
+});
+server.get("/create-collection", csrfProtection, (req, res) => {
+  defaultLocals(req, res);
+  res.render("views/create-collection");
+});
 server.get("/logout", csrfProtection, (req, res) => {
   req.session.destroy();
   defaultLocals(req, res);

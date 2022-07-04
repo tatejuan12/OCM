@@ -33,6 +33,7 @@
         <a href="<%login ? __append("profile") : __append('#')%>" <%if (!login) __append("onclick=\"customAlert.alert('Connect Wallet to View Profile')\"")%>>Account</a>
         <ul class="submenu">
           <li><a href="<%login ? __append("profile") : __append('#')%>" <%if (!login) __append("onclick=\"customAlert.alert('Connect Wallet to View Profile')\"")%>>Account</a></li>
+          <li><a href="collections">My Collections</a></li>
           <li><a href="<%login ? __append("edit-profile") : __append('#')%>" <%if (!login) __append("onclick=\"customAlert.alert('Connect Wallet to Update Profile')\"")%>>Update Profile</a></li>
         </ul>
       </li>
