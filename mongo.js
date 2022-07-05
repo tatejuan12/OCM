@@ -393,6 +393,7 @@ var methods = {
           NFTokenID: NFTokenID,
           knownHolder: wallet,
           dateAdded: new Date(),
+          issuer: issuer,
           duration: {
             permanent: permanent,
             paidHolder: payholder,
