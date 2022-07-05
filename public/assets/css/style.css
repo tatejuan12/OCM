@@ -17666,6 +17666,13 @@ button .small-image {
   margin: 5px;
   max-width: 28px;
 }
+.stakeable{
+  position: absolute;
+  right: 0;
+  top: 33px;
+  margin: 5px;
+  max-width: 28px;
+}
 .product-share-wrapper .share-btn .icon {
   padding: 0;
   margin: 0;
