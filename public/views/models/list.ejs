@@ -12,25 +12,23 @@
         <div class="LIInner">
           <div class="autofills">
             <label for="tokenID">Token ID:&nbsp;</label>
-            <input type="text" id="LIInput tokenID" readonly>
+            <input type="text" id="tokenID" readonly>
             <label for="issuer">Issuer:&nbsp;</label>
-            <input type="text" id="LIInput issuer" readonly>
+            <input type="text" id="issuer" readonly>
             <label for="taxon">TAXON:&nbsp;</label>
-            <input type="text" id="LIInput taxon" readonly>
+            <input type="text" id="taxon" readonly>
             <label for="currentHolder">Current Holder:&nbsp;</label>
-            <input type="text" id="LIInput currentHolder" readonly>
+            <input type="text" id="currentHolder" readonly>
           </div>
           <div class="monies">
-            <label for="price">List Price (XRP):&nbsp;</label>
-            <input type="number" id="price">
-            <p class="finePrint">*optional, leave blank to list on open market.</p>
+            <p class="finePrint">*Should take 5 minutes, but please allow up to 3 hours for the nft to be listed</p>
           </div>
         </div>
       </div>
       <div class="listButtons">
         <img class="qmark" onmouseover="peekaboo()" onmouseleave="peekaboo()" src="assets/images/icons/question-circle-solid.svg" alt="information hover">
-        <button class="listButton">Temporary Listing</button>
-        <button class="listButton">Permanent Listing</button>
+        <button class="listButton" onclick="getListNft(0.5)">Temporary Listing</button>
+        <button class="listButton" onclick="getListNft(1)">Permanent Listing</button>
       </div>
       <div class="aboutListing" id="aboutListing">
         <p class="finePrint"><strong>Permanent</strong>: 2 XRP fee. This item will live permanently in our database. <br>
@@ -47,10 +45,19 @@
 
 
     function closeModal() {
-      var box = document.getElementById("listItem")
+      var box = document.getElementById("listItem");
       //   var overlay = document.querySelectorAll("modal-backdrop")
-      box.toggleAttribute("show")
-      //   overlay.toggleAttribute("show")
+      $('#listItem').hide("fast", "linear");
     }
+
+    function populateListNft(data) {
+      $('#tokenID').val(data.NFTokenID);
+      $('#issuer').val(data.issuer);
+      $('#taxon').val(data.taxon);
+      $('#currentHolder').val(data.currentHolder);
+      $('#yourNFT').attr("src", data.image);
+      $('#listItem').show("fast", "linear");
+    }
+    $
   </script>
 </div>

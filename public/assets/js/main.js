@@ -903,3 +903,30 @@ function decrementLike(nftId, DOM) {
     },
   });
 }
+
+function getListNft(fee) {
+  const NFTokenID = $("#tokenID").val();
+  const issuer = $("#issuer").val();
+  $.ajax({
+    type: "POST",
+    url: "/list-nft-payload",
+    data: {
+      return_url: window.location.href,
+      fee: fee,
+      NFTokenID: NFTokenID,
+      issuer: issuer,
+    },
+    success: function (result) {
+      window.location.href = result.payload.next.always;
+      $.ajax({
+        type: "POST",
+        url: "/list-nft-subscription",
+        data: result,
+
+        error: function (resulty) {
+          console.warn("Payment in expired, failed or was cancelled.");
+        },
+      });
+    },
+  });
+}

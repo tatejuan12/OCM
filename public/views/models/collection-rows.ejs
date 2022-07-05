@@ -1,6 +1,6 @@
-  <div class="row g-5 " id="exploreSection">
+  <div class="collection-grid " id="exploreSection">
     <!-- Product -->
     <% collections.forEach(function(res){%>
-    <%- include('collection-card.ejs', {collection:res})%>
+    <%- include('collections-card.ejs', {collection:res})%>
     <%}); %>
   </div>

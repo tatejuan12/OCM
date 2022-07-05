@@ -9,7 +9,6 @@ const xrpl = require("xrpl");
 const { json } = require("express/lib/response");
 const https = require("https");
 const http = require("http");
-
 var payloads = {
   NFTokenCreateOffer: async function (NFToken, value, mobile, return_url) {
     const nftOwner = await xrpls.getcurrentNftHolder(NFToken);
@@ -281,6 +280,39 @@ var payloads = {
       await client.disconnect();
     }
   },
+  listNftPayload: async function (
+    address,
+    ownAddress,
+    fee,
+    mobile,
+    return_url
+  ) {
+    const reserve = await getXrplReserve();
+    const paymentAmount = (fee * reserve * 1000000).toString();
+    const request = {
+      options: {
+        submit: true,
+        expire: 240,
+      },
+      txjson: {
+        TransactionType: "Payment",
+        Account: ownAddress,
+        Destination: address,
+        Amount: paymentAmount,
+      },
+    };
+    if (mobile)
+      request.options["return_url"] = {
+        app: return_url,
+      };
+    else
+      request.options["return_url"] = {
+        web: return_url,
+      };
+    const payload = await getPayload(request);
+    console.log(payload);
+    return payload;
+  },
 };
 var subscriptions = {
   transactionSubscription: async function () {
@@ -372,6 +404,25 @@ var subscriptions = {
           return true;
         }
       });
+    } catch (error) {
+      console.error("There was an error with the payload: \n" + error);
+    }
+  },
+  listNftSubscription: async function (req, res) {
+    var subscription = false;
+    var promise = new Promise(function (resolve) {
+      subscription = sdk.payload.subscribe(req.body.payload, (event) => {
+        if (event.data.signed) {
+          console.log("signed");
+          resolve("signed");
+        } else if (event.data.signed == false) {
+          res.status(401).send(false);
+          resolve(false);
+        }
+      });
+    });
+    try {
+      return await promise;
     } catch (error) {
       console.error("There was an error with the payload: \n" + error);
     }
@@ -996,26 +1047,7 @@ var xrpls = {
       await client.disconnect();
     }
   },
-  getXrplReserve: async function () {
-    try {
-      const client = getXrplClient();
-      //GET LEDGER RESERVE
-      var serverstate = await client.request({
-        command: "server_state",
-        ledger_index: "validated",
-      });
 
-      var reserve =
-        Number(serverstate.result.state.validated_ledger.reserve_inc) / 1000000;
-
-      return reserve;
-    } catch (error) {
-      console.log(error);
-      return null;
-    } finally {
-      await client.disconnect();
-    }
-  },
   getOcwBalance: async function (address) {
     const client = await getXrplClientMain();
     try {
@@ -1193,8 +1225,9 @@ var xrpls = {
     }
   },
 };
-function getPayload(request) {
-  const payload = sdk.payload.create(request);
+async function getPayload(request) {
+  console.log(request);
+  const payload = await sdk.payload.create(request);
   return payload;
 }
 async function getXrplClientMain() {
@@ -1306,7 +1339,26 @@ async function sendRequestRedeem(ipAddress, address) {
   console.log(await promiseRequest);
   return promiseRequest;
 }
+async function getXrplReserve() {
+  const client = await getXrplClient();
+  try {
+    //GET LEDGER RESERVE
+    var serverstate = await client.request({
+      command: "server_state",
+      ledger_index: "validated",
+    });
 
+    var reserve =
+      Number(serverstate.result.state.validated_ledger.reserve_inc) / 1000000;
+
+    return reserve;
+  } catch (error) {
+    console.log(error);
+    return null;
+  } finally {
+    await client.disconnect();
+  }
+}
 exports.payloads = payloads;
 exports.subscriptions = subscriptions;
 exports.xrpl = xrpls;

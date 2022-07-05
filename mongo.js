@@ -358,6 +358,57 @@ var methods = {
       return res;
     }
   },
+  getCollections: async function () {
+    var result;
+    const client = await getClient();
+    if (!client) return;
+    try {
+      const db = client.db("Additional-Traits");
+
+      let collection = db.collection("Collections");
+
+      let res = await collection.find();
+      const array = await res.toArray();
+
+      return array;
+    } catch (err) {
+      console.log("Database error" + err);
+    } finally {
+      client.close();
+    }
+  },
+  addNftToQueried: async function (NFTokenID, wallet, permanent) {
+    var checker = false;
+    const client = await getClient();
+    var payholder = null;
+    if (permanent) payholder = wallet;
+    if (!client) return;
+    try {
+      const db = client.db("NFTokens");
+
+      let collection = db.collection("Queued-Listings");
+      const exists = await listQueryExistsChecker(NFTokenID);
+      if (!exists) {
+        let query = {
+          NFTokenID: NFTokenID,
+          knownHolder: wallet,
+          dateAdded: new Date(),
+          duration: {
+            permanent: permanent,
+            paidHolder: payholder,
+          },
+        };
+
+        let res = await collection.insertOne(query);
+
+        return;
+      }
+    } catch (err) {
+      console.log("Database error" + err);
+    } finally {
+      client.close();
+    }
+  },
 };
 
 async function alreadyLiked(collection, id, wallet) {
@@ -394,6 +445,28 @@ async function userExistsChecker(wallet) {
     //Make a check later on for inelegible-accounts
     let query = {
       wallet: wallet,
+    };
+
+    let res = await collection.count(query);
+
+    return res > 0 ? true : false;
+  } catch (err) {
+    console.log("Database error" + err);
+  } finally {
+    client.close();
+  }
+}
+async function listQueryExistsChecker(NFTokenID) {
+  var checker = false;
+  const client = await getClient();
+  if (!client) return;
+  try {
+    const db = client.db("NFTokens");
+
+    let collection = db.collection("Queued-Listings");
+
+    let query = {
+      NFTokenID: NFTokenID,
     };
 
     let res = await collection.count(query);

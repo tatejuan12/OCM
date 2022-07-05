@@ -17658,6 +17658,20 @@ button .small-image {
   height: 35px;
   display: flex;
   align-items: center;
+  justify-content: space-around;
+}
+.verified {
+  position: absolute;
+  right: 0;
+  margin: 5px;
+  max-width: 28px;
+}
+.stakeable {
+  position: absolute;
+  right: 0;
+  top: 33px;
+  margin: 5px;
+  max-width: 28px;
 }
 .product-share-wrapper .share-btn .icon {
   padding: 0;
@@ -23155,7 +23169,7 @@ body.active-light-mode {
 /*# sourceMappingURL=../maps/style.css.map */
 
 .finePrint {
-  font-size: 10px;
+  font-size: 15px;
 }
 
 /*==============ABOUT==============*/
@@ -23870,6 +23884,13 @@ body.active-light-mode {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
+}
+@media only screen and (max-width: 768px) and (max-width: 991px) {
+  .collection-grid {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
 }
 .collection-card {
   display: inline-block;

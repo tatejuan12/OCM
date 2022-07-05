@@ -7,10 +7,8 @@
     <div class="card-thumbnail">
       <img draggable="false" src="<%= nft.http_image %> " alt="NFT_portfolio" />
       <% if(owner) {%>
-      <a class="btn btn-primary">List NFT</a>
-      <%- include('list.ejs', {nft: nft}) -%>
-      <% } %>
-
+      <a class="btn btn-primary nft-list-btn" onclick='populateListNft( {"NFTokenID": "<%=nft.NFTokenID%>" , "issuer" : "<%=nft.issuer%>" , "taxon" : "<%=nft.taxon%>" , "currentHolder" : "<%=nft.currentHolder%>", "image":"<%=nft.http_image%>" })'>List NFT</a>
+      <%}%>
     </div>
     <div class="product-share-wrapper">
       <div class="share-btn share-btn-activation dropdown">
@@ -27,11 +25,12 @@
           <button type="button" class="btn-setting-text report-text" onclick="setCurrNft(this)" data-bs-toggle="modal" data-bs-target="#reportModal">
             Report
           </button>
-          <input type="hidden" class="token-id" value="<%=nft.NFTokenID%>">
+          <input type="hidden" class="list-data">
         </div>
       </div>
     </div>
     <a href="https://xls20.bithomp.com/explorer/<%=nft.NFTokenID%>"><span class="product-name"><%= nft.name %></span></a>
+    </div>
   </div>
-</div>
-<!-- end single product -->
+
+  <!-- end single product -->
