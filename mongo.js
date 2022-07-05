@@ -380,8 +380,7 @@ var methods = {
   addNftToQueried: async function (NFTokenID, wallet, permanent) {
     var checker = false;
     const client = await getClient();
-    var payholder = null;
-    if (permanent) payholder = wallet;
+    var payholder = wallet;
     if (!client) return;
     try {
       const db = client.db("NFTokens");
