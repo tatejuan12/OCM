@@ -292,7 +292,7 @@
     <%- include('sections/popup-modal.ejs') -%>
     <%#if (!isOwner){%>
     <!-- PLACE BID MODAL -->
-    <div class="rn-popup-modal placebid-modal-wrapper modal fade" id="placebidModal" tabindex="-1" aria-hidden="true">
+    <div class="rn-popup-modal placebid-modal-wrapper modal fade" id="placebidModal" tabindex="-1" aria-hidden="true" >
       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i data-feather="x"></i></button>
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
@@ -313,12 +313,12 @@
 
                 <div class="bid-content-mid">
                   <div class="bid-content-left">
-                    <span>Your Balance</span>
+                    <span><strong>Your Balance</strong></span>
                     <!-- <span>Service fee</span> -->
                     <span>Total bid amount</span>
                   </div>
-                  <div class="bid-content-right">
-                    <span>connected wallet xrp or currency amount held</span>
+                  <div class="bid-content-right" onload="getCurrencyBalance()">
+                    <span id="walletBalance" value='{"issuer": "XRP", "hex": "XRP", "token": "XRP"}'></span>
                     <!-- <span id="serviceFee">2 XRP</span> -->
                     <span id="sum">
                       <!-- 
@@ -391,6 +391,14 @@
         if (!data[4]) $("#buy-offer-btn-container").html('<button type="button" class="btn btn-primary-alta mt--30" data-bs-toggle="modal" data-bs-target="#placebidModal">Place an Offer</button>');
       })
       currNft = '<%=nft.tokenID%>';
+
+      function getCurrencyBalance() {
+              try {
+                $("#walletBalance").load(`<%=url%>get-token-balance?issuer="XRP"&hex="XRP"&token="XRP"`);
+              } catch (err) {
+                console.error("Couldn't parse balance");
+              }
+            }
     </script>
 
 </body>
