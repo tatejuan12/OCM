@@ -50,13 +50,13 @@
     <div class="container">
       <div class="row align-items-center">
         <div class="col-lg-6 col-md-6 col-12">
-          <h5 class="title text-center text-md-start">Explore Filter</h5>
+          <h5 class="title text-center text-md-start">Explore</h5>
         </div>
         <div class="col-lg-6 col-md-6 col-12">
           <ul class="breadcrumb-list">
             <li class="item"><a href="">Home</a></li>
             <li class="separator"><i class="feather-chevron-right"></i></li>
-            <li class="item current">Explore With Filter</li>
+            <li class="item current">Explore</li>
           </ul>
         </div>
       </div>
@@ -82,17 +82,33 @@
           <div class="filter-select-option">
             <label class="filter-leble">LIKES</label>
             <select>
-              <option data-display="Most liked">Most liked</option>
+              <option data-display="Likes">Likes</option>
+              <option value="1">Most liked</option>
               <option value="1">Least liked</option>
             </select>
           </div>
-
           <div class="filter-select-option">
             <label class="filter-leble">Brand</label>
             <select>
-              <option data-display="Category">Brand</option>
+              <option data-display="Select Brand">Select Brand</option>
               <option value="1">OCW</option>
               <option value="2">XBLADE</option>
+            </select>
+          </div>
+          <div class="filter-select-option">
+            <label class="filter-leble">Extras</label>
+            <select>
+              <option data-display="Select Option">Select Option</option>
+              <option value="1">Verified</option>
+              <option value="2">Staykable</option>
+            </select>
+          </div>
+          <div class="filter-select-option">
+            <label class="filter-leble">Collection</label>
+            <select>
+              <option data-display="Select Collection">Select Collection</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
             </select>
           </div>
           <!--Print here other filter options upon MongoDB query in relation to selected brand-->
@@ -102,12 +118,12 @@
             <label class="filter-leble">Price Range</label>
             <div class="price_filter s-filter clear">
               <form action="#" method="GET">
-                <div id="slider-range"></div>
                 <div class="slider__range--output">
+                  <div class="price-filter-input-wrap">
+                    <input type="number" placeholder="min" max="999999">
+                    <input type="number" placeholder="max" max="1000000">
+                  </div>
                   <div class="price__output--wrap">
-                    <div class="price--output">
-                      <span>Price :</span><input type="text" id="amount" readonly>
-                    </div>
                     <div class="price--filter">
                       <a class="btn btn-primary btn-small" href="#">Filter</a>
                     </div>

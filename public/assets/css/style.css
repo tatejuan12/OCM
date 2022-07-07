@@ -14003,6 +14003,7 @@ button.btn.btn-large {
 .price__output--wrap {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
 }
 .price__output--wrap .price--output {
   display: flex;
@@ -14034,6 +14035,24 @@ button.btn.btn-large {
   text-transform: uppercase;
   border-radius: 6px;
   line-height: 16px;
+}
+.price-filter-input-wrap{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.price-filter-input-wrap input{
+  max-width: 70px;
+  margin: 0;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #fff;
+}
+.price-filter-input-wrap input:first-of-type{
+  margin-right: 15px;
+}
+.price-filter-input-wrap input:focus{
+  border: 2px solid #000;
 }
 
 /*-------------------------
