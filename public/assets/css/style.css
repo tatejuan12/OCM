@@ -16049,8 +16049,8 @@ xclip
 .rn-service-one .inner .icon {
   position: absolute;
   z-index: 2;
-  right: -15px;
-  top: -30px;
+  right: -50px;
+  top: -80px;
 }
 @media only screen and (max-width: 767px) {
   .rn-service-one .inner .icon {
@@ -16066,7 +16066,7 @@ xclip
   transition: var(--transition);
 }
 .rn-service-one .inner .icon img {
-  max-height: 85px;
+  max-width: 200px;
 }
 @media only screen and (max-width: 767px) {
   .rn-service-one .inner .icon img {
