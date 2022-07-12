@@ -135,12 +135,15 @@ server.get("/collection", speedLimiter, (req, res) => {
 });
 server.get("/collections", speedLimiter, async (req, res) => {
   const collections = await mongoClient.query.getCollections();
-  var collectionName;
+  var collectionName = collections.collectionTitle;
   const collection_logo = digitalOcean.functions.getCollectionLogoLink(collectionName);
   const collection_banner = digitalOcean.functions.getCollectionBannerLink(collectionName);
-  const collection_thumb = digitalOcean.functions.getCollectionThumbLink(collectionName);
   defaultLocals(req, res);
-  res.render("views/collections", { collections: collections });
+  res.render("views/collections", { 
+    collections: collections,
+    collection_logo: collection_logo,
+    collection_banner: collection_banner
+   });
 });
 server.get("/create-collection", speedLimiter, (req, res) => {
   defaultLocals(req, res);

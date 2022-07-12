@@ -98,13 +98,6 @@ var methods = {
       collectionName +
       "_logo.png"
     );
-  },
-  getCollectionThumbLink: function (collectionName) {
-    return(
-      "https://ocw-space.sgp1.digitaloceanspaces.com/collections/thumbnail/" +
-      collectionName +
-      "_thumb.png"
-    )
   }
 };
 exports.functions = methods;
