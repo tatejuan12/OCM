@@ -23927,6 +23927,7 @@ body.active-light-mode {
 .collection-card img {
   border-radius: 5px;
   overflow: hidden;
+  max-height: 150px;
 }
 .collection-card-content {
   margin-top: -34px;

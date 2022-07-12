@@ -37,7 +37,7 @@ const speedLimiter = slowDown({
   delayAfter: 100,
   delayMs: 500,
 });
-const NFTSPERPAGE = 10;
+const NFTSPERPAGE = 25;
 //! ---------------------Imported middleware--------------------------------//
 const server = express();
 
@@ -81,7 +81,7 @@ const authorizedIps = [
   "1.145.188.214",
   "103.231.88.10",
   "27.99.115.205",
-  "220.235.196.107",
+  "220.235.196.107"
 ];
 //! ---------------------Custom middleware--------------------------------//
 server.use((req, res, next) => {
@@ -135,6 +135,10 @@ server.get("/collection", speedLimiter, (req, res) => {
 });
 server.get("/collections", speedLimiter, async (req, res) => {
   const collections = await mongoClient.query.getCollections();
+  var collectionName;
+  const collection_logo = digitalOcean.functions.getCollectionLogoLink(collectionName);
+  const collection_banner = digitalOcean.functions.getCollectionBannerLink(collectionName);
+  const collection_thumb = digitalOcean.functions.getCollectionThumbLink(collectionName);
   defaultLocals(req, res);
   res.render("views/collections", { collections: collections });
 });
