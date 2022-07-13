@@ -1,0 +1,5 @@
+<div class="collection-grid">
+    <% collections.forEach(function(res){%>
+        <%- include('collections-card.ejs', {collections:res})%>
+        <%}); %>
+</div>

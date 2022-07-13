@@ -1,22 +1,22 @@
 <div class="collection-card" data-sal="slide-up" data-sal-delay="150" data-sal-duration="800">
     <a href="">
-        <img src="assets/images/artcards/1.png" alt="">
+        <img src="<%=collection_banner%> " alt="">
+        <div class="collection-card-content">
+            <div class="CCC-logo">
+                <img src="<%=collection_logo%>" alt="" class="CCC-icon"> 
+            </div>
+            <div class="CCC-collection-name">
+                <h4><%=collections.collectionTitle %> </h4>
+            </div>
+            <div class="CCC-owner">
+                <p>by <a href="<%=collections.link%>"><%=collections.brand%></a></p>
+            </div>
+            <div class="CCC-description">
+                <p><%= collections.description %> </p>
+            </div>
+            <div class="CCC-item-count">
+                <p><%= collections.items %>  items</p>
+            </div>
+        </div>
     </a>
-    <div class="collection-card-content">
-        <div class="CCC-logo">
-            <img src="assets/images/icons/unknown-user.png" alt="" class="CCC-icon">
-        </div>
-        <div class="CCC-collection-name">
-            <h4>Common Whales</h4>
-        </div>
-        <div class="CCC-owner">
-            <p>by <a href="">OnChain Whales</a></p>
-        </div>
-        <div class="CCC-description">
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, rerum.</p>
-        </div>
-        <div class="CCC-item-count">
-            <p>36,000 items</p>
-        </div>
-    </div>
 </div>

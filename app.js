@@ -37,7 +37,7 @@ const speedLimiter = slowDown({
   delayAfter: 100,
   delayMs: 500,
 });
-const NFTSPERPAGE = 10;
+const NFTSPERPAGE = 25;
 //! ---------------------Imported middleware--------------------------------//
 const server = express();
 
@@ -82,10 +82,6 @@ const authorizedIps = [
   "103.231.88.10",
   "27.99.115.205",
   "220.235.196.107",
-  "116.206.228.203",
-  "139.218.13.37",
-  "110.174.79.19", //Liam personal
-  "120.153.69.11" //jordy personal
 ];
 //! ---------------------Custom middleware--------------------------------//
 server.use((req, res, next) => {
@@ -156,8 +152,17 @@ server.get("/collection", speedLimiter, (req, res) => {
 });
 server.get("/collections", speedLimiter, async (req, res) => {
   const collections = await mongoClient.query.getCollections();
+  var collectionName = await mongoClient.query.getCollections().collectionTitle;
+  const collection_logo =
+    digitalOcean.functions.getCollectionLogoLink(collectionName);
+  const collection_banner =
+    digitalOcean.functions.getCollectionBannerLink(collectionName);
   defaultLocals(req, res);
-  res.render("views/collections", { collections: collections });
+  res.render("views/collections", {
+    collections: collections,
+    collection_logo: collection_logo,
+    collection_banner: collection_banner,
+  });
 });
 server.get("/create-collection", speedLimiter, (req, res) => {
   defaultLocals(req, res);

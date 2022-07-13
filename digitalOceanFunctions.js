@@ -85,5 +85,19 @@ var methods = {
       "_cover.png"
     );
   },
+  getCollectionBannerLink: function (collectionName) {
+    return (
+      "https://ocw-space.sgp1.digitaloceanspaces.com/collections/banner/" +
+      collectionName +
+      "_banner.png"
+    );
+  },
+  getCollectionLogoLink: function (collectionName) {
+    return(
+      "https://ocw-space.sgp1.digitaloceanspaces.com/collections/logo/"+
+      collectionName +
+      "_logo.png"
+    );
+  }
 };
 exports.functions = methods;
