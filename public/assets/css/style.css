@@ -17513,7 +17513,7 @@ button .small-image {
   position: relative;
 }
 .product-style-one.with-placeBid .card-thumbnail img {
-  max-height: 500px;
+  max-height: 250px;
 }
 .product-style-one.with-placeBid .card-thumbnail a.btn,
 .product-style-one.with-placeBid .card-thumbnail span.btn {

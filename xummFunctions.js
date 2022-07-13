@@ -310,7 +310,6 @@ var payloads = {
         web: return_url,
       };
     const payload = await getPayload(request);
-    console.log(payload);
     return payload;
   },
 };
@@ -1226,7 +1225,6 @@ var xrpls = {
   },
 };
 async function getPayload(request) {
-  console.log(request);
   const payload = await sdk.payload.create(request);
   return payload;
 }

@@ -377,7 +377,7 @@ var methods = {
       client.close();
     }
   },
-  addNftToQueried: async function (NFTokenID, wallet, permanent) {
+  addNftToQueried: async function (NFTokenID, wallet, permanent, issuer) {
     var checker = false;
     const client = await getClient();
     var payholder = wallet;
@@ -403,6 +403,25 @@ var methods = {
 
         return;
       }
+    } catch (err) {
+      console.log("Database error: " + err);
+    } finally {
+      client.close();
+    }
+  },
+  getVerifiedIssuers: async function () {
+    const client = await getClient();
+    if (!client) return;
+    try {
+      const db = client.db("Additional-Traits");
+
+      let collection = db.collection("Verified-Issuers");
+
+      let query = {};
+
+      const cursor = await collection.find();
+
+      return await cursor.toArray();
     } catch (err) {
       console.log("Database error" + err);
     } finally {

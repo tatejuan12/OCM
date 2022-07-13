@@ -26,7 +26,6 @@
 
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-  <!-- <script src="assets/js/vendor/explore.js"></script> -->
   <% include ('functions.ejs') %>
 </head>
 
@@ -80,33 +79,34 @@
       <div class="default-exp-wrapper default-exp-expand">
         <div class="inner">
           <div class="filter-select-option">
-            <label class="filter-leble">LIKES</label>
-            <select>
-              <option data-display="Likes">Likes</option>
-              <option value="1">Most liked</option>
-              <option value="1">Least liked</option>
+            <label class="filter-leble">SORT BY LIKES</label>
+            <select id="sort-likes">
+              <option data-display="Likes" class="option disabled" selected disabled>Likes</option>
+              <option value="Most">Most liked</option>
+              <option value="Least">Least liked</option>
             </select>
           </div>
           <div class="filter-select-option">
             <label class="filter-leble">Brand</label>
-            <select>
-              <option data-display="Select Brand">Select Brand</option>
-              <option value="1">OCW</option>
-              <option value="2">XBLADE</option>
+            <select id="filter-brand">
+              <option data-display="Select Brand" class="option disabled" selected disabled>Select Brand</option>
+              <% verifiedIssuers.forEach(function(res){%>
+              <option value="<%=res.projectName%>"><%=res.projectName%></option>
+              <%}); %>
             </select>
           </div>
           <div class="filter-select-option">
             <label class="filter-leble">Extras</label>
-            <select>
-              <option data-display="Select Option">Select Option</option>
-              <option value="1">Verified</option>
-              <option value="2">Staykable</option>
+            <select id="filter-extras">
+              <option data-display="Select Option" selected disabled>Select Option</option>
+              <option value="Verified">Verified</option>
+              <option value="Staykable">Staykable</option>
             </select>
           </div>
           <div class="filter-select-option">
             <label class="filter-leble">Collection</label>
-            <select>
-              <option data-display="Select Collection">Select Collection</option>
+            <select id="filter-collection">
+              <option data-display="Select Collection" selected disabled>Select Collection</option>
               <option value="1">1</option>
               <option value="2">2</option>
             </select>
@@ -120,12 +120,12 @@
               <form action="#" method="GET">
                 <div class="slider__range--output">
                   <div class="price-filter-input-wrap">
-                    <input type="number" placeholder="min" max="999999">
-                    <input type="number" placeholder="max" max="1000000">
+                    <input id="filter-price-min" type="number" placeholder="min" max="999999">
+                    <input id="filter-price-max" type="number" placeholder="max" max="1000000">
                   </div>
                   <div class="price__output--wrap">
                     <div class="price--filter">
-                      <a class="btn btn-primary btn-small" href="#">Filter</a>
+                      <a class="btn btn-primary btn-small" onclick="handleFilterSort()">Filter</a>
                     </div>
                   </div>
                 </div>
@@ -176,6 +176,20 @@
   <script src="assets/js/vendor/savePopup.js"></script>
   <!-- main JS -->
   <script src="assets/js/main.js"></script>
+  <script>
+    function handleFilterSort() {
+      const jsonFilterSort = {
+        sortLikes: document.getElementById("sort-likes").value,
+        filterBrands: document.getElementById("sort-likes").value,
+        filterExtras: document.getElementById("filter-extras").value,
+        filterCollection: document.getElementById("filter-collection").value,
+        filterPriceMin: document.getElementById("filter-price-min").value,
+        filterPriceMax: document.getElementById("filter-price-max").value
 
+
+      }
+      window.location.href += "yes"
+    }
+  </script>
 
 </html>

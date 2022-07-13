@@ -82,6 +82,10 @@ const authorizedIps = [
   "103.231.88.10",
   "27.99.115.205",
   "220.235.196.107",
+  "116.206.228.203",
+  "139.218.13.37",
+  "110.174.79.19", //Liam personal
+  "120.153.69.11" //jordy personal
 ];
 //! ---------------------Custom middleware--------------------------------//
 server.use((req, res, next) => {
@@ -111,10 +115,27 @@ server.get("/explore", speedLimiter, async (req, res) => {
   defaultLocals(req, res);
   var nfts;
   const page = parseInt(req.query.page);
+  const filter = {
+    likesSort: req.query.likesSort,
+    issuerNameFilter: req.issuerNameFilter,
+    extrasFilter: req.query.extrasFilter,
+    collectionsFilter: req.query.collectionsFilter,
+    minPriceFilter: req.query.minPriceFilter,
+    maxPriceFilter: req.query.maxPriceFilter,
+  };
   if (!isNaN(page)) {
-    nfts = await mongoClient.query.getNfts(NFTSPERPAGE, page);
-
-    res.render("views/explore", { nfts: nfts, page: page });
+    promiseNfts = new Promise(function (resolve, reject) {
+      resolve(mongoClient.query.getNfts(NFTSPERPAGE, page));
+    });
+    promiseVerifiedIssuers = new Promise(function (resolve, reject) {
+      resolve(mongoClient.query.getVerifiedIssuers());
+    });
+    const promises = await Promise.all([promiseNfts, promiseVerifiedIssuers]);
+    res.render("views/explore", {
+      nfts: promises[0],
+      page: page,
+      verifiedIssuers: promises[1],
+    });
   } else res.redirect("explore?page=0");
 });
 server.get("/about", speedLimiter, (req, res) => {
@@ -474,7 +495,8 @@ server.post("/list-nft-subscription", async (req, res, next) => {
     mongoClient.query.addNftToQueried(
       req.body.NFTokenID,
       req.session.wallet,
-      permanent
+      permanent,
+      req.body.issuer
     );
   }
 });
