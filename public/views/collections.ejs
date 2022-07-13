@@ -50,10 +50,8 @@
                 </div>
             </span>
         </header>
-        <div class="CMC-collections">
-            <div class="collection-grid">
-                <%- include('models/collections-card') %>
-            </div>
+        <div class="CMC-collections">        
+          <%- include ("models/collections-grid.ejs", {collections:collections}) %>                  
         </div>
     </div>
   </div>

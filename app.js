@@ -135,7 +135,7 @@ server.get("/collection", speedLimiter, (req, res) => {
 });
 server.get("/collections", speedLimiter, async (req, res) => {
   const collections = await mongoClient.query.getCollections();
-  var collectionName = collections.collectionTitle;
+  var collectionName = await mongoClient.query.getCollections().collectionTitle;
   const collection_logo = digitalOcean.functions.getCollectionLogoLink(collectionName);
   const collection_banner = digitalOcean.functions.getCollectionBannerLink(collectionName);
   defaultLocals(req, res);
