@@ -23924,10 +23924,12 @@ body.active-light-mode {
   border: 5px solid var(--background-color-4);
   background-color: var(--background-color-4);
 }
-.collection-card img {
+.collection-card .CC-banner {
   border-radius: 5px;
+  object-fit: cover;
   overflow: hidden;
   max-height: 150px;
+  width: 100%;
 }
 .collection-card-content {
   margin-top: -34px;
@@ -23939,16 +23941,24 @@ body.active-light-mode {
   max-width: 64px;
   border-radius: 50%;
   border: 2px solid rgb(255, 255, 255);
+  background-color: #f4f4f4;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 .active-dark-mode .collection-card-content .CCC-icon {
   border: 2px solid var(--background-color-4);
+}
+.CCC-logo{
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-around;
 }
 .CCC-collection-name {
   margin-top: 15px;
 }
 .CCC-collection-name h4 {
   margin-bottom: 0;
+  text-transform: capitalize;
 }
 .CCC-owner p {
   font-size: 14px;
@@ -23962,8 +23972,6 @@ body.active-light-mode {
 }
 .CCC-item-count {
   margin-top: 20px;
-}
-.collection-form {
 }
 .required-comment {
   display: flex;

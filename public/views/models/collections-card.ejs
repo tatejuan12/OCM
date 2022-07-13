@@ -1,12 +1,12 @@
 <div class="collection-card" data-sal="slide-up" data-sal-delay="150" data-sal-duration="800">
   <a href="">
-    <img src="<%=collection.banner_url%> " alt="">
+    <img src="<%=collection.banner_url%> " alt="" class="CC-banner">
     <div class="collection-card-content">
       <div class="CCC-logo">
         <img src="<%=collection.logo_url%>" alt="" class="CCC-icon">
       </div>
       <div class="CCC-collection-name">
-        <h4><%=collection.name %> </h4>
+        <h4 class="nus"><%=collection.name %> </h4>
       </div>
       <div class="CCC-owner">
         <p>by <a href="<%=collection.link%>"><%=collection.brand%></a></p>
@@ -18,5 +18,9 @@
         <p><%= collection.items %> items</p>
       </div>
     </div>
+    <script>
+        const elements = document.querySelectorAll('.nus')   
+        elements.forEach(e => e.innerText = e.innerText.replaceAll('_', ' '))
+    </script>
   </a>
 </div>
