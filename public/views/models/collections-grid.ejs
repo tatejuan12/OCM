@@ -3,3 +3,7 @@
   <%- include('collections-card.ejs', {collection:res})%>
   <%}); %>
 </div>
+<script>
+    const elements = document.querySelectorAll('.nus')   
+    elements.forEach(e => e.innerText = e.innerText.replaceAll('_', ' '))
+</script>

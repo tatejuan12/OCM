@@ -23969,9 +23969,17 @@ body.active-light-mode {
 .CCC-description {
   text-align: center;
   margin-top: 20px;
+  min-height: 118px;
+  max-height: 118px;
 }
 .CCC-item-count {
   margin-top: 20px;
+}
+.CCC-item-count p{
+  font-size: 14px;
+}
+.CCC-item-count p span{
+  opacity: 50%;
 }
 .required-comment {
   display: flex;

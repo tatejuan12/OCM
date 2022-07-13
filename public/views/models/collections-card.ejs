@@ -9,18 +9,15 @@
         <h4 class="nus"><%=collection.name %> </h4>
       </div>
       <div class="CCC-owner">
-        <p>by <a href="<%=collection.link%>"><%=collection.brand%></a></p>
+        <p>by <a href="<%=collection.link%>" target="_blank"><%=collection.brand%></a></p>
       </div>
       <div class="CCC-description">
         <p><%= collection.description %> </p>
       </div>
       <div class="CCC-item-count">
-        <p><%= collection.items %> items</p>
+        <p><%= collection.items %> <span>items</span></p>
       </div>
     </div>
-    <script>
-        const elements = document.querySelectorAll('.nus')   
-        elements.forEach(e => e.innerText = e.innerText.replaceAll('_', ' '))
-    </script>
+    
   </a>
 </div>
