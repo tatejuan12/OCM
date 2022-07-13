@@ -93,11 +93,11 @@ var methods = {
     );
   },
   getCollectionLogoLink: function (collectionName) {
-    return(
-      "https://ocw-space.sgp1.digitaloceanspaces.com/collections/logo/"+
+    return (
+      "https://ocw-space.sgp1.digitaloceanspaces.com/collections/logo/" +
       collectionName +
       "_logo.png"
     );
-  }
+  },
 };
 exports.functions = methods;

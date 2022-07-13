@@ -82,6 +82,7 @@ const authorizedIps = [
   "103.231.88.10",
   "27.99.115.205",
   "220.235.196.107",
+  "116.206.228.204",
 ];
 //! ---------------------Custom middleware--------------------------------//
 server.use((req, res, next) => {
@@ -151,17 +152,13 @@ server.get("/collection", speedLimiter, (req, res) => {
   res.render("views/collection");
 });
 server.get("/collections", speedLimiter, async (req, res) => {
-  const collections = await mongoClient.query.getCollections();
-  var collectionName = await mongoClient.query.getCollections().collectionTitle;
-  const collection_logo =
-    digitalOcean.functions.getCollectionLogoLink(collectionName);
-  const collection_banner =
-    digitalOcean.functions.getCollectionBannerLink(collectionName);
+  var collections = await mongoClient.query.getCollections();
+  collections = appendColletionsImagesUrls(collections);
+  console.log(collections);
+
   defaultLocals(req, res);
   res.render("views/collections", {
     collections: collections,
-    collection_logo: collection_logo,
-    collection_banner: collection_banner,
   });
 });
 server.get("/create-collection", speedLimiter, (req, res) => {
@@ -628,4 +625,18 @@ function getPayload(request) {
   const payload = sdk.payload.create(request);
 
   return payload;
+}
+
+function appendColletionsImagesUrls(collections) {
+  collections.forEach((collection) => {
+    const collection_logo = digitalOcean.functions.getCollectionLogoLink(
+      collection.name
+    );
+    const collection_banner = digitalOcean.functions.getCollectionBannerLink(
+      collection.name
+    );
+    collection["banner_url"] = collection_banner;
+    collection["logo_url"] = collection_logo;
+  });
+  return collections;
 }
