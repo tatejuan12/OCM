@@ -263,14 +263,9 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
     const nfts = mongoClient.query.getNfts(NFTSPERPAGE / 2, 0);
     resolve(nfts);
   });
-
   const promises = await Promise.all([nftPromise, nftsPromise]);
-
   const nftCollection = promises[0].uriMetadata.collection.name.toLowerCase().replace(' ', '_');
-  console.log(nftCollection);
-
   const collection_logo = digitalOcean.functions.getProductCollectionLogoLink(nftCollection);
-
   if (promises[0]) {
     res.render("views/product-details", {
       nft: promises[0],

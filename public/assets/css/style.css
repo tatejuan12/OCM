@@ -23791,6 +23791,9 @@ body.active-light-mode {
   .NFTDeets {
     flex-direction: column;
   }
+  .NFTDeets img{
+    max-height: 200px;
+  }
   .aboutListing {
     top: 65%;
     left: 60%;
