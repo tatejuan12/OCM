@@ -1,13 +1,11 @@
-<!-- single creator -->
-<div class="top-seller-inner-one">
-  <div class="top-seller-wrapper offer-wrapper transition">
-    <div class="top-seller-content">
-      <span><%=buyOffer.price%> <%=buyOffer.token%></span>
-      <% if (isOwner){%>
-      <button class="btn btn-primary" onclick="NFTokenAcceptOffer('<%=buyOffer.index%>', '<%=NFToken%>')">Accept Offer
-      </button>
-      <%}%>
+<div class="offers-slice">
+  <div class="offers-wrap">
+    <div class="offers-content">
+      <h5><%=buyOffer.price%> <%=buyOffer.token%></h5>
+      <span><%= buyOffer.account %></span>
+    </div>
+    <div class="offers-content">
+      <button class="btn btn-primary">Accept Offer</button>
     </div>
   </div>
 </div>
-<!-- single creator -->

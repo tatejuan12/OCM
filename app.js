@@ -316,6 +316,12 @@ server.post("/get-profile-info", speedLimiter, async (req, res, next) => {
     );
     res.render(
       "views/models/product-details/sell-offers-container.ejs",
+      {
+        sellOffers: promises[0][0],
+        owner: promises[1],
+        isOwner: isOwner,
+        NFToken: nftId,
+      },
       function (err, html) {
         if (err) throw "Couldn't get sell offers\n" + err;
         returnHtml.push(html);

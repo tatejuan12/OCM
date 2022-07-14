@@ -13253,6 +13253,7 @@ span.rn-badge-card::before {
   font-size: 18px;
   margin-bottom: 4px;
 }
+
 .rn-notification-wrapper.creators
   .top-seller-inner-one
   .top-seller-content
@@ -13263,6 +13264,37 @@ span.rn-badge-card::before {
   padding: 7px 10px;
   font-size: 12px;
   font-weight: 400;
+}
+.offers-slice{
+  width: 100%;
+  margin-bottom: 15px;
+}
+.offers-wrap{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: rgba(255, 255, 255, .15);  
+  backdrop-filter: blur(5px);
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .1);
+  align-items: center;
+  border-radius: 6px;
+
+}
+.offers-content h5{
+  margin-bottom: 5px;
+}
+@media only screen and (max-width: 767px) {
+  .offers-wrap{
+    flex-direction: column;
+    padding: 8px;
+  }  
+  .offers-content{
+    text-align: center;
+  }
+  .offers-content:nth-child(2){
+    margin-top: 10px;
+  }
 }
 
 /* Blog  */
@@ -24027,4 +24059,7 @@ body.active-light-mode {
   100% {
     clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0);
   }
+}
+.disclaimer{
+  margin-bottom: -90px;
 }

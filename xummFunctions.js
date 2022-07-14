@@ -497,121 +497,175 @@ var xrpls = {
   getnftOffers: async function (tokenId) {
     const client = await getXrplClient();
     try {
-      //get all buy and sell offers
-      var offers = [];
-      var methodTypes = ["nft_sell_offers", "nft_buy_offers"];
-      for (a in methodTypes) {
-        var allOffers = [];
-        var marker = "begin";
-        while (marker != null) {
-          try {
-            if (marker == "begin") {
-              var nftOffers = await client.request({
-                method: methodTypes[a],
-                ledger_index: "validated",
-                nft_id: tokenId,
-                limit: 400,
-              });
+      let tokenXRPValue = async function(client, ledgerindex, hex, issuer, totalTokens) {
+
+        var totalTokens = Math.abs(Number(totalTokens))
+        var drops = 0
+
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        var orders = await client.request({
+            "command": "book_offers",
+            "ledger_index": ledgerindex,
+            "taker_gets": {
+                "currency": "XRP"
+            },
+            "taker_pays": {
+                "currency": hex,
+                "issuer": issuer
+            },
+            "limit": 400
+        })
+
+        var markerme = orders.result.marker
+
+        for (a in orders.result.offers) {
+
+            if (totalTokens == 0) break
+
+            if (totalTokens >= orders.result.offers[a].TakerPays.value) {
+
+                drops += Number(orders.result.offers[a].TakerGets)
+                totalTokens -= Number(orders.result.offers[a].TakerPays.value)
             } else {
-              var nftOffers = await client.request({
-                method: methodTypes[a],
-                ledger_index: "validated",
-                nft_id: tokenId,
-                marker: marker,
-                limit: 400,
-              });
+
+                var ratio = totalTokens / Number(orders.result.offers[a].TakerPays.value)
+                drops += ratio * Number(orders.result.offers[a].TakerGets)
+                totalTokens -= totalTokens
             }
-            var allOffers = allOffers.concat(nftOffers.result.offers);
-            var marker = nftOffers.result.marker;
-          } catch {
-            var marker = null;
-          }
         }
 
-        offers.push(allOffers);
-      }
+        while (markerme != null && totalTokens > 0) {
+            await new Promise(resolve => setTimeout(resolve, 300));
 
-      //filter sell offers into readable data for website
-      var sellOffers = [];
-      for (b in offers[0]) {
-        //check if offer is expired
-        if (offers[0][b].expiration + 946684800 <= Date.now() / 1000) continue;
+            var orders = await client.request({
+                "command": "book_offers",
+                "ledger_index": ledgerindex,
+                "taker_gets": {
+                    "currency": "XRP"
+                },
+                "taker_pays": {
+                    "currency": hex,
+                    "issuer": issuer
+                },
+                "limit": 400,
+                "marker": markerme
+            })
 
-        var index = offers[0][b].nft_offer_index;
+            var markerme = orders.result.marker
 
-        if (isNaN(offers[0][b].amount)) {
-          var price = offers[0][b].amount.value;
-          if (offers[0][b].amount.currency.length > 3) {
-            var token = xrpl.convertHexToString(offers[0][b].amount.currency);
-          } else {
-            var token = offers[0][b].amount.currency;
-          }
-        } else {
-          var price = Number(offers[0][b].amount) / 1000000;
-          var token = "XRP";
+            for (a in orders.result.offers) {
+
+                if (totalTokens == 0) break
+
+                if (totalTokens >= orders.result.offers[a].TakerPays.value) {
+
+                    drops += Number(orders.result.offers[a].TakerGets)
+                    totalTokens -= Number(orders.result.offers[a].TakerPays.value)
+                } else {
+
+                    var ratio = totalTokens / Number(orders.result.offers[a].TakerPays.value)
+                    drops += ratio * Number(orders.result.offers[a].TakerGets)
+                    totalTokens -= totalTokens
+                }
+            }
         }
 
-        var destination = offers[0][b].destination;
+        var totalXRP = drops / 1000000
 
-        var data = {
-          price: price,
-          token: token,
-          index: index,
-          destination: destination,
-        };
-
-        sellOffers.push(data);
-      }
-
-      sellOffers.sort(function (a, b) {
-        return a.price - b.price;
-      });
-
-      //filter buy offers into readable data for website
-      var buyOffers = [];
-      for (b in offers[1]) {
-        //check if offer is expired
-        if (offers[1][b].expiration + 946684800 <= Date.now() / 1000) continue;
-
-        var index = offers[1][b].nft_offer_index;
-
-        if (isNaN(offers[1][b].amount)) {
-          var price = offers[1][b].amount.value;
-          if (offers[1][b].amount.currency.length > 3) {
-            var token = xrpl.convertHexToString(offers[1][b].amount.currency);
-          } else {
-            var token = offers[1][b].amount.currency;
-          }
-        } else {
-          var price = Number(offers[1][b].amount) / 1000000;
-          var token = "XRP";
-        }
-
-        var destination = offers[1][b].destination;
-
-        var data = {
-          price: price,
-          token: token,
-          index: index,
-          destination: destination,
-        };
-
-        buyOffers.push(data);
-      }
-
-      buyOffers.sort(function (a, b) {
-        return b.price - a.price;
-      });
-
-      //return findings
-      // console.log(sellOffers);
-      // console.log(buyOffers);
-      return [sellOffers, buyOffers];
-    } catch (error) {
-      return;
-    } finally {
-      await client.disconnect();
+        return totalXRP
     }
+
+        var listOfOffers = []
+        var methodTypes = ["nft_sell_offers", "nft_buy_offers"]
+
+        for (a in methodTypes) {
+            if (methodTypes[a] == "nft_sell_offers") {
+                var type = "SELL"
+            } else {
+                var type = "BUY"
+            }
+
+            var allOffers = []
+            var marker = "begin"
+            while (marker != null) {
+
+                try {
+                    if (marker == 'begin') {
+                        var nftOffers = await client.request({
+                            "command": methodTypes[a],
+                            "ledger_index": "validated",
+                            "nft_id": tokenId,
+                            "limit": 400
+                        })
+                    } else {
+                        var nftOffers = await client.request({
+                            "command": methodTypes[a],
+                            "ledger_index": "validated",
+                            "nft_id": tokenId,
+                            "marker": marker,
+                            "limit": 400
+                        })
+                    }
+                    var allOffers = allOffers.concat(nftOffers.result.offers)
+                    var marker = nftOffers.result.marker
+
+                } catch {
+                    var marker = null
+                }
+            }
+
+            var allFilteredOffers = []
+            for (a in allOffers) {
+
+                var index = allOffers[a].nft_offer_index
+                var destination = allOffers[a].destination
+
+                if (isNaN(allOffers[a].amount)) {
+
+                    var price = allOffers[a].amount.value
+                    if ((allOffers[a].amount.currency).length > 3) {
+                        var token = xrpl.convertHexToString(allOffers[a].amount.currency).replace(/\0/g, '')
+                    } else {
+                        var token = allOffers[a].amount.currency
+                    }
+
+                    var xrpValue = await tokenXRPValue(client, "validated", allOffers[a].amount.currency, allOffers[a].amount.issuer, allOffers[a].amount.value)
+                } else {
+                    var price = allOffers[a].amount / 1000000
+                    var token = "XRP"
+                    var xrpValue = price
+                }
+
+
+                var data = {
+                    price: price,
+                    token: token,
+                    xrpValue: xrpValue,
+                    index: index,
+                    destination: destination,
+                    expiration: (Number(allOffers[a].expiration) + 946684800) * 1000,
+                    type: type,
+                    account: allOffers[a].owner
+                }
+
+                allFilteredOffers.push(data)
+            }
+
+            allFilteredOffers.sort(function(a, b) {
+                return b.xrpValue - a.xrpValue;
+            });
+
+            listOfOffers.push(allFilteredOffers)
+        }
+        return listOfOffers
+    } catch (error) {
+        console.log(error)
+        return null
+    } finally {
+        await client.disconnect()
+    }
+
   },
   getcurrentNftHolder: async function (NFTokenID) {
     const lastKnownHolder = await getNft(NFTokenID).then((nft) => {
