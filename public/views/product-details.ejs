@@ -129,10 +129,10 @@
                   <div class="top-seller-wrapper">
                     <div class="thumbnail">
                       <!-- a tag should link to collection of the respective NFT collection associated with that image -->
-                      <a href="collection/({collection.family})"><img src="assets/images/client/client-2.png" alt="Nft_Profile"></a>
+                      <a href="collection/({collection.family})"><img src="<%=collection_logo%> " alt="Nft_Profile"></a>
                     </div>
                     <div class="top-seller-content">
-                      <a href="collection/({collection.family})">
+                      <a href="collections?name=<%=nft.uriMetadata.collection.name.toLowerCase().replace(' ', '_')%>&issuer=<%=nft.issuer%>">
                         <h6 class="name"><%=nft.uriMetadata.collection.name%></h6>
                       </a>
                     </div>

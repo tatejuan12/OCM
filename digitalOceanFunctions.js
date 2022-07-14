@@ -99,5 +99,12 @@ var methods = {
       "_logo.png"
     );
   },
+  getProductCollectionLogoLink: function (nftCollection) {
+    return (
+      "https://ocw-space.sgp1.digitaloceanspaces.com/collections/logo/" +
+      nftCollection +
+      "_logo.png"
+    );
+  },
 };
 exports.functions = methods;

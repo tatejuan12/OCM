@@ -16922,6 +16922,7 @@ button .small-image {
   overflow: hidden;
   transition: 0.3s;
   border-radius: 100%;
+  background-color: #f4f4f450;
 }
 .top-seller-inner-one .top-seller-wrapper .top-seller-content {
   margin-left: 12px;
@@ -23936,7 +23937,7 @@ body.active-light-mode {
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
-@media only screen and (max-width: 768px) and (max-width: 991px) {
+@media only screen and (max-width: 768px){
   .collection-grid {
     display: flex;
     flex-direction: column;
@@ -23961,6 +23962,7 @@ body.active-light-mode {
   object-fit: cover;
   overflow: hidden;
   max-height: 150px;
+  min-height: 150px;
   width: 100%;
 }
 .collection-card-content {
@@ -23971,6 +23973,8 @@ body.active-light-mode {
 }
 .collection-card-content .CCC-icon {
   max-width: 64px;
+  min-width: 64px;
+  min-height: 64px;
   border-radius: 50%;
   border: 2px solid rgb(255, 255, 255);
   background-color: #f4f4f4;
@@ -24003,6 +24007,8 @@ body.active-light-mode {
   margin-top: 20px;
   min-height: 118px;
   max-height: 118px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .CCC-item-count {
   margin-top: 20px;
