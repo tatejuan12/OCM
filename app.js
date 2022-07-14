@@ -260,7 +260,7 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
     resolve(nft);
   });
   nftsPromise = new Promise(function (resolve, reject) {
-    const nfts = mongoClient.query.getNfts(NFTSPERPAGE / 2, 0);
+    const nfts = mongoClient.query.getNfts(5);
     resolve(nfts);
   });
   const promises = await Promise.all([nftPromise, nftsPromise]);

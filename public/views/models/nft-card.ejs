@@ -2,7 +2,7 @@
 <% owner = nft.currentOwner == wallet ? true : false %>
 
 <!-- start single product -->
-<div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12">
+<div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12 nft-card-wrap">
   <div class="product-style-one no-overlay with-placeBid">
     <div class="card-thumbnail">
       <a href="product-details?id=<%=nft.tokenID%>"><img draggable="false" src="<%= nft.httpsImage %> " alt="NFT_portfolio" />
