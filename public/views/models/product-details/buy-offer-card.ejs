@@ -5,7 +5,9 @@
       <span><%= buyOffer.account %></span>
     </div>
     <div class="offers-content">
-      <button class="btn btn-primary">Accept Offer</button>
+      <% if (isOwner){%>
+        <button class="btn btn-primary" onclick="NFTokenAcceptOffer('<%=buyOffer.index%>', '<%=NFToken%>')">Accept Offer</button>
+      <%}%>
     </div>
   </div>
 </div>
