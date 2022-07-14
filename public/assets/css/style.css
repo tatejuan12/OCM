@@ -16102,7 +16102,9 @@ xclip
 }
 @media only screen and (max-width: 767px) {
   .rn-service-one .inner .icon img {
-    max-height: 67px;
+    max-height: 180px;
+    margin-top: -40px;
+    margin-right: -20px;
   }
 }
 .rn-service-one .inner .subtitle {
