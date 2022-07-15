@@ -117,7 +117,7 @@
                 </div>
               </div>
             </div>
-            <span class="bid">Latest bid <span class="price"><%- nft.buyOffers[0] ? nft.buyOffers[0] + " XRP": "No bids"%></span></span>
+            <span class="bid">Highest Bid: <span class="price"><%- nft.buyOffers[0] ? nft.buyOffers[0].xrpValue + " XRP": "No bids"%></span></span>
             <h6 class="title-name">
               <%=nft.uriMetadata.collection.family%>
             </h6>
@@ -157,7 +157,7 @@
                       <div class="offers-slice">
                         <div class="offers-wrap">
                           <div class="offers-content">
-                            <h5>Nothing To Show</h5>
+                            <h5>Nothing To Show Yet</h5>
                           </div>
                         </div>
                       </div>
@@ -230,22 +230,23 @@
                       </div>
                     </div>
                     <!-- Previous Owners area -->
-                    <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-                      <!-- single creator -->
-                      <div class="top-seller-inner-one">
-                        <div class="top-seller-wrapper">
-                          <a href="bithomp.com/explorer/[sale hash here]" target="_blank">
-                            <div class="top-seller-content">
-                              <!-- needs to be XRP value at time of sale -->
-                              <span>250 XRP</span>
-                              <span class="count-number">
-                                <!-- DATE -->
-                              </span>
-                            </div>
-                          </a>
+                  </div>
+                  <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+                    <h6>Purchase History</h6>
+                    <div class="nft-sale-history-section">
+                      <% nft.sellHistory.forEach(function(res){%>
+                        <div class="nft-sale-history-wrap">
+                          <div class="nft-sale-history-content">
+                            <h5><%=res.price + " " + res.token%></h5>
+                            <p style="margin-top: -5px;"><%=res.xrpValue%> XRP</p>
+                            <span>account</span>
+                          </div>
+                          <div class="nft-sale-history-content">
+                            <a href="https://xls20.bithomp.com/explorer/<%= res.txID %> " target="_blank">View Transaction</a>
+                            <p><%=res.date%></p>
+                          </div>
                         </div>
-                      </div>
-                      <!-- single creator -->
+                      <%}); %>
                     </div>
                   </div>
                 </div>
