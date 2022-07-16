@@ -63,15 +63,15 @@
           <div class="filter-select-option">
             <label class="filter-leble">SORT BY LIKES</label>
             <select id="sort-likes">
-              <option data-display="Likes" class="option disabled" selected disabled>Likes</option>
-              <option value="Most">Most liked</option>
-              <option value="Least">Least liked</option>
+              <option data-display="Likes" value='' class="option disabled" selected disabled>Likes</option>
+              <option value=-1>Most liked</option>
+              <option value=1>Least liked</option>
             </select>
           </div>
           <div class="filter-select-option">
             <label class="filter-leble">Brand</label>
-            <select id="filter-brand">
-              <option data-display="Select Brand" class="option disabled" selected disabled>Select Brand</option>
+            <select id="filter-brands">
+              <option data-display="Select Brand" class="option disabled" value='' selected disabled>Select Brand</option>
               <% verifiedIssuers.forEach(function(res){%>
               <option value="<%=res.projectName%>"><%=res.projectName%></option>
               <%}); %>
@@ -80,7 +80,7 @@
           <div class="filter-select-option">
             <label class="filter-leble">Extras</label>
             <select id="filter-extras">
-              <option data-display="Select Option" selected disabled>Select Option</option>
+              <option data-display="Select Option" value='' selected disabled>Select Option</option>
               <option value="Verified">Verified</option>
               <option value="Staykable">Staykable</option>
             </select>
@@ -88,7 +88,7 @@
           <div class="filter-select-option">
             <label class="filter-leble">Collection</label>
             <select id="filter-collection">
-              <option data-display="Select Collection" selected disabled>Select Collection</option>
+              <option data-display="Select Collection" value='' selected disabled>Select Collection</option>
               <option value="1">1</option>
               <option value="2">2</option>
             </select>
@@ -162,15 +162,26 @@
     function handleFilterSort() {
       const jsonFilterSort = {
         sortLikes: document.getElementById("sort-likes").value,
-        filterBrands: document.getElementById("sort-likes").value,
+        filterBrands: document.getElementById("filter-brands").value,
         filterExtras: document.getElementById("filter-extras").value,
-        filterCollection: document.getElementById("filter-collection").value,
+        filterCollections: document.getElementById("filter-collection").value,
         filterPriceMin: document.getElementById("filter-price-min").value,
         filterPriceMax: document.getElementById("filter-price-max").value
-
-
       }
-      window.location.href += "yes"
+      var url = `?page=<%=page%>`;
+      if (jsonFilterSort.sortLikes)
+        url += `&sortLikes=${jsonFilterSort.sortLikes}`;
+      if (jsonFilterSort.filterBrands)
+        url += `&filterBrands=${jsonFilterSort.filterBrands}`;
+      if (jsonFilterSort.filterExtras)
+        url += `&filterExtras=${jsonFilterSort.filterExtras}`;
+      if (jsonFilterSort.filterCollections)
+        url += `&filterCollections=${jsonFilterSort.filterCollections}`;
+      if (jsonFilterSort.filterPriceMin)
+        url += `&filterPriceMin=${jsonFilterSort.filterPriceMin}`;
+      if (jsonFilterSort.filterPriceMax)
+        url += `&filterPriceMax=${jsonFilterSort.filterPriceMax}`;
+      window.location.search = url;
     }
   </script>
 

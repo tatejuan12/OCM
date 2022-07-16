@@ -129,22 +129,49 @@ var methods = {
       client.close();
     }
   },
-  getNfts: async function (NFTSPERPAGE, page) {
+  getNfts: async function (NFTSPERPAGE, page, filters) {
     const client = await getClient();
     if (!client) return;
     try {
       const db = client.db("NFTokens");
 
       let collection = db.collection("Eligible-Listings");
+      let sort;
 
-      let query = {};
-
-      const cursor = await collection
-        .find(query)
-        .skip(NFTSPERPAGE * page)
-        .limit(NFTSPERPAGE);
-
-      return await cursor.toArray();
+      var aggregateQuery = [];
+      if (filters.sortLikes) {
+        aggregateQuery.push({
+          $addFields: {
+            likesLength: {
+              $size: "$likes",
+            },
+          },
+        });
+        aggregateQuery.push({
+          $sort: { likesLength: parseInt(filters.sortLikes) },
+        });
+      }
+      if (filters.filterBrands) {
+        aggregateQuery.push({
+          $match: { "uriMetadata.collection.family": filters.filterBrands },
+        });
+      }
+      if (filters.filterExtras == "Verified") {
+        aggregateQuery.push({
+          $match: { "verified.status": true },
+        });
+      } else if (filters.filterExtras == "Staykable") {
+        aggregateQuery.push({
+          $match: { "stakable.status": true },
+        });
+      }
+      const aggregate = collection.aggregate(aggregateQuery).limit(NFTSPERPAGE);
+      // const cursor = await collection
+      //   .find(query)
+      //   .skip(NFTSPERPAGE * page)
+      //   .sort(sort)
+      //   .limit(NFTSPERPAGE);
+      return await aggregate.toArray();
     } catch (err) {
       console.log("Database error" + err);
     } finally {

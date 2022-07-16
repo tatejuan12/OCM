@@ -82,7 +82,7 @@ const authorizedIps = [
   "103.231.88.10",
   "27.99.115.205",
   "220.235.196.107",
-  "220.253.105.253",  //Liam
+  "220.253.105.253", //Liam
   "116.206.228.204",
 ];
 //! ---------------------Custom middleware--------------------------------//
@@ -114,16 +114,16 @@ server.get("/explore", speedLimiter, async (req, res) => {
   var nfts;
   const page = parseInt(req.query.page);
   const filter = {
-    likesSort: req.query.likesSort,
-    issuerNameFilter: req.issuerNameFilter,
-    extrasFilter: req.query.extrasFilter,
-    collectionsFilter: req.query.collectionsFilter,
-    minPriceFilter: req.query.minPriceFilter,
-    maxPriceFilter: req.query.maxPriceFilter,
+    sortLikes: req.query.sortLikes,
+    filterBrands: req.query.filterBrands,
+    filterExtras: req.query.filterExtras,
+    filterCollections: req.query.filterCollections,
+    filterPriceMin: req.query.filterPriceMin,
+    filterPriceMax: req.query.filterPriceMax,
   };
   if (!isNaN(page)) {
     promiseNfts = new Promise(function (resolve, reject) {
-      resolve(mongoClient.query.getNfts(NFTSPERPAGE, page));
+      resolve(mongoClient.query.getNfts(NFTSPERPAGE, page, filter));
     });
     promiseVerifiedIssuers = new Promise(function (resolve, reject) {
       resolve(mongoClient.query.getVerifiedIssuers());
@@ -264,13 +264,16 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
     resolve(nfts);
   });
   const promises = await Promise.all([nftPromise, nftsPromise]);
-  const nftCollection = promises[0].uriMetadata.collection.name.toLowerCase().replace(' ', '_');
-  const collection_logo = digitalOcean.functions.getProductCollectionLogoLink(nftCollection);
+  const nftCollection = promises[0].uriMetadata.collection.name
+    .toLowerCase()
+    .replace(" ", "_");
+  const collection_logo =
+    digitalOcean.functions.getProductCollectionLogoLink(nftCollection);
   if (promises[0]) {
     res.render("views/product-details", {
       nft: promises[0],
       nfts: promises[1],
-      collection_logo: collection_logo
+      collection_logo: collection_logo,
     });
   } else next();
 });
