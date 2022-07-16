@@ -84,6 +84,7 @@ const authorizedIps = [
   "220.235.196.107",
   "220.253.105.253", //Liam
   "116.206.228.204",
+  "116.206.228.203",
 ];
 //! ---------------------Custom middleware--------------------------------//
 server.use((req, res, next) => {
@@ -121,6 +122,10 @@ server.get("/explore", speedLimiter, async (req, res) => {
     filterPriceMin: req.query.filterPriceMin,
     filterPriceMax: req.query.filterPriceMax,
   };
+  if (parseInt(filter.filterPriceMin) > parseInt(filter.filterPriceMax)) {
+    filter.filterPriceMax = undefined;
+    filter.filterPriceMin = undefined;
+  }
   if (!isNaN(page)) {
     promiseNfts = new Promise(function (resolve, reject) {
       resolve(mongoClient.query.getNfts(NFTSPERPAGE, page, filter));

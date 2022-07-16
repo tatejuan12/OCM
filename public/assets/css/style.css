@@ -13265,62 +13265,61 @@ span.rn-badge-card::before {
   font-size: 12px;
   font-weight: 400;
 }
-.offers-slice{
+.offers-slice {
   width: 100%;
   margin-bottom: 15px;
 }
-.offers-wrap{
+.offers-wrap {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   padding: 10px 20px;
-  background-color: rgba(255, 255, 255, .15);  
+  background-color: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(5px);
-  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .1);
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.1);
   align-items: center;
   border-radius: 6px;
-
 }
-.offers-content h5{
+.offers-content h5 {
   margin-bottom: 5px;
 }
-.nft-sale-history-section{
+.nft-sale-history-section {
   width: 100%;
   margin-bottom: 15px;
   max-height: 400px;
   overflow: auto;
-  box-shadow: inset 0 8px 2px -2px rgba(0, 0, 0, .1);
+  box-shadow: inset 0 8px 2px -2px rgba(0, 0, 0, 0.1);
 }
-.nft-sale-history-wrap{
+.nft-sale-history-wrap {
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   padding: 10px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, .15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(5px);
   align-items: center;
   border-radius: 6px;
 }
-.nft-sale-history-content{
+.nft-sale-history-content {
   display: flex;
   flex-direction: column;
 }
-.nft-sale-history-content h5{
+.nft-sale-history-content h5 {
   margin-bottom: 5px;
 }
-.nft-sale-history-content p{
+.nft-sale-history-content p {
   margin-bottom: 0;
 }
 @media only screen and (max-width: 767px) {
-  .offers-wrap{
+  .offers-wrap {
     flex-direction: column;
     padding: 8px;
-  }  
-  .offers-content{
+  }
+  .offers-content {
     text-align: center;
   }
-  .offers-content:nth-child(2){
+  .offers-content:nth-child(2) {
     margin-top: 10px;
   }
 }
@@ -14096,22 +14095,22 @@ button.btn.btn-large {
   border-radius: 6px;
   line-height: 16px;
 }
-.price-filter-input-wrap{
+.price-filter-input-wrap {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
 }
-.price-filter-input-wrap input{
+.price-filter-input-wrap input {
   max-width: 70px;
   margin: 0;
   padding: 5px;
   border-radius: 5px;
   background-color: #fff;
 }
-.price-filter-input-wrap input:first-of-type{
+.price-filter-input-wrap input:first-of-type {
   margin-right: 15px;
 }
-.price-filter-input-wrap input:focus{
+.price-filter-input-wrap input:focus {
   border: 2px solid #000;
 }
 
@@ -17814,27 +17813,27 @@ NFT product styles
 /*################
 NFT product styles mobile layout
 ##################*/
-@media  only screen and (max-width: 767px){
+@media only screen and (max-width: 767px) {
   .product-style-one {
     max-width: 180px;
     max-height: 325px;
   }
-  #exploreSection .nft-card-wrap{
+  #exploreSection .nft-card-wrap {
     max-width: 50%;
     padding: 8px;
   }
-  .product-style-one a .product-name{
+  .product-style-one a .product-name {
     font-size: 15px;
     margin-top: 0;
     min-height: 50px;
     max-height: 50px;
-    overflow: hidden; 
+    overflow: hidden;
     text-overflow: ellipsis;
   }
-  .product-style-one .latest-bid{
+  .product-style-one .latest-bid {
     font-size: 12px;
   }
-  .product-share-wrapper{
+  .product-share-wrapper {
     margin-top: 15px;
   }
 }
@@ -23829,7 +23828,7 @@ body.active-light-mode {
   cursor: pointer;
 }
 @media only screen and (max-width: 768px) and (max-width: 991px) {
-  .logoGrid{
+  .logoGrid {
     display: flex;
     flex-direction: column;
   }
@@ -23853,7 +23852,7 @@ body.active-light-mode {
   .NFTDeets {
     flex-direction: column;
   }
-  .NFTDeets img{
+  .NFTDeets img {
     max-height: 200px;
   }
   .aboutListing {
@@ -24002,7 +24001,7 @@ body.active-light-mode {
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
-@media only screen and (max-width: 768px){
+@media only screen and (max-width: 768px) {
   .collection-grid {
     display: flex;
     flex-direction: column;
@@ -24048,7 +24047,7 @@ body.active-light-mode {
 .active-dark-mode .collection-card-content .CCC-icon {
   border: 2px solid var(--background-color-4);
 }
-.CCC-logo{
+.CCC-logo {
   display: flex;
   width: 100%;
   align-items: center;
@@ -24078,10 +24077,10 @@ body.active-light-mode {
 .CCC-item-count {
   margin-top: 20px;
 }
-.CCC-item-count p{
+.CCC-item-count p {
   font-size: 14px;
 }
-.CCC-item-count p span{
+.CCC-item-count p span {
   opacity: 50%;
 }
 .required-comment {
@@ -24131,6 +24130,6 @@ body.active-light-mode {
     clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0);
   }
 }
-.disclaimer{
+.disclaimer {
   margin-bottom: -90px;
 }
