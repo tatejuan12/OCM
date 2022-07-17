@@ -14087,14 +14087,14 @@ button.btn.btn-large {
   display: inline-block;
   margin-top: -2px;
 }
-.price__output--wrap .price--filter a.btn {
+/* .price__output--wrap .price--filter a.btn {
   padding: 2px 10px;
   font-size: 12px;
   letter-spacing: 0.5px;
   text-transform: uppercase;
   border-radius: 6px;
   line-height: 16px;
-}
+} */
 .price-filter-input-wrap {
   display: flex;
   flex-direction: row;
