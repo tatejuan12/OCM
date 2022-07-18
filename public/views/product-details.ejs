@@ -243,7 +243,7 @@
                           </div>
                           <div class="nft-sale-history-content">
                             <a href="https://xls20.bithomp.com/explorer/<%= res.txID %> " target="_blank">View Transaction</a>
-                            <p><%=res.date%></p>
+                            <p><%=(new Date(res.date)).toLocaleDateString('en-au');%></p>
                           </div>
                         </div>
                       <%}); %>
