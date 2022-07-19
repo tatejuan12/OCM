@@ -153,9 +153,21 @@ server.get("/partners", speedLimiter, (req, res) => {
   defaultLocals(req, res);
   res.render("views/partners");
 });
-server.get("/collection", speedLimiter, (req, res) => {
-  defaultLocals(req, res);
-  res.render("views/collection");
+server.get("/collection", speedLimiter, async (req, res) => {
+  const page = parseInt(req.query.page);
+  if (!isNaN(page)) {
+    const collectionName = req.query.name;
+    const issuer = req.query.issuer;
+    const nfts = await mongoClient.query.getNftsByCollection(
+      collectionName,
+      issuer,
+      NFTSPERPAGE,
+      page
+    );
+    console.log(nfts);
+    defaultLocals(req, res);
+    res.render("views/collection", { nfts: nfts });
+  } else res.redirect("collection?page=0");
 });
 server.get("/collections", speedLimiter, async (req, res) => {
   var collections = await mongoClient.query.getCollections();

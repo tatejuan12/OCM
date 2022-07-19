@@ -201,6 +201,87 @@ var methods = {
       client.close();
     }
   },
+  getNftsByCollection: async function (
+    collectionName,
+    issuer,
+    NFTSPERPAGE,
+    page
+  ) {
+    const client = await getClient();
+    if (!client) return;
+    try {
+      const db = client.db("NFTokens");
+      let collection = db.collection("Eligible-Listings");
+      var query = {
+        $match: { "uriMetadata.collection.name": collectionName },
+        $match: { issuer: issuer },
+      };
+      const aggregate = collection
+        .aggregate([query])
+        .skip(NFTSPERPAGE * page)
+        .limit(NFTSPERPAGE);
+      return await aggregate.toArray();
+      // if (filters) {
+      //   if (filters.sortLikes) {
+      //     aggregateQuery[0].$addFields.likesLength = { $size: "$likes" };
+      //     aggregateQuery.push({
+      //       $sort: { likesLength: parseInt(filters.sortLikes) },
+      //     });
+      //   }
+      //   if (filters.filterBrands) {
+      //     aggregateQuery.push({
+      //       $match: { "uriMetadata.collection.family": filters.filterBrands },
+      //     });
+      //   }
+      //   if (filters.filterExtras == "Verified") {
+      //     aggregateQuery.push({
+      //       $match: { "verified.status": true },
+      //     });
+      //   } else if (filters.filterExtras == "Staykable") {
+      //     aggregateQuery.push({
+      //       $match: { "stakable.status": true },
+      //     });
+      //   }
+      //   if (filters.filterCollections) {
+      //     aggregateQuery.push({
+      //       $match: {
+      //         "uriMetadata.collection.name": filters.filterCollections,
+      //       },
+      //     });
+      //   }
+      //   if (filters.filterPriceMin || filters.priceMax) {
+      //     aggregateQuery[0].$addFields.recentSell = {
+      //       $first: "$sellHistory.price",
+      //     };
+      //     aggregateQuery.push({
+      //       $match: {
+      //         recentSell: {
+      //           $lte: parseInt(filters.filterPriceMax),
+      //           $gte: parseInt(filters.filterPriceMin),
+      //         },
+      //       },
+      //     });
+      //   }
+
+      // else {
+      //   const aggregate = collection
+      //     .find()
+      //     .skip(NFTSPERPAGE * page)
+      //     .limit(NFTSPERPAGE);
+      //   return await aggregate.toArray();
+      // }
+
+      // const cursor = await collection
+      //   .find(query)
+      //   .skip(NFTSPERPAGE * page)
+      //   .sort(sort)
+      //   .limit(NFTSPERPAGE);
+    } catch (err) {
+      console.log("Database error" + err);
+    } finally {
+      client.close();
+    }
+  },
   getAccountLikedNfts: async function (wallet) {
     const client = await getClient();
     if (!client) return;
