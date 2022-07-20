@@ -17821,7 +17821,9 @@ NFT product styles mobile layout
   #exploreSection .nft-card-wrap {
     max-width: 50%;
     padding: 8px;
-  }
+    justify-content: space-around;
+    display: flex;
+    }
   .product-style-one a .product-name {
     font-size: 15px;
     margin-top: 0;
@@ -17835,6 +17837,9 @@ NFT product styles mobile layout
   }
   .product-share-wrapper {
     margin-top: 15px;
+  }
+  .product-style-one.with-placeBid .card-thumbnail img {
+    max-height: 170px;
   }
 }
 
@@ -20898,15 +20903,18 @@ tbody.ranking tr td .thumbnail img {
     margin-left: 0;
   }
 }
-.tab-content-edit-wrapepr .nuron-information .profile-form-wrapper input {
-  background: var(--background-color-4);
+.active-light-mode .tab-content-edit-wrapepr .nuron-information .profile-form-wrapper input {
+  background: var(--color-gray-2);
   height: 50px;
   border-radius: 5px;
-  color: var(--color-white);
+  color: var(--color-light-heading);
   font-size: 14px;
   padding: 10px 20px;
   border: 2px solid var(--color-border);
   transition: 0.3s;
+}
+.tab-content-edit-wrapepr .nuron-information .profile-form-wrapper input{
+  background: var(--background-color-4)
 }
 .tab-content-edit-wrapepr .nuron-information .profile-form-wrapper input:focus {
   border: 2px solid var(--color-primary);
@@ -20962,7 +20970,17 @@ tbody.ranking tr td .thumbnail img {
   p {
   font-size: 15px;
 }
-.tab-content-edit-wrapepr .nuron-information .edit-bio-area textarea {
+.active-light-mode .tab-content-edit-wrapepr .nuron-information .edit-bio-area textarea {
+  background: var(--color-gray-2);
+  height: 150px;
+  border-radius: 5px;
+  color: var(--color-light-heading);
+  font-size: 14px;
+  padding: 10px 20px;
+  border: 2px solid var(--color-border);
+  transition: var(--transition);
+}
+.tab-content-edit-wrapepr .nuron-information .edit-bio-area textarea{
   background: var(--background-color-4);
   height: 150px;
   border-radius: 5px;
