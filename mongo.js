@@ -201,15 +201,14 @@ var methods = {
       client.close();
     }
   },
-  getNftsCollection: async function (collectionName, issuer){
+  getNftsCollection: async function (collectionName, issuer) {
     const client = await getClient();
     if (!client) return;
     try {
-      const db= client.db("Aditional-Traits");
+      const db = client.db("Additional-Traits");
       let collection = db.collection("Collections");
       var query = {
-        $match: { name: collectionName},
-        $match: { issuer: issuer}
+        $match: { name: collectionName, issuer: issuer },
       };
       const aggregate = collection.aggregate([query]);
       return await aggregate.toArray();
@@ -231,8 +230,10 @@ var methods = {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
       var query = {
-        $match: { "uriMetadata.collection.name": collectionName },
-        $match: { issuer: issuer },
+        $match: {
+          "uriMetadata.collection.name": collectionName,
+          issuer: issuer,
+        },
       };
       const aggregate = collection
         .aggregate([query])

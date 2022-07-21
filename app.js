@@ -170,7 +170,11 @@ server.get("/collection", speedLimiter, async (req, res) => {
     );
     console.log(collectionDetails);
     defaultLocals(req, res);
-    res.render("views/collection", { nfts: nfts, collectionName: collectionName, collectionDetails: collectionDetails});
+    res.render("views/collection", {
+      nfts: nfts,
+      collectionName: collectionName,
+      collectionDetails: collectionDetails,
+    });
   } else res.redirect("collection?page=0");
 });
 server.get("/collections", speedLimiter, async (req, res) => {
