@@ -201,6 +201,24 @@ var methods = {
       client.close();
     }
   },
+  getNftsCollection: async function (collectionName, issuer){
+    const client = await getClient();
+    if (!client) return;
+    try {
+      const db= client.db("Aditional-Traits");
+      let collection = db.collection("Collections");
+      var query = {
+        $match: { name: collectionName},
+        $match: { issuer: issuer}
+      };
+      const aggregate = collection.aggregate([query]);
+      return await aggregate.toArray();
+    } catch (err) {
+      console.log("Database error" + err);
+    } finally {
+      client.close();
+    }
+  },
   getNftsByCollection: async function (
     collectionName,
     issuer,

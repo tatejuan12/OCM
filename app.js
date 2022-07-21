@@ -164,9 +164,13 @@ server.get("/collection", speedLimiter, async (req, res) => {
       NFTSPERPAGE,
       page
     );
-    console.log(nfts);
+    const collectionDetails = await mongoClient.query.getNftsCollection(
+      collectionName,
+      issuer
+    );
+    console.log(collectionDetails);
     defaultLocals(req, res);
-    res.render("views/collection", { nfts: nfts });
+    res.render("views/collection", { nfts: nfts, collectionName: collectionName, collectionDetails: collectionDetails});
   } else res.redirect("collection?page=0");
 });
 server.get("/collections", speedLimiter, async (req, res) => {

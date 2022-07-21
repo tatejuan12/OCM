@@ -57,7 +57,7 @@
                 <img src="" alt="Stack Overflow logo and icons and such" onerror="this.src='assets/images/icons/unknown-user.png'">
               </div>
               <div class="rn-author-info-content">
-                <h4 class="title">Collection Name</h4>
+                <h4 class="title"><%= collectionDetails.name %> </h4>
               </div>
             </div>
           </div>
@@ -73,15 +73,18 @@
           <div class="tab-wrapper-one">
             <nav class="tab-button-one">
               <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Description</button>
-                <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Items</button>
+                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-description" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Description</button>
+                <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-nfts" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Items</button>
               </div>
             </nav>
           </div>
         </div>
       </div>
-      <div>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur enim placeat quod animi temporibus voluptatibus incidunt cupiditate vitae excepturi optio. Impedit saepe corrupti modi optio aspernatur eaque, dolorum repellendus commodi odit accusamus nam ducimus eveniet corporis aperiam praesentium deleniti qui explicabo ullam nostrum expedita minus quae possimus fugit harum. Exercitationem?</p>
+      <div id="nav-description" class="tab-pane fade active show" aria-labelledby="nav-liked-tab" role="tabpanel">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione expedita laudantium adipisci voluptatem qui debitis porro libero aliquid consequuntur itaque.
+      </div>
+      <div id="nav-nfts" class="tab-pane fade" aria-labelledby="nav-liked-tab" role="tabpanel">
+        <%- include ("models/nft-rows.ejs", {nfts: nfts}) %>
       </div>
     </div>
   </div>
