@@ -129,7 +129,7 @@
                   <div class="top-seller-wrapper">
                     <div class="thumbnail">
                       <!-- a tag should link to collection of the respective NFT collection associated with that image -->
-                      <a href="collection/({collection.family})"><img src="<%=collection_logo%> " alt="Nft_Profile"></a>
+                      <a href="collection?name=<%=nft.uriMetadata.collection.name.toLowerCase().replace(' ', '_')%>&issuer=<%=nft.issuer%>"><img src="<%=collection_logo%> " alt="Nft_Profile"></a>
                     </div>
                     <div class="top-seller-content">
                       <a href="collection?name=<%=nft.uriMetadata.collection.name.toLowerCase().replace(' ', '_')%>&issuer=<%=nft.issuer%>">
@@ -342,8 +342,9 @@
                 </div>
               </div>
               <div class="bit-continue-button">
-                <button onclick="setBuyOfferBid('<%=nft.tokenID%>')" class="btn btn-primary w-100">Place a bid</button>
-                <button type="button" class="btn btn-primary-alta mt--10" data-bs-dismiss="modal">Cancel</button>
+                <button id="bidButton" onclick="setBuyOfferBid('<%=nft.tokenID%>');buyOrderClicked(this, this.nextElementSibling);" class="btn btn-primary w-100">Place a bid</button>
+                <div id="loader" class="loader-data hidden"></div>
+                <button type="button" class="btn btn-primary-alta mt--10" data-bs-dismiss="modal" onclick="buyOrderCanceled(document.getElementById('bidButton'), document.getElementById('loader'));">Cancel</button>
               </div>
 
             </div>
@@ -404,7 +405,7 @@
               } catch (err) {
                 console.error("Couldn't parse balance");
               }
-            }
+            };
     </script>
 
 </body>

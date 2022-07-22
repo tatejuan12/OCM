@@ -875,6 +875,14 @@ function getRedeem(redeemElement, loadingElement, ipAddress) {
     });
   }
 }
+function buyOrderClicked(redeemElement, loadingElement) {
+  redeemElement.classList.add("hidden");
+  loadingElement.classList.remove("hidden");
+}
+function buyOrderCanceled(redeemElement, loadingElement) {
+  redeemElement.classList.remove("hidden");
+  loadingElement.classList.add("hidden");
+}
 function likeHandler(nftId, DOM) {
   if (DOM.classList.contains("liked")) decrementLike(nftId, DOM);
   else incrementLike(nftId, DOM);

@@ -24221,7 +24221,7 @@ Collection nav
   position: absolute;
   inset: 0px;
   border-radius: 50%;
-  border: 5px solid #fff;
+  border: 5px solid #c7c7cf;
   animation: prixClipFix 2s linear infinite;
 }
 
@@ -24250,4 +24250,10 @@ Collection nav
 }
 .disclaimer {
   margin-bottom: -90px;
+}
+.bit-continue-button{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
 }
