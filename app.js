@@ -168,12 +168,18 @@ server.get("/collection", speedLimiter, async (req, res) => {
       collectionName,
       issuer
     );
-    console.log(collectionDetails);
+    const collection_logo = digitalOcean.functions.getCollectionLogoLink(
+      collectionDetails.name
+    );
+    const collection_banner = digitalOcean.functions.getCollectionBannerLink(
+      collectionDetails.name
+    );
     defaultLocals(req, res);
     res.render("views/collection", {
       nfts: nfts,
-      collectionName: collectionName,
       collectionDetails: collectionDetails,
+      collection_logo: collection_logo,
+      collection_banner: collection_banner
     });
   } else res.redirect("collection?page=0");
 });

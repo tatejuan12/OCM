@@ -930,3 +930,10 @@ function getListNft(fee) {
     },
   });
 }
+
+
+//No underscores looks for nus class and removes
+window.onload = function noUnderscores(){
+  const elements = document.querySelectorAll('.nus')   
+  elements.forEach(e => e.innerText = e.innerText.toUpperCase().replaceAll('_', ' '))
+};

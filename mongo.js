@@ -208,10 +208,11 @@ var methods = {
       const db = client.db("Additional-Traits");
       let collection = db.collection("Collections");
       var query = {
-        $match: { name: collectionName, issuer: issuer },
+        name: collectionName,
+        issuer: issuer,
       };
-      const aggregate = collection.aggregate([query]);
-      return await aggregate.toArray();
+      const results = collection.findOne(query);
+      return await results;
     } catch (err) {
       console.log("Database error" + err);
     } finally {
@@ -230,10 +231,8 @@ var methods = {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
       var query = {
-        $match: {
-          "uriMetadata.collection.name": collectionName,
-          issuer: issuer,
-        },
+        $match: {"uriMetadata.collection.name": collectionName },
+        $match: { issuer: issuer }
       };
       const aggregate = collection
         .aggregate([query])

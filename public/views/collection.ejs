@@ -40,11 +40,8 @@
 
   <%- include('sections/header.ejs') -%>
 
-  <div class="rn-author-bg-area bg_image--9 bg_image ptb--150">
-    <div class="container">
-      <div class="row">
-      </div>
-    </div>
+  <div class="collection-hero">
+    <img src="<%= collection_banner%>" alt="">
   </div>
 
   <div class="rn-author-area mb--30 mt_dec--120">
@@ -54,10 +51,10 @@
           <div class="author-wrapper">
             <div class="author-inner">
               <div class="user-thumbnail">
-                <img src="" alt="Stack Overflow logo and icons and such" onerror="this.src='assets/images/icons/unknown-user.png'">
+                <img src="<%= collection_logo %>" alt="Stack Overflow logo and icons and such" onerror="this.src='assets/images/icons/unknown-user.png'">
               </div>
               <div class="rn-author-info-content">
-                <h4 class="title">collection Name here </h4>
+                <h4 class="title nus"> <%= collectionDetails.name %> </h4>
               </div>
             </div>
           </div>
@@ -81,7 +78,22 @@
         </div>
       </div>
       <div id="nav-description" class="tab-pane fade active show" aria-labelledby="nav-liked-tab" role="tabpanel">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione expedita laudantium adipisci voluptatem qui debitis porro libero aliquid consequuntur itaque.
+        <div class="nav-description-content">
+          <div class="collection-description-card">
+            <div class="collection-description-card-wrap">
+              <h5>Collection Description</h5>
+              <p><%= collectionDetails.description %></p>
+            </div>
+          </div>
+          <div class="collection-description-card">
+            <div class="collection-description-card-wrap">
+              <h5>Brand</h5>
+              <p><%= collectionDetails.brand %> </p>
+              <h5>Issuer</h5>
+              <p><a href="https://bithomp.com/explorer/<%=collectionDetails.issuer%>" target="_blank"><%= collectionDetails.issuer%></a></p>
+            </div>
+          </div>
+        </div>
       </div>
       <div id="nav-nfts" class="tab-pane fade" aria-labelledby="nav-liked-tab" role="tabpanel">
         <%- include ("models/nft-rows.ejs", {nfts: nfts}) %>
