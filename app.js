@@ -82,10 +82,12 @@ const authorizedIps = [
   "103.231.88.10",
   "27.99.115.205",
   "220.235.196.107",
-  "110.175.5.210", //Liam
+  "202.168.12.19", //Liam
   "116.206.228.204",
   "116.206.228.203",
-  "147.41.128.35", //doddler
+  // "49.145.172.88", //Kuro OCW mod
+  // "136.158.11.167", //B OCW mod
+  // "136.158.2.224", //kazu OCW mod
 ];
 //! ---------------------Custom middleware--------------------------------//
 server.use((req, res, next) => {
@@ -501,6 +503,22 @@ server.post(
       )
     )
       result = true;
+    result ? res.status(200).send("Modified") : res.status(500).send("Failed");
+  }
+);
+server.post(
+  "/subscribe-email",
+  speedLimiter,
+  async (req,res) => {
+    const formDataBody = req.body;
+    var result = false;
+    if (
+      await mongoClient.query.updateMailingList(
+        req.session.wallet,
+        formDataBody["email"]
+      )
+    )
+    result = true;
     result ? res.status(200).send("Modified") : res.status(500).send("Failed");
   }
 );

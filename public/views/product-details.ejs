@@ -97,7 +97,7 @@
                 </div>
                 <div class="count">
                   <div class="share-btn share-btn-activation dropdown">
-                    <button class="icon" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="icon-fix" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                       <svg viewBox="0 0 14 4" fill="none" width="16" height="16" class="sc-bdnxRM sc-hKFxyN hOiKLt">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z" fill="currentColor"></path>
                       </svg>
@@ -237,7 +237,7 @@
                           <div class="nft-sale-history-content">
                             <h5><%=res.price + " " + res.token%></h5>
                             <p style="margin-top: -5px;"><%=res.xrpValue%> XRP</p>
-                            <span>account</span>
+                            <span><%=res.account ? res.account : "couldn't find an account"%></span>
                           </div>
                           <div class="nft-sale-history-content">
                             <a href="https://xls20.bithomp.com/explorer/<%= res.txID %> " target="_blank">View Transaction</a>
@@ -251,16 +251,13 @@
                 <div class="place-bet-area">
                   <div class="rn-bet-create">
                     <div class="bid-list winning-bid">
-                      <h6 class="title">Last Sale</h6>
+                      <h5 class="title">Last Sale</h5>
                       <div class="top-seller-inner-one">
                         <div class="top-seller-wrapper">
-                          <div class="thumbnail">
-                            <a href="#"><img src="assets/images/client/client-7.png" alt="Nft_Profile"></a>
-                          </div>
                           <div class="top-seller-content">
-                            <span class="heighest-bid"><a href="https://xrpscan.com/account/'account address here'"></a></span>
+                            <span class="heighest-bid"><a href="https://xls20.bithomp.com/explorer/<%= nft.sellHistory[0].account %> "><%= nft.sellHistory[0].account %>test</a></span>
                             <span class="count-number">
-                              <%= nft.sellHistory[0] + " " + nft.sellHistory[0]%>
+                              <%- nft.sellHistory[0] ? nft.sellHistory[0].price + " " + nft.sellHistory[0].token : "No Sell History"%>
                             </span>
                           </div>
                         </div>

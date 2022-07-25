@@ -16,9 +16,9 @@
                         <div class="widget-bottom mt--40 pt--40">
                             <h6 class="title">Get The Latest OnChain Marketplace Updates </h6>
                             <div class="input-group">
-                                <input type="text" class="form-control bg-color--2" placeholder="Your email address" aria-label="Recipient's username" style="border: 2px solid #000;">
+                                <input type="email" name="email" class="form-control bg-color--2" placeholder="Your email address" aria-label="Recipient's username" style="border: 2px solid #000;" id="emailSub">
                                 <div class="input-group-append">
-                                    <button class="btn btn-primary-alta btn-outline-secondary" type="button">Subscribe</button>
+                                    <button class="btn btn-primary-alta btn-outline-secondary" type="button" onclick="submitEmail()">Subscribe</button>
                                 </div>
                             </div>
                             <div class="newsletter-dsc">
@@ -37,7 +37,7 @@
                             <li class="single-list"><a href="explore">NFToken Marketplace</a></li>
                             <li class="single-list"><a href="redeem">Redeem your IOU for an NFToken</a></li>
                             <li class="single-list"><a href="mailto:enquiry@onchainwhales.net">Contact Us</a></li>
-                            <li class="single-list"><a href="https://www.staykx.com" target="_blank">Stake Your Tokens</a></li>
+                            <li class="single-list"><a href="https://www.staykx.com" target="_blank">Stayk Your Tokens</a></li>
                         </ul>
                     </div>
                 </div>
@@ -88,4 +88,25 @@
             </div>
         </div>
     </div>
+    <script>
+        function submitEmail() {
+            const formData = new FormData();
+            formData.append("email", document.getElementById("emailSub").value);
+            console.log("formData");
+            $.ajax({
+                type: "POST",
+                url: "/subscribe-email",
+                data: formData,
+                processData: false,
+                contentType: false,
+                enctype: "multipart/form-data",
+                success: function(resulty) {
+                    customAlert.alert('Email Address Submitted')
+                },
+                error: function(resulty) {
+                    customAlert.alert('Error submitting email address, try again later.')
+                },
+            });
+        }
+    </script>
     <!-- End Footer Area -->

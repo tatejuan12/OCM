@@ -473,44 +473,83 @@ var {
   display: block;
   background-size: contain;
 }
-.i-home{
+.active-light-mode .i-home{
   background-image: url(../images/icons/Favorites/icons8-home-100.png);
 }
-.i-shop{
+.i-home{
+  background-image: url(../images/icons/Favorites-light/icons8-home-100.png);
+}
+.active-light-mode .i-shop{
   background-image: url(../images/icons/Favorites/icons8-online-shop-100.png);
 }
-.i-gallery{
+.i-shop{
+  background-image: url(../images/icons/Favorites-light/icons8-online-shop-100.png);
+}
+.active-light-mode .i-gallery{
   background-image: url(../images/icons/Favorites/icons8-home-decorations-100.png);
 }
-.i-box{
+.i-gallery{
+  background-image: url(../images/icons/Favorites-light/icons8-home-decorations-100.png);
+}
+.active-light-mode .i-box{
   background-image: url(../images/icons/Favorites/icons8-box-100.png);
 }
-.i-report{
+.i-box{
+  background-image: url(../images/icons/Favorites-light/icons8-box-100.png);
+}
+.active-light-mode .i-report{
   background-image: url(../images/icons/Favorites/icons8-box-important-100.png);
 }
-.i-shake{
+.i-report{
+  background-image: url(../images/icons/Favorites-light/icons8-box-important-100.png);
+}
+.active-light-mode .i-shake{
   background-image: url(../images/icons/Favorites/icons8-handshake-100.png);
 }
-.i-redeem{
+.i-shake{
+  background-image: url(../images/icons/Favorites-light/icons8-handshake-100.png);
+}
+.active-light-mode .i-redeem{
   background-image: url(../images/icons/Favorites/icons8-transaction-100.png);
 }
-.i-mint{
+.i-redeem{
+  background-image: url(../images/icons/Favorites-light/icons8-transaction-100.png);
+}
+.active-light-mode .i-mint{
   background-image: url(../images/icons/Favorites/icons8-rubber-stamp-100.png);
 }
-.i-gears{
+.i-mint{
+  background-image: url(../images/icons/Favorites-light/icons8-rubber-stamp-100.png);
+}
+.active-light-mode .i-gears{
   background-image: url(../images/icons/Favorites/icons8-services-100.png);
 }
-.i-account{
+.i-gears{
+  background-image: url(../images/icons/Favorites-ligt/icons8-services-100.png);
+}
+.active-light-mode .i-account{
   background-image: url(../images/icons/Favorites/icons8-user-100.png);
 }
-.i-edit{
+.i-account{
+  background-image: url(../images/icons/Favorites-light/icons8-user-100.png);
+}
+.active-light-mode .i-edit{
   background-image: url(../images/icons/Favorites/icons8-edit-100.png);
 }
-.i-about{
+.i-edit{
+  background-image: url(../images/icons/Favorites-light/icons8-edit-100.png);
+}
+.active-light-mode .i-about{
   background-image: url(../images/icons/Favorites/icons8-about-100.png); 
 }
-.i-report{
+.i-about{
+  background-image: url(../images/icons/Favorites-light/icons8-about-100.png); 
+}
+.active-light-mode .i-report{
   background-image: url(../images/icons/Favorites/icons8-box-important-100.png);
+}
+.i-report{
+  background-image: url(../images/icons/Favorites-light/icons8-box-important-100.png);
 }
 /*---------------------------
 	List Style 
@@ -13335,6 +13374,10 @@ span.rn-badge-card::before {
   margin-bottom: 15px;
   max-height: 400px;
   overflow: auto;
+  border-radius: 6px;
+  box-shadow: inset 0 8px 2px -2px rgba(255, 255, 255, 0.1);
+}
+.active-light-mode .nft-sale-history-section{
   box-shadow: inset 0 8px 2px -2px rgba(0, 0, 0, 0.1);
 }
 .nft-sale-history-wrap {
@@ -16175,7 +16218,7 @@ xclip
   max-width: 200px;
 }
 @media only screen and (max-width: 767px) {
-  .rn-service-one .inner .icon img {
+  .rn-service-one .inner .frontpage-icon img {
     max-height: 180px;
     margin-top: -40px;
     margin-right: -20px;
@@ -19050,6 +19093,7 @@ NFT product styles mobile layout
 }
 .place-bet-area .winning-bid .top-seller-content .count-number {
   font-size: 14px;
+  margin-left: 7px;
 }
 .place-bet-area .left-bid {
   flex-basis: 40%;

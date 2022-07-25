@@ -10,6 +10,28 @@ var methods = {
     if (!exists) {
     }
   },
+  updateMailingList: async function (email) {
+    const client = await getClient();
+    if (!client) return;
+    try{
+      const db = client.db("Accounts");
+
+      let collection = db.collection("Mailing-List");
+
+      let query = {$set: {} };
+      if (email) query.$set["email"] = email;
+
+      let res = await collection.updateOne(query);
+
+      console.log(query);
+
+      return res.modifiedCount > 0 ? true : false;
+    } catch (err) {
+      console.log("Database error" + err);
+    } finally {
+      client.close();
+    }
+  },
   updateUser: async function (wallet, project, email, bio, website) {
     const client = await getClient();
     if (!client) return;
