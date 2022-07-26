@@ -161,7 +161,16 @@
                         </div>
                       </div>
                     </div>
-                    <h6 id="buyOffers" class="title name-title mr--10 mt--20 transition">Sell Offers</h6>
+                    <h6 id="sellOffers" class="title name-title mr--10 mt--20 transition">Sell Offers</h6>
+                    <div id="sell-offer-container">
+                      <div class="offers-slice">
+                        <div class="offers-wrap">
+                          <div class="offers-content">
+                            <h5>Nothing To Show Yet</h5>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     
                   </div>
                   <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
@@ -255,7 +264,7 @@
                       <div class="top-seller-inner-one">
                         <div class="top-seller-wrapper">
                           <div class="top-seller-content">
-                            <span class="heighest-bid"><a href="https://xls20.bithomp.com/explorer/<%= nft.sellHistory[0].account %> "><%= nft.sellHistory[0].account %>test</a></span>
+                            <!-- <span class="heighest-bid"><a href="https://xls20.bithomp.com/explorer/%= nft.sellHistory[0].account %>">%= nft.sellHistory[0] ? nft.sellHistory[0].account : "account" %></a></span> -->
                             <span class="count-number">
                               <%- nft.sellHistory[0] ? nft.sellHistory[0].price + " " + nft.sellHistory[0].token : "No Sell History"%>
                             </span>

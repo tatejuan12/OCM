@@ -10,22 +10,24 @@ var methods = {
     if (!exists) {
     }
   },
-  updateMailingList: async function (email) {
+  updateMailingList: async function (wallet, email) {
     const client = await getClient();
     if (!client) return;
     try{
       const db = client.db("Accounts");
 
       let collection = db.collection("Mailing-List");
-
+      
+      let filter = {
+        wallet: wallet,
+      };
       let query = {$set: {} };
       if (email) query.$set["email"] = email;
 
-      let res = await collection.updateOne(query);
-
-      console.log(query);
+      let res = await collection.updateOne(filter, query);
 
       return res.modifiedCount > 0 ? true : false;
+
     } catch (err) {
       console.log("Database error" + err);
     } finally {

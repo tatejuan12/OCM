@@ -846,7 +846,20 @@ function NFTokenAcceptOffer(index, NFToken) {
     url: "/NFTokenAcceptOffer",
     data: { index: index, NFToken: NFToken, return_url: window.location.href },
     success: function (result) {
-      window.location.href = result.next.always;
+      console.log(result);
+      window.location.href = result.payload.payload.next.always;
+
+      $.ajax({
+        type: "POST",
+        url: "/NFTokenAcceptOfferSubscription",
+        data: result,
+        success: function (resulty) {
+          console.log("Transacted");
+        },
+        error: function (resulty) {
+          console.warn("Transaction expired, failed or was cancelled.");
+        },
+      });
     },
   });
 }
@@ -939,9 +952,29 @@ function getListNft(fee) {
   });
 }
 
-
 //No underscores looks for nus class and removes
-window.onload = function noUnderscores(){
-  const elements = document.querySelectorAll('.nus')   
-  elements.forEach(e => e.innerText = e.innerText.toUpperCase().replaceAll('_', ' '))
+window.onload = function noUnderscores() {
+  const elements = document.querySelectorAll(".nus");
+  elements.forEach(
+    (e) => (e.innerText = e.innerText.toUpperCase().replaceAll("_", " "))
+  );
 };
+
+function submitEmail() {
+  const formData = new FormData();
+  formData.append("email", document.getElementById("emailSub").value);
+  $.ajax({
+      type: "POST",
+      url: "/subscribe-email",
+      data: formData,
+      processData: false,
+      contentType: false,
+      enctype: "multipart/form-data",
+      success: function(resulty) {
+          customAlert.alert('Email Address Submitted')
+      },
+      error: function(resulty) {
+          customAlert.alert('Error submitting email address, try again later.')
+      },
+  });
+}

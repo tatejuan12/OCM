@@ -13366,6 +13366,9 @@ span.rn-badge-card::before {
   align-items: center;
   border-radius: 6px;
 }
+.offers-content .btn{
+  font-size: 12px;
+}
 .offers-content h5 {
   margin-bottom: 5px;
 }

@@ -1,8 +1,9 @@
+<%url = new URLSearchParams(queries)%>
 <div class="pagination-navigation">
   <%for(var i = page - 5 ; i < page + 5 ; i++) {
     if (i < 0) i = 0;
     if (page == i) {%><a><span class="pagination-step step-active"><%=i%></span></a><%} else {%>
-
-  <a href="<%=url +'explore?page='+ i%>"><span class="pagination-step"><%=i%></span></a>
+  <%url.set("page", i)%>
+  <a href="<%=path +"?"+ url.toString()%>"><span class="pagination-step"><%=i%></span></a>
   <%}}%>
 </div>

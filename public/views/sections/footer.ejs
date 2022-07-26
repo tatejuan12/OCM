@@ -88,25 +88,4 @@
             </div>
         </div>
     </div>
-    <script>
-        function submitEmail() {
-            const formData = new FormData();
-            formData.append("email", document.getElementById("emailSub").value);
-            console.log("formData");
-            $.ajax({
-                type: "POST",
-                url: "/subscribe-email",
-                data: formData,
-                processData: false,
-                contentType: false,
-                enctype: "multipart/form-data",
-                success: function(resulty) {
-                    customAlert.alert('Email Address Submitted')
-                },
-                error: function(resulty) {
-                    customAlert.alert('Error submitting email address, try again later.')
-                },
-            });
-        }
-    </script>
     <!-- End Footer Area -->

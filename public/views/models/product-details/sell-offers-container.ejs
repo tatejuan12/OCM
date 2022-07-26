@@ -1,8 +1,3 @@
-<div class="top-seller-inner-one">
-  <div class="top-seller-wrapper offer-wrapper transition">
-    <div class="top-seller-content">
-      <span>20 XRP</span>
-
-    </div>
-  </div>
-</div>
+<% sellOffers.forEach(function(res){%>
+<%- include('buy-offer-card.ejs', {sellOffers: res, isOwner: isOwner, NFToken: NFToken})%>
+<%}); %>
