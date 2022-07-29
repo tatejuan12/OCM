@@ -82,12 +82,13 @@ const authorizedIps = [
   "103.231.88.10",
   "27.99.115.205",
   "220.235.196.107",
-  "220.235.193.14", //Liam
+  "220.244.152.184", //Liam
   "116.206.228.204",
   "116.206.228.203",
   // "49.145.172.88", //Kuro OCW mod
   // "136.158.11.167", //B OCW mod
   // "136.158.2.224", //kazu OCW mod
+  // "174.118.238.12", //Razzle OCW mod
 ];
 //! ---------------------Custom middleware--------------------------------//
 server.use((req, res, next) => {
@@ -136,7 +137,7 @@ server.get("/profile", speedLimiter, async (req, res) => {
     defaultLocals(req, res);
     const profile_pic = digitalOcean.functions.getProfileLink(wallet);
     nftsPromise = new Promise(function (resolve, reject) {
-      const nfts = xumm.xrpl.getAccountsNfts(NFTSPERPAGE, page, wallet);
+      const nfts = xumm.xrpl.getAccountsNfts(wallet, NFTSPERPAGE);
       resolve(nfts);
     });
     userPromise = new Promise(function (resolve, reject) {
@@ -157,14 +158,26 @@ server.get("/profile", speedLimiter, async (req, res) => {
       offersPromise,
       likedNftsPromise,
     ]);
-    const ownerNfts = await mongoClient.query.getOwnerNfts(wallet, promises[0]);
+
+    const isOwner = promises[1].wallet == req.session.wallet ? true : false;
+    var marker = promises[0][1];
+    var isMarker = promises[0][1] == undefined ? false : true;
+    const ownerNfts = await mongoClient.query.getOwnerNfts(
+      wallet,
+      promises[0][0]
+    );
     res.render("views/profile", {
+      isOwner: isOwner,
+      marker: marker,
       nfts: ownerNfts,
       user: promises[1],
       profile_pic: profile_pic,
       buyOffers: promises[2][1],
       sellOffers: promises[2][0],
       likedNfts: promises[3],
+      page: page,
+      queries: req.query,
+      isMarker: isMarker,
     });
   } else {
     parametersToSet.push({ key: "page", value: 0 });
@@ -361,6 +374,7 @@ server.post("/get-profile-info", speedLimiter, async (req, res, next) => {
     const promises = await Promise.all([offersPromise, ownerPromise]);
     var returnHtml = [];
     defaultLocals(req, res);
+    const currUser = req.session.wallet;
     const isOwner = promises[1] == req.session.wallet ? true : false;
     const profile_img = digitalOcean.functions.getProfileLink(promises[1]);
     res.render(
@@ -383,6 +397,7 @@ server.post("/get-profile-info", speedLimiter, async (req, res, next) => {
         owner: promises[1],
         isOwner: isOwner,
         NFToken: nftId,
+        currUser: currUser,
       },
       function (err, html) {
         if (err) throw "Couldn't get sell offers\n" + err;
@@ -542,19 +557,19 @@ server.post(
     result ? res.status(200).send("Modified") : res.status(500).send("Failed");
   }
 );
-server.post("/subscribe-email", 
-  speedLimiter,
-  async (req, res) => {
-    const formDataBody = req.body;
-    var result = false;
-    if (
-      await mongoClient.query.updateMailingList(
-        req.session.wallet,
-        formDataBody["email"],
-      )
+server.post("/subscribe-email", speedLimiter, async (req, res) => {
+  const formDataBody = req.body;
+  console.log(formDataBody);
+
+  var result = false;
+  if (
+    await mongoClient.query.updateMailingList(
+      req.session.wallet,
+      formDataBody["email"]
     )
-      result = true;
-    result ? res.status(200).send("Modified") : res.status(500).send("Failed");
+  )
+    result = true;
+  result ? res.status(200).send("Modified") : res.status(500).send("Failed");
 });
 server.post("/report-nft", upload.any(), speedLimiter, async (req, res) => {
   const formData = req.body;
@@ -605,8 +620,8 @@ server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
   var unlistedNftsToReturn = [];
   if (req.query.wallet) wallet = req.query.wallet;
   else wallet = req.session.wallet;
-  const nfts = await xumm.xrpl.getAccountsNfts(wallet);
-  for (let nft of nfts) {
+  const nfts = await xumm.xrpl.getAccountsNfts(wallet, NFTSPERPAGE);
+  for (let nft of nfts[0]) {
     const returnedNft = await mongoClient.query.getNft(nft.NFTokenID);
     if (returnedNft == null) unlistedNfts.push(nft);
   }
@@ -621,6 +636,39 @@ server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
   res.render("views/models/unlisted-nft-rows.ejs", {
     nfts: unlistedNftsToReturn,
   });
+});
+server.get("/get-additional-listed-nfts", speedLimiter, async (req, res) => {
+  var wallet = req.query.wallet;
+  var marker = req.query.marker;
+  var markerIteration = req.query.markerIteration;
+  var returnData = [];
+  if (wallet && marker && markerIteration) {
+    const xrplNfts = await xumm.xrpl.getAccountsNfts(
+      wallet,
+      NFTSPERPAGE,
+      marker
+    );
+    const nfts = await mongoClient.query.matchXrplNftsWithMongoDB(
+      null,
+      xrplNfts
+    );
+    var updateNfts = [];
+    for (var i = markerIteration * NFTSPERPAGE; i < nfts.length; i++) {
+      updateNfts.push(nfts[i]);
+    }
+    res.render(
+      "views/models/nft-rows-load.ejs",
+      {
+        nfts: nfts,
+      },
+      async function (err, html) {
+        if (err) throw "Couldn't get NFTS\n" + err;
+        returnData.push(html);
+      }
+    );
+    returnData.push(xrplNfts[1]);
+    res.send(returnData);
+  } else res.sendStatus(400);
 });
 server.get("/get-token-balance", speedLimiter, async (req, res) => {
   const hex = req.query.hex;

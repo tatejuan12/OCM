@@ -14024,7 +14024,25 @@ button.btn.btn-large {
   padding: 15px 34px;
   min-width: 160px;
 }
+.btn.btn-load-more{
+  width: 343px;
+  height: 48px;
+  border: 2px solid #6c7279;
+  transition: 0.3s;
 
+}
+.btn.btn-load-more:hover{
+  background-color: #00000024;
+}
+.active-light-mode .btn.btn-load-more{
+  border: 2px solid #f4f4f4;
+}
+.load-more-div{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 25px;
+}
 .btn-transparent {
   color: var(--color-body);
   transition: 0.4s;

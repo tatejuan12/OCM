@@ -880,40 +880,55 @@ var xrpls = {
       await client.disconnect();
     }
   },
-  getAccountsNfts: async function (NFTSPERPAGE, marker, address) {
-    const client = await getXrplClient();
-    if (marker == 0) marker = undefined;
+  getAccountsNfts: async function (address, numberOfNFTs, marker) {
     try {
+      //define
+      var client = new xrpl.Client("wss://xls20-sandbox.rippletest.net:51233");
+      var cname = "marker";
+
+      //console.log("Connecting to XRPL")
+      //Try Connect to XRPL
+      var count = 0;
+      while (count < 6) {
+        if (count >= 3) {
+          var client = new xrpl.Client(
+            "wss://xls20-sandbox.rippletest.net:51233"
+          );
+        }
+
+        try {
+          await client.connect();
+          //console.log(`\tConnected`)
+          break;
+        } catch (err) {
+          //console.log(`                    Failed ${count}`)
+          count += 1;
+        }
+      }
       //try 5 times to get an array of all account NFTs
       var count = 0;
       while (count < 5) {
         try {
-          var allNFTs = [];
-          var marker = "begin";
-          while (marker != null) {
-            //console.log("Retrieving")
-            if (marker == "begin") {
-              var accountNFTs = await client.request({
-                method: "account_nfts",
-                ledger_index: "validated",
-                account: address,
-                limit: NFTSPERPAGE,
-              });
-            } else {
-              var accountNFTs = await client.request({
-                method: "account_nfts",
-                ledger_index: "validated",
-                account: address,
-                marker: marker,
-                limit: NFTSPERPAGE,
-              });
-            }
-
-            for (a in accountNFTs.result.account_nfts) {
-              allNFTs.push(accountNFTs.result.account_nfts[a]);
-            }
-            var marker = accountNFTs.result.marker;
+          if (marker == null) {
+            var accountNFTs = await client.request({
+              command: "account_nfts",
+              ledger_index: "validated",
+              account: address,
+              limit: numberOfNFTs,
+            });
+          } else {
+            var accountNFTs = await client.request({
+              command: "account_nfts",
+              ledger_index: "validated",
+              account: address,
+              marker: marker,
+              limit: numberOfNFTs,
+            });
           }
+
+          var allNFTs = accountNFTs.result.account_nfts;
+          var marker = accountNFTs.result.marker;
+
           break;
         } catch (err) {
           //console.log(`                    Failed ${count}`)
@@ -921,13 +936,12 @@ var xrpls = {
         }
       }
 
-      console.log(allNFTs);
-      console.log(allNFTs.length);
-      return allNFTs;
+      return [allNFTs, marker];
     } catch (error) {
-      return;
+      console.log(error);
+      return null;
     } finally {
-      client.disconnect();
+      await client.disconnect();
     }
   },
   getAccountOffers: async function (address) {

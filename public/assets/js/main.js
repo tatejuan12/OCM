@@ -969,7 +969,6 @@ function submitEmail() {
       data: formData,
       processData: false,
       contentType: false,
-      enctype: "multipart/form-data",
       success: function(resulty) {
           customAlert.alert('Email Address Submitted')
       },

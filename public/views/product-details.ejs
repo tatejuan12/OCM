@@ -129,10 +129,10 @@
                   <div class="top-seller-wrapper">
                     <div class="thumbnail">
                       <!-- a tag should link to collection of the respective NFT collection associated with that image -->
-                      <a href="collection?name=<%=nft.uriMetadata.collection.name.toLowerCase().replace(' ', '_')%>&issuer=<%=nft.issuer%>"><img src="<%=collection_logo%> " alt="Nft_Profile"></a>
+                      <a href="collection?name=<%=nft.uriMetadata.collection.name.toLowerCase().replace(' ', '_')%>&issuer=<%=nft.issuer%>&page=0"><img src="<%=collection_logo%> " alt="Nft_Profile"></a>
                     </div>
                     <div class="top-seller-content">
-                      <a href="collection?name=<%=nft.uriMetadata.collection.name.toLowerCase().replace(' ', '_')%>&issuer=<%=nft.issuer%>">
+                      <a href="collection?name=<%=nft.uriMetadata.collection.name.toLowerCase().replace(' ', '_')%>&issuer=<%=nft.issuer%>&page=0">
                         <h6 class="name"><%=nft.uriMetadata.collection.name%></h6>
                       </a>
                     </div>
@@ -398,6 +398,7 @@
     <script>
       $.post("/get-profile-info?id=<%-nft.tokenID%>", function(data) {
         $("#buy-offer-container").html(data[0]);
+        $("#sell-offer-container").html(data[1]);
         $("#owner-name").html(`<h6 class = "name" style = "display: inline-block" >${data[2]}</h6>`);
         $("#owner-name").attr("href", `/profile?wallet=${data[2]}`);
         $("#profile-thumbnail-container").html(`<img src="${data[3]}" class="profile-thumbnail transition" onerror="this.src='assets/images/icons/unknown-user.png'">`)

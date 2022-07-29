@@ -74,16 +74,24 @@
             <nav class="tab-button-one">
               <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#pane-listed-nfts" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Listed</button>
+                <% if (isOwner) {%>
                 <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#pane-unlisted-nfts" type="button" role="tab" aria-controls="nav-profile" aria-selected="true">Un-Listed</button>
                 <button class="nav-link" id="nav-liked-tab" data-bs-toggle="tab" data-bs-target="#pane-liked-nfts" type="button" role="tab" aria-controls="nav-liked" aria-selected="false">Liked</button>
                 <button class="nav-link" id="nav-offers-tab" data-bs-toggle="tab" data-bs-target="#pane-offers" type="button" role="tab" aria-controls="nav-accountOffers" aria-selected="false">Account Offers</button>
+                <%}%>
               </div>
             </nav>
           </div>
         </div>
       </div>
 
-      <div id="pane-listed-nfts" class="tab-pane fade active show" aria-labelledby="nav-listed-tab" role="tabpanel"><%- include ("models/nft-rows.ejs", {nfts:nfts}) %></div>
+      <div id="pane-listed-nfts" class="tab-pane fade active show" aria-labelledby="nav-listed-tab" role="tabpanel">
+        <%- include ("models/nft-rows.ejs", {nfts:nfts}) %>
+        <%if (isMarker) {%>
+        <div class="load-more-div"><button id="moreListedNftsLoad" class="btn btn-load-more">Load More</button></div>
+        <%}%>
+      </div>
+      <% if (isOwner) {%>
       <div id="pane-unlisted-nfts" class="tab-pane fade" aria-labelledby="nav-unlisted-tab" role="tabpanel">
         <div class="loader-content"></div>
       </div>
@@ -95,6 +103,7 @@
         <%- include('models/buy-offers.ejs', {offer:res})%>
         <%}); %>
       </div>
+      <%}%>
     </div>
   </div>
   <!-- Modal require -->
@@ -136,15 +145,32 @@
   <!-- main JS -->
   <script src="assets/js/main.js"></script>
 
-  <!-- <script>
-    $("#pane-unlisted-nfts").load("<%=url%>get-account-unlisted-nfts?wallet=<%=user.wallet%>",
+  <script>
+    $("#pane-unlisted-nfts").load("<%=url%>/get-account-unlisted-nfts?wallet=<%=user.wallet%>",
       function() {
         const cards = document.getElementById("pane-unlisted-nfts").querySelectorAll(".col-5");
         cards.forEach(element => {
           element.classList.add("sal-animate")
         });
       })
-  </script> -->
+    var markerIteration = 0;
+    var marker = '<%=marker%>';
+    $("#moreListedNftsLoad").click(function() {
+      $.get(
+        `<%=url%>/get-additional-listed-nfts?wallet=<%=user.wallet%>&marker=${marker}&markerIteration=${markerIteration}`,
+        function(data) {
+          markerIteration++;
+          var updateNfts = [];
+          $("#exploreSection").append(data[0])
+          marker = data[1]
+          const cards = document.getElementById("exploreSection").querySelectorAll(".col-5");
+          cards.forEach(element => {
+            element.classList.add("sal-animate")
+          });
+        }
+      )
+    })
+  </script>
 </body>
 
 </html>

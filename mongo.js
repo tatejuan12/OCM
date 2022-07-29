@@ -13,21 +13,19 @@ var methods = {
   updateMailingList: async function (wallet, email) {
     const client = await getClient();
     if (!client) return;
-    try{
+    try {
       const db = client.db("Accounts");
 
       let collection = db.collection("Mailing-List");
-      
-      let filter = {
-        wallet: wallet,
-      };
-      let query = {$set: {} };
-      if (email) query.$set["email"] = email;
 
-      let res = await collection.updateOne(filter, query);
+      let query = {
+        wallet: wallet,
+        email: email,
+      };
+
+      let res = await collection.insertOne(query);
 
       return res.modifiedCount > 0 ? true : false;
-
     } catch (err) {
       console.log("Database error" + err);
     } finally {
@@ -130,28 +128,56 @@ var methods = {
     }
   },
   getOwnerNfts: async function (owner, nfts) {
-    const tokenIds = [];
-    nfts.forEach((nft) => {
-      tokenIds.push(nft.NFTokenID);
-    });
-    var result;
-    const client = await getClient();
-    if (!client) return;
-    try {
-      const db = client.db("NFTokens");
+    if (nfts) {
+      var tokenIds = [];
+      nfts.forEach((nft) => {
+        tokenIds.push(nft.NFTokenID);
+      });
+      var result;
+      const client = await getClient();
+      if (!client) return;
+      try {
+        const db = client.db("NFTokens");
 
-      let collection = db.collection("Eligible-Listings");
+        let collection = db.collection("Eligible-Listings");
 
-      let query = {
-        $or: [{ tokenID: { $in: tokenIds } }],
-      };
-      const cursor = await collection.find(query);
-      return await cursor.toArray();
-    } catch (err) {
-      console.log("Database error" + err);
-    } finally {
-      client.close();
-    }
+        let query = {
+          $or: [{ tokenID: { $in: tokenIds } }],
+        };
+        const cursor = await collection.find(query);
+        return await cursor.toArray();
+      } catch (err) {
+        console.log("Database error" + err);
+      } finally {
+        client.close();
+      }
+    } else return [];
+  },
+  matchXrplNftsWithMongoDB: async function (owner, nfts) {
+    if (nfts) {
+      var tokenIds = [];
+      nfts[0].forEach((nft) => {
+        tokenIds.push(nft.NFTokenID);
+      });
+      var result;
+      const client = await getClient();
+      if (!client) return;
+      try {
+        const db = client.db("NFTokens");
+
+        let collection = db.collection("Eligible-Listings");
+
+        let query = {
+          $or: [{ tokenID: { $in: tokenIds } }],
+        };
+        const cursor = await collection.find(query);
+        return await cursor.toArray();
+      } catch (err) {
+        console.log("Database error" + err);
+      } finally {
+        client.close();
+      }
+    } else return [];
   },
   getNfts: async function (NFTSPERPAGE, page, filters) {
     const client = await getClient();
@@ -255,8 +281,8 @@ var methods = {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
       var query = {
-        $match: {"uriMetadata.collection.name": collectionName },
-        $match: { issuer: issuer }
+        $match: { "uriMetadata.collection.name": collectionName },
+        $match: { issuer: issuer },
       };
       const aggregate = collection
         .aggregate([query])

@@ -1,3 +1,4 @@
-<% sellOffers.forEach(function(res){%>
-<%- include('buy-offer-card.ejs', {sellOffers: res, isOwner: isOwner, NFToken: NFToken})%>
-<%}); %>
+<% sellOffers.forEach(function(res){ if (res.expiry < Date.now()){%>
+<% if (res.destination == undefined || currUser == res.destination){%> 
+<%- include('sell-offer-card.ejs', {sellOffers: res, isOwner: isOwner, NFToken: NFToken})%>
+<%}}});%>
