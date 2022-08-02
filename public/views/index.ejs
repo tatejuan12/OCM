@@ -42,6 +42,16 @@
     </div>
   </div>
 
+  <!-- popup alert for beta testers -->
+  <div class="devnet-alert">
+    <span class="devnet-pop-helper"></span>
+    <div>
+      <div class="devnet-pop-close">&times;</div>
+      <p style="color: red;">This website is currently in <strong>Beta!</strong> <br> This means any transactions made on this website <strong>must be done through the XLS-20 devnet</strong>. Connect your XUMM wallet to the devnet then proceed with using this website. <br> Should you fail to do so and you make a transaction, those<strong> real world funds will be transfered and lost</strong>.</p>
+    </div>
+  </div>
+
+
   <!--Require header-->
   <%- include( 'sections/header.ejs'); -%>
 
@@ -173,6 +183,16 @@
   <script src="assets/js/vendor/savePopup.js"></script>
   <!-- main JS -->
   <script src="assets/js/main.js"></script>
+  <script>
+    $(window).load(function () {
+    $('.devnet-alert').click(function(){
+        $('.devnet-alert').hide();
+    });
+    $('.devnet-pop-close').click(function(){
+        $('.devnet-alert').hide();
+    });
+});
+  </script>
 </body>
 
 </html>
