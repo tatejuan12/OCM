@@ -82,13 +82,14 @@ const authorizedIps = [
   "103.231.88.10",
   "27.99.115.205",
   "220.235.196.107",
-  "118.209.235.113", //Liam
+  "118.208.192.59", //Liam
   "116.206.228.204",
   "116.206.228.203",
-  "49.145.172.88", //Kuro OCW mod
+  "175.176.36.102", //Kuro OCW mod
   "136.158.11.167", //B OCW mod
   "136.158.2.224", //kazu OCW mod
   "174.118.238.12", //Razzle OCW mod
+  "14.201.212.126",
 ];
 //! ---------------------Custom middleware--------------------------------//
 server.use((req, res, next) => {
@@ -443,15 +444,14 @@ server.post("/NFTokenAcceptOffer", speedLimiter, async (req, res) => {
   } else res.sendStatus(400);
 });
 server.post("/NFTokenAcceptOfferSubscription", async (req, res, next) => {
+  const NFTokenID = req.body.NFTokenID;
   const result = await xumm.subscriptions.NFTokenAcceptSubscription(req, res);
   if (result) {
-    console.log(result);
     const NFTOfferDetails = {
-      NFTokenID: result.NFTokenID,
-      Date: new Date(),
+      NFTokenID: NFTokenID,
+      Date: new Date.now(),
     };
-    mongoClient.query.queryHERE;
-    //!here
+    mongoClient.query.logRecentSale(NFTOfferDetails);
     return;
   }
 });

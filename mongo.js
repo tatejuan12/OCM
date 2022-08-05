@@ -83,6 +83,23 @@ var methods = {
       client.close();
     }
   },
+  logRecentSale: async function (details) {
+    const client = await getClient();
+    if (!client) return;
+    try {
+      const db = client.db("NFTokens");
+      let collection = db.collection("Recently-Sold");
+      let query = {
+        details: details,
+      };
+
+      let res = await collection.insertOne(query);
+      return res;
+    } catch (err) {
+    } finally {
+      client.close();
+    }
+  },
   getUser: async function (wallet) {
     var result;
     const client = await getClient();

@@ -267,6 +267,7 @@
                             <!-- <span class="heighest-bid"><a href="https://xls20.bithomp.com/explorer/%= nft.sellHistory[0].account %>">%= nft.sellHistory[0] ? nft.sellHistory[0].account : "account" %></a></span> -->
                             <span class="count-number">
                               <%- nft.sellHistory[0] ? nft.sellHistory[0].price + " " + nft.sellHistory[0].token : "No Sell History"%>
+                              <%#- account  %>
                             </span>
                           </div>
                         </div>
@@ -403,6 +404,7 @@
         $("#owner-name").attr("href", `/profile?wallet=${data[2]}`);
         $("#profile-thumbnail-container").html(`<img src="${data[3]}" class="profile-thumbnail transition" onerror="this.src='assets/images/icons/unknown-user.png'">`)
         if (!data[4]) $("#buy-offer-btn-container").html('<button type="button" class="btn btn-primary-alta mt--30" data-bs-toggle="modal" data-bs-target="#placebidModal">Place an Offer</button>');
+        // if (data[4]) $("#buy-offer-btn-container").html('<button type="button" class="btn btn-primary-alta mt--30" data-bs-toggle="modal" data-bs-target="#placebidModal">Place a Sell Offer</button>');
       })
       currNft = '<%=nft.tokenID%>';
 
