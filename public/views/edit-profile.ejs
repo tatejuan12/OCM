@@ -8,6 +8,7 @@
   <meta name="robots" content="noindex, follow" />
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="Cache-control" content="private">
 
   <meta name="theme-style-mode" content="0"> <!-- 0 == light, 1 == dark -->
 
@@ -139,12 +140,12 @@
                   <div class=" mb--15">
                     <div class="first-name half-wid">
                       <label for="Project" class="form-label">Project Name:</label>
-                      <input name="Project" id="Project" type="text" placeholder="Wesley">
+                      <input name="Project" id="Project" type="text" placeholder="Wesley" value="<%= account_info.project %> ">
                     </div>
                   </div>
                   <div class="email-area">
                     <label for="Email" class="form-label">Change Your Email:</label>
-                    <input name="Email" id="Email" type="email" placeholder="example@gmail.com">
+                    <input name="Email" id="Email" type="email" placeholder="example@gmail.com" value="<%= account_info.email %> ">
                   </div>
                 </div>
 
@@ -152,7 +153,7 @@
                 <!-- edit bio area Start-->
                 <div class="edit-bio-area mt--30">
                   <label for="Description" class="form-label">Edit Your Bio:</label>
-                  <textarea id="Description" placeholder="I'm having a whale of a time."></textarea>
+                  <textarea id="Description" placeholder="I'm having a whale of a time."><%= account_info.bio %></textarea>
                 </div>
                 <!-- edit bio area End -->
 
@@ -160,7 +161,7 @@
                 <!-- start Role area -->
                 <div class="role-area mt--15">
                   <label for="Website" class="form-label mb--10">Link to Website:</label>
-                  <input name="Website" id="Website" type="text" placeholder="onchainwhales.net">
+                  <input name="Website" id="Website" type="text" placeholder="onchainwhales.net" value="<%= account_info.website %> ">
                 </div>
                 <!-- End Role area -->
 
@@ -171,106 +172,8 @@
             <!-- End single tabv content -->
             <div class="tab-pane fade " id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
 
-              <!-- start Notification Setting  -->
-              <div class="nuron-information">
-                <h5 class="title">Make Sure Your Notification setting </h5>
-                <p class="notice-disc">
-                  Notification Center is where you can find app notifications and Quick Settings—which
-                  give you quick access to commonly used settings and apps. You can change your
-                  notification settings at any time from the Settings app. Select Start , then select
-                  Settings
-                </p>
-                <hr />
-                <!-- start notice wrapper parrent -->
-                <div class="notice-parent-wrapper d-flex">
-                  <div class="notice-child-wrapper">
-                    <!-- single notice wrapper -->
-                    <div class="single-notice-setting">
-                      <div class="input">
-                        <input type="checkbox" id="themeSwitchs" name="theme-switch" class="theme-switch__input" />
-                      </div>
-                    </div>
-                    <!-- single notice wrapper End -->
-
-                    <!-- single notice wrapper -->
-                    <div class="single-notice-setting mt--15">
-                      <div class="input">
-                        <input type="checkbox" id="themeSwitchs" name="theme-switch" class="theme-switch__input" />
-                        <label for="themeSwitchs" class="theme-switch__label">
-                          <span></span>
-                        </label>
-                      </div>
-                      <div class="content-text">
-                        <p>New Items Notification</p>
-                      </div>
-                    </div>
-                    <!-- single notice wrapper End -->
-
-                    <!-- single notice wrapper -->
-                    <div class="single-notice-setting mt--15">
-                      <div class="input">
-                        <input type="checkbox" id="OrderNotice" name="theme-switch" class="theme-switch__input" />
-                        <label for="OrderNotice" class="theme-switch__label">
-                          <span></span>
-                        </label>
-                      </div>
-                      <div class="content-text">
-                        <p>New Bid Notification</p>
-                      </div>
-                    </div>
-                    <!-- single notice wrapper End -->
-
-                    <!-- single notice wrapper -->
-                    <div class="single-notice-setting mt--15">
-                      <div class="input">
-                        <input type="checkbox" id="newPAy" name="theme-switch" class="theme-switch__input" />
-                        <label for="newPAy" class="theme-switch__label">
-                          <span></span>
-                        </label>
-                      </div>
-                      <div class="content-text">
-                        <p>Payment Card Notification</p>
-                      </div>
-                    </div>
-                    <!-- single notice wrapper End -->
-
-                    <!-- single notice wrapper -->
-                    <div class="single-notice-setting mt--15">
-                      <div class="input">
-                        <input type="checkbox" id="EndBid" name="theme-switch" class="theme-switch__input" />
-                        <label for="EndBid" class="theme-switch__label">
-                          <span></span>
-                        </label>
-                      </div>
-                      <div class="content-text">
-                        <p>Ending Bid Notification Before 5 min</p>
-                      </div>
-                    </div>
-                    <!-- single notice wrapper End -->
-
-                    <!-- single notice wrapper -->
-                    <div class="single-notice-setting mt--15">
-                      <div class="input">
-                        <input type="checkbox" id="Approve" name="theme-switch" class="theme-switch__input" />
-                        <label for="Approve" class="theme-switch__label">
-                          <span></span>
-                        </label>
-                      </div>
-                      <div class="content-text">
-                        <p>Notification for approving product</p>
-                      </div>
-                    </div>
-                    <!-- single notice wrapper End -->
-                  </div>
-
-
-
-                  <div class="notice-child-wrapper">
-                  </div>
-                </div>
-                <!-- end notice wrapper parrent -->
-                <a href="#" class="btn btn-primary save-btn-edit" onclick="customAlert.alert('Successfully saved Your Notificationm setting')">Save</a>
-              </div>
+              
+            <a href="#" class="btn btn-primary save-btn-edit" onclick="customAlert.alert('Successfully saved Your Notificationm setting')">Save</a>
               <!-- End Notification Setting  -->
 
 

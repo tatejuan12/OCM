@@ -321,7 +321,9 @@ server.get("/edit-profile", speedLimiter, async (req, res) => {
     const profile_pic = digitalOcean.functions.getProfileLink(
       req.session.wallet
     );
-    res.render("views/edit-profile", { profile_pic: profile_pic });
+    const account_info = await mongoClient.query.getUser(req.session.wallet);
+    console.log(account_info);
+    res.render("views/edit-profile", { profile_pic: profile_pic, account_info: account_info });
   } else res.status(401).redirect("/");
 });
 server.get("/product-details", speedLimiter, async (req, res, next) => {

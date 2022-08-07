@@ -8,7 +8,7 @@
   <meta name="robots" content="noindex, follow" />
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+  <meta http-equiv="Cache-control" content="private">
   <meta name="theme-style-mode" content="0"> <!-- 0 == light, 1 == dark -->
 
   <!-- Favicon -->
@@ -58,6 +58,7 @@
               </div>
               <div class="rn-author-info-content">
                 <h4 class="title"><%= user.wallet %></h4>
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptate omnis ad consectetur, ipsum quod molestiae et maxime corrupti sint quaerat!</p>
               </div>
             </div>
           </div>
@@ -94,6 +95,7 @@
       <% if (isOwner) {%>
       <div id="pane-unlisted-nfts" class="tab-pane fade" aria-labelledby="nav-unlisted-tab" role="tabpanel">
         <div class="loader-content"></div>
+        <span>Checking your account for unlisted NFTs (this will take a few seconds)</span>
       </div>
       <div id="pane-liked-nfts" class="tab-pane fade" aria-labelledby="nav-liked-tab" role="tabpanel">
         <%- include ("models/nft-rows.ejs", {nfts: likedNfts}) %>
