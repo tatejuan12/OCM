@@ -551,6 +551,9 @@ var {
 .i-report{
   background-image: url(../images/icons/Favorites-light/icons8-box-important-100.png);
 }
+.i-close{
+  background-image: url(../images/icons/Favorites/icons8-close-100.png);
+}
 /*---------------------------
 	List Style 
 ---------------------------*/
@@ -24371,4 +24374,10 @@ Collection nav
 }
 .devnet-pop-close:hover {
   background-color: #ccc;
+}
+/*Mint Page stuffs*/
+.properties-content-main{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
