@@ -24381,3 +24381,23 @@ Collection nav
   flex-direction: row;
   justify-content: space-between;
 }
+.attribute-item-bubble:nth-child(2){
+  margin: 0 8px;
+}
+.close-btn{
+  margin-top: auto;
+  margin-bottom: 3px;
+  max-width: 44px;
+  min-width: 44px;
+  max-height: 44px;
+  min-height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(255, 0, 0);
+  border-radius: 5px;
+  cursor: pointer;
+}
+#attribs{
+  margin: 8px 0;
+}

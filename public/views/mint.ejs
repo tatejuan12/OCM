@@ -8,7 +8,7 @@
   <meta name="robots" content="noindex, follow" />
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="Cache-control" content="public">
+  <meta http-equiv="Cache-control" content="no-store">
   <meta name="theme-style-mode" content="0"> <!-- 0 == light, 1 == dark -->
 
   <!-- Favicon -->
@@ -89,21 +89,10 @@
           <div class="AFTS-content">
             <div class="AFTS-content-main">
               <span>Properties</span>
-              <p>Textual traits that describe elements of the NFT</p>
             </div>
             <div class="AFTS-content-secondary">
               <div class="properties-content" id="propertiesContent">
-                <div class="properties-content-main" id="atts">
-                    <span class="attribute-item-bubble">
-                      <label for="">Title</label>
-                      <input type="text">
-                    </span>
-                    <span class="attribute-item-bubble">
-                      <label for="">Value</label>
-                      <input type="text">
-                    </span>
-                    <button style="background-color: red;" class="close-btn"><i class="icon i-close"></i></button>
-                </div>
+                
               </div>
             </div>
             <a class="btn btn-secondary" id="attribs">+ property</a>
@@ -239,10 +228,22 @@
   <script src="assets/js/main.js"></script>
   <script>
     $('#attribs').click(function(){
-      $('#atts').clone().appendTo('#propertiesContent');
+      $(`<div class="properties-content-main" id="atts">
+                    <span class="attribute-item-bubble">
+                      <label for="attributeName">Title</label>
+                      <input type="text" id="attributeName">
+                    </span>
+                    <span class="attribute-item-bubble">
+                      <label for="attributeValue">Value</label>
+                      <input type="text" id="attributeValue">
+                    </span>
+                    <a class="close-btn" id="attributeRemove"><i class="icon i-close"></i></a>
+                </div>`).appendTo('#propertiesContent');
+    });
+    $('#attributeRemove').click(function(){
+      $(this).parent().remove();
     });
   </script>
-
 </body>
 
 </html>

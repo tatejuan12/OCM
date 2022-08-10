@@ -15,4 +15,4 @@ Things to do for Production
 - Minting Help page
 - edit profile needs to autofill if data is there --DONE--
 - unlisted NFT's needs fixing (if none, send "no NFTs to display")
-- Optimise website cache
+- Set up website caching

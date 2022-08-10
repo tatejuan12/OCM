@@ -172,7 +172,7 @@
                         </div>
                       </div>
                     </div>
-                    
+
                   </div>
                   <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                     <!-- single -->
@@ -243,17 +243,17 @@
                     <h6>Purchase History</h6>
                     <div class="nft-sale-history-section">
                       <% nft.sellHistory.forEach(function(res){%>
-                        <div class="nft-sale-history-wrap">
-                          <div class="nft-sale-history-content">
-                            <h5><%=res.price + " " + res.token%></h5>
-                            <p style="margin-top: -5px;"><%=res.xrpValue%> XRP</p>
-                            <span><%=res.account ? res.account : "couldn't find an account"%></span>
-                          </div>
-                          <div class="nft-sale-history-content">
-                            <a href="https://xls20.bithomp.com/explorer/<%= res.txID %> " target="_blank">View Transaction</a>
-                            <p><%=(new Date(res.date)).toLocaleDateString('en-au');%></p>
-                          </div>
+                      <div class="nft-sale-history-wrap">
+                        <div class="nft-sale-history-content">
+                          <h5><%=res.price + " " + res.token%></h5>
+                          <p style="margin-top: -5px;"><%=res.xrpValue%> XRP</p>
+                          <span><%=res.account ? res.account : "couldn't find an account"%></span>
                         </div>
+                        <div class="nft-sale-history-content">
+                          <a href="https://xls20.bithomp.com/explorer/<%= res.txID %> " target="_blank">View Transaction</a>
+                          <p><%=(new Date(res.date)).toLocaleDateString('en-au');%></p>
+                        </div>
+                      </div>
                       <%}); %>
                     </div>
                   </div>
@@ -305,7 +305,7 @@
     <%- include('sections/popup-modal.ejs') -%>
     <%#if (!isOwner){%>
     <!-- PLACE BID MODAL -->
-    <div class="rn-popup-modal placebid-modal-wrapper modal fade" id="placebidModal" tabindex="-1" aria-hidden="true" >
+    <div class="rn-popup-modal placebid-modal-wrapper modal fade" id="placebidModal" tabindex="-1" aria-hidden="true">
       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i data-feather="x"></i></button>
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
@@ -410,12 +410,12 @@
       currNft = '<%=nft.tokenID%>';
 
       function getCurrencyBalance() {
-              try {
-                $("#walletBalance").load(`<%=url%>get-token-balance?issuer="XRP"&hex="XRP"&token="XRP"`);
-              } catch (err) {
-                console.error("Couldn't parse balance");
-              }
-            };
+        try {
+          $("#walletBalance").load(`<%=url%>/get-token-balance?issuer="XRP"&hex="XRP"&token="XRP"`);
+        } catch (err) {
+          console.error("Couldn't parse balance");
+        }
+      };
     </script>
 
 </body>
