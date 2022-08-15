@@ -85,14 +85,17 @@ const authorizedIps = [
   "220.244.21.106", //Liam
   "116.206.228.204",
   "116.206.228.203",
-  "175.176.36.102", //Kuro OCW mod
-  "136.158.11.167", //B OCW mod
-  "136.158.2.224", //kazu OCW mod
-  "174.118.238.12", //Razzle OCW mod
-  "14.201.212.126",
-  "122.171.23.129", //Ron
-  "99.228.46.244", // crypto survivor
-  "36.71.36.93", //Dejavus
+  "139.218.13.37", //Juanito
+  // "175.176.36.102", //Kuro OCW mod
+  // "180.232.74.234", // Kuro office
+  // "136.158.11.167", //B OCW mod
+  // "136.158.2.105", //kazu OCW mod
+  // "174.118.238.12", //Razzle OCW mod
+  // "14.201.212.126",
+  // "122.171.23.129", //Ron
+  // "99.228.46.244", // crypto survivor
+  // "36.71.36.93", //Dejavus
+  // "110.54.195.57", //BINCE
 ];
 //! ---------------------Custom middleware--------------------------------//
 server.use((req, res, next) => {
@@ -565,20 +568,25 @@ server.post(
     result ? res.status(200).send("Modified") : res.status(500).send("Failed");
   }
 );
-server.post("/subscribe-email", speedLimiter, async (req, res) => {
-  const formDataBody = req.body;
-  console.log(formDataBody);
+server.post(
+  "/subscribe-email",
+  upload.fields([{ name: "email" }]),
+  speedLimiter,
+  async (req, res) => {
+    const formDataBody = req.body;
+    console.log(formDataBody);
 
-  var result = false;
-  if (
-    await mongoClient.query.updateMailingList(
-      req.session.wallet,
-      formDataBody["email"]
+    var result = false;
+    if (
+      await mongoClient.query.updateMailingList(
+        req.session.wallet,
+        formDataBody["email"]
+      )
     )
-  )
-    result = true;
-  result ? res.status(200).send("Modified") : res.status(500).send("Failed");
-});
+      result = true;
+    result ? res.status(200).send("Modified") : res.status(500).send("Failed");
+  }
+);
 server.post("/report-nft", upload.any(), speedLimiter, async (req, res) => {
   const formData = req.body;
   const result = await mongoClient.query.reportNft(
@@ -636,11 +644,13 @@ server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
   }
   for (var i = 0; i < unlistedNfts.length; i++) {
     const data = await xumm.xrpl.getNftImage(unlistedNfts[i].URI);
-    unlistedNftsToReturn[i] = data;
-    unlistedNftsToReturn[i].taxon = unlistedNfts[i].NFTokenTaxon;
-    unlistedNftsToReturn[i].issuer = unlistedNfts[i].Issuer;
-    unlistedNftsToReturn[i].currentHolder = wallet;
-    unlistedNftsToReturn[i].NFTokenID = unlistedNfts[i].NFTokenID;
+    if (data) {
+      unlistedNftsToReturn[i] = data;
+      unlistedNftsToReturn[i].taxon = unlistedNfts[i].NFTokenTaxon;
+      unlistedNftsToReturn[i].issuer = unlistedNfts[i].Issuer;
+      unlistedNftsToReturn[i].currentHolder = wallet;
+      unlistedNftsToReturn[i].NFTokenID = unlistedNfts[i].NFTokenID;
+    }
   }
   res.render("views/models/unlisted-nft-rows.ejs", {
     nfts: unlistedNftsToReturn,

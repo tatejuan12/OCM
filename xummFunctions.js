@@ -9,6 +9,7 @@ const xrpl = require("xrpl");
 const { json } = require("express/lib/response");
 const https = require("https");
 const http = require("http");
+const { resolve } = require("path");
 var payloads = {
   NFTokenCreateOffer: async function (NFToken, value, mobile, return_url) {
     const nftOwner = await xrpls.getcurrentNftHolder(NFToken);
@@ -462,10 +463,15 @@ var xrpls = {
           });
           res.on("end", () => {
             if (res.statusCode == 200) {
-              json = JSON.parse(body);
+              try {
+                json = JSON.parse(body);
+                console.log(body);
+              } catch (error) {
+                resolve(body);
+              }
               resolve(json);
             } else {
-              reject(null);
+              reject(new Error("Could not contact server to get NFT info"));
             }
           });
         });
@@ -486,6 +492,7 @@ var xrpls = {
       }
 
       //get metadata
+
       var uriMetadata = await httpAPI(httpURI);
 
       //find image
@@ -513,7 +520,6 @@ var xrpls = {
       json["http_uri"] = httpURI;
       return json;
     } catch (error) {
-      console.log(error);
       return null;
     }
   },
