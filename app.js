@@ -2,6 +2,7 @@
 //! ---------------------Imports modules/packages--------------------------------//
 require("dotenv").config();
 const express = require("express");
+const compression = require("compression");
 const https = require("https");
 const proxiedHttps = require("proxywrap").proxy(https);
 const fs = require("fs");
@@ -41,6 +42,7 @@ const NFTSPERPAGE = 25;
 //! ---------------------Imported middleware--------------------------------//
 const server = express();
 
+server.use(compression());
 server.use(bodyParser.json()); // for parsing serverlication/json
 server.use(bodyParser.urlencoded({ extended: true })); // for parsing serverlication/x-www-form-urlencoded
 server.set("view engine", "ejs"); // Setting rendering agent to ejs
@@ -82,20 +84,20 @@ const authorizedIps = [
   "103.231.88.10",
   "27.99.115.205",
   "220.235.196.107",
-  "220.244.21.106", //Liam
+  "124.169.212.172", //Liam
   "116.206.228.204",
   "116.206.228.203",
   "139.218.13.37", //Juanito
-  // "175.176.36.102", //Kuro OCW mod
-  // "180.232.74.234", // Kuro office
-  // "136.158.11.167", //B OCW mod
-  // "136.158.2.105", //kazu OCW mod
-  // "174.118.238.12", //Razzle OCW mod
-  // "14.201.212.126",
-  // "122.171.23.129", //Ron
-  // "99.228.46.244", // crypto survivor
-  // "36.71.36.93", //Dejavus
-  // "110.54.195.57", //BINCE
+  "175.176.36.102", //Kuro OCW mod
+  "180.232.74.234", // Kuro office
+  "136.158.11.167", //B OCW mod
+  "136.158.2.105", //kazu OCW mod
+  "174.118.238.12", //Razzle OCW mod
+  "14.201.212.126",
+  "122.171.23.129", //Ron
+  "99.228.46.244", // crypto survivor
+  "36.71.36.93", //Dejavus
+  "110.54.195.57", //BINCE
 ];
 //! ---------------------Custom middleware--------------------------------//
 server.use((req, res, next) => {
@@ -584,7 +586,7 @@ server.post(
       )
     )
       result = true;
-    result ? res.status(200).send("Modified") : res.status(500).send("Failed");
+    res.status(200).send("Modified");
   }
 );
 server.post("/report-nft", upload.any(), speedLimiter, async (req, res) => {

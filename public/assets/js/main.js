@@ -961,19 +961,26 @@ window.onload = function noUnderscores() {
 };
 
 function submitEmail() {
-  const formData = new FormData();
-  formData.append("email", document.getElementById("emailSub").value);
-  $.ajax({
-      type: "POST",
-      url: "/subscribe-email",
-      data: formData,
-      processData: false,
-      contentType: false,
-      success: function(resulty) {
-          customAlert.alert('Email Address Submitted')
-      },
-      error: function(resulty) {
-          customAlert.alert('Error submitting email address, try again later.')
-      },
-  });
+  var mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  var submittedEmail = document.getElementById("emailSub").value;
+  if (submittedEmail.match(mailFormat)){
+    const formData = new FormData();
+    formData.append("email", document.getElementById("emailSub").value);
+    $.ajax({
+        type: "POST",
+        url: "/subscribe-email",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(resulty) {
+            customAlert.alert('Email Address Submitted')
+        },
+        error: function(resulty) {
+            customAlert.alert('Error submitting email address, try again later.')
+        },
+    });
+  } else {
+    alert("You have entered an invalid email address!")
+  }
+
 }

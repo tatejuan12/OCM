@@ -16,7 +16,8 @@
                         <div class="widget-bottom mt--40 pt--40">
                             <h6 class="title">Get The Latest OnChain Marketplace Updates </h6>
                             <div class="input-group">
-                                <input type="email" name="email" class="form-control bg-color--2" placeholder="Your email address" aria-label="Recipient's username" style="border: 2px solid #000;" id="emailSub">
+                                <input type="email" name="email" class="form-control bg-color--2" placeholder="Your email address" aria-label="Recipient's username" style="border: 2px solid #000;" id="emailSub" pattern="^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"
+                                required>
                                 <div class="input-group-append">
                                     <button class="btn btn-primary-alta btn-outline-secondary" type="button" onclick="submitEmail()">Subscribe</button>
                                 </div>

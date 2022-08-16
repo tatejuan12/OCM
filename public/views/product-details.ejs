@@ -267,7 +267,7 @@
                           <div class="top-seller-content">
                             <!-- <span class="heighest-bid"><a href="https://xls20.bithomp.com/explorer/%= nft.sellHistory[0].account %>">%= nft.sellHistory[0] ? nft.sellHistory[0].account : "account" %></a></span> -->
                             <span class="count-number">
-                              <%- nft.sellHistory[0] ? nft.sellHistory[0].price + " " + nft.sellHistory[0].token : "No Sell History"%>
+                              <%- nft.sellHistory[0] ? nft.sellHistory[0].price + " " + nft.sellHistory[0].token : "No Sale History"%>
                               <%#- account  %>
                             </span>
                           </div>
@@ -329,23 +329,13 @@
                   <div class="bid-content-left">
                     <span><strong>Your Balance</strong></span>
                     <!-- <span>Service fee</span> -->
-                    <span>Total bid amount</span>
+                    <!-- <span>Total bid amount</span> -->
                   </div>
-                  <div class="bid-content-right" onload="getCurrencyBalance()">
-                    <span id="walletBalance" value='{"issuer": "XRP", "hex": "XRP", "token": "XRP"}'></span>
-                    <!-- <span id="serviceFee">2 XRP</span> -->
-                    <span id="sum">
-                      <!-- 
-                                        if(isset($_POST['submit'])){
-                                            $sum=0;
-                                            $one=$_POST['value'];
-                                            $two=$_POST['serviceFee'];
+                  <div class="bid-content-right" >
+                    <span id="walletBalance">
 
-                                            $sum=$one+$two;
-                                            echo $sum;
-                                        }                                        
-                                         -->
                     </span>
+                    <!-- <span id="serviceFee">2 XRP</span> -->
                   </div>
                 </div>
               </div>
@@ -404,18 +394,18 @@
         $("#owner-name").html(`<h6 class = "name" style = "display: inline-block" >${data[2]}</h6>`);
         $("#owner-name").attr("href", `/profile?wallet=${data[2]}`);
         $("#profile-thumbnail-container").html(`<img src="${data[3]}" class="profile-thumbnail transition" onerror="this.src='assets/images/icons/unknown-user.png'">`)
-        if (!data[4]) $("#buy-offer-btn-container").html('<button type="button" class="btn btn-primary-alta mt--30" data-bs-toggle="modal" data-bs-target="#placebidModal">Place an Offer</button>');
+        if (!data[4]) $("#buy-offer-btn-container").html('<button type="button" class="btn btn-primary-alta mt--30" data-bs-toggle="modal" data-bs-target="#placebidModal" onclick="getCurrencyBalance()">Place an Offer</button>');
         // if (data[4]) $("#buy-offer-btn-container").html('<button type="button" class="btn btn-primary-alta mt--30" data-bs-toggle="modal" data-bs-target="#placebidModal">Place a Sell Offer</button>');
       })
       currNft = '<%=nft.tokenID%>';
 
       function getCurrencyBalance() {
-        try {
-          $("#walletBalance").load(`<%=url%>/get-token-balance?issuer="XRP"&hex="XRP"&token="XRP"`);
-        } catch (err) {
-          console.error("Couldn't parse balance");
-        }
-      };
+              try {
+                $("#walletBalance").load(`<%=url%>/get-token-balance?issuer=XRP&hex=$XRP&token=XRP`);
+              } catch (err) {
+                console.error("Couldn't parse balance");
+              }
+            }
     </script>
 
 </body>
