@@ -92,7 +92,7 @@
             </div>
             <div class="AFTS-content-secondary">
               <div class="properties-content" id="propertiesContent">
-                
+
               </div>
             </div>
             <a class="btn btn-secondary" id="attribs">+ property</a>
@@ -146,54 +146,6 @@
   </div>
   <!-- create new product area -->
 
-
-  <!-- Modal -->
-  <div class="rn-popup-modal upload-modal-wrapper modal fade" id="uploadModal" tabindex="-1" aria-hidden="true">
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i data-feather="x"></i></button>
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content share-wrapper">
-        <div class="modal-body">
-          <div class="product-style-one no-overlay">
-            <div class="card-thumbnail">
-              <a href="product-details.html"><img src="assets/images/portfolio/portfolio-05.jpg" alt="NFT_portfolio"></a>
-            </div>
-            <div class="product-share-wrapper">
-              <div class="profile-share">
-                <a href="author.html" class="avatar" data-tooltip="Jone lee"><img src="assets/images/client/client-1.png" alt="Nft_Profile"></a>
-                <a href="author.html" class="avatar" data-tooltip="Jone lee"><img src="assets/images/client/client-2.png" alt="Nft_Profile"></a>
-                <a href="author.html" class="avatar" data-tooltip="Jone lee"><img src="assets/images/client/client-3.png" alt="Nft_Profile"></a>
-                <a class="more-author-text" href="#">9+ Place Bit.</a>
-              </div>
-              <div class="share-btn share-btn-activation dropdown">
-
-                <div class="share-btn-setting dropdown-menu dropdown-menu-end">
-                  <button type="button" class="btn-setting-text share-text" data-bs-toggle="modal" data-bs-target="#shareModal">
-                    Share
-                  </button>
-                  <button type="button" class="btn-setting-text report-text" data-bs-toggle="modal" data-bs-target="#reportModal">
-                    Report
-                  </button>
-                </div>
-
-              </div>
-            </div>
-            <a href="product-details.html"><span class="product-name">Preatent</span></a>
-            <span class="latest-bid">Highest bid 1/20</span>
-            <div class="bid-react-area">
-              <div class="last-bid">0.244wETH</div>
-              <div class="react-area">
-                <svg viewBox="0 0 17 16" fill="none" width="16" height="16" class="sc-bdnxRM sc-hKFxyN kBvkOu">
-                  <path d="M8.2112 14L12.1056 9.69231L14.1853 7.39185C15.2497 6.21455 15.3683 4.46116 14.4723 3.15121V3.15121C13.3207 1.46757 10.9637 1.15351 9.41139 2.47685L8.2112 3.5L6.95566 2.42966C5.40738 1.10976 3.06841 1.3603 1.83482 2.97819V2.97819C0.777858 4.36443 0.885104 6.31329 2.08779 7.57518L8.2112 14Z" stroke="currentColor" stroke-width="2"></path>
-                </svg>
-                <span class="number">322</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <%- include('sections/footer.ejs') -%>
   <!-- Start Top To Bottom Area  -->
   <div class="rn-progress-parent">
@@ -227,22 +179,26 @@
   <!-- main JS -->
   <script src="assets/js/main.js"></script>
   <script>
-    $('#attribs').click(function(){
-      $(`<div class="properties-content-main" id="atts">
+    var i=0;
+    $('#attribs').click(function() {
+      i++;
+        $(`<div class="properties-content-main" id="atts-${i}">
                     <span class="attribute-item-bubble">
                       <label for="attributeName">Title</label>
-                      <input type="text" id="attributeName">
+                      <input type="text" id="attributeName-${i}">
                     </span>
                     <span class="attribute-item-bubble">
                       <label for="attributeValue">Value</label>
-                      <input type="text" id="attributeValue">
+                      <input type="text" id="attributeValue-${i}">
                     </span>
-                    <a class="close-btn" id="attributeRemove"><i class="icon i-close"></i></a>
+                    <a class="close-btn attributeRemove" onclick="attributeRemove(this)"><i class="icon i-close"></i></a>
                 </div>`).appendTo('#propertiesContent');
+
     });
-    $('#attributeRemove').click(function(){
-      $(this).parent().remove();
-    });
+
+    function attributeRemove(element) {
+      $(element).closest('div').remove()
+    }
   </script>
 </body>
 
