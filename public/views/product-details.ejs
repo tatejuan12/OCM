@@ -303,55 +303,11 @@
     <!-- New items End -->
     <!-- Modal require -->
     <%- include('sections/popup-modal.ejs') -%>
-    <%#if (!isOwner){%>
-    <!-- PLACE BID MODAL -->
-    <div class="rn-popup-modal placebid-modal-wrapper modal fade" id="placebidModal" tabindex="-1" aria-hidden="true">
-      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i data-feather="x"></i></button>
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-          <div class="modal-header">
-            <img src="assets/images/icons/COIN.png" alt="">
-            <h3 class="modal-title">Place a bid</h3>
-          </div>
-          <div class="modal-body">
-            <p>You are about to place a Bid</p>
-            <div class="placebid-form-box">
-              <h5 class="title">Your bid</h5>
-              <div class="bid-content">
-                <div class="bid-content-top">
-                  <div class="bid-content-left" id="formData">
-                    <input id="value" type="text" name="value">
-                    <span>XRP</span>
-                  </div>
-                </div>
-
-                <div class="bid-content-mid">
-                  <div class="bid-content-left">
-                    <span><strong>Your Balance</strong></span>
-                    <!-- <span>Service fee</span> -->
-                    <!-- <span>Total bid amount</span> -->
-                  </div>
-                  <div class="bid-content-right" >
-                    <span id="walletBalance">
-
-                    </span>
-                    <!-- <span id="serviceFee">2 XRP</span> -->
-                  </div>
-                </div>
-              </div>
-              <div class="bit-continue-button">
-                <button id="bidButton" onclick="setBuyOfferBid('<%=nft.tokenID%>');buyOrderClicked(this, this.nextElementSibling);" class="btn btn-primary w-100">Place a bid</button>
-                <div id="loader" class="loader-data hidden"></div>
-                <button type="button" class="btn btn-primary-alta mt--10" data-bs-dismiss="modal" onclick="buyOrderCanceled(document.getElementById('bidButton'), document.getElementById('loader'));">Cancel</button>
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <%#}%>
-
+    <%if (!isOwner){%>
+      <%- include('models/product-details/buy-modal.ejs') %>    
+    <%} else if (isOwner) {%>
+      <%- include('models/product-details/sell-modal.ejs') %>
+    <% };%>
     <!-- PHP footer call -->
     <%- include('sections/popup-modal.ejs') -%>
     <%- include('sections/footer.ejs') -%>
@@ -394,18 +350,13 @@
         $("#owner-name").html(`<h6 class = "name" style = "display: inline-block" >${data[2]}</h6>`);
         $("#owner-name").attr("href", `/profile?wallet=${data[2]}`);
         $("#profile-thumbnail-container").html(`<img src="${data[3]}" class="profile-thumbnail transition" onerror="this.src='assets/images/icons/unknown-user.png'">`)
-        if (!data[4]) $("#buy-offer-btn-container").html('<button type="button" class="btn btn-primary-alta mt--30" data-bs-toggle="modal" data-bs-target="#placebidModal" onclick="getCurrencyBalance()">Place an Offer</button>');
-        // if (data[4]) $("#buy-offer-btn-container").html('<button type="button" class="btn btn-primary-alta mt--30" data-bs-toggle="modal" data-bs-target="#placebidModal">Place a Sell Offer</button>');
+        if (!data[4]) {
+          $("#buy-offer-btn-container").html('<button type="button" class="btn btn-primary-alta mt--30" data-bs-toggle="modal" data-bs-target="#placebidModal" onclick="getCurrencyBalance()">Place an Offer</button>');
+        } else {
+          $("#buy-offer-btn-container").html('<button type="button" class="btn btn-primary-alta mt--30" data-bs-toggle="modal" data-bs-target="#placebidModal">Place a Sell Offer</button>');
+        }
       })
       currNft = '<%=nft.tokenID%>';
-
-      function getCurrencyBalance() {
-              try {
-                $("#walletBalance").load(`<%=url%>/get-token-balance?issuer=XRP&hex=$XRP&token=XRP`);
-              } catch (err) {
-                console.error("Couldn't parse balance");
-              }
-            }
     </script>
 
 </body>

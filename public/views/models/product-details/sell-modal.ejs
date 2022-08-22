@@ -1,0 +1,31 @@
+<div class="rn-popup-modal placebid-modal-wrapper modal fade" id="placebidModal" tabindex="-1" aria-hidden="true">
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i data-feather="x"></i></button>
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <img src="assets/images/icons/COIN.png" alt="">
+          <h3 class="modal-title">Place a bid</h3>
+        </div>
+        <div class="modal-body ">
+          <p>You are about to place a <strong>Sell Offer</strong></p>
+          <div class="placebid-form-box">
+            <h5 class="title">Your Offer</h5>
+            <div class="bid-content mb--30">
+              <div class="bid-content-top">
+                <div class="bid-content-left" id="formData">
+                  <input id="value" type="text" name="value">
+                  <span>XRP</span>
+                </div>
+              </div>
+            </div>
+            <div class="bit-continue-button">
+              <button id="bidButton" onclick="setSellOfferBid('<%=nft.tokenID%>');buyOrderClicked(this, this.nextElementSibling);" class="btn btn-primary w-100">Place a bid</button>
+              <div id="loader" class="loader-data hidden"></div>
+              <button type="button" class="btn btn-primary-alta mt--10" data-bs-dismiss="modal" onclick="buyOrderCanceled(document.getElementById('bidButton'), document.getElementById('loader'));">Cancel</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

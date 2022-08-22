@@ -6,9 +6,7 @@
   <div class="product-style-one no-overlay with-placeBid">
     <div class="card-thumbnail">
       <img draggable="false" src="<%= nft.http_image %> " alt="NFT_portfolio" />
-      <% if(owner) {%>
       <a class="btn btn-primary nft-list-btn" onclick='populateListNft( {"NFTokenID": "<%=nft.NFTokenID%>" , "issuer" : "<%=nft.issuer%>" , "taxon" : "<%=nft.taxon%>" , "currentHolder" : "<%=nft.currentHolder%>", "image":"<%=nft.http_image%>" })'>List NFT</a>
-      <%}%>
     </div>
     <div class="product-share-wrapper">
       <div class="share-btn share-btn-activation dropdown">

@@ -1,4 +1,4 @@
-<% sellOffers.forEach(function(res){ if (res.expiry < Date.now()){%>
+<% sellOffers.forEach(function(res){%>
 <% if (res.destination == undefined || currUser == res.destination){%> 
 <%- include('sell-offer-card.ejs', {sellOffers: res, isOwner: isOwner, NFToken: NFToken})%>
-<%}}});%>
+<%}});%>

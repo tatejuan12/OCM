@@ -834,11 +834,22 @@ function setBuyOfferBid(NFToken) {
   $.ajax({
     type: "POST",
     url: "/nftoken-create-offer",
-    data: { NFToken: NFToken, value: value, return_url: window.location.href },
+    data: { NFToken: NFToken, value: value, return_url: window.location.href, flags: 0},
     success: function (result) {
       window.location.href = result.next.always;
     },
   });
+}
+function setSellOfferBid(NFToken) {
+  const value = document.getElementById("value").value;
+  $.ajax({
+    type: "POST",
+    url: "/nftoken-create-offer",
+    data: { NFToken: NFToken, value: value, return_url: window.location.href, flags: 1},
+    success: function (result) {
+      window.location.href = result.next.always;
+    },
+  })
 }
 function NFTokenAcceptOffer(index, NFToken) {
   $.ajax({
@@ -983,4 +994,11 @@ function submitEmail() {
     alert("You have entered an invalid email address!")
   }
 
-}
+};
+function getCurrencyBalance() {
+  try {
+    $("#walletBalance").load(`<%=url%>/get-token-balance?issuer=XRP&hex=$XRP&token=XRP`);
+  } catch (err) {
+    console.error("Couldn't parse balance");
+  }
+};

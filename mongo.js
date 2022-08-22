@@ -1,5 +1,6 @@
 const { MongoDBNamespace, GridFSBucketReadStream } = require("mongodb");
 const { resolve } = require("path");
+const { resourceLimits } = require("worker_threads");
 const { XummSdk } = require("xumm-sdk");
 
 const mongoClient = require("mongodb").MongoClient;
@@ -116,6 +117,27 @@ var methods = {
       let res = await collection.findOne(query);
 
       return res;
+    } catch (err) {
+      console.log("Database error" + err);
+    } finally {
+      client.close();
+    }
+  },
+  checkQueue: async function (id) {
+    var result;
+    const client = await getClient();
+    if (!client) return;
+    try{
+      const db = client.db('NFTokens');
+      let collection = db.collection('Queued-Listings');
+
+      let query = {
+        tokenID: id,
+      };
+
+      let res = await collection.findOne(query);
+      console.log(res);
+      return res.NFTokenID;
     } catch (err) {
       console.log("Database error" + err);
     } finally {

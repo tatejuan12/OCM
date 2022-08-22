@@ -11,29 +11,31 @@ const https = require("https");
 const http = require("http");
 const { resolve } = require("path");
 var payloads = {
-  NFTokenCreateOffer: async function (NFToken, value, mobile, return_url) {
+  NFTokenCreateOffer: async function (NFToken, value, mobile, return_url, flags) {
     const nftOwner = await xrpls.getcurrentNftHolder(NFToken);
     try {
       value = parseInt(value);
       value = value * 1000000;
       value = value.toString();
+      console.log(flags);
     } catch (err) {
       console.error("Error parsing Value: " + err);
       return false;
     }
-    const request = {
-      options: {
-        submit: true,
-        expire: 240,
-      },
-      txjson: {
-        TransactionType: "NFTokenCreateOffer",
-        NFTokenID: NFToken,
-        Owner: nftOwner,
-        Amount: value,
-      },
-    };
-    if (mobile)
+    if (flags == 0) {
+      const request = {
+        options: {
+          submit: true,
+          expire: 240,
+        },
+        txjson: {
+          TransactionType: "NFTokenCreateOffer",
+          NFTokenID: NFToken,
+          Owner: nftOwner,
+          Amount: value,
+        },
+      };
+      if (mobile)
       request.options["return_url"] = {
         app: return_url,
       };
@@ -44,6 +46,31 @@ var payloads = {
 
     const payload = await getPayload(request);
     return payload;
+    } else {
+      const request = {
+        options: {
+          submit: true,
+          expire: 240,
+        },
+        txjson: {
+          TransactionType: "NFTokenCreateOffer",
+          NFTokenID: NFToken,
+          Amount: value,
+          Flags: 1,
+        },
+      };
+      if (mobile)
+      request.options["return_url"] = {
+        app: return_url,
+      };
+    else
+      request.options["return_url"] = {
+        web: return_url,
+      };
+
+    const payload = await getPayload(request);
+    return payload;
+    }
   },
   NFTokenAcceptOffer: async function (NFToken, value, mobile, return_url) {
     const nftOwner = await xrpls.getcurrentNftHolder(NFToken);
@@ -465,7 +492,7 @@ var xrpls = {
             if (res.statusCode == 200) {
               try {
                 json = JSON.parse(body);
-                console.log(body);
+                // console.log(body);
               } catch (error) {
                 resolve(body);
               }
