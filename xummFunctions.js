@@ -11,7 +11,13 @@ const https = require("https");
 const http = require("http");
 const { resolve } = require("path");
 var payloads = {
-  NFTokenCreateOffer: async function (NFToken, value, mobile, return_url, flags) {
+  NFTokenCreateOffer: async function (
+    NFToken,
+    value,
+    mobile,
+    return_url,
+    flags
+  ) {
     const nftOwner = await xrpls.getcurrentNftHolder(NFToken);
     try {
       value = parseInt(value);
@@ -36,16 +42,16 @@ var payloads = {
         },
       };
       if (mobile)
-      request.options["return_url"] = {
-        app: return_url,
-      };
-    else
-      request.options["return_url"] = {
-        web: return_url,
-      };
+        request.options["return_url"] = {
+          app: return_url,
+        };
+      else
+        request.options["return_url"] = {
+          web: return_url,
+        };
 
-    const payload = await getPayload(request);
-    return payload;
+      const payload = await getPayload(request);
+      return payload;
     } else {
       const request = {
         options: {
@@ -60,51 +66,64 @@ var payloads = {
         },
       };
       if (mobile)
-      request.options["return_url"] = {
-        app: return_url,
-      };
-    else
-      request.options["return_url"] = {
-        web: return_url,
-      };
+        request.options["return_url"] = {
+          app: return_url,
+        };
+      else
+        request.options["return_url"] = {
+          web: return_url,
+        };
 
-    const payload = await getPayload(request);
-    return payload;
+      const payload = await getPayload(request);
+      return payload;
     }
   },
-  NFTokenAcceptOffer: async function (NFToken, value, mobile, return_url) {
-    const nftOwner = await xrpls.getcurrentNftHolder(NFToken);
-    try {
-      value = parseInt(value);
-      value = value * 1000000;
-      value = value.toString();
-    } catch (err) {
-      console.error("Error parsing Value: " + err);
-      return false;
+  NFTokenAcceptOffer: async function (offerId, mobile, return_url, flags) {
+    if (flags == 0) {
+      const request = {
+        options: {
+          submit: true,
+          expire: 240,
+        },
+        txjson: {
+          TransactionType: "NFTokenAcceptOffer",
+          NFTokenBuyOffer: offerId,
+        },
+      };
+      console.log(request);
+      if (mobile)
+        request.options["return_url"] = {
+          app: return_url,
+        };
+      else
+        request.options["return_url"] = {
+          web: return_url,
+        };
+      const payload = await getPayload(request);
+      return payload;
+    } else {
+      const request = {
+        options: {
+          submit: true,
+          expire: 240,
+        },
+        txjson: {
+          TransactionType: "NFTokenAcceptOffer",
+          NFTokenSellOffer: offerId,
+        },
+      };
+      console.log(return_url);
+      if (mobile)
+        request.options["return_url"] = {
+          app: return_url,
+        };
+      else
+        request.options["return_url"] = {
+          web: return_url,
+        };
+      const payload = await getPayload(request);
+      return payload;
     }
-    const request = {
-      options: {
-        submit: true,
-        expire: 240,
-      },
-      txjson: {
-        TransactionType: "NFTokenCreateOffer",
-        NFTokenID: NFToken,
-        Owner: nftOwner,
-        Amount: value,
-      },
-    };
-    if (mobile)
-      request.options["return_url"] = {
-        app: return_url,
-      };
-    else
-      request.options["return_url"] = {
-        web: return_url,
-      };
-
-    const payload = await getPayload(request);
-    return payload;
   },
   signInPayload: async function (mobile, return_url) {
     const request = {
@@ -126,29 +145,6 @@ var payloads = {
       };
     const payload = await getPayload(request);
     return payload;
-  },
-  NFTokenAcceptOffer: async function (index, mobile, return_url) {
-    const request = {
-      options: {
-        submit: true,
-        expire: 240,
-      },
-      txjson: {
-        TransactionType: "NFTokenAcceptOffer",
-        NFTokenBuyOffer: index,
-      },
-    };
-    if (mobile)
-      request.options["return_url"] = {
-        app: return_url,
-      };
-    else
-      request.options["return_url"] = {
-        web: return_url,
-      };
-    const payload = await getPayload(request);
-
-    return { payload: payload, index: index };
   },
   NFTokenCancelOffer: async function (index, mobile, return_url) {
     const request = {
@@ -458,18 +454,15 @@ var subscriptions = {
   NFTokenAcceptSubscription: async function (req, res) {
     var subscription = false;
     var promise = new Promise(function (resolve) {
-      subscription = sdk.payload.subscribe(
-        req.body.payload.payload,
-        (event) => {
-          if (event.data.signed) {
-            console.log("signed");
-            resolve("signed");
-          } else if (event.data.signed == false) {
-            res.status(401).send(false);
-            resolve(false);
-          }
+      subscription = sdk.payload.subscribe(req.body.payload, (event) => {
+        if (event.data.signed) {
+          console.log("signed");
+          resolve("signed");
+        } else if (event.data.signed == false) {
+          res.status(401).send(false);
+          resolve(false);
         }
-      );
+      });
     });
     try {
       return await promise;

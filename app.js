@@ -84,7 +84,7 @@ const authorizedIps = [
   "103.231.88.10",
   "27.99.115.205",
   "220.235.196.107",
-  "193.116.216.50", //Liam
+  "118.208.221.227", //Liam
   "116.206.228.204",
   "116.206.228.203",
   "139.218.13.37", //Juanito
@@ -106,7 +106,11 @@ server.use((req, res, next) => {
 server.get("*", speedLimiter, (req, res, next) => {
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://onchainmarketplace.net/"
+    "https://onchainmarketplace.net"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://www.onchainmarketplace.net"
   );
   res.setHeader("Cross-Origin-Embedder-Policy", "same-origin");
   if (
@@ -117,7 +121,6 @@ server.get("*", speedLimiter, (req, res, next) => {
     res.status(404).render("views/404.ejs");
   } else next();
 });
-
 //! ---------------------Browser endpoints--------------------------------//
 server.get("/", speedLimiter, async (req, res) => {
   defaultLocals(req, res);
@@ -338,7 +341,7 @@ server.get("/edit-profile", speedLimiter, async (req, res) => {
 });
 server.get("/product-details", speedLimiter, async (req, res, next) => {
   defaultLocals(req, res);
-  let wallet = req.session.wallet
+  let wallet = req.session.wallet;
   let nftId = req.query.id;
   nftPromise = new Promise(function (resolve, reject) {
     const nft = mongoClient.query.getNft(nftId);
@@ -353,7 +356,8 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
     .toLowerCase()
     .replace(" ", "_");
   const isOwner = wallet == promises[0].currentOwner;
-  const collection_logo = digitalOcean.functions.getProductCollectionLogoLink(nftCollection);
+  const collection_logo =
+    digitalOcean.functions.getProductCollectionLogoLink(nftCollection);
   if (promises[0]) {
     res.render("views/product-details", {
       isOwner: isOwner,
@@ -437,7 +441,7 @@ server.post("/nftoken-create-offer", speedLimiter, async (req, res) => {
   const NFToken = req.body.NFToken;
   const value = req.body.value;
   const flags = req.body.flags;
-  console.log(flags)
+  console.log(flags);
   const payload = await xumm.payloads.NFTokenCreateOffer(
     NFToken,
     value,
@@ -445,21 +449,24 @@ server.post("/nftoken-create-offer", speedLimiter, async (req, res) => {
     req.body.return_url,
     flags
   );
+  console.log(payload);
   res.status(200).send(payload);
 });
 server.post("/subscription-transaction", speedLimiter, async (req, res) => {
   xumm.subscriptions.transactionSubscription(req, res);
 });
 server.post("/NFTokenAcceptOffer", speedLimiter, async (req, res) => {
-  const owner = await xumm.xrpl.getcurrentNftHolder(req.body.NFToken);
-  if (owner == req.session.wallet) {
-    const payload = await xumm.payloads.NFTokenAcceptOffer(
-      req.body.index,
-      req.useragent.isMobile,
-      req.body.return_url
-    );
-    res.status(200).send({ payload: payload, NFTokenID: req.body.NFToken });
-  } else res.sendStatus(400);
+  const offerId = req.body.index;
+  const flags = req.body.flags;
+  console.log(req.body.return_url);
+  const payload = await xumm.payloads.NFTokenAcceptOffer(
+    offerId,
+    req.useragent.isMobile,
+    req.body.return_url,
+    flags
+  );
+  res.status(200).send({ payload: payload, NFTokenID: req.body.NFToken });
+  //else res.sendStatus(400);
 });
 server.post("/NFTokenAcceptOfferSubscription", async (req, res, next) => {
   const NFTokenID = req.body.NFTokenID;
@@ -650,12 +657,13 @@ server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
     if (returnedNft == null) unlistedNfts.push(nft);
   }
   for (var i = 0; i < unlistedNfts.length; i++) {
-    console.log(unlistedNftsToReturn[i]);
-    var queuedIDFinder = await mongoClient.query.checkQueue(unlistedNftsToReturn[i]);
-    var theNFT = unlistedNftsToReturn[i].NFTokenID;
-    if (theNFT !== queuedIDFinder) { //check to see if the NFT isn't in the queue for listing with !==.
+    var queuedIDFinder = await mongoClient.query.checkQueue(
+      unlistedNfts[i].NFTokenID
+    );
+    var theNFT = unlistedNfts[i].NFTokenID;
+    if (queuedIDFinder == null) {
+      //check to see if the NFT isn't in the queue for listing with !==.
       const data = await xumm.xrpl.getNftImage(unlistedNfts[i].URI);
-      console.log(unlistedNftsToReturn);
       if (data) {
         unlistedNftsToReturn[i] = data;
         unlistedNftsToReturn[i].taxon = unlistedNfts[i].NFTokenTaxon;

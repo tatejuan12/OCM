@@ -130,14 +130,11 @@ var methods = {
     try{
       const db = client.db('NFTokens');
       let collection = db.collection('Queued-Listings');
-
       let query = {
-        tokenID: id,
+        NFTokenID: id,
       };
-
       let res = await collection.findOne(query);
-      console.log(res);
-      return res.NFTokenID;
+      return res;
     } catch (err) {
       console.log("Database error" + err);
     } finally {

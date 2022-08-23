@@ -5,7 +5,22 @@
 <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12 nft-card-wrap">
   <div class="product-style-one no-overlay with-placeBid">
     <div class="card-thumbnail">
-      <a href="product-details?id=<%=nft.tokenID%>"><img draggable="false" src="<%= nft.httpsImage %> " alt="NFT_portfolio" loading="lazy" />
+      <a href="product-details?id=<%=nft.tokenID%>">
+
+
+        <!-- CHECKING FILE EXTENSION AND REQUIRED CONTAINER -->
+        <%var imageExt = new Set(['jpg', 'jpeg', 'png', 'gif']); var vidExt = new Set(['mp4', 'mov', 'avi', 'webm', 'mpg', 'wmv']);%>
+        <% if (imageExt.has(nft.httpsImage.substring(nft.httpsImage.lastIndexOf('.') + 1))) { %>
+          <img src="<%= nft.httpsImage%> " alt="Nft_Profile" draggable="false" loading="lazy">
+        <!-- JPG/JPEG/PNG/GIF -->
+        <% } else if (vidExt.has(nft.httpsImage.substring(nft.httpsImage.lastIndexOf('.') + 1))) { %>
+          <video src="<%= nft.httpsImage%>"></video>
+        <% } else {%>
+          <span>file format not supported</span>
+        <%};%>
+
+
+        <!-- CHECKING VERIFICATION STATUS AND STAKING STATUS -->
         <% if (nft.verified.status){%>
         <img src="assets/images/icons/verified.png" class="verified" alt="verified collection" loading="lazy">
         <%}%>
@@ -13,9 +28,13 @@
         <img src="assets/images/icons/staykx.png" class="stakeable" alt="stakeable collection" loading="lazy">
         <%}%>
         </a>
-      <% if(!owner) {%>
+
+        <!-- PLACE BID BUTTON ONLY VISIBLE IF THEY AREN'T THE OWNER -->
+      <!-- <%# if(!owner) {%>
         <a href="product-details?id=<%=nft.tokenID%>" class="btn btn-primary">Place Bid</a>
-        <% } %>
+      <%# } %> -->
+
+
     </div>
     <div class="product-share-wrapper">
       <div class="share-btn share-btn-activation dropdown">

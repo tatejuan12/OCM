@@ -7973,8 +7973,7 @@ a:hover {
   transition: var(--transition);
   line-height: inherit;
   min-height: 0;
-  font-size: 22px;
-  padding: 8px 20px;
+  font-size: 14px;
 }
 .nice-select .option.selected {
   font-weight: 700;
@@ -21673,7 +21672,7 @@ tbody.ranking tr td .thumbnail img {
     White Version Demo  
 -----------------------------------*/
 body.active-light-mode {
-  background: linear-gradient(180deg, #09f, #883dff);
+  background: #1f6bf8;
 }
 
 .active-light-mode {

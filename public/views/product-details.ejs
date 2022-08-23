@@ -76,7 +76,15 @@
               <div class="tab-content rn-pd-content" id="v-pills-tabContent">
                 <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
                   <div class="rn-pd-thumbnail">
-                    <img src="<%= nft.httpsImage%> " alt="Nft_Profile">
+                    <%var imageExt = new Set(['jpg', 'jpeg', 'png', 'gif']); var vidExt = new Set(['mp4', 'mov', 'avi', 'webm', 'mpg', 'wmv']);%>
+                    <% if (imageExt.has(nft.httpsImage.substring(nft.httpsImage.lastIndexOf('.') + 1))) { %>
+                      <img src="<%= nft.httpsImage%> " alt="Nft_Profile">
+                    <!-- JPG/JPEG/PNG/GIF -->
+                    <% } else if (vidExt.has(nft.httpsImage.substring(nft.httpsImage.lastIndexOf('.') + 1))) { %>
+                      <video src="<%= nft.httpsImage%>"></video>
+                    <% } else {%>
+                      <span>file format not supported</span>
+                    <%};%>
                   </div>
                 </div>
               </div>
@@ -157,7 +165,7 @@
                       <div class="offers-slice">
                         <div class="offers-wrap">
                           <div class="offers-content">
-                            <h5>Nothing To Show Yet</h5>
+                            <h5>Loading...</h5>
                           </div>
                         </div>
                       </div>
@@ -167,7 +175,7 @@
                       <div class="offers-slice">
                         <div class="offers-wrap">
                           <div class="offers-content">
-                            <h5>Nothing To Show Yet</h5>
+                            <h5>Loading...</h5>
                           </div>
                         </div>
                       </div>
@@ -352,7 +360,7 @@
         $("#profile-thumbnail-container").html(`<img src="${data[3]}" class="profile-thumbnail transition" onerror="this.src='assets/images/icons/unknown-user.png'">`)
         if (!data[4]) {
           $("#buy-offer-btn-container").html('<button type="button" class="btn btn-primary-alta mt--30" data-bs-toggle="modal" data-bs-target="#placebidModal" onclick="getCurrencyBalance()">Place an Offer</button>');
-        } else {
+        } else if (data[4]) {
           $("#buy-offer-btn-container").html('<button type="button" class="btn btn-primary-alta mt--30" data-bs-toggle="modal" data-bs-target="#placebidModal">Place a Sell Offer</button>');
         }
       })

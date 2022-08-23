@@ -855,10 +855,33 @@ function NFTokenAcceptOffer(index, NFToken) {
   $.ajax({
     type: "POST",
     url: "/NFTokenAcceptOffer",
-    data: { index: index, NFToken: NFToken, return_url: window.location.href },
+    data: { index: index, NFToken: NFToken, return_url: window.location.href, flags: 0 },
     success: function (result) {
       console.log(result);
       window.location.href = result.payload.payload.next.always;
+
+      $.ajax({
+        type: "POST",
+        url: "/NFTokenAcceptOfferSubscription",
+        data: result,
+        success: function (resulty) {
+          console.log("Transacted");
+        },
+        error: function (resulty) {
+          console.warn("Transaction expired, failed or was cancelled.");
+        },
+      });
+    },
+  });
+}
+function NFTokenAcceptSellOffer(index, NFToken) {
+  $.ajax({
+    type: "POST",
+    url: "/NFTokenAcceptOffer",
+    data: { index: index, NFToken: NFToken, return_url: window.location.href, flags: 1 },
+    success: function (result) {
+      console.log(result);
+      window.location.href = result.payload.next.always;
 
       $.ajax({
         type: "POST",
