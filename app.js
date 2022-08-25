@@ -84,7 +84,7 @@ const authorizedIps = [
   "103.231.88.10",
   "27.99.115.205",
   "220.235.196.107",
-  "118.208.221.227", //Liam
+  "14.202.23.107", //Liam
   "116.206.228.204",
   "116.206.228.203",
   "139.218.13.37", //Juanito
@@ -178,6 +178,8 @@ server.get("/profile", speedLimiter, async (req, res) => {
       wallet,
       promises[0][0]
     );
+    console.log(promises[2][1])
+    console.log(promises[2][0])
     res.render("views/profile", {
       isOwner: isOwner,
       marker: marker,
@@ -643,6 +645,10 @@ server.post("/list-nft-subscription", async (req, res, next) => {
     );
   }
 });
+server.post("/mint-NFToken", async (req, res, next) => {
+  console.log(req.body);
+
+})
 
 server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
   var wallet;

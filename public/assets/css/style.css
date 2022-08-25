@@ -554,6 +554,22 @@ var {
 .i-close{
   background-image: url(../images/icons/Favorites/icons8-close-100.png);
 }
+.i-up {
+  background-image: url(../images/icons/Favorites/icons8-up-50.png);
+}
+.i-up-lg{
+  background-image: url(../images/icons/Favorites/icons8-up-50.png);
+  height: 50px;
+  width: 50px;
+}
+.i-down{
+  background-image: url(../images/icons/Favorites/icons8-down-50.png);
+}
+.i-down-lg{
+  background-image: url(../images/icons/Favorites/icons8-down-50.png);
+  height: 50px;
+  width: 50px;
+}
 /*---------------------------
 	List Style 
 ---------------------------*/
@@ -24035,41 +24051,51 @@ body.active-light-mode {
 .tab-pane.active {
   display: block;
 }
-.offer-sliver {
+.offers-container-wrap{
   width: 100%;
-  padding: 8px;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  column-gap: 25px;
+  row-gap:25px;
 }
-.offerContainer {
+.offer-sliver{
+  max-width: 450px;
+}
+.offer-container {
   width: 100%;
   background-color: var(--background-color-1);
   border-radius: 0.5rem;
-  padding: 8px;
+  padding: 20px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   transition: all 0.3s ease-in-out;
 }
-.active-light-mode .offerContainer {
+.offer-container.SELL{
+  background-image: url(../images/profile/down-bg.png);
+  background-size: 600px;
+}
+.offer-container.BUY{
+  background-image: url(../images/profile/up-bg.png);
+  background-size: 600px;
+}
+.active-light-mode .offer-container {
   background-color: var(--color-white);
 }
-.offerContent {
+.offer-content {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.offer-container:hover {
+  transform: scale(1.01);
+}
+.offer-wrap:nth-child(2){
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
-.offerContainer:hover {
-  transform: scale(1.01);
-}
-.Oleft {
-  display: flex;
-  flex-direction: column;
-  max-width: 75%;
-}
-.Oleft a {
-  color: var(--color-primary);
-}
-.Oright {
-  display: flex;
-  flex-direction: column;
+.offer-wrap i{
+  margin-bottom: 20px;
 }
 .offer button {
   margin: 0 5px;
@@ -24083,36 +24109,37 @@ body.active-light-mode {
 .offerType.sell {
   color: red;
 }
-#NFTID {
-  overflow-wrap: break-word;
-}
 .offer-links {
-  text-align: center;
-  margin: 10px 0 10px 0;
-}
-.offer-links > * {
-  color: var(--color-white) !important;
-}
-.offer-links > :nth-child(1) {
-  margin-right: 10px;
-}
-
-.offerCancel {
-  margin: auto 0;
-  align-items: center;
-  text-align: center;
+  display:flex;
+  width:100%;
+  flex-direction:row;
   justify-content: space-around;
-  border: 1px solid red;
-  color: red;
-  padding: 5px;
-  border-radius: 10px;
+  background-color: var(--color-midgray);
+  height: 50px;
+  margin-bottom: -20px;
+  box-shadow: inset rgba(0, 0, 0, 0.35) 0px 8px 10px;
 }
-.offerCancel:hover {
-  color: #fff;
+.active-light-mode .offer-links{
+  background-color: var(--color-info);
+}
+.offer-links a{
+  width: 100%;
+  margin: auto 0;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  color: var(--color-heading);
 }
-.active-light-mode .offerCancel:hover {
-  color: var(--color-primary);
+.active-light-mode .offer-links{
+  color: var(--color-light-heading);
+}
+.offer-card-functions:nth-child(2){
+  border-left: 1px solid #000;
+  border-right: 1px solid #000
+}
+.offer-card-functions.cancel{
+  color: red;
 }
 .expired.true {
   display: block;
@@ -24120,13 +24147,14 @@ body.active-light-mode {
 .expired.false {
   display: none;
 }
-.offerLink {
-  width: 100%;
-  height: 100%;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
+@media only screen and (max-width: 768px) {
+  .offers-container-wrap{
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto;
+    column-gap: 25px;
+    row-gap:25px;
+  }
 }
 .collection-manager {
   overflow: auto;

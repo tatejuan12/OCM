@@ -986,6 +986,39 @@ function getListNft(fee) {
   });
 }
 
+$('#startMint').click(function() {
+  var uri = document.getElementById('URI').value;
+  var taxon = document.getElementById('taxon').value;
+  var transferFee = document.getElementById('transferFee').value;
+  var memo = document.getElementById('memo').value;
+  var burnable = document.getElementById('burnable').value;
+  var onlyXRP = document.getElementById('onlyXRP').value;
+  var trustline = document.getElementById('trustline').value;
+  var transferable = document.getElementById('transferable').value;
+  console.log(uri);
+  $.ajax({
+    type: "POST",
+    url: "/mint-NFToken",
+    data: {
+      return_url: window.location.href,
+      uri: uri,
+      taxon: taxon,
+      transferFee: transferFee,
+      memo: memo,
+      burnable: burnable,
+      onlyXRP: onlyXRP,
+      trustline: trustline,
+      transferable: transferable
+    },
+    success: function (result) {
+      customAlert.alert('NFT minted successfully!')
+    },
+    error: function (result) {
+      customAlert.alert('Error, failed to mint NFT. Check your inputs and try again.')
+    }
+  })
+})
+
 //No underscores looks for nus class and removes
 window.onload = function noUnderscores() {
   const elements = document.querySelectorAll(".nus");
@@ -1019,8 +1052,9 @@ function submitEmail() {
 
 };
 function getCurrencyBalance() {
+  var currentWindow
   try {
-    $("#walletBalance").load(`<%=url%>/get-token-balance?issuer=XRP&hex=$XRP&token=XRP`);
+    $("#walletBalance").load(`/get-token-balance?issuer=XRP&hex=$XRP&token=XRP`);
   } catch (err) {
     console.error("Couldn't parse balance");
   }

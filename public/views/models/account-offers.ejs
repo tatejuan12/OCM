@@ -1,0 +1,27 @@
+<div class="offer-sliver">
+  <div class="offer-container <%=offer.type%>">
+    <div class="offer-content">
+      <div class="offer-wrap">
+        <% if (offer.type == 'BUY') { %>
+          <i class="icon i-up-lg"></i>
+          <span>Buy offer</span>
+          <h4>Offer - <%=offer.price%> <%=offer.token%></h4>
+          <h6>Offer Value - <%=offer.xrpValue%> XRP</h6>
+        <% } else if (offer.type == 'SELL') {%>
+          <i class="icon i-down-lg"></i>
+          <span>Sell offer</span>
+          <span class="expired <%=offer.expired%>">Expired</span>
+          <h4>Ask - <%=offer.price%> <%=offer.token%></h4>
+          <h6>Ask Value - <%=offer.xrpValue%> XRP</h6>
+        <% };%>
+      </div>
+      <div class="offer-wrap">
+          <div class="offer-links">
+            <a class="offer-card-functions" href="/product-details?id=<%=offer.nftID%>">View NFT on OCM</a>
+            <a class="offer-card-functions" href="https://xls20.bithomp.com/explorer/<%=offer.nftID%>">View transaction</a>
+            <a class="offer-card-functions cancel" onclick="NFTokenCancelOffer('<%=offer.index%>')">Cancel Offer</a>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

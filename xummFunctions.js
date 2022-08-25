@@ -337,6 +337,71 @@ var payloads = {
     const payload = await getPayload(request);
     return payload;
   },
+  mintObject: async function (uri, taxon, transferFee, memo, burnable, onlyXRP, trustline, transferable) {
+      try {
+        //CONDUCT CHECKS
+        if (memo != undefined && memo != "") {
+            var memoHex = xrpl.convertStringToHex(memo)
+        }
+
+        if (isNaN(taxon) || Number(taxon) % 1 != 0) {
+            console.log(`DEFINED TAXON IS NOT A WHOLE NUMBER, AND HENCE IS INVALID`)
+            return
+        } else {
+            var taxon = Number(taxon)
+        }
+
+        if (isNaN(transferFee) || (transferFee < 0 || transferFee > 50) || (Number(transferFee) * 1000) % 1 != 0) {
+            console.log(`DEFINED TRANSFER FEE IS NOT A NUMBER BETWEEN 0 AND 50 WITH 3 OR LESS DECIMAL PLACES`)
+            return
+        } else {
+            var transferFee = Number(transferFee) * 1000
+        }
+
+        if (!transferable && transferFee != 0) {
+            console.log(`TRANSFERABLE FLAG MUST BE TRUE TO INCLUDE A TRANSFER FEE`)
+            return
+        }
+
+        //CALCULATE THE FLAGS
+        var flags = 0
+        if (burnable) flags += 1
+        if (onlyXRP) flags += 2
+        if (trustline) flags += 4
+        if (transferable) flags += 8
+
+        var mintObject = {
+            "TransactionType": "NFTokenMint",
+            "NFTokenTaxon": taxon
+        }
+
+        if (memoHex != undefined) {
+            mintObject.Memos = [{
+                "Memo": {
+                    "MemoData": memoHex
+                }
+            }]
+        }
+
+        if (uri != undefined && uri != "") {
+            mintObject.URI = xrpl.convertStringToHex(uri)
+        }
+
+
+        if (transferFee != 0) {
+            mintObject.TransferFee = transferFee
+        }
+
+        if (flags != 0) {
+            mintObject.Flags = flags
+        }
+
+        const payload = await getPayload(mintObject);
+        return payload;
+      } catch (err) {
+        console.log("Minting error " + err);
+      }
+  },
 };
 var subscriptions = {
   transactionSubscription: async function () {
