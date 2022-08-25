@@ -5,13 +5,16 @@
 <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12 nft-card-wrap">
   <div class="product-style-one no-overlay with-placeBid">
     <div class="card-thumbnail">
-      <%console.log(nft)%>
-      <%var imageExt = new Set(['jpg', 'jpeg', 'png', 'gif']); var vidExt = new Set(['mp4', 'mov', 'avi', 'webm', 'mpg', 'wmv']);%>
+      <%var imageExt = new Set(['jpg', 'jpeg', 'png', 'gif']); var vidExt = new Set(['mp4', 'ogg', 'webm']);%>
         <% if (imageExt.has(nft.http_image.substring(nft.http_image.lastIndexOf('.') + 1))) { %>
           <img src="<%= nft.http_image%> " alt="Nft_Profile" draggable="false" loading="lazy">
         <!-- JPG/JPEG/PNG/GIF -->
         <% } else if (vidExt.has(nft.http_image.substring(nft.http_image.lastIndexOf('.') + 1))) { %>
-          <video src="<%= nft.http_image%>"></video>
+          <video controls autoplay>
+            <source src="<%= nft.http_image%>" type="video/mp4">
+            <source src="<%= nft.http_image%>" type="video/webm">
+            <source src="<%= nft.http_image%>" type="video/ogg">
+          </video>
         <% } else {%>
           <span>file format not supported</span>
         <%};%>

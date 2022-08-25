@@ -23901,11 +23901,14 @@ body.active-light-mode {
   position: fixed;
   top: 50%;
   left: 50%;
-  background-color: #fff;
+  background-color: var(--background-color-4);
   padding: 8px;
   border-radius: 0.5rem;
   transform: translate(-50%, -50%);
   box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+}
+.active-light-mode .listItem{
+  background-color: #fff;
 }
 [show] {
   display: block;
@@ -23998,6 +24001,10 @@ body.active-light-mode {
   display: flex;
   align-items: center;
   justify-content: space-around;
+  margin-right: 8px;
+}
+.NFImage  video{
+  max-width: 300px;
 }
 #price {
   box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em,

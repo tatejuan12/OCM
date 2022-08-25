@@ -81,7 +81,11 @@
                       <img src="<%= nft.httpsImage%> " alt="Nft_Profile">
                     <!-- JPG/JPEG/PNG/GIF -->
                     <% } else if (vidExt.has(nft.httpsImage.substring(nft.httpsImage.lastIndexOf('.') + 1))) { %>
-                      <video src="<%= nft.httpsImage%>"></video>
+                      <video>
+                        <source src="<%= nft.httpsImage%>" type="video/mp4">
+                        <source src="<%= nft.httpsImage%>" type="video/webm">
+                        <source src="<%= nft.httpsImage%>" type="video/ogg">
+                      </video>
                     <% } else {%>
                       <span>file format not supported</span>
                     <%};%>

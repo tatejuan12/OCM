@@ -6,7 +6,7 @@
         <button type="button" onclick="closeModal()" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="margin-bottom: 20px;"></button>
       </div>
       <div class="NFTDeets">
-        <div class="NFImage">
+        <div class="NFImage" id="listImage">
           <img draggable="false" src="assets/images/activity/qmark600.png" id="yourNFT">
         </div>
         <div class="LIInner">
@@ -55,9 +55,19 @@
       $('#issuer').val(data.issuer);
       $('#taxon').val(data.taxon);
       $('#currentHolder').val(data.currentHolder);
-      $('#yourNFT').attr("src", data.image);
       $('#listItem').show("fast", "linear");
+      var imageExt = new Set(['jpg', 'jpeg', 'png', 'gif']); var vidExt = new Set(['mp4', 'mov', 'avi', 'webm', 'mpg', 'wmv']);
+       if (imageExt.has(data.image.substring(data.image.lastIndexOf('.') + 1))) {
+          $('#listImage').html(`<img src="${data.image} " alt="Nft_Profile" draggable="false" loading="lazy">`);
+       } else if (vidExt.has(data.image.substring(data.image.lastIndexOf('.') + 1))) {
+          $('#listImage').html(`<video controls autoplay>
+            <source src="${data.image}" type="video/mp4">
+            <source src="${data.image}" type="video/webm">
+            <source src="${data.image}" type="video/ogg">
+          </video>`);
+       } else {
+          $('#listImage').html(`<span>file format not supported</span>`);
+      };
     }
-    $
   </script>
 </div>

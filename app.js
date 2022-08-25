@@ -357,8 +357,7 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
     .toLowerCase()
     .replace(" ", "_");
   const isOwner = wallet == promises[0].currentOwner;
-  const collection_logo =
-    digitalOcean.functions.getProductCollectionLogoLink(nftCollection);
+  const collection_logo = digitalOcean.functions.getProductCollectionLogoLink(nftCollection);
   if (promises[0]) {
     res.render("views/product-details", {
       isOwner: isOwner,
