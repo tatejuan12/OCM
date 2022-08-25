@@ -17714,9 +17714,14 @@ NFT product styles
 }
 .product-style-one.with-placeBid .card-thumbnail {
   position: relative;
+  display: flex;
+  justify-content: center;
 }
 .product-style-one.with-placeBid .card-thumbnail img {
   max-height: 300px;
+}
+.product-style-one.with-placeBid .card-thumbnail video {
+  max-width: 300px;
 }
 .product-style-one.with-placeBid .card-thumbnail a.btn,
 .product-style-one.with-placeBid .card-thumbnail span.btn {
@@ -24089,6 +24094,14 @@ body.active-light-mode {
 .offer-container:hover {
   transform: scale(1.01);
 }
+.offer-wrap h4{
+  margin-bottom:8px;
+}
+.offer-wrap h6{
+  font-weight: 400;
+  font-size: 15px;
+  color: grey;
+}
 .offer-wrap:nth-child(2){
   display: flex;
   flex-direction: row;
@@ -24114,10 +24127,12 @@ body.active-light-mode {
   width:100%;
   flex-direction:row;
   justify-content: space-around;
-  background-color: var(--color-midgray);
+  background-color: var(--color-light-body);
   height: 50px;
   margin-bottom: -20px;
-  box-shadow: inset rgba(0, 0, 0, 0.35) 0px 8px 10px;
+  box-shadow: inset rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border-top-left-radius: .25rem;
+  border-top-right-radius: .25rem;
 }
 .active-light-mode .offer-links{
   background-color: var(--color-info);
@@ -24130,6 +24145,7 @@ body.active-light-mode {
   justify-content: center;
   cursor: pointer;
   color: var(--color-heading);
+  padding: 0 4px
 }
 .active-light-mode .offer-links{
   color: var(--color-light-heading);

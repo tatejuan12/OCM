@@ -280,7 +280,6 @@ server.get("/collection", speedLimiter, async (req, res) => {
 });
 server.get("/collections", speedLimiter, async (req, res) => {
   var collections = await mongoClient.query.getCollections();
-  console.log(collections);
   collections = appendColletionsImagesUrls(collections);
 
   defaultLocals(req, res);
