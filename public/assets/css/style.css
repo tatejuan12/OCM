@@ -17773,6 +17773,7 @@ NFT product styles
   font-size: 18px;
   transition: 0.4s;
   overflow: hidden;
+  cursor: pointer;
 }
 .product-style-one a .product-name:hover {
   color: var(--color-primary) !important;
@@ -24318,6 +24319,15 @@ Collection nav
 }
 .CCC-item-count p span {
   opacity: 50%;
+}
+.collection-data-wrap{
+  display: flex;
+  flex-direction: row;
+  width: 600px;
+  justify-content: space-evenly;
+}
+.collection-content{
+
 }
 .required-comment {
   display: flex;

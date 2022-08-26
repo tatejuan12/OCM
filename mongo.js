@@ -401,6 +401,24 @@ var methods = {
       client.close();
     }
   },
+  incrementView: async function (nftId) {
+    const client = await getClient();
+    if (!client) return;
+    try {
+      const db = client.db('NFTokens');
+      let collection = db.collection('Eligible-Listings');
+        collection.updateOne(
+          {
+            tokenID: nftId
+          },
+          {$inc: {
+            views: 1
+          }})
+
+    } catch (err) {
+      console.log("Database error" + err);
+    }
+  },
   addLike: async function (body, wallet) {
     const id = body;
     const userWallet = wallet;
@@ -462,6 +480,9 @@ var methods = {
       client.close();
       return res;
     }
+  },
+  totalCollectionItems: async function (collection) {
+    
   },
   reportNft: async function (id, message, login, wallet) {
     var res = false;

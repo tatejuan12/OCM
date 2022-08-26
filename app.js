@@ -84,7 +84,7 @@ const authorizedIps = [
   "103.231.88.10",
   "27.99.115.205",
   "220.235.196.107",
-  "14.202.23.107", //Liam
+  "118.208.200.237", //Liam
   "116.206.228.204",
   "116.206.228.203",
   "139.218.13.37", //Juanito
@@ -178,8 +178,6 @@ server.get("/profile", speedLimiter, async (req, res) => {
       wallet,
       promises[0][0]
     );
-    console.log(promises[2][1])
-    console.log(promises[2][0])
     res.render("views/profile", {
       isOwner: isOwner,
       marker: marker,
@@ -358,6 +356,8 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
     .replace(" ", "_");
   const isOwner = wallet == promises[0].currentOwner;
   const collection_logo = digitalOcean.functions.getProductCollectionLogoLink(nftCollection);
+  //increment views on the NFT for most viewed section
+  mongoClient.query.incrementView(nftId);
   if (promises[0]) {
     res.render("views/product-details", {
       isOwner: isOwner,
@@ -676,8 +676,11 @@ server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
         unlistedNftsToReturn[i].NFTokenID = unlistedNfts[i].NFTokenID;
       }
     }
+    var rawData = unlistedNfts[i]
   }
   res.render("views/models/unlisted-nft-rows.ejs", {
+    wallet: wallet,
+    rawData: rawData,
     nfts: unlistedNftsToReturn,
   });
 });

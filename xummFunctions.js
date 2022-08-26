@@ -537,6 +537,93 @@ var subscriptions = {
   },
 };
 var xrpls = {
+  getAccountTokens: async function (address) {
+
+    try {
+        //define 
+        var client = new xrpl.Client("wss://xls20-sandbox.rippletest.net:51233")
+
+        //console.log("Connecting to XRPL")
+        //Try Connect to XRPL 
+        var count = 0
+        while (count < 6) {
+            if (count >= 3) {
+                var client = new xrpl.Client("wss://xls20-sandbox.rippletest.net:51233")
+            }
+
+            try {
+                await client.connect()
+                //console.log(`\tConnected`)
+                break
+            } catch (err) {
+                //console.log(`                    Failed ${count}`)
+                count += 1
+            }
+        }
+
+        //try 5 times to get an array of all account NFTs
+        var count = 0
+        while (count < 5) {
+            try {
+                var allTokens = []
+                var marker = "begin"
+                while (marker != null) {
+                    //console.log("Retrieving")
+                    if (marker == 'begin') {
+                        var accountTokens = await client.request({
+                            "command": "account_lines",
+                            "ledger_index": "validated",
+                            "account": address,
+                            "limit": 400
+                        })
+                    } else {
+                        var accountTokens = await client.request({
+                            "command": "account_lines",
+                            "ledger_index": "validated",
+                            "account": address,
+                            "marker": marker,
+                            "limit": 400
+                        })
+                    }
+
+                    var allTokens = allTokens.concat(accountTokens.result.lines)
+                    var marker = accountTokens.result.marker
+                }
+                break
+            } catch (err) {
+                //console.log(`                    Failed ${count}`)
+                count += 1
+            }
+        }
+
+
+        var tokensHeld = []
+        for(a in allTokens){
+
+            if (allTokens[a].balance <= `0`) continue
+
+            if (allTokens[a].currency.length > 3) {
+                var name = xrpl.convertHexToString(allTokens[a].currency).replace(/\0/g, '')
+            } else {
+                var name = allTokens[a].currency
+            }
+
+            tokensHeld.push({
+                "issuer": allTokens[a].account,
+                "hex": allTokens[a].currency,
+                "balance": allTokens[a].balance,
+                "name": name
+            })
+        }
+
+        return tokensHeld
+    } catch (error) {
+        console.log(error)
+        return null
+    } finally {
+        await client.disconnect()
+    }
+  },
   getNftImage: async function (nftURI, retryCount = 0) {
     var json = {};
     async function httpAPI(url, retryCount = 0) {
