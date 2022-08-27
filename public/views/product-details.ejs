@@ -78,16 +78,16 @@
                   <div class="rn-pd-thumbnail">
                     <%var imageExt = new Set(['jpg', 'jpeg', 'png', 'gif']); var vidExt = new Set(['mp4', 'mov', 'avi', 'webm', 'mpg', 'wmv']);%>
                     <% if (imageExt.has(nft.httpsImage.substring(nft.httpsImage.lastIndexOf('.') + 1))) { %>
-                      <img src="<%= nft.httpsImage%> " alt="Nft_Profile">
+                      <img src="<%=nft.httpsImage%> " alt="Nft_Profile">
                     <!-- JPG/JPEG/PNG/GIF -->
                     <% } else if (vidExt.has(nft.httpsImage.substring(nft.httpsImage.lastIndexOf('.') + 1))) { %>
-                      <video>
-                        <source src="<%= nft.httpsImage%>" type="video/mp4">
-                        <source src="<%= nft.httpsImage%>" type="video/webm">
-                        <source src="<%= nft.httpsImage%>" type="video/ogg">
+                      <video controls>
+                        <source src="<%=nft.httpsImage%>" type="video/mp4">
+                        <source src="<%=nft.httpsImage%>" type="video/webm">
+                        <source src="<%=nft.httpsImage%>" type="video/ogg">
                       </video>
                     <% } else {%>
-                      <span>file format not supported</span>
+                      <span style="width:300px;height:300px;text-align:center;">file format not supported</span>
                     <%};%>
                   </div>
                 </div>
@@ -140,15 +140,21 @@
                 <span>Collection</span>
                 <div class="top-seller-inner-one">
                   <div class="top-seller-wrapper">
+                    <%if (nft.uriMetadata.collection.name == null) {%>
+                      <div class="top-seller-content">
+                        <h6>No Collection</h6>
+                      </div>
+                    <%} else {%>
                     <div class="thumbnail">
                       <!-- a tag should link to collection of the respective NFT collection associated with that image -->
-                      <a href="collection?name=<%=nft.uriMetadata.collection.name.toLowerCase().replace(' ', '_')%>&issuer=<%=nft.issuer%>&page=0"><img src="<%=collection_logo%> " alt="Nft_Profile"></a>
+                        <a href="collection?name=<%=nft.uriMetadata.collection.name.toLowerCase().replace(' ', '_')%>&issuer=<%=nft.issuer%>&page=0"><img src="<%=collection_logo%> " alt="Nft_Profile"></a>
                     </div>
                     <div class="top-seller-content">
                       <a href="collection?name=<%=nft.uriMetadata.collection.name.toLowerCase().replace(' ', '_')%>&issuer=<%=nft.issuer%>&page=0">
                         <h6 class="name"><%=nft.uriMetadata.collection.name%></h6>
                       </a>
                     </div>
+                    <%};%>
                   </div>
                 </div>
               </div>

@@ -18780,6 +18780,11 @@ NFT product styles mobile layout
   object-fit: cover;
   width: -webkit-fill-available;
 }
+.product-tab-wrapper .rn-pd-content .rn-pd-thumbnail video {
+  border-radius: 7px;
+  object-fit: cover;
+  width: -webkit-fill-available;
+}
 .product-tab-wrapper .rn-pd-rt-content button {
   border-radius: 5px;
   transition: var(--transition);

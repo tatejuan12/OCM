@@ -351,11 +351,19 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
     resolve(nfts);
   });
   const promises = await Promise.all([nftPromise, nftsPromise]);
-  const nftCollection = promises[0].uriMetadata.collection.name
+  if (promises[0].uriMetadata.collection.name !== null) {
+    var nftCollection = promises[0].uriMetadata.collection.name
     .toLowerCase()
     .replace(" ", "_");
+  } else {
+    var nftCollection = 'no collection';
+  }
   const isOwner = wallet == promises[0].currentOwner;
-  const collection_logo = digitalOcean.functions.getProductCollectionLogoLink(nftCollection);
+  if (nftCollection !== 'no collection') {
+    var collection_logo = digitalOcean.functions.getProductCollectionLogoLink(nftCollection);
+  } else {
+    var collection_logo = null;
+  }
   //increment views on the NFT for most viewed section
   mongoClient.query.incrementView(nftId);
   if (promises[0]) {

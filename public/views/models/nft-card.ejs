@@ -15,8 +15,8 @@
         <!-- JPG/JPEG/PNG/GIF -->
         <% } else if (vidExt.has(nft.httpsImage.substring(nft.httpsImage.lastIndexOf('.') + 1))) { %>
           <video src="<%= nft.httpsImage%>"></video>
-        <% } else {%>
-          <span>file format not supported</span>
+        <% } else { console.log(nft);%>
+          <img src="<%= nft.http_image%> " alt="unlisted NFT image" draggable="false" loading="lazy">
         <%};%>
 
 
