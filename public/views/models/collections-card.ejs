@@ -1,4 +1,4 @@
-<div class="collection-card" data-sal="slide-up" data-sal-delay="150" data-sal-duration="800">
+<!-- <div class="collection-card" data-sal="slide-up" data-sal-delay="150" data-sal-duration="800">
   <a href="collection?name=<%=collection.name%>&issuer=<%=collection.issuer%>&page=0">
     <img src="<%=collection.banner_url%> " alt="" class="CC-banner">
     <div class="collection-card-content">
@@ -19,5 +19,26 @@
       </div>
     </div>
     
+  </a>
+</div> -->
+<div data-sal="slide-up" data-sal-delay="200" data-sal-duration="800" class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-12">
+  <a href="collection?name=<%=collection.name%>&issuer=<%=collection.issuer%>&page=0" class="rn-collection-inner-one">
+      <div class="collection-wrapper">
+          <div class="collection-big-thumbnail">
+              <img src="<%=collection.banner_url%>" alt="Nft_Profile">
+          </div>
+          <div class="collenction-small-thumbnail">
+              <img src="assets/images/collection/collection-place.jpg" alt="collection NFT image">
+              <img src="assets/images/collection/collection-place.jpg" alt="collection NFT image">
+              <img src="assets/images/collection/collection-place.jpg" alt="collection NFT image">
+        </div>
+          <div class="collection-profile">
+              <img src="<%=collection.logo_url%>" alt="Nft_Profile">
+          </div>
+          <div class="collection-deg">
+              <h6 class="title nus"><%=collection.name %></h6>
+              <span class="items"><%= collection.items %></span>
+          </div>
+      </div>
   </a>
 </div>

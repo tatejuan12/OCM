@@ -1,9 +1,9 @@
 <%url = new URLSearchParams(queries)%>
-<div class="pagination-navigation">
-  <%for(var i = page - 5 ; i < page + 5 ; i++) {
-    if (i < 0) i = 0;
-    if (page == i) {%><a><span class="pagination-step step-active"><%=i%></span></a><%} else {%>
-  <%url.set("page", i)%>
-  <a href="<%=path +"?"+ url.toString()%>"><span class="pagination-step"><%=i%></span></a>
-  <%}}%>
-</div>
+<nav class="pagination-wrapper" aria-label="Page navigation example">
+    <ul class="pagination">
+      <%for(var i = page - 5 ; i < page + 5 ; i++) {if (i < 0) i = 0; if (page == i) {%> <li class="page-item"><a class="page-link active"><%=i%></a></li><%} else {%>
+    <%url.set("page", i)%>
+      <li class="page-item"><a class="page-link" href="<%=path +"?"+ url.toString()%></a>"><%=i%></a></li>
+      <%}}%>
+    </ul>
+</nav>

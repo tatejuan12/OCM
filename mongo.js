@@ -623,12 +623,29 @@ var methods = {
 
       let collection = db.collection("Collections");
 
-      let res = await collection.find();
+      let res = collection.find();
       const array = await res.toArray();
 
       return array;
     } catch (err) {
       console.log("Database error" + err);
+    } finally {
+      client.close();
+    }
+  },
+  getCollectionImageTaste: async function (issuer) {
+    const client = await getClient();
+    if (!client) return;
+    try {
+      const db = client.db("NFTokens");
+      let collection = db.collection("Eligible-Listings");
+      let query = {
+        issuer: issuer
+      };
+      let res = await collection.find(query).limit(3).toArray();
+      return res;
+    } catch (err) {
+      console.log("Database error: " + err);
     } finally {
       client.close();
     }

@@ -278,8 +278,8 @@ server.get("/collection", speedLimiter, async (req, res) => {
 });
 server.get("/collections", speedLimiter, async (req, res) => {
   var collections = await mongoClient.query.getCollections();
+  //make script to fetch 3 images from the collection to display on the collection page using the issuer address.
   collections = appendColletionsImagesUrls(collections);
-
   defaultLocals(req, res);
   res.render("views/collections", {
     collections: collections,
@@ -661,9 +661,7 @@ server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
     if (returnedNft == null) unlistedNfts.push(nft);
   }
   for (var i = 0; i < unlistedNfts.length; i++) {
-    var queuedIDFinder = await mongoClient.query.checkQueue(
-      unlistedNfts[i].NFTokenID
-    );
+    var queuedIDFinder = await mongoClient.query.checkQueue(unlistedNfts[i].NFTokenID);
     var theNFT = unlistedNfts[i].NFTokenID;
     if (queuedIDFinder == null) {
       //check to see if the NFT isn't in the queue for listing with !==.
