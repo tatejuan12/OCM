@@ -331,7 +331,6 @@ server.get("/edit-profile", speedLimiter, async (req, res) => {
       req.session.wallet
     );
     const account_info = await mongoClient.query.getUser(req.session.wallet);
-    console.log(account_info);
     res.render("views/edit-profile", {
       profile_pic: profile_pic,
       account_info: account_info,
@@ -482,7 +481,7 @@ server.post("/NFTokenAcceptOfferSubscription", async (req, res, next) => {
   if (result) {
     const NFTOfferDetails = {
       NFTokenID: NFTokenID,
-      Date: new Date.now(),
+      Date: new Date,
     };
     mongoClient.query.logRecentSale(NFTOfferDetails);
     return;

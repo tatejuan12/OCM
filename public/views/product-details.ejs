@@ -52,7 +52,7 @@
         </div>
         <div class="col-lg-6 col-md-6 col-12">
           <ul class="breadcrumb-list">
-            <li class="item"><a href="index.html">Home</a></li>
+            <li class="item"><a href="/">Home</a></li>
             <li class="separator"><i class="feather-chevron-right"></i></li>
             <li class="item current">Product Details</li>
           </ul>
@@ -195,6 +195,25 @@
                   <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                     <!-- single -->
                     <div class="rn-pd-bd-wrapper">
+                      <%if (nft.flags.burnable == true || nft.flags.transferable == false) {%>
+                      <div class="top-seller-inner-one">
+                        <h6 class="name-title">Flags</h6>
+                        <div class="flag-alerts">
+                          <%if (nft.flags.burnable) {%>
+                          <div class="flag-wrap">
+                            <h6>Burnable</h6>
+                            <p>The issuer can burn this NFT whenever they want</p>
+                          </div>
+                          <%}%>
+                          <%if (!nft.flags.transferable) {%>
+                          <div class="flag-wrap">
+                            <h6>Transferable</h6>
+                            <p>This NFT can only be sold the to issuer</p>
+                          </div>
+                          <%}%>
+                        </div>
+                      </div>
+                      <%}%>
                       <div class="top-seller-inner-one">
                         <h6 class="name-title">
 

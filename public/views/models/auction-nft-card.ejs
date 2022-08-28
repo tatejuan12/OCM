@@ -15,7 +15,7 @@
         <!-- JPG/JPEG/PNG/GIF -->
         <% } else if (vidExt.has(nft.httpsImage.substring(nft.httpsImage.lastIndexOf('.') + 1))) { %>
           <video src="<%= nft.httpsImage%>"></video>
-        <% } else {%>
+        <% } else { console.log(nft);%>
           <img src="<%= nft.http_image%> " alt="unlisted NFT image" draggable="false" loading="lazy">
         <%};%>
 
@@ -31,23 +31,30 @@
 
         <!-- PLACE BID BUTTON ONLY VISIBLE IF THEY AREN'T THE OWNER -->
       <!-- <%# if(!owner) {%>
-        <a href="product-details?id=<%#=nft.tokenID%>" class="btn btn-primary">Place Bid</a>
+        <a href="product-details?id=<%=nft.tokenID%>" class="btn btn-primary">Place Bid</a>
       <%# } %> -->
 
 
     </div>
+    <div class="countdown" data-date="2022-11-09">
+        <div class="countdown-container days">
+            <span class="countdown-value">87</span>
+            <span class="countdown-heading">D's</span>
+        </div>
+        <div class="countdown-container hours">
+            <span class="countdown-value">23</span>
+            <span class="countdown-heading">H's</span>
+        </div>
+        <div class="countdown-container minutes">
+            <span class="countdown-value">38</span>
+            <span class="countdown-heading">Min's</span>
+        </div>
+        <div class="countdown-container seconds">
+            <span class="countdown-value">27</span>
+            <span class="countdown-heading">Sec</span>
+        </div>
+    </div>
     <div class="product-share-wrapper">
-      <div class="profile-share">
-        <% if (nft.buyOffers[0] !== undefined) { %> 
-        <% for (let i=0; i<3; i++) {%>
-        <% if (nft.buyOffers[i] !== undefined) {%>
-          <a href="/profile?account=<%=nft.buyOffers[i].address%>" class="avatar" data-tooltip="<%=nft.buyOffers[i].account%>"><img src="https://www.ui-avatars.com/api/?background=random&length=3&font-size=0.33&uppercase=false&size=200&name=<%=nft.buyOffers[i].account%>" alt="Nft_Profile"></a>
-        <%}}%>
-          <a class="more-author-text" href="#"><%=nft.buyOffers.length%> Bids</a>
-        <%} else {%>
-        <a class="more-author-text">No Bids</a>
-        <% }; %>
-      </div>
       <div class="share-btn share-btn-activation dropdown">
         <button class="icon" data-bs-toggle="dropdown" aria-expanded="false">
           <svg viewBox="0 0 14 4" fill="none" width="16" height="16" class="sc-bdnxRM sc-hKFxyN hOiKLt">

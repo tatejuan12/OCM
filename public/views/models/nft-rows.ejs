@@ -31,9 +31,9 @@
 
 <div class="row g-5" id="exploreSection">
   <!-- Product -->
-  <% nfts.forEach(function(res){%>
+  <% nfts.forEach(function(res){ if (res.httpsImage !== undefined) {%>
   <%- include('nft-card.ejs', {nft:res})%>
-  <%}); %>
+  <%}}); %>
   <!-- <div style="height:100px; background-color: red;">
 
       
