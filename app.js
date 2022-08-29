@@ -84,7 +84,7 @@ const authorizedIps = [
   "103.231.88.10",
   "27.99.115.205",
   "220.235.196.107",
-  "118.208.200.237", //Liam
+  "220.244.21.2", //Liam
   "116.206.228.204",
   "116.206.228.203",
   "139.218.13.37", //Juanito
@@ -124,7 +124,10 @@ server.get("*", speedLimiter, (req, res, next) => {
 //! ---------------------Browser endpoints--------------------------------//
 server.get("/", speedLimiter, async (req, res) => {
   defaultLocals(req, res);
-  res.render("views/");
+  const mostViewedNFTs = await mongoClient.query.getMostViewed();
+  res.render("views/", {
+    mostViewedNFTs: mostViewedNFTs
+  });
 });
 server.get("/profile", speedLimiter, async (req, res) => {
   var wallet;
@@ -309,18 +312,18 @@ server.get("/minting-help", speedLimiter, (req, res) => {
 server.get("/redeem", speedLimiter, async (req, res) => {
   if (req.session.login) {
     defaultLocals(req, res);
-    const ocwBalance = await xumm.xrpl.getOcwBalance(
-      req.session.wallet,
-      req.useragent.isMobile
-    );
+    const getAssets = await mongoClient.query.redeemAssets();
+    const ocwBalance = await xumm.xrpl.getOcwBalance(req.session.wallet, req.useragent.isMobile);
     ocwBalance
       ? res.render("views/redeem", {
           ocwBalance: ocwBalance[0],
           obtainableNfts: ocwBalance[1],
+          tokens: getAssets
         })
       : res.render("views/redeem", {
           ocwBalance: 0,
           obtainableNfts: 0,
+          tokens: getAssets
         });
   } else res.status(401).redirect("/");
 });

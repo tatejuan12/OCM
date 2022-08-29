@@ -71,41 +71,18 @@
     </div>
   </div>
 
-  <div class="rn-authore-profile-area">
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="tab-wrapper-one">
-            <nav class="tab-button-one">
-              <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-description" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Description</button>
-                <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-nfts" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Items</button>
+  <div class="rn-product-area rn-section-gapTop">
+    <div class="container"> 
+      <div class="row g-5 mt_dec--30">
+          <%- include ("models/nft-rows.ejs", {nfts: nfts}) %>
+        <div class="row">
+          <div class="col-lg-12">
+              <div class="view-more-btn mt--50">
+                  <a class="btn btn-primary-alta btn-large w-100" href="#">View More Items</a>
               </div>
-            </nav>
           </div>
         </div>
-      </div>
-      <div id="nav-description" class="tab-pane fade active show" aria-labelledby="nav-liked-tab" role="tabpanel">
-        <div class="nav-description-content">
-          <div class="collection-description-card">
-            <div class="collection-description-card-wrap">
-              <h5>Collection Description</h5>
-              <p><%= collectionDetails.description %></p>
-            </div>
-          </div>
-          <div class="collection-description-card">
-            <div class="collection-description-card-wrap">
-              <h5>Brand</h5>
-              <p><%= collectionDetails.brand %> </p>
-              <h5>Issuer</h5>
-              <p><a href="https://bithomp.com/explorer/<%=collectionDetails.issuer%>" target="_blank"><%= collectionDetails.issuer%></a></p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="nav-nfts" class="tab-pane fade" aria-labelledby="nav-liked-tab" role="tabpanel">
-        <%- include ("models/nft-rows.ejs", {nfts: nfts}) %>
-      </div>
+      </div>     
     </div>
   </div>
   <!-- Modal require -->

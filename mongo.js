@@ -701,6 +701,35 @@ var methods = {
       client.close();
     }
   },
+  redeemAssets: async function () {
+    const client = await getClient();
+    if (!client) return;
+    try {
+      const db = client.db("Redeem");
+      let collection  = db.collection("Assets");
+      const res = await collection.find();
+      return res.toArray();
+    } catch (err) {
+      console.log("Database error" + err);
+    }
+  },
+  getMostViewed: async function () {
+    const client = await getClient();
+    if (!client) return
+    try {
+      const db = client.db("NFTokens")
+      let collection = db.collection("Eligible-Listings");
+      let sort = {
+        views: -1
+      }
+      const res = await collection.find().sort(sort).limit(10);
+      return await res.toArray();
+    } catch (err) {
+      console.log("Database error" + err);
+    } finally {
+      client.close();
+    }
+  },
 };
 
 async function alreadyLiked(collection, id, wallet) {

@@ -17957,6 +17957,9 @@ NFT product styles
   border-radius: 5px;
   z-index: 2;
 }
+.w-100{
+  width: 100%;
+}
 /*################
 NFT product styles mobile layout
 ##################*/
@@ -18941,9 +18944,6 @@ NFT product styles mobile layout
   .rn-pd-content-area .catagory-collection {
     justify-content: space-around;
   }
-}
-.rn-pd-content-area .catagory-collection .collection span {
-  color: var(--color-light);
 }
 .rn-pd-content-area .catagory-collection .collection span span {
   font-size: 16px;

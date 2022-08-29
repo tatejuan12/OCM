@@ -87,7 +87,7 @@
                         <source src="<%=nft.httpsImage%>" type="video/ogg">
                       </video>
                     <% } else {%>
-                      <span style="width:300px;height:300px;text-align:center;">file format not supported</span>
+                      <img src="<%=nft.httpsImage%>" alt="NFT image">
                     <%};%>
                   </div>
                 </div>
@@ -137,7 +137,7 @@
             <div class="catagory-collection">
 
               <div class="collection">
-                <span>Collection</span>
+                <span class="title-name">Collection</span>
                 <div class="top-seller-inner-one">
                   <div class="top-seller-wrapper">
                     <%if (nft.uriMetadata.collection.name == null) {%>
@@ -215,16 +215,12 @@
                       </div>
                       <%}%>
                       <div class="top-seller-inner-one">
-                        <h6 class="name-title">
-
-                          Owner
-                        </h6>
+                        <h6 class="name-title">Owner</h6>
                         <div class="top-seller-wrapper">
+                          <div id="profile-thumbnail-container"></div>
 
                           <div class="top-seller-content">
                             <!-- make link to issuer collection page on Marketplace if it exists -->
-                            <div id="profile-thumbnail-container"></div>
-
                             <a href="" id="owner-name">
                               <div class="loader-content"></div>
                             </a>
