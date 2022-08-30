@@ -481,8 +481,21 @@ var methods = {
       return res;
     }
   },
-  totalCollectionItems: async function (collection) {
-    
+  totalCollectionItems: async function (collectionName) {
+    const client = await getClient();
+    if (!client) return;
+    try{
+      const db = client.db("NFTokens");
+      let collection = db.collection("Eligible-Listings");
+      var returnedName = collectionName.replace('_', ' ')
+      let query = {
+        "uriMetadata.collection.name": new RegExp(returnedName, 'i'),
+      }
+      const result = await collection.count(query);
+      return result;
+    } catch (err) {
+      console.error("Database error" + err);
+    }
   },
   reportNft: async function (id, message, login, wallet) {
     var res = false;
@@ -717,7 +730,7 @@ var methods = {
     const client = await getClient();
     if (!client) return
     try {
-      const db = client.db("NFTokens")
+      const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
       let sort = {
         views: -1
@@ -728,6 +741,34 @@ var methods = {
       console.log("Database error" + err);
     } finally {
       client.close();
+    }
+  },
+  getCollectionFloorPrice: async function (collectionName) {
+    const client = await getClient();
+    if (!client) return;
+    try{
+      const db = client.db("NFTokens");
+      let collection = db.collection("Eligible-Listings");
+      var returnedName = collectionName.replace('_', ' ');
+      let query01 = {
+        "sellHistory.0.xrpValue": {
+          $gt: 0
+      },
+      "uriMetadata.collection.name": new RegExp(returnedName, 'i')
+      }
+      let query02 = {
+        projection: {
+          _id: 0,
+          "sellHistory": 1
+        }
+      }
+      let sort = {
+        "sellHistory.0.xrpValue": 1
+      }
+      const result = (await collection.find(query01,query02).sort(sort).limit(1).toArray())[0].sellHistory[0].xrpValue
+      return result;
+    } catch (err) {
+      console.log("Database error" + err);
     }
   },
 };

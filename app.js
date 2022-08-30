@@ -32,7 +32,6 @@ const mongoStore = new MongoDBStore({
   databaseName: "Sessions",
   collection: "Sessions",
 });
-const csrfProtection = csurf({});
 const speedLimiter = slowDown({
   windowMs: 10 * 60 * 1000, // 10 minutes
   delayAfter: 100,
@@ -56,10 +55,11 @@ server.use(
     resave: false,
     saveUninitialized: false,
     //! change to secure true once hosting
-    cookie: { secure: true, maxAge: 1000 * 60 * 60 * 24 * 30 }, // ms/s, s/m, m/h, h/d, d/mnth
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 30 }, // ms/s, s/m, m/h, h/d, d/mnth
     store: mongoStore,
   })
 );
+const csrfProtection = csurf({});
 server.use(useragent.express()); // For browser data, like if it is mobile or not
 server.use(
   minifyHtml({
@@ -84,8 +84,8 @@ const authorizedIps = [
   "103.231.88.10",
   "27.99.115.205",
   "220.235.196.107",
-  "220.244.21.2", //Liam
-  "116.206.228.204",
+  "1.132.108.195", //Liam
+  "27.99.115.205",
   "116.206.228.203",
   "139.218.13.37", //Juanito
   "175.176.36.102", //Kuro OCW mod
@@ -118,7 +118,8 @@ server.get("*", speedLimiter, (req, res, next) => {
     !authorizedIps.includes(req.header("x-forwarded-for"))
   ) {
     defaultLocals(req, res);
-    res.status(404).render("views/404.ejs");
+    next();
+    // res.status(404).render("views/404.ejs");
   } else next();
 });
 //! ---------------------Browser endpoints--------------------------------//
@@ -126,7 +127,7 @@ server.get("/", speedLimiter, async (req, res) => {
   defaultLocals(req, res);
   const mostViewedNFTs = await mongoClient.query.getMostViewed();
   res.render("views/", {
-    mostViewedNFTs: mostViewedNFTs
+    mostViewedNFTs: mostViewedNFTs,
   });
 });
 server.get("/profile", speedLimiter, async (req, res) => {
@@ -270,12 +271,16 @@ server.get("/collection", speedLimiter, async (req, res) => {
     const collection_banner = digitalOcean.functions.getCollectionBannerLink(
       collectionDetails.name
     );
+    const floorPrice = await mongoClient.query.getCollectionFloorPrice(collectionName)
+    const items = await mongoClient.query.totalCollectionItems(collectionName)
     defaultLocals(req, res);
     res.render("views/collection", {
       nfts: nfts,
       collectionDetails: collectionDetails,
       collection_logo: collection_logo,
       collection_banner: collection_banner,
+      floor: floorPrice,
+      items: items
     });
   } else res.redirect("collection?page=0");
 });
@@ -283,6 +288,11 @@ server.get("/collections", speedLimiter, async (req, res) => {
   var collections = await mongoClient.query.getCollections();
   //make script to fetch 3 images from the collection to display on the collection page using the issuer address.
   collections = appendColletionsImagesUrls(collections);
+  for (var i = 0; i < collections.length; i++) {
+    collections[i].numberOfNFTs = await mongoClient.query.totalCollectionItems(
+      collections[i].name
+    );
+  }
   defaultLocals(req, res);
   res.render("views/collections", {
     collections: collections,
@@ -313,17 +323,20 @@ server.get("/redeem", speedLimiter, async (req, res) => {
   if (req.session.login) {
     defaultLocals(req, res);
     const getAssets = await mongoClient.query.redeemAssets();
-    const ocwBalance = await xumm.xrpl.getOcwBalance(req.session.wallet, req.useragent.isMobile);
+    const ocwBalance = await xumm.xrpl.getOcwBalance(
+      req.session.wallet,
+      req.useragent.isMobile
+    );
     ocwBalance
       ? res.render("views/redeem", {
           ocwBalance: ocwBalance[0],
           obtainableNfts: ocwBalance[1],
-          tokens: getAssets
+          tokens: getAssets,
         })
       : res.render("views/redeem", {
           ocwBalance: 0,
           obtainableNfts: 0,
-          tokens: getAssets
+          tokens: getAssets,
         });
   } else res.status(401).redirect("/");
 });
@@ -355,14 +368,15 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
   const promises = await Promise.all([nftPromise, nftsPromise]);
   if (promises[0].uriMetadata.collection.name !== null) {
     var nftCollection = promises[0].uriMetadata.collection.name
-    .toLowerCase()
-    .replace(" ", "_");
+      .toLowerCase()
+      .replace(" ", "_");
   } else {
-    var nftCollection = 'no collection';
+    var nftCollection = "no collection";
   }
   const isOwner = wallet == promises[0].currentOwner;
-  if (nftCollection !== 'no collection') {
-    var collection_logo = digitalOcean.functions.getProductCollectionLogoLink(nftCollection);
+  if (nftCollection !== "no collection") {
+    var collection_logo =
+      digitalOcean.functions.getProductCollectionLogoLink(nftCollection);
   } else {
     var collection_logo = null;
   }
@@ -484,7 +498,7 @@ server.post("/NFTokenAcceptOfferSubscription", async (req, res, next) => {
   if (result) {
     const NFTOfferDetails = {
       NFTokenID: NFTokenID,
-      Date: new Date,
+      Date: new Date(),
     };
     mongoClient.query.logRecentSale(NFTOfferDetails);
     return;
@@ -655,8 +669,7 @@ server.post("/list-nft-subscription", async (req, res, next) => {
 });
 server.post("/mint-NFToken", async (req, res, next) => {
   console.log(req.body);
-
-})
+});
 
 server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
   var wallet;
@@ -671,7 +684,9 @@ server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
     if (returnedNft == null) unlistedNfts.push(nft);
   }
   for (var i = 0; i < unlistedNfts.length; i++) {
-    var queuedIDFinder = await mongoClient.query.checkQueue(unlistedNfts[i].NFTokenID);
+    var queuedIDFinder = await mongoClient.query.checkQueue(
+      unlistedNfts[i].NFTokenID
+    );
     var theNFT = unlistedNfts[i].NFTokenID;
     if (queuedIDFinder == null) {
       //check to see if the NFT isn't in the queue for listing with !==.
@@ -684,7 +699,7 @@ server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
         unlistedNftsToReturn[i].NFTokenID = unlistedNfts[i].NFTokenID;
       }
     }
-    var rawData = unlistedNfts[i]
+    var rawData = unlistedNfts[i];
   }
   res.render("views/models/unlisted-nft-rows.ejs", {
     wallet: wallet,
@@ -782,6 +797,7 @@ server.use(function (err, req, res, next) {
   if (err.code !== "EBADCSRFTOKEN") return next(err);
 
   // handle CSRF token errors here
+  console.log(err);
   res.status(403).render("views/500.ejs");
 });
 server.use((err, req, res, next) => {
@@ -789,26 +805,27 @@ server.use((err, req, res, next) => {
   defaultLocals(req, res);
   res.status(500).render("views/500.ejs");
 });
-try {
-  serverSecure = proxiedHttps.createServer(
-    {
-      key: fs.readFileSync(
-        `${process.env.SSL_CERTIFICATE_PATH}privkey.pem`,
-        "utf8"
-      ),
-      cert: fs.readFileSync(
-        `${process.env.SSL_CERTIFICATE_PATH}fullchain.pem`,
-        "utf8"
-      ),
-    },
-    server
-  );
-  serverSecure.listen(443, () => {
-    console.log("Server Listening on Port 443");
-  });
-} catch (err) {
-  console.warn("SSL not found");
-}
+// try {
+//   serverSecure = proxiedHttps.createServer(
+//     {
+//       key: fs.readFileSync(
+//         `${process.env.SSL_CERTIFICATE_PATH}priv.key`,
+//         "utf8"
+//       ),
+//       cert: fs.readFileSync(
+//         `${process.env.SSL_CERTIFICATE_PATH}chain.pem`,
+//         "utf8"
+//       ),
+//       ca: fs.readFileSync(`/opt/OCM/root.pem`, "utf8"),
+//     },
+//     server
+//   );
+//   serverSecure.listen(443, () => {
+//     console.log("Server Listening on Port 443");
+//   });
+// } catch (err) {
+//   console.warn("SSL not found");
+// }
 server.listen(80, () => {
   console.log("Server Listening on Port 80");
 });

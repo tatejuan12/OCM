@@ -834,7 +834,12 @@ function setBuyOfferBid(NFToken) {
   $.ajax({
     type: "POST",
     url: "/nftoken-create-offer",
-    data: { NFToken: NFToken, value: value, return_url: window.location.href, flags: 0},
+    data: {
+      NFToken: NFToken,
+      value: value,
+      return_url: window.location.href,
+      flags: 0,
+    },
     success: function (result) {
       window.location.href = result.next.always;
     },
@@ -845,17 +850,27 @@ function setSellOfferBid(NFToken) {
   $.ajax({
     type: "POST",
     url: "/nftoken-create-offer",
-    data: { NFToken: NFToken, value: value, return_url: window.location.href, flags: 1},
+    data: {
+      NFToken: NFToken,
+      value: value,
+      return_url: window.location.href,
+      flags: 1,
+    },
     success: function (result) {
       window.location.href = result.next.always;
     },
-  })
+  });
 }
 function NFTokenAcceptOffer(index, NFToken) {
   $.ajax({
     type: "POST",
     url: "/NFTokenAcceptOffer",
-    data: { index: index, NFToken: NFToken, return_url: window.location.href, flags: 0 },
+    data: {
+      index: index,
+      NFToken: NFToken,
+      return_url: window.location.href,
+      flags: 0,
+    },
     success: function (result) {
       console.log(result);
       window.location.href = result.payload.payload.next.always;
@@ -878,7 +893,12 @@ function NFTokenAcceptSellOffer(index, NFToken) {
   $.ajax({
     type: "POST",
     url: "/NFTokenAcceptOffer",
-    data: { index: index, NFToken: NFToken, return_url: window.location.href, flags: 1 },
+    data: {
+      index: index,
+      NFToken: NFToken,
+      return_url: window.location.href,
+      flags: 1,
+    },
     success: function (result) {
       console.log(result);
       window.location.href = result.payload.next.always;
@@ -986,15 +1006,15 @@ function getListNft(fee) {
   });
 }
 
-$('#startMint').click(function() {
-  var uri = document.getElementById('URI').value;
-  var taxon = document.getElementById('taxon').value;
-  var transferFee = document.getElementById('transferFee').value;
-  var memo = document.getElementById('memo').value;
-  var burnable = document.getElementById('burnable').value;
-  var onlyXRP = document.getElementById('onlyXRP').value;
-  var trustline = document.getElementById('trustline').value;
-  var transferable = document.getElementById('transferable').value;
+$("#startMint").click(function () {
+  var uri = document.getElementById("URI").value;
+  var taxon = document.getElementById("taxon").value;
+  var transferFee = document.getElementById("transferFee").value;
+  var memo = document.getElementById("memo").value;
+  var burnable = document.getElementById("burnable").value;
+  var onlyXRP = document.getElementById("onlyXRP").value;
+  var trustline = document.getElementById("trustline").value;
+  var transferable = document.getElementById("transferable").value;
   console.log(uri);
   $.ajax({
     type: "POST",
@@ -1008,16 +1028,18 @@ $('#startMint').click(function() {
       burnable: burnable,
       onlyXRP: onlyXRP,
       trustline: trustline,
-      transferable: transferable
+      transferable: transferable,
     },
     success: function (result) {
-      customAlert.alert('NFT minted successfully!')
+      customAlert.alert("NFT minted successfully!");
     },
     error: function (result) {
-      customAlert.alert('Error, failed to mint NFT. Check your inputs and try again.')
-    }
-  })
-})
+      customAlert.alert(
+        "Error, failed to mint NFT. Check your inputs and try again."
+      );
+    },
+  });
+});
 
 //No underscores looks for nus class and removes
 window.onload = function noUnderscores() {
@@ -1030,32 +1052,33 @@ window.onload = function noUnderscores() {
 function submitEmail() {
   var mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   var submittedEmail = document.getElementById("emailSub").value;
-  if (submittedEmail.match(mailFormat)){
+  if (submittedEmail.match(mailFormat)) {
     const formData = new FormData();
     formData.append("email", document.getElementById("emailSub").value);
     $.ajax({
-        type: "POST",
-        url: "/subscribe-email",
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(resulty) {
-            customAlert.alert('Email Address Submitted')
-        },
-        error: function(resulty) {
-            customAlert.alert('Error submitting email address, try again later.')
-        },
+      type: "POST",
+      url: "/subscribe-email",
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function (resulty) {
+        customAlert.alert("Email Address Submitted");
+      },
+      error: function (resulty) {
+        customAlert.alert("Error submitting email address, try again later.");
+      },
     });
   } else {
-    alert("You have entered an invalid email address!")
+    alert("You have entered an invalid email address!");
   }
-
-};
+}
 function getCurrencyBalance() {
-  var currentWindow
+  var currentWindow;
   try {
-    $("#walletBalance").load(`/get-token-balance?issuer=XRP&hex=$XRP&token=XRP`);
+    $("#walletBalance").load(
+      `/get-token-balance?issuer=XRP&hex=$XRP&token=XRP`
+    );
   } catch (err) {
     console.error("Couldn't parse balance");
   }
-};
+}
