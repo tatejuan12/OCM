@@ -116,7 +116,7 @@ server.get("*", speedLimiter, (req, res, next) => {
   if (
     req.path != "/node" &&
     !authorizedIps.includes(req.header("x-forwarded-for"))
-  ) {  
+  ) {
     defaultLocals(req, res);
     next();
     // res.status(404).render("views/404.ejs");
