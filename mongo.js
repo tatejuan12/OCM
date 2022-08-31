@@ -417,6 +417,8 @@ var methods = {
 
     } catch (err) {
       console.log("Database error" + err);
+    } finally {
+      client.close();
     }
   },
   addLike: async function (body, wallet) {
@@ -495,6 +497,8 @@ var methods = {
       return result;
     } catch (err) {
       console.error("Database error" + err);
+    } finally {
+      client.close();
     }
   },
   reportNft: async function (id, message, login, wallet) {
@@ -724,6 +728,8 @@ var methods = {
       return res.toArray();
     } catch (err) {
       console.log("Database error" + err);
+    } finally {
+      client.close()
     }
   },
   getMostViewed: async function () {
@@ -769,6 +775,8 @@ var methods = {
       return result;
     } catch (err) {
       console.log("Database error" + err);
+    } finally {
+      client.close()
     }
   },
 };
