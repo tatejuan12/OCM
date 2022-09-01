@@ -63,6 +63,15 @@
                     <span><%=floor%> XRP <a class="color-body">Lowest Offer</a></span>
                   </div>
               </div>
+                <%if (wallet == collectionDetails.issuer) {%>
+                  <div>
+                    <span>Owner Info:</span>
+                    <div class="follow following">
+                      <span><a class="color-body">collection Views: </a><%=collectionDetails.views%></span>
+                    </div>
+                  </div>
+                <%}%>
+              </div>
               </div>
             </div>
           </div>
