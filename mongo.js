@@ -127,9 +127,9 @@ var methods = {
     var result;
     const client = await getClient();
     if (!client) return;
-    try{
-      const db = client.db('NFTokens');
-      let collection = db.collection('Queued-Listings');
+    try {
+      const db = client.db("NFTokens");
+      let collection = db.collection("Queued-Listings");
       let query = {
         NFTokenID: id,
       };
@@ -405,16 +405,18 @@ var methods = {
     const client = await getClient();
     if (!client) return;
     try {
-      const db = client.db('NFTokens');
-      let collection = db.collection('Eligible-Listings');
-        collection.updateOne(
-          {
-            tokenID: nftId
+      const db = client.db("NFTokens");
+      let collection = db.collection("Eligible-Listings");
+      collection.updateOne(
+        {
+          tokenID: nftId,
+        },
+        {
+          $inc: {
+            views: 1,
           },
-          {$inc: {
-            views: 1
-          }})
-
+        }
+      );
     } catch (err) {
       console.log("Database error" + err);
     } finally {
@@ -425,17 +427,19 @@ var methods = {
     const client = await getClient();
     if (!client) return;
     try {
-      const db = client.db('Additional-Traits');
-      let collection = db.collection('Collections');
+      const db = client.db("Additional-Traits");
+      let collection = db.collection("Collections");
       console.log(collectionName);
-        collection.updateOne(
-          {
-            name: collectionName
+      collection.updateOne(
+        {
+          name: collectionName,
+        },
+        {
+          $inc: {
+            views: 1,
           },
-          {$inc: {
-            views: 1
-          }})
-
+        }
+      );
     } catch (err) {
       console.log("Database error" + err);
     } finally {
@@ -507,13 +511,13 @@ var methods = {
   totalCollectionItems: async function (collectionName) {
     const client = await getClient();
     if (!client) return;
-    try{
+    try {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
-      var returnedName = collectionName.replace('_', ' ')
+      var returnedName = collectionName.replace("_", " ");
       let query = {
-        "uriMetadata.collection.name": new RegExp(returnedName, 'i'),
-      }
+        "uriMetadata.collection.name": new RegExp(returnedName, "i"),
+      };
       const result = await collection.count(query);
       return result;
     } catch (err) {
@@ -678,7 +682,7 @@ var methods = {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
       let query = {
-        issuer: issuer
+        issuer: issuer,
       };
       let res = await collection.find(query).limit(3).toArray();
       return res;
@@ -744,24 +748,23 @@ var methods = {
     if (!client) return;
     try {
       const db = client.db("Redeem");
-      let collection  = db.collection("Assets");
+      let collection = db.collection("Assets");
       const res = await collection.find();
-      return res.toArray();
+      return await res.toArray();
     } catch (err) {
-      console.log("Database error" + err);
     } finally {
       await client.close();
     }
   },
   getMostViewed: async function () {
     const client = await getClient();
-    if (!client) return
+    if (!client) return;
     try {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
       let sort = {
-        views: -1
-      }
+        views: -1,
+      };
       const res = await collection.find().sort(sort).limit(10);
       return await res.toArray();
     } catch (err) {
@@ -773,26 +776,28 @@ var methods = {
   getCollectionFloorPrice: async function (collectionName) {
     const client = await getClient();
     if (!client) return;
-    try{
+    try {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
-      var returnedName = collectionName.replace('_', ' ');
+      var returnedName = collectionName.replace("_", " ");
       let query01 = {
         "sellHistory.0.xrpValue": {
-          $gt: 0
-      },
-      "uriMetadata.collection.name": new RegExp(returnedName, 'i')
-      }
+          $gt: 0,
+        },
+        "uriMetadata.collection.name": new RegExp(returnedName, "i"),
+      };
       let query02 = {
         projection: {
           _id: 0,
-          "sellHistory": 1
-        }
-      }
+          sellHistory: 1,
+        },
+      };
       let sort = {
-        "sellHistory.0.xrpValue": 1
-      }
-      const result = (await collection.find(query01,query02).sort(sort).limit(1).toArray())[0].sellHistory[0].xrpValue
+        "sellHistory.0.xrpValue": 1,
+      };
+      const result = (
+        await collection.find(query01, query02).sort(sort).limit(1).toArray()
+      )[0].sellHistory[0].xrpValue;
       return result;
     } catch (err) {
       console.log("Database error" + err);
