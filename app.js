@@ -387,9 +387,7 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
   }
   //increment views on the NFT for most viewed section
   //if owner if issuer and if not logged in
-  if (wallet != promises[0].currentOwner && wallet != promises[0].issuer && wallet != undefined) {
-   await mongoClient.query.incrementView(nftId);
-  }
+   mongoClient.query.incrementView(nftId);
   if (promises[0]) {
     res.render("views/product-details", {
       isOwner: isOwner,
@@ -408,7 +406,8 @@ server.get("/search", speedLimiter, async (req, res) => {
   const searchResults = await mongoClient.query.getSearchResultsJSON(
     req.query.q
   );
-  res.render("views/search", { res: searchResults });
+  const searchedItem = req.query.q;
+  res.render("views/search", { res: searchResults, searchedItem: searchedItem });
 });
 
 //! ---------------------OCW API--------------------------------//

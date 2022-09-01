@@ -749,7 +749,7 @@ var methods = {
     try {
       const db = client.db("Redeem");
       let collection = db.collection("Assets");
-      const res = await collection.find();
+      const res = collection.find();
       return await res.toArray();
     } catch (err) {
     } finally {
@@ -765,7 +765,7 @@ var methods = {
       let sort = {
         views: -1,
       };
-      const res = await collection.find().sort(sort).limit(10);
+      const res = collection.find().sort(sort).limit(10);
       return await res.toArray();
     } catch (err) {
       console.log("Database error" + err);

@@ -873,7 +873,7 @@ function NFTokenAcceptOffer(index, NFToken) {
     },
     success: function (result) {
       console.log(result);
-      window.location.href = result.payload.payload.next.always;
+      window.location.href = result.payload.next.always;
 
       $.ajax({
         type: "POST",
