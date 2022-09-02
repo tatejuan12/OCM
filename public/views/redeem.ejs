@@ -110,6 +110,11 @@
           <!-- main JS -->
           <script src="assets/js/main.js"></script>
           <script>
+            $('#redeem-menu').change(function (data) {
+              $('.redeemContainer').addClass(`${data.token}`)
+            })
+          </script>
+          <script>
             function setLoaderBalance() {
               $("#currency-balance").html("<div class='loader-data'></div>");
             }

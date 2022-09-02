@@ -72,8 +72,8 @@
             <label class="filter-leble">Brand</label>
             <select id="filter-brands">
               <option data-display="Select Brand" class="option disabled" value='' selected disabled>Select Brand</option>
-              <% verifiedIssuers.forEach(function(res){%>
-              <option value="<%=res.projectName%>"><%=res.projectName%></option>
+              <% filterOptions.forEach(function(res){%>
+              <option value="<%=res._id%>"><%=res._id%></option>
               <%}); %>
             </select>
           </div>
@@ -86,10 +86,15 @@
             </select>
           </div>
           <div class="filter-select-option">
+            <label class="filter-leble">Family</label>
+            <select id="filter-family">
+              <option data-display="Select Family" value='' selected disabled>Select Family</option>
+            </select>
+          </div>
+          <div class="filter-select-option">
             <label class="filter-leble">Collection</label>
             <select id="filter-collection">
               <option data-display="Select Collection" value='' selected disabled>Select Collection</option>
-              <option value="Original Cards">Original Cards</option>
             </select>
           </div>
           <!--Print here other filter options upon MongoDB query in relation to selected brand-->
@@ -156,8 +161,23 @@
   <script src="assets/js/vendor/jquery.custom-file-input.js"></script>
   <script src="assets/js/vendor/savePopup.js"></script>
   <!-- main JS -->
-  <script src="assets/js/main.js"></script>
+  <script src="assets/js/main.js"></script> 
   <script>
+    var filterOptions = <%-filterOptions%>
+    console.log(filterOptions)
+    
+    $('#filter-brands').change(function () {
+        var val = $('#filter-brands').val();
+        console.log(filterOptions + 'LOG 2')
+        for (var i = 0; i < filterOptions.length; i ++) {
+          console.log(`checking ${i}`)
+          if (val == filterOptions[i]._id) {
+            $('#filter-family').html(filterOptions[i].familyFilters.forEach(function (res) {
+              `<option value="${res[i]}">${res[i]}</option>`
+            }));
+          }
+        }
+      });
     function handleFilterSort() {
       const jsonFilterSort = {
         sortLikes: document.getElementById("sort-likes").value,

@@ -231,7 +231,7 @@ var methods = {
         }
         if (filters.filterBrands) {
           aggregateQuery.push({
-            $match: { "uriMetadata.collection.family": filters.filterBrands },
+            $match: { "uriMetadata.collection.family": filters.filterBrands }, //look for issuer of collection
           });
         }
         if (filters.filterExtras == "Verified") {
@@ -769,6 +769,44 @@ var methods = {
       return result;
     } catch (err) {
       console.log("Database error" + err);
+    }
+  },
+  filterOptions: async function () {
+    var client = await getClient();
+    if (!client) return;
+    try {
+      const db = client.db('NFTokens');
+      let collection = db.collection('Eligible-Listings')
+
+      var searchOptions = await collection.aggregate(
+        [
+            {
+                $match: {
+                    "verified.status": true
+                    }
+            },
+            {
+            $group: {
+                _id: "$verified.projectName",
+                familyFilters: {
+                    $addToSet: "$uriMetadata.collection.family"
+                },
+                issuers: {
+                    $addToSet: "$issuer"
+                },
+                nameFilters: {
+                    $addToSet: "$uriMetadata.collection.name"
+                }
+            }
+        }]
+    ).toArray()
+
+        return searchOptions;
+    } catch (error) {
+        console.log(error)
+        return null
+    } finally {
+        await client.close()
     }
   },
 };

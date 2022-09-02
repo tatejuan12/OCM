@@ -227,11 +227,13 @@ server.get("/explore", speedLimiter, async (req, res) => {
       resolve(mongoClient.query.getVerifiedIssuers());
     });
     const promises = await Promise.all([promiseNfts, promiseVerifiedIssuers]);
+    const filterOptions = await mongoClient.query.filterOptions();
     res.render("views/explore", {
       nfts: promises[0],
       page: page,
       verifiedIssuers: promises[1],
       queries: req.query,
+      filterOptions: filterOptions
     });
   } else {
     parametersToSet.push({ key: "page", value: "0" });
@@ -380,8 +382,10 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
   } else {
     var collection_logo = null;
   }
-  //increment views on the NFT for most viewed section
-  mongoClient.query.incrementView(nftId);
+  //increment views on the NFT if it is not the owner, issuer or they aren't logged in
+  if (wallet != promises[0].currentOwner && wallet != promises[0].issuer && wallet != undefined) {
+    mongoClient.query.incrementView(nftId);
+  }
   if (promises[0]) {
     res.render("views/product-details", {
       isOwner: isOwner,
