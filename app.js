@@ -274,8 +274,8 @@ server.get("/collection", speedLimiter, async (req, res) => {
     const collection_banner = digitalOcean.functions.getCollectionBannerLink(
       collectionDetails.name
     );
-    const floorPrice = await mongoClient.query.getCollectionFloorPrice(collectionName)
-    const items = await mongoClient.query.totalCollectionItems(collectionName)
+    const floorPrice = await mongoClient.query.getCollectionFloorPrice(collectionName, issuer)
+    const items = await mongoClient.query.totalCollectionItems(collectionName, issuer)
     if (wallet !== collectionDetails.issuer) {
       await mongoClient.query.incrementViewCollection(collectionName);
     }
@@ -296,9 +296,7 @@ server.get("/collections", speedLimiter, async (req, res) => {
   //make script to fetch 3 images from the collection to display on the collection page using the issuer address.
   collections = appendColletionsImagesUrls(collections);
   for (var i = 0; i < collections.length; i++) {
-    collections[i].numberOfNFTs = await mongoClient.query.totalCollectionItems(
-      collections[i].name
-    );
+    collections[i].numberOfNFTs = await mongoClient.query.totalCollectionItems(collections[i].name, collections[i].issuer);
   }
   defaultLocals(req, res);
   res.render("views/collections", {

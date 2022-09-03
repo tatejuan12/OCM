@@ -75,6 +75,12 @@
 
               <div class="tab-content rn-pd-content" id="v-pills-tabContent">
                 <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                  <% if (nft.verified.status){%>
+                    <img src="assets/images/icons/verified.png" class="verified" alt="verified collection" loading="lazy">
+                    <%}%>
+                    <% if (nft.stakable.status) {%>
+                    <img src="assets/images/icons/staykx.png" class="stakeable" alt="stakeable collection" loading="lazy">
+                    <%}%>
                   <div class="rn-pd-thumbnail">
                     <%var imageExt = new Set(['jpg', 'jpeg', 'png', 'gif']); var vidExt = new Set(['mp4', 'mov', 'avi', 'webm', 'mpg', 'wmv']);%>
                     <% if (imageExt.has(nft.httpsImage.substring(nft.httpsImage.lastIndexOf('.') + 1))) { %>
@@ -241,6 +247,14 @@
                               <h6 class="name"><%=nft.issuer%></h6>
                             </a>
                           </div>
+                        </div>
+                        <div class="top-seller-inner-one">
+                          <h6 class="name-title">Royalties</h6>
+                          <%if (nft.transferFee !== 0 && nft.transferFee !== undefined) {%>
+                            <p><%=nft.transferFee%>%</p>
+                          <%} else {%>
+                            <p>No Transfer Fee</p>
+                          <%}%>
                         </div>
                         <!-- single -->
                         <div class="rn-pd-sm-property-wrapper">

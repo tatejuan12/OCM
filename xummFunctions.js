@@ -19,11 +19,11 @@ var payloads = {
     flags
   ) {
     const nftOwner = await xrpls.getcurrentNftHolder(NFToken);
+    console.log(value);
     try {
-      value = parseInt(value);
+      value = parseFloat(value);
       value = value * 1000000;
       value = value.toString();
-      console.log(flags);
     } catch (err) {
       console.error("Error parsing Value: " + err);
       return false;
