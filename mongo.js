@@ -245,7 +245,7 @@ var methods = {
         }
         if (filters.filterFamilies) {
           aggregateQuery.push({
-            $match: { "uriMetadata.collection.family": filters.filterBrands }
+            $match: { "uriMetadata.collection.family": filters.filterFamilies }
           })
         }
         if (filters.filterCollections) {
