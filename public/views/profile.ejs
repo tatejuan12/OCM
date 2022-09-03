@@ -97,9 +97,7 @@
             <div class="loader-images"></div>
             <span class="loader-disclaimer">Querying the XRPL, please be patient</span>
           </div>
-          <%if (isMarker) {%>
           <div class="load-more-div"><button id="moreUnlistedNftsLoad" class="btn btn-load-more">Load More</button></div>
-          <% } %>
         </div>
         <div id="pane-liked-nfts" class="tab-pane fade" aria-labelledby="nav-liked-tab" role="tabpanel">
           <%- include ("models/nft-rows.ejs", {nfts: likedNfts}) %>

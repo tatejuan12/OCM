@@ -229,6 +229,11 @@ var methods = {
             $sort: { likesLength: parseInt(filters.sortLikes) },
           });
         }
+        if (filters.filterBrands) {
+          aggregateQuery.push({
+            $match: { "uriMetadata.collection.family": filters.filterBrands }, //look for issuer of collection
+          });
+        }
         if (filters.filterExtras == "Verified") {
           aggregateQuery.push({
             $match: { "verified.status": true },
@@ -237,16 +242,6 @@ var methods = {
           aggregateQuery.push({
             $match: { "stakable.status": true },
           });
-        }
-        if (filters.filterBrands) {
-          aggregateQuery.push({
-            $match: { "issuer": filters.filterBrands }, //look for issuer of collection
-          });
-        }
-        if (filters.filterFamilies) {
-          aggregateQuery.push({
-            $match: { "uriMetadata.collection.family": filters.filterBrands }
-          })
         }
         if (filters.filterCollections) {
           aggregateQuery.push({
