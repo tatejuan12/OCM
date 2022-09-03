@@ -69,20 +69,20 @@
             </select>
           </div>
           <div class="filter-select-option">
-            <label class="filter-leble">Brand</label>
-            <select id="filter-brands">
-              <option data-display="Select Brand" class="option disabled" value='' selected disabled>Select Brand</option>
-              <% filterOptions.forEach(function(res){%>
-              <option value="<%=res._id%>"><%=res._id%></option>
-              <%}); %>
-            </select>
-          </div>
-          <div class="filter-select-option">
             <label class="filter-leble">Extras</label>
             <select id="filter-extras">
               <option data-display="Select Option" value='' selected disabled>Select Option</option>
               <option value="Verified">Verified</option>
               <option value="Staykable">Staykable</option>
+            </select>
+          </div>
+          <div class="filter-select-option">
+            <label class="filter-leble">Brand</label>
+            <select id="filter-brands">
+              <option data-display="Select Brand" class="option disabled" value='' selected disabled>Select Brand</option>
+              <% filterOptions.forEach(function(res){%>
+              <option value="<%=res.issuers%>"><%=res._id%></option>
+              <%}); %>
             </select>
           </div>
           <div class="filter-select-option">
@@ -163,26 +163,33 @@
   <!-- main JS -->
   <script src="assets/js/main.js"></script> 
   <script>
-    var filterOptions = <%-filterOptions%>
-    console.log(filterOptions)
-    
+    var filterOptions = <%- JSON.stringify(filterOptions) %>;
+
     $('#filter-brands').change(function () {
-        var val = $('#filter-brands').val();
-        console.log(filterOptions + 'LOG 2')
-        for (var i = 0; i < filterOptions.length; i ++) {
-          console.log(`checking ${i}`)
-          if (val == filterOptions[i]._id) {
-            $('#filter-family').html(filterOptions[i].familyFilters.forEach(function (res) {
-              `<option value="${res[i]}">${res[i]}</option>`
-            }));
+      var val = $('#filter-brands').val();
+      $('#filter-family').empty();
+      $('#filter-collection').empty();
+      for (var i = 0; i < filterOptions.length; i ++) {
+        if (val == filterOptions[i].issuers) {
+          $('#filter-family').append(`<option data-display="Select Family" value='' selected disabled>Select Family</option>`);
+          $('#filter-collection').append(`<option data-display="Select Collection" value='' selected disabled>Select Collection</option>`);
+          for (var fam = 0; fam < filterOptions[i].familyFilters.length; fam ++) {
+            $('#filter-family').append(`<option value="${filterOptions[i].familyFilters[fam]}">${filterOptions[i].familyFilters[fam]}</option>`);
+          }
+          for (var col = 0; col < filterOptions[i].nameFilters.length; col ++) {
+            $('#filter-collection').append(`<option value="${filterOptions[i].nameFilters[col]}">${filterOptions[i].nameFilters[col]}</option>`);
           }
         }
-      });
+      }
+      $('select').niceSelect('destroy');
+      $('select').niceSelect();
+    });
     function handleFilterSort() {
       const jsonFilterSort = {
         sortLikes: document.getElementById("sort-likes").value,
-        filterBrands: document.getElementById("filter-brands").value,
         filterExtras: document.getElementById("filter-extras").value,
+        filterBrands: document.getElementById("filter-brands").value,
+        filterFamilies: document.getElementById("filter-family").value,
         filterCollections: document.getElementById("filter-collection").value,
         filterPriceMin: document.getElementById("filter-price-min").value,
         filterPriceMax: document.getElementById("filter-price-max").value
@@ -190,10 +197,12 @@
       var url = `?page=<%=page%>`;
       if (jsonFilterSort.sortLikes)
         url += `&sortLikes=${jsonFilterSort.sortLikes}`;
-      if (jsonFilterSort.filterBrands)
-        url += `&filterBrands=${jsonFilterSort.filterBrands}`;
       if (jsonFilterSort.filterExtras)
         url += `&filterExtras=${jsonFilterSort.filterExtras}`;
+      if (jsonFilterSort.filterBrands)
+        url += `&filterBrands=${jsonFilterSort.filterBrands}`;
+      if (jsonFilterSort.filterFamilies)
+        url += `&filterFamilies=${jsonFilterSort.filterFamilies}`;
       if (jsonFilterSort.filterCollections)
         url += `&filterCollections=${jsonFilterSort.filterCollections}`;
       if (jsonFilterSort.filterPriceMin)
