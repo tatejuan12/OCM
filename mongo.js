@@ -30,7 +30,7 @@ var methods = {
     } catch (err) {
       console.log("Database error" + err);
     } finally {
-      client.close();
+      await client.close();
     }
   },
   updateUser: async function (wallet, project, email, bio, website) {
@@ -57,7 +57,7 @@ var methods = {
     } catch (err) {
       console.log("Database error" + err);
     } finally {
-      client.close();
+      await client.close();
     }
   },
   initiateUser: async function (wallet) {
@@ -81,7 +81,7 @@ var methods = {
     } catch (err) {
       console.log("Database error" + err);
     } finally {
-      client.close();
+      await client.close();
     }
   },
   logRecentSale: async function (details) {
@@ -98,7 +98,7 @@ var methods = {
       return res;
     } catch (err) {
     } finally {
-      client.close();
+      await client.close();
     }
   },
   getUser: async function (wallet) {
@@ -120,16 +120,16 @@ var methods = {
     } catch (err) {
       console.log("Database error" + err);
     } finally {
-      client.close();
+      await client.close();
     }
   },
   checkQueue: async function (id) {
     var result;
     const client = await getClient();
     if (!client) return;
-    try{
-      const db = client.db('NFTokens');
-      let collection = db.collection('Queued-Listings');
+    try {
+      const db = client.db("NFTokens");
+      let collection = db.collection("Queued-Listings");
       let query = {
         NFTokenID: id,
       };
@@ -138,7 +138,7 @@ var methods = {
     } catch (err) {
       console.log("Database error" + err);
     } finally {
-      client.close();
+      await client.close();
     }
   },
   getNft: async function (id) {
@@ -160,7 +160,7 @@ var methods = {
     } catch (err) {
       console.log("Database error" + err);
     } finally {
-      client.close();
+      await client.close();
     }
   },
   getOwnerNfts: async function (owner, nfts) {
@@ -185,7 +185,7 @@ var methods = {
       } catch (err) {
         console.log("Database error" + err);
       } finally {
-        client.close();
+        await client.close();
       }
     } else return [];
   },
@@ -211,7 +211,7 @@ var methods = {
       } catch (err) {
         console.log("Database error" + err);
       } finally {
-        client.close();
+        await client.close();
       }
     } else return [];
   },
@@ -284,7 +284,7 @@ var methods = {
     } catch (err) {
       console.log("Database error" + err);
     } finally {
-      client.close();
+      await client.close();
     }
   },
   getNftsCollection: async function (collectionName, issuer) {
@@ -302,7 +302,7 @@ var methods = {
     } catch (err) {
       console.log("Database error" + err);
     } finally {
-      client.close();
+      await client.close();
     }
   },
   getNftsByCollection: async function (
@@ -383,7 +383,7 @@ var methods = {
     } catch (err) {
       console.log("Database error" + err);
     } finally {
-      client.close();
+      await client.close();
     }
   },
   getAccountLikedNfts: async function (wallet) {
@@ -398,25 +398,52 @@ var methods = {
     } catch (err) {
       console.log("Database error" + err);
     } finally {
-      client.close();
+      await client.close();
     }
   },
   incrementView: async function (nftId) {
     const client = await getClient();
     if (!client) return;
     try {
-      const db = client.db('NFTokens');
-      let collection = db.collection('Eligible-Listings');
-        collection.updateOne(
-          {
-            tokenID: nftId
+      const db = client.db("NFTokens");
+      let collection = db.collection("Eligible-Listings");
+      collection.updateOne(
+        {
+          tokenID: nftId,
+        },
+        {
+          $inc: {
+            views: 1,
           },
-          {$inc: {
-            views: 1
-          }})
-
+        }
+      );
     } catch (err) {
       console.log("Database error" + err);
+    } finally {
+      await client.close();
+    }
+  },
+  incrementViewCollection: async function (collectionName) {
+    const client = await getClient();
+    if (!client) return;
+    try {
+      const db = client.db("Additional-Traits");
+      let collection = db.collection("Collections");
+      console.log(collectionName);
+      collection.updateOne(
+        {
+          name: collectionName,
+        },
+        {
+          $inc: {
+            views: 1,
+          },
+        }
+      );
+    } catch (err) {
+      console.log("Database error" + err);
+    } finally {
+      await client.close();
     }
   },
   addLike: async function (body, wallet) {
@@ -446,7 +473,7 @@ var methods = {
     } catch (err) {
       console.log("Database error" + err);
     } finally {
-      client.close();
+      await client.close();
       return res;
     }
   },
@@ -477,24 +504,26 @@ var methods = {
     } catch (err) {
       console.error("Database error" + err);
     } finally {
-      client.close();
+      await client.close();
       return res;
     }
   },
   totalCollectionItems: async function (collectionName) {
     const client = await getClient();
     if (!client) return;
-    try{
+    try {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
-      var returnedName = collectionName.replace('_', ' ')
+      var returnedName = collectionName.replace("_", " ");
       let query = {
-        "uriMetadata.collection.name": new RegExp(returnedName, 'i'),
-      }
+        "uriMetadata.collection.name": new RegExp(returnedName, "i"),
+      };
       const result = await collection.count(query);
       return result;
     } catch (err) {
       console.error("Database error" + err);
+    } finally {
+      await client.close();
     }
   },
   reportNft: async function (id, message, login, wallet) {
@@ -532,7 +561,7 @@ var methods = {
     } catch (err) {
       console.log("Database error" + err);
     } finally {
-      client.close();
+      await client.close();
 
       return res;
     }
@@ -622,7 +651,7 @@ var methods = {
     } catch (err) {
       console.log("Database error: " + err);
     } finally {
-      client.close();
+      await client.close();
 
       return res;
     }
@@ -643,7 +672,7 @@ var methods = {
     } catch (err) {
       console.log("Database error" + err);
     } finally {
-      client.close();
+      await client.close();
     }
   },
   getCollectionImageTaste: async function (issuer) {
@@ -653,14 +682,14 @@ var methods = {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
       let query = {
-        issuer: issuer
+        issuer: issuer,
       };
       let res = await collection.find(query).limit(3).toArray();
       return res;
     } catch (err) {
       console.log("Database error: " + err);
     } finally {
-      client.close();
+      await client.close();
     }
   },
   addNftToQueried: async function (NFTokenID, wallet, permanent, issuer) {
@@ -692,7 +721,7 @@ var methods = {
     } catch (err) {
       console.log("Database error: " + err);
     } finally {
-      client.close();
+      await client.close();
     }
   },
   getVerifiedIssuers: async function () {
@@ -711,7 +740,7 @@ var methods = {
     } catch (err) {
       console.log("Database error" + err);
     } finally {
-      client.close();
+      await client.close();
     }
   },
   redeemAssets: async function () {
@@ -719,56 +748,61 @@ var methods = {
     if (!client) return;
     try {
       const db = client.db("Redeem");
-      let collection  = db.collection("Assets");
-      const res = await collection.find();
-      return res.toArray();
+      let collection = db.collection("Assets");
+      const res = collection.find();
+      return await res.toArray();
     } catch (err) {
-      console.log("Database error" + err);
+    } finally {
+      await client.close();
     }
   },
   getMostViewed: async function () {
     const client = await getClient();
-    if (!client) return
+    if (!client) return;
     try {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
       let sort = {
-        views: -1
-      }
-      const res = await collection.find().sort(sort).limit(10);
+        views: -1,
+      };
+      const res = collection.find().sort(sort).limit(10);
       return await res.toArray();
     } catch (err) {
       console.log("Database error" + err);
     } finally {
-      client.close();
+      await client.close();
     }
   },
   getCollectionFloorPrice: async function (collectionName) {
     const client = await getClient();
     if (!client) return;
-    try{
+    try {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
-      var returnedName = collectionName.replace('_', ' ');
+      var returnedName = collectionName.replace("_", " ");
       let query01 = {
         "sellHistory.0.xrpValue": {
-          $gt: 0
-      },
-      "uriMetadata.collection.name": new RegExp(returnedName, 'i')
-      }
+          $gt: 0,
+        },
+        "uriMetadata.collection.name": new RegExp(returnedName, "i"),
+      };
       let query02 = {
         projection: {
           _id: 0,
-          "sellHistory": 1
-        }
-      }
+          sellHistory: 1,
+        },
+      };
       let sort = {
-        "sellHistory.0.xrpValue": 1
-      }
-      const result = (await collection.find(query01,query02).sort(sort).limit(1).toArray())[0].sellHistory[0].xrpValue
+        "sellHistory.0.xrpValue": 1,
+      };
+      const result = (
+        await collection.find(query01, query02).sort(sort).limit(1).toArray()
+      )[0].sellHistory[0].xrpValue;
       return result;
     } catch (err) {
       console.log("Database error" + err);
+    } finally {
+      await client.close();
     }
   },
   filterOptions: async function () {
@@ -825,7 +859,7 @@ async function alreadyLiked(collection, id, wallet) {
   return checker;
 }
 async function getClient() {
-  const client = await mongoClient
+  var client = await mongoClient
     .connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
     })
@@ -853,7 +887,7 @@ async function userExistsChecker(wallet) {
   } catch (err) {
     console.log("Database error" + err);
   } finally {
-    client.close();
+    await client.close();
   }
 }
 async function listQueryExistsChecker(NFTokenID) {
@@ -875,7 +909,7 @@ async function listQueryExistsChecker(NFTokenID) {
   } catch (err) {
     console.log("Database error" + err);
   } finally {
-    client.close();
+    await client.close();
   }
 }
 exports.query = methods;

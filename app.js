@@ -254,6 +254,7 @@ server.get("/partners", speedLimiter, (req, res) => {
 });
 server.get("/collection", speedLimiter, async (req, res) => {
   const page = parseInt(req.query.page);
+  const wallet = req.session.wallet;
   if (!isNaN(page)) {
     const collectionName = req.query.name;
     const issuer = req.query.issuer;
@@ -275,6 +276,9 @@ server.get("/collection", speedLimiter, async (req, res) => {
     );
     const floorPrice = await mongoClient.query.getCollectionFloorPrice(collectionName)
     const items = await mongoClient.query.totalCollectionItems(collectionName)
+    if (wallet !== collectionDetails.issuer) {
+      await mongoClient.query.incrementViewCollection(collectionName);
+    }
     defaultLocals(req, res);
     res.render("views/collection", {
       nfts: nfts,
@@ -282,7 +286,8 @@ server.get("/collection", speedLimiter, async (req, res) => {
       collection_logo: collection_logo,
       collection_banner: collection_banner,
       floor: floorPrice,
-      items: items
+      items: items,
+      wallet: wallet
     });
   } else res.redirect("collection?page=0");
 });
@@ -404,7 +409,8 @@ server.get("/search", speedLimiter, async (req, res) => {
   const searchResults = await mongoClient.query.getSearchResultsJSON(
     req.query.q
   );
-  res.render("views/search", { res: searchResults });
+  const searchedItem = req.query.q;
+  res.render("views/search", { res: searchResults, searchedItem: searchedItem });
 });
 
 //! ---------------------OCW API--------------------------------//
