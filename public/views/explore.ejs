@@ -162,8 +162,8 @@
   <script src="assets/js/vendor/savePopup.js"></script>
   <!-- main JS -->
   <script src="assets/js/main.js"></script> 
-  <script>    
-    var val = $('#filter-brands').val();
+  <script> 
+    var filterOptions = <%- JSON.stringify(filterOptions) %>;
     $('#filter-brands').change(function () {
       var val = $('#filter-brands').val();
       $('#filter-family').empty();
@@ -178,6 +178,8 @@
           for (var col = 0; col < filterOptions[i].nameFilters.length; col ++) {
             $('#filter-collection').append(`<option value="${filterOptions[i].nameFilters[col]}">${filterOptions[i].nameFilters[col]}</option>`);
           }
+        }
+      }
         $('select').niceSelect('destroy');
         $('select').niceSelect();
       });
