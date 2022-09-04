@@ -17966,7 +17966,6 @@ NFT product styles mobile layout
 @media only screen and (max-width: 767px) {
   .product-style-one {
     max-width: 180px;
-    max-height: 325px;
   }
   #exploreSection .nft-card-wrap {
     max-width: 50%;
@@ -17977,16 +17976,13 @@ NFT product styles mobile layout
   .product-style-one a .product-name {
     font-size: 15px;
     margin-top: 0;
-    min-height: 50px;
+    min-height: 30px;
     max-height: 50px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
   .product-style-one .latest-bid {
     font-size: 12px;
-  }
-  .product-share-wrapper {
-    margin-top: 15px;
   }
   .product-style-one.with-placeBid .card-thumbnail img {
     max-height: 170px;

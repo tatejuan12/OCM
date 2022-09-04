@@ -730,6 +730,58 @@ var methods = {
       await client.close();
     }
   },
+  bulkNFTList: async function (NFTokenID, wallet, permanent, issuer) {
+    var checker = false;
+    const client = await getClient();
+    var payholder = wallet;
+    if (!client) return;
+    try {
+      const db = client.db("NFTokens");
+
+      let collection = db.collection("Queued-Listings");
+      var bulkArray = [];
+      for (a in NFTokenID) {
+      let query = {
+        NFTokenID: NFTokenID,
+        knownHolder: wallet,
+        dateAdded: new Date(),
+        issuer: issuer,
+        duration: {
+          permanent: permanent,
+          paidHolder: payholder,
+        },
+      };
+      var data = {
+        updateOne: {
+          "filter": {
+            NFTokenID: NFTokenID[a]
+          },
+          "update": {
+            $setOnInsert: {
+              NFTokenID: NFTokenID[a],
+              knownHolder: wallet,
+              dateAdded: new Date(),
+              issuer: issuer[a],
+              duration: {
+                permanent: permanent,
+                paidHolder: payholder,
+              },
+            }
+          }
+        }
+      }
+
+    }
+
+      let res = await collection.bulkWrite(bulkArray);
+
+      return;
+    } catch (err) {
+      console.log("Database error: " + err);
+    } finally {
+      await client.close();
+    }
+  },
   getVerifiedIssuers: async function () {
     const client = await getClient();
     if (!client) return;
@@ -849,6 +901,53 @@ var methods = {
     } finally {
         await client.close()
     }
+  },
+  listingStats: async function () {
+    var client = await getClient();
+    if (!client) return;
+    try {
+      const db = client.db('NFTokens');
+      let collection = db.collection('Eligible-Listings');
+
+      var output = await collection.aggregate([{
+          $group: {
+              _id: {},
+              listed: {
+                  $sum: 1
+              },
+              issuers: { $addToSet: "$issuer"},
+              holders: { $addToSet: "$currentOwner"},
+              listings: {
+                  $addToSet: {
+                      $cond: {
+                          if: { $gt: [ "$listingDate", Date.now() - 86400000] },
+                          then: "$listingDate",
+                          else: null
+                      }
+                  }
+              }
+          }
+      },
+      {
+          $project: {
+              listed: 1,
+              uniqueIssuers: { $size: "$issuers" },
+              uniqueHolders: { $size: "$holders" },
+              listings24hrs: { $size: "$listings" }
+          }   
+      },
+      {
+          $unset: ["_id"]
+      }
+    ]).toArray()
+
+    return output[0]
+  } catch (error) {
+      console.log(error)
+      return null
+  } finally {
+      await client.close()
+  }
   },
 };
 

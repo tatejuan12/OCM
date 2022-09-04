@@ -148,9 +148,34 @@
   <script src="assets/js/vendor/scrolltrigger.js"></script>
   <script src="assets/js/vendor/jquery.custom-file-input.js"></script>
   <script src="assets/js/vendor/savePopup.js"></script>
+  <script src="assets/js/vendor/jquery.endless-scroll.js"></script>
   <!-- main JS -->
   <script src="assets/js/main.js"></script>
   <script>
+    $(window).endlessScroll({
+      pagesToKeep: 10,
+      inflowPixels: 600,
+      fireOnce: false,
+      fireDelay: false,
+      loader: '<div class="loading"><div>',
+      callback: function(p){
+        var markerIteration = 0;
+        var marker = '<%=marker%>';
+          $.get(
+            `<%=url%>/get-additional-listed-nfts?wallet=<%=user.wallet%>&marker=${marker}&markerIteration=${markerIteration}`,
+            function(data) {
+              markerIteration++;
+              var updateNfts = [];
+              $("#exploreSection").append(data[0])
+              marker = data[1]
+              const cards = document.getElementById("exploreSection").querySelectorAll(".col-5");
+              cards.forEach(element => {
+                element.classList.add("sal-animate")
+              });
+            }
+          )
+      }
+    });
     $("#unlisted-nfts").load("<%=url%>/get-account-unlisted-nfts?wallet=<%=user.wallet%>",
       function() {
         const cards = document.getElementById("pane-unlisted-nfts").querySelectorAll(".col-5");
@@ -158,23 +183,7 @@
           element.classList.add("sal-animate")
         });
       })
-    var markerIteration = 0;
-    var marker = '<%=marker%>';
-    $("#moreListedNftsLoad").click(function() {
-      $.get(
-        `<%=url%>/get-additional-listed-nfts?wallet=<%=user.wallet%>&marker=${marker}&markerIteration=${markerIteration}`,
-        function(data) {
-          markerIteration++;
-          var updateNfts = [];
-          $("#exploreSection").append(data[0])
-          marker = data[1]
-          const cards = document.getElementById("exploreSection").querySelectorAll(".col-5");
-          cards.forEach(element => {
-            element.classList.add("sal-animate")
-          });
-        }
-      )
-    })
+
     var markerIterationUnlisted = 0;
     var markerUnlisted = '<%=marker%>';
     $("#moreUnlistedNftsLoad").click(function() {

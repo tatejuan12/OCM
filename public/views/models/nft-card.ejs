@@ -41,7 +41,7 @@
         <% if (nft.buyOffers[0] !== undefined) { %> 
         <% for (let i=0; i<3; i++) {%>
         <% if (nft.buyOffers[i] !== undefined) {%>
-          <a href="/profile?account=<%=nft.buyOffers[i].address%>" class="avatar" data-tooltip="<%=nft.buyOffers[i].account%>"><img src="https://www.ui-avatars.com/api/?background=random&length=3&font-size=0.33&uppercase=false&size=200&name=<%=nft.buyOffers[i].account%>" alt="Nft_Profile"></a>
+          <a href="profile?wallet=<%=nft.buyOffers[i].account%>&page=0" class="avatar" data-tooltip="<%=nft.buyOffers[i].account%>"><img src="https://www.ui-avatars.com/api/?background=random&length=3&font-size=0.33&uppercase=false&size=200&name=<%=nft.buyOffers[i].account%>" alt="Nft_Profile"></a>
         <%}}%>
           <a class="more-author-text" style="margin-left:5px;"><%=nft.buyOffers.length%> Bids</a>
         <%} else {%>

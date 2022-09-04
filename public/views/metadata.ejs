@@ -2,35 +2,119 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>OCM || Metadata</title>
+  <meta name="robots" content="noindex, follow" />
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="Cache-control" content="public">
 
-  <title>OCM metadata layout</title>
+  <meta name="theme-style-mode" content="0"> <!-- 0 == light, 1 == dark -->
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png">
+  <!-- CSS 
+    ============================================ -->
+  <link rel="stylesheet" href="assets/css/vendor/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/vendor/slick.css">
+  <link rel="stylesheet" href="assets/css/vendor/slick-theme.css">
+  <link rel="stylesheet" href="assets/css/vendor/nice-select.css">
+  <link rel="stylesheet" href="assets/css/plugins/feature.css">
+  <link rel="stylesheet" href="assets/css/plugins/jquery-ui.min.css">
+
+  <!-- Style css -->
+  <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
-<body>
-  <p>{<br>
-    &quot;name&quot;: string input name of the NFT,<br>
-    &quot;description&quot;: string input, description to accompany nft,<br>
-    &quot;image&quot;: string input that points to the NFT image, typically -> ipfs://&gt;CID&lt;/1.png,<br>
-    &quot;edition&quot;: Number/Double input, number of the NFT edition,<br>
-    &quot;date&quot;: Number/Double input, ms since epoch time of the NFT creation/inception,<br>
-    &quot;external_url&quot;: string input, http link to personal url,<br>
-    &quot;attributes&quot;: [ -> contains all attributes of the NFT <br>
-    {<br>
-    &quot;trait_type&quot;: String input of the trait type (location, author, creator, colour, ect&#8230;),<br>
-    &quot;value&quot;: string input of trait value<br>
-    }<br>
-    ],<br>
-    &quot;collection&quot;: {<br>
-    &quot;name&quot;: string, particular name of the NFT collection,<br>
-    &quot;family&quot;: Over-aching family the collection originates from<br>
-    }<br>
-    }<br>
-  </p>
+<body class="template-color-1">
+  <!-- Preloader -->
+  <div class="preloader">
+    <div class='loader'>
+      <div class='circle'></div>
+      <div class='circle'></div>
+      <div class='circle'></div>
+      <div class='circle'></div>
+      <div class='circle'></div>
+    </div>
+  </div>
+  <%- include('sections/header.ejs') -%>
+
+  <!-- start page title area -->
+  <div class="rn-breadcrumb-inner ptb--30">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 col-md-6 col-12">
+          <h5 class="title text-center text-md-start">Metadata</h5>
+        </div>
+        <div class="col-lg-6 col-md-6 col-12">
+          <ul class="breadcrumb-list">
+            <li class="item"><a href="/">Home</a></li>
+            <li class="separator"><i class="feather-chevron-right"></i></li>
+            <li class="item current">Metadata</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="rn-product-area rn-section-gapTop">
+    <div class="container">
+      <div class="row mb--50 align-items-center">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+          <h3 class="title mb--0" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800">OnChain MarketPlace: Metadata Standards</h3>
+        </div>
+      </div>
+      <div class="row mb--50 align-items-center">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+          <h5>OCM Presentations</h5>
+          <p>NFTokens often entail unique and identifiable data, this is commonly referred to as Metadata. This
+            data storage allows NFTokens to be clearly distinguished and displayed, in an interoperable manner,
+            throughout various platforms.<br>
+            OCM follows a widely agreed standard for metadata representation, and details are given below.
+            Pleas ensure all relevant data is formatted as explained below, this will allow seamless and efficient
+            listing and trading throughout platforms.</p>
+        </div>
+      </div>
+      <img src="../assets/images/code/metadata.png" alt="metadata standard">
+    </div>
+  </div>
 
   <a href="https://docs.opensea.io/docs/metadata-standards" target="_blank">Opensea Metadata Standards</a>
+
+
+  <%- include('sections/footer.ejs') -%>
+  <!-- Start Top To Bottom Area  -->
+  <div class="rn-progress-parent">
+    <svg class="rn-back-circle svg-inner" width="100%" height="100%" viewBox="-1 -1 102 102">
+      <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
+    </svg>
+  </div>
+  <!-- End Top To Bottom Area  -->
+  <!-- JS ============================================ -->
+  <script src="assets/js/vendor/jquery.js"></script>
+  <script src="assets/js/vendor/jquery.nice-select.min.js"></script>
+  <script src="assets/js/vendor/jquery-ui.js"></script>
+  <script src="assets/js/vendor/modernizer.min.js"></script>
+  <script src="assets/js/vendor/feather.min.js"></script>
+  <script src="assets/js/vendor/slick.min.js"></script>
+  <script src="assets/js/vendor/bootstrap.min.js"></script>
+  <script src="assets/js/vendor/sal.min.js"></script>
+  <script src="assets/js/vendor/waypoint.js"></script>
+  <script src="assets/js/vendor/wow.js"></script>
+  <script src="assets/js/vendor/particles.js"></script>
+  <script src="assets/js/vendor/jquery.style.swicher.js"></script>
+  <script src="assets/js/vendor/js.cookie.js"></script>
+  <script src="assets/js/vendor/count-down.js"></script>
+  <script src="assets/js/vendor/counter-up.js"></script>
+  <script src="assets/js/vendor/isotop.js"></script>
+  <script src="assets/js/vendor/imageloaded.js"></script>
+  <script src="assets/js/vendor/backtoTop.js"></script>
+  <script src="assets/js/vendor/scrolltrigger.js"></script>
+  <script src="assets/js/vendor/jquery.custom-file-input.js"></script>
+  <script src="assets/js/vendor/savePopup.js"></script>
+  <!-- main JS -->
+  <script src="assets/js/main.js"></script>
+
 </body>
 
 </html>
