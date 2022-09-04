@@ -713,7 +713,6 @@ server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
   res.render("views/models/unlisted-nft-rows.ejs", {
     wallet: wallet,
     rawData: rawData,
-    unlistedNftsArray: unlistedNfts,
     nfts: unlistedNftsToReturn,
   });
 });

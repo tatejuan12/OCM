@@ -277,7 +277,10 @@ var methods = {
         const aggregate = collection
           .find()
           .skip(NFTSPERPAGE * page)
-          .limit(NFTSPERPAGE);
+          .limit(NFTSPERPAGE)
+          .sort({
+            views: -1
+          });
         return await aggregate.toArray();
       }
 
@@ -730,51 +733,42 @@ var methods = {
       await client.close();
     }
   },
-  bulkNFTList: async function (NFTokenID, wallet, permanent, issuer) {
+  bulkNFTList: async function (nftArray, wallet, permanent) {
     var checker = false;
     const client = await getClient();
     var payholder = wallet;
     if (!client) return;
     try {
+        var bulkArray = [];
+        for (a in nftArray) {
+        var data = {
+          updateOne: {
+            "filter": {
+              NFTokenID: nftArray[a].NFTokenID
+            },
+            "update": {
+              $setOnInsert: {
+                NFTokenID: nftArray[a].NFTokenID,
+                knownHolder: wallet,
+                dateAdded: new Date(),
+                issuer: nftArray[a].Issuer,
+                duration: {
+                  permanent: permanent,
+                  paidHolder: payholder
+                },
+              }
+            },
+            "upsert": true
+          }
+        }
+        bulkArray.push(data)
+      }
+
       const db = client.db("NFTokens");
 
       let collection = db.collection("Queued-Listings");
-      var bulkArray = [];
-      for (a in NFTokenID) {
-      let query = {
-        NFTokenID: NFTokenID,
-        knownHolder: wallet,
-        dateAdded: new Date(),
-        issuer: issuer,
-        duration: {
-          permanent: permanent,
-          paidHolder: payholder,
-        },
-      };
-      var data = {
-        updateOne: {
-          "filter": {
-            NFTokenID: NFTokenID[a]
-          },
-          "update": {
-            $setOnInsert: {
-              NFTokenID: NFTokenID[a],
-              knownHolder: wallet,
-              dateAdded: new Date(),
-              issuer: issuer[a],
-              duration: {
-                permanent: permanent,
-                paidHolder: payholder,
-              },
-            }
-          }
-        }
-      }
 
-    }
-
-      let res = await collection.bulkWrite(bulkArray);
-
+      let res = await collection.bulkWrite(bulkArray, {ordered: false});
       return;
     } catch (err) {
       console.log("Database error: " + err);
