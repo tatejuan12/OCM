@@ -17185,6 +17185,7 @@ button .small-image {
   border-radius: 50%;
   border: 5px solid var(--color-primary-alta);
   transition: var(--transition);
+  background-color: var(--color-white);
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .rn-collection-inner-one .collection-wrapper .collection-profile img {

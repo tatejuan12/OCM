@@ -28,9 +28,13 @@
               <img src="<%=collection.banner_url%>" alt="Nft_Profile">
           </div>
           <div class="collenction-small-thumbnail">
+            <%if (sampleImages.length != 3) {%>
               <img src="assets/images/collection/collection-place.jpg" alt="collection NFT image">
               <img src="assets/images/collection/collection-place.jpg" alt="collection NFT image">
               <img src="assets/images/collection/collection-place.jpg" alt="collection NFT image">
+            <%} else { for (var i=0; i < sampleImages.length; i++) {%>
+              <img src="<%=sampleImages[i].httpsImage%>" alt="collection NFT image">
+            <%}}%>
         </div>
           <div class="collection-profile">
               <img src="<%=collection.logo_url%>" alt="Nft_Profile">

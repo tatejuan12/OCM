@@ -221,7 +221,7 @@ var methods = {
     try {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
-      var aggregateQuery = [{ $addFields: {} }];
+      var aggregateQuery = [{ $addFields: {} }, {$sort: {views: -1}}];
       if (filters) {
         if (filters.sortLikes) {
           aggregateQuery[0].$addFields.likesLength = { $size: "$likes" };
@@ -277,10 +277,7 @@ var methods = {
         const aggregate = collection
           .find()
           .skip(NFTSPERPAGE * page)
-          .limit(NFTSPERPAGE)
-          .sort({
-            views: -1
-          });
+          .limit(NFTSPERPAGE);
         return await aggregate.toArray();
       }
 
@@ -333,61 +330,6 @@ var methods = {
         .skip(NFTSPERPAGE * page)
         .limit(NFTSPERPAGE);
       return await aggregate.toArray();
-      // if (filters) {
-      //   if (filters.sortLikes) {
-      //     aggregateQuery[0].$addFields.likesLength = { $size: "$likes" };
-      //     aggregateQuery.push({
-      //       $sort: { likesLength: parseInt(filters.sortLikes) },
-      //     });
-      //   }
-      //   if (filters.filterBrands) {
-      //     aggregateQuery.push({
-      //       $match: { "uriMetadata.collection.family": filters.filterBrands },
-      //     });
-      //   }
-      //   if (filters.filterExtras == "Verified") {
-      //     aggregateQuery.push({
-      //       $match: { "verified.status": true },
-      //     });
-      //   } else if (filters.filterExtras == "Staykable") {
-      //     aggregateQuery.push({
-      //       $match: { "stakable.status": true },
-      //     });
-      //   }
-      //   if (filters.filterCollections) {
-      //     aggregateQuery.push({
-      //       $match: {
-      //         "uriMetadata.collection.name": filters.filterCollections,
-      //       },
-      //     });
-      //   }
-      //   if (filters.filterPriceMin || filters.priceMax) {
-      //     aggregateQuery[0].$addFields.recentSell = {
-      //       $first: "$sellHistory.price",
-      //     };
-      //     aggregateQuery.push({
-      //       $match: {
-      //         recentSell: {
-      //           $lte: parseInt(filters.filterPriceMax),
-      //           $gte: parseInt(filters.filterPriceMin),
-      //         },
-      //       },
-      //     });
-      //   }
-
-      // else {
-      //   const aggregate = collection
-      //     .find()
-      //     .skip(NFTSPERPAGE * page)
-      //     .limit(NFTSPERPAGE);
-      //   return await aggregate.toArray();
-      // }
-
-      // const cursor = await collection
-      //   .find(query)
-      //   .skip(NFTSPERPAGE * page)
-      //   .sort(sort)
-      //   .limit(NFTSPERPAGE);
     } catch (err) {
       console.log("Database error" + err);
     } finally {
@@ -852,6 +794,33 @@ var methods = {
         await collection.find(query01, query02).sort(sort).limit(1).toArray()
       )[0].sellOffers[0].xrpValue;
       return result;
+    } catch (err) {
+      console.log("Database error" + err);
+    } finally {
+      await client.close();
+    }
+  },
+  getRandomCollectionImages: async function (
+    collectionName,
+    issuer
+  ) {
+    const client = await getClient();
+    if (!client) return;
+    try {
+      const db = client.db("NFTokens");
+      let collection = db.collection("Eligible-Listings");
+      var query = [
+        {
+            $match: { $or: [ {"uriMetadata.collection.name": collectionName}, {"uriMetadata.collection.name": null} ]  },
+            $match: { issuer: issuer }            
+        },
+        { $sample: {size: 3}},
+        { $project: { "httpsImage": 1 }},
+        { $unset: "_id" }
+    ]
+      const aggregate = collection
+        .aggregate(query);
+      return await aggregate.toArray();
     } catch (err) {
       console.log("Database error" + err);
     } finally {

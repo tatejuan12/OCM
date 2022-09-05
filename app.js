@@ -295,6 +295,9 @@ server.get("/collection", speedLimiter, async (req, res) => {
 server.get("/collections", speedLimiter, async (req, res) => {
   var collections = await mongoClient.query.getCollections();
   //make script to fetch 3 images from the collection to display on the collection page using the issuer address.
+  for (var i = 0; i < collections.length; i++) {
+    collections[i].sampleImages = await mongoClient.query.getRandomCollectionImages(collections[i].name, collections[i].issuer);
+  }
   collections = appendColletionsImagesUrls(collections);
   for (var i = 0; i < collections.length; i++) {
     collections[i].numberOfNFTs = await mongoClient.query.totalCollectionItems(collections[i].name, collections[i].issuer);
