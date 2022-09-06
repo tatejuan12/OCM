@@ -781,12 +781,12 @@ server.get("/get-additional-unlisted-nfts", speedLimiter, async (req, res) => {
     res.send(returnData);
   } else res.sendStatus(400);
 });
-server.get("/get-additional-collection-nfts", speedLimiter, async (re, res) => {
+server.get("/get-additional-collection-nfts", speedLimiter, async (req, res) => {
   var wallet = req.session.wallet;
-  var collectionName = req.query.collectionName;
+  var collectionName = req.query.name;
   const issuer = req.query.issuer;
   var marker = req.query.marker;
-  var iteration = req.query.iteration;
+  var iteration = req.query.markerIteration;
   if (wallet && marker && iteration) {
     const collectionNfts = await mongoClient.query.getNftsByCollection(
       collectionName,

@@ -51,7 +51,7 @@
           <div class="author-wrapper">
             <div class="author-inner">
               <div class="user-thumbnail">
-                <img src="<%= collection_logo %>" alt="Stack Overflow logo and icons and such" onerror="this.src='assets/images/icons/unknown-user.png'">
+                <img src="<%= collection_logo %>" alt="Collection Logo" onerror="this.src='assets/images/icons/unknown-user.png'">
               </div>
               <div class="rn-author-info-content">
                 <h4 class="title nus"> <%= collectionDetails.name %> </h4>
@@ -133,8 +133,10 @@
   <!-- main JS -->
   <script src="assets/js/main.js"></script>
   <script>
+    var iteration = 0;
+    var marker = 1;
     $('#fetchCollection').on('click', function () {
-      $.get(`<%=url%>/get-additional-collection-nfts?collection=<%=collectionDetails.name%>&issuer=<%=collectionDetails.issuer%>&marker=${marker}&markerIteration=${iteration}`,
+      $.get(`<%=url%>/get-additional-collection-nfts?name=<%=collectionDetails.name%>&issuer=<%=collectionDetails.issuer%>&marker=${marker}&markerIteration=${iteration}`,
         function(data) {
           iteration++;
           var updateNfts = [];

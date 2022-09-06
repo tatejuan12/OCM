@@ -310,6 +310,9 @@ var methods = {
       await client.close();
     }
   },
+  getUnlistedCollectionNfts: async function () {
+
+  },
   getNftsByCollection: async function (
     collectionName,
     issuer,
