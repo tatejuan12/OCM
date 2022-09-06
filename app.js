@@ -781,6 +781,36 @@ server.get("/get-additional-unlisted-nfts", speedLimiter, async (req, res) => {
     res.send(returnData);
   } else res.sendStatus(400);
 });
+server.get("/get-additional-collection-nfts", speedLimiter, async (re, res) => {
+  var wallet = req.session.wallet;
+  var collectionName = req.query.collectionName;
+  const issuer = req.query.issuer;
+  var marker = req.query.marker;
+  var iteration = req.query.iteration;
+  if (wallet && marker && iteration) {
+    const collectionNfts = await mongoClient.query.getNftsByCollection(
+      collectionName,
+      issuer,
+      NFTSPERPAGE,
+      iteration
+    );
+    var updateNfts = [];
+    for (var i = iteration * NFTSPERPAGE; i < nfts.length; i++) {
+      updateNfts.push(nfts[i]);
+    }
+    res.render(
+      "views/models/nft-rows-load.ejs", {
+        nfts: nfts,
+      },
+      async function (err, html) {
+        if (err) throw "couldn't get NFTs\n" + err;
+        returnData.push(html);
+      }
+    );
+    returnData.push(collectionNfts[1]);
+    res.send(returnData);
+  } else res.sendStatus(400);
+});
 server.get("/get-token-balance", speedLimiter, async (req, res) => {
   const hex = req.query.hex;
   const issuer = req.query.issuer;
