@@ -234,7 +234,7 @@ server.get("/explore", speedLimiter, async (req, res) => {
       page: page,
       verifiedIssuers: promises[1],
       queries: req.query,
-      filterOptions: filterOptions
+      filterOptions: filterOptions,
     });
   } else {
     parametersToSet.push({ key: "page", value: "0" });
@@ -275,8 +275,14 @@ server.get("/collection", speedLimiter, async (req, res) => {
     const collection_banner = digitalOcean.functions.getCollectionBannerLink(
       collectionDetails.name
     );
-    const floorPrice = await mongoClient.query.getCollectionFloorPrice(collectionName, issuer)
-    const items = await mongoClient.query.totalCollectionItems(collectionName, issuer)
+    const floorPrice = await mongoClient.query.getCollectionFloorPrice(
+      collectionName,
+      issuer
+    );
+    const items = await mongoClient.query.totalCollectionItems(
+      collectionName,
+      issuer
+    );
     if (wallet !== collectionDetails.issuer) {
       await mongoClient.query.incrementViewCollection(collectionName);
     }
@@ -288,7 +294,7 @@ server.get("/collection", speedLimiter, async (req, res) => {
       collection_banner: collection_banner,
       floor: floorPrice,
       items: items,
-      wallet: wallet
+      wallet: wallet,
     });
   } else res.redirect("collection?page=0");
 });
@@ -296,11 +302,18 @@ server.get("/collections", speedLimiter, async (req, res) => {
   var collections = await mongoClient.query.getCollections();
   //make script to fetch 3 images from the collection to display on the collection page using the issuer address.
   for (var i = 0; i < collections.length; i++) {
-    collections[i].sampleImages = await mongoClient.query.getRandomCollectionImages(collections[i].name, collections[i].issuer);
+    collections[i].sampleImages =
+      await mongoClient.query.getRandomCollectionImages(
+        collections[i].name,
+        collections[i].issuer
+      );
   }
   collections = appendColletionsImagesUrls(collections);
   for (var i = 0; i < collections.length; i++) {
-    collections[i].numberOfNFTs = await mongoClient.query.totalCollectionItems(collections[i].name, collections[i].issuer);
+    collections[i].numberOfNFTs = await mongoClient.query.totalCollectionItems(
+      collections[i].name,
+      collections[i].issuer
+    );
   }
   defaultLocals(req, res);
   res.render("views/collections", {
@@ -390,7 +403,11 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
     var collection_logo = null;
   }
   //increment views on the NFT if it is not the owner, issuer or they aren't logged in
-  if (wallet != promises[0].currentOwner && wallet != promises[0].issuer && wallet != undefined) {
+  if (
+    wallet != promises[0].currentOwner &&
+    wallet != promises[0].issuer &&
+    wallet != undefined
+  ) {
     mongoClient.query.incrementView(nftId);
   }
   if (promises[0]) {
@@ -412,7 +429,10 @@ server.get("/search", speedLimiter, async (req, res) => {
     req.query.q
   );
   const searchedItem = req.query.q;
-  res.render("views/search", { res: searchResults, searchedItem: searchedItem });
+  res.render("views/search", {
+    res: searchResults,
+    searchedItem: searchedItem,
+  });
 });
 
 //! ---------------------OCW API--------------------------------//
@@ -781,36 +801,44 @@ server.get("/get-additional-unlisted-nfts", speedLimiter, async (req, res) => {
     res.send(returnData);
   } else res.sendStatus(400);
 });
-server.get("/get-additional-collection-nfts", speedLimiter, async (req, res) => {
-  var wallet = req.session.wallet;
-  var collectionName = req.query.name;
-  const issuer = req.query.issuer;
-  var marker = req.query.marker;
-  var iteration = req.query.markerIteration;
-  if (wallet && marker && iteration) {
-    const collectionNfts = await mongoClient.query.getNftsByCollection(
-      collectionName,
-      issuer,
-      NFTSPERPAGE,
-      iteration
-    );
-    var updateNfts = [];
-    for (var i = iteration * NFTSPERPAGE; i < nfts.length; i++) {
-      updateNfts.push(nfts[i]);
-    }
-    res.render(
-      "views/models/nft-rows-load.ejs", {
-        nfts: nfts,
-      },
-      async function (err, html) {
-        if (err) throw "couldn't get NFTs\n" + err;
-        returnData.push(html);
+server.get(
+  "/get-additional-collection-nfts",
+  speedLimiter,
+  async (req, res, next) => {
+    var wallet = req.session.wallet;
+    var login = req.session.login;
+    var collectionName = req.query.name;
+    const issuer = req.query.issuer;
+    var marker = req.query.marker;
+    var iteration = req.query.markerIteration;
+    var returnData = [];
+    if (wallet && marker && iteration) {
+      const nfts = await mongoClient.query.getNftsByCollection(
+        collectionName,
+        issuer,
+        NFTSPERPAGE,
+        iteration
+      );
+      var updateNfts = [];
+      for (var i = iteration * NFTSPERPAGE; i < nfts.length; i++) {
+        updateNfts.push(nfts[i]);
       }
-    );
-    returnData.push(collectionNfts[1]);
-    res.send(returnData);
-  } else res.sendStatus(400);
-});
+      res.render(
+        "views/models/nft-rows-load.ejs",
+        {
+          nfts: nfts,
+          wallet: wallet,
+          login: login,
+        },
+        async function (err, html) {
+          if (err) console.error("Could not get NFTS\n" + err);
+          returnData.push(html);
+        }
+      );
+      res.send(returnData);
+    } else res.sendStatus(400);
+  }
+);
 server.get("/get-token-balance", speedLimiter, async (req, res) => {
   const hex = req.query.hex;
   const issuer = req.query.issuer;
@@ -868,7 +896,7 @@ server.use((err, req, res, next) => {
 // } catch (err) {
 //   console.warn("SSL not found");
 // }
-server.listen(80, () => {
+server.listen(process.env.PORT, () => {
   console.log("Server Listening on Port 80");
 });
 
