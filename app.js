@@ -812,7 +812,7 @@ server.get(
     var marker = req.query.marker;
     var iteration = req.query.markerIteration;
     var returnData = [];
-    if (wallet && marker && iteration) {
+    if (marker && iteration) {
       const nfts = await mongoClient.query.getNftsByCollection(
         collectionName,
         issuer,
