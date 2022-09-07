@@ -1,0 +1,15 @@
+<script>
+  var currNft;
+
+  function setCurrNft(element) {
+    currNft = element.nextElementSibling.value;
+  }
+</script>
+
+<div class="row g-5" id="exploreSectionUnlisted">
+  <!-- Product -->
+  <% unlistedNfts.forEach(function(res){%>
+  <%- include('unlisted-nft-card-collection.ejs', {nft:res})%>
+  <%}); %>
+</div>
+<%- include("list.ejs")%>
