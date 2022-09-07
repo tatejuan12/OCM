@@ -310,8 +310,26 @@ var methods = {
       await client.close();
     }
   },
-  getUnlistedCollectionNfts: async function () {
-
+  getUnlistedCollectionNfts: async function (collectionName, issuer, NFTSPERPAGE, page) {
+    const client = await getClient();
+    if (!client) return;
+    try {
+      const db = client.db("NFTokens");
+      let collection = db.collection("Expired-Listings");
+      var query = {
+        $match: { $or: [ {"uriMetadata.collection.name": collectionName}, {"uriMetadata.collection.name": null} ]  },
+        $match: { issuer: issuer },
+      };
+      const aggregate = collection
+        .aggregate([query])
+        .skip(NFTSPERPAGE * page)
+        .limit(NFTSPERPAGE);
+      return await aggregate.toArray();
+    } catch (err) {
+      console.log("Database error" + err);
+    } finally {
+      await client.close();
+    }
   },
   getNftsByCollection: async function (
     collectionName,

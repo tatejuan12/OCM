@@ -259,12 +259,8 @@ server.get("/collection", speedLimiter, async (req, res) => {
   if (!isNaN(page)) {
     const collectionName = req.query.name;
     const issuer = req.query.issuer;
-    const nfts = await mongoClient.query.getNftsByCollection(
-      collectionName,
-      issuer,
-      NFTSPERPAGE,
-      page
-    );
+    const nfts = await mongoClient.query.getNftsByCollection(collectionName, issuer, NFTSPERPAGE, page);
+    const unlistedNfts = await mongoClient.query.getUnlistedCollectionNfts(collectionName, issuer, NFTSPERPAGE, page)
     const collectionDetails = await mongoClient.query.getNftsCollection(
       collectionName,
       issuer
@@ -289,6 +285,7 @@ server.get("/collection", speedLimiter, async (req, res) => {
     defaultLocals(req, res);
     res.render("views/collection", {
       nfts: nfts,
+      unlistedNfts: unlistedNfts,
       collectionDetails: collectionDetails,
       collection_logo: collection_logo,
       collection_banner: collection_banner,
