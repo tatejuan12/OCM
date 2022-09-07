@@ -6,27 +6,27 @@
   <div class="product-style-one no-overlay with-placeBid">
     <div class="card-thumbnail">
       <%var imageExt = new Set(['jpg', 'jpeg', 'png', 'gif', '']); var vidExt = new Set(['mp4', 'ogg', 'webm']);%>
-      <%if (nft.https_image == undefined && imageExt.has(nft.substring(nft.lastIndexOf('.') + 1))) {%>
+      <%if (nft.httpsImage == undefined && imageExt.has(nft.substring(nft.lastIndexOf('.') + 1))) {%>
           <img src="<%= nft%> " alt="unlisted NFT image" draggable="false" loading="lazy">
-        <%} else if (nft.http_image == undefined && vidExt.has(nft.substring(nft.lastIndexOf('.') + 1))) {%>
+        <%} else if (nft.httpsImage == undefined && vidExt.has(nft.substring(nft.lastIndexOf('.') + 1))) {%>
           <video controls autoplay>
             <source src="<%= nft%>" type="video/mp4">
             <source src="<%= nft%>" type="video/webm">
             <source src="<%= nft%>" type="video/ogg">
           </video>
-        <%} else if (imageExt.has(nft.http_image.substring(nft.http_image.lastIndexOf('.') + 1))) {%>
-        <img src="<%= nft.http_image%> " alt="unlisted NFT image" draggable="false" loading="lazy">
+        <%} else if (imageExt.has(nft.httpsImage.substring(nft.httpsImage.lastIndexOf('.') + 1))) {%>
+        <img src="<%= nft.httpsImage%> " alt="unlisted NFT image" draggable="false" loading="lazy">
       
-        <%} else if (vidExt.has(nft.http_image.substring(nft.http_image.lastIndexOf('.') + 1))) {%>
+        <%} else if (vidExt.has(nft.httpsImage.substring(nft.httpsImage.lastIndexOf('.') + 1))) {%>
         <video controls autoplay>
-          <source src="<%= nft.http_image%>" type="video/mp4">
-          <source src="<%= nft.http_image%>" type="video/webm">
-          <source src="<%= nft.http_image%>" type="video/ogg">
+          <source src="<%= nft.httpsImage%>" type="video/mp4">
+          <source src="<%= nft.httpsImage%>" type="video/webm">
+          <source src="<%= nft.httpsImage%>" type="video/ogg">
         </video>
         <%} else {%>
-          <img src="<%= nft.http_image%> " alt="unlisted NFT image" draggable="false" loading="lazy">
+          <img src="<%= nft.httpsImage%> " alt="unlisted NFT image" draggable="false" loading="lazy">
         <%};%>
-      <%if (nft.http_image == undefined) {%>
+      <%if (nft.httpsImage == undefined) {%>
         <a class="btn btn-primary nft-list-btn" onclick='populateListNft( {"NFTokenID": "<%=rawData.NFTokenID%>" , "issuer" : "<%=rawData.Issuer%>" , "taxon" : "<%=rawData.NFTokenTaxon%>" , "currentHolder" : "<%=wallet%>", "image":"<%=nft%>" })'>List NFT</a>
       <%} else {%>
         <a class="btn btn-primary nft-list-btn" onclick='populateListNft( {"NFTokenID": "<%=nft.NFTokenID%>" , "issuer" : "<%=nft.issuer%>" , "taxon" : "<%=nft.taxon%>" , "currentHolder" : "<%=nft.currentHolder%>", "image":"<%=nft.http_image%>" })'>List NFT</a>
@@ -45,10 +45,10 @@
         </div>
       </div>
     </div>
-    <%if (nft.http_image == undefined) {%>
+    <%if (nft.httpsImage == undefined) {%>
       <a onclick='populateListNft( {"NFTokenID": "<%=rawData.NFTokenID%>" , "issuer" : "<%=rawData.Issuer%>" , "taxon" : "<%=rawData.NFTokenTaxon%>" , "currentHolder" : "<%=wallet%>", "image":"<%=nft%>" })'><span class="product-name">Un-named NFT</span></a>
     <%} else {%>
-      <a onclick='populateListNft( {"NFTokenID": "<%=nft.NFTokenID%>" , "issuer" : "<%=nft.issuer%>" , "taxon" : "<%=nft.taxon%>" , "currentHolder" : "<%=nft.currentHolder%>", "image":"<%=nft.http_image%>" })'><span class="product-name"><%= nft.name %></span></a>
+      <a onclick='populateListNft( {"NFTokenID": "<%=nft.NFTokenID%>" , "issuer" : "<%=nft.issuer%>" , "taxon" : "<%=nft.taxon%>" , "currentHolder" : "<%=nft.currentHolder%>", "image":"<%=nft.http_image%>" })'><span class="product-name"><%= nft.uriMetadata.name %></span></a>
     <%}%>
     </div>
   </div>

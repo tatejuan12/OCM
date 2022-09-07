@@ -44,7 +44,7 @@
     <img src="<%= collection_banner%>" alt="">
   </div>
 
-  <div class="rn-author-area mb--30 mt_dec--120">
+  <div class="rn-author-area mt_dec--120">
     <div class="container">
       <div class="row padding-tb-50 align-items-center d-flex">
         <div class="col-lg-12">
@@ -75,15 +75,36 @@
             </div>
           </div>
         </div>
+        <div class="col-12">
+          <div class="tab-wrapper-one">
+            <nav class="tab-button-one">
+              <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#pane-listed-nfts" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Listed</button>
+                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#pane-unlisted-nfts" type="button" role="tab" aria-controls="nav-profile" aria-selected="true">Un-Listed</button>
+              </div>
+            </nav>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="rn-product-area rn-section-gapTop">
-    <div class="container"> 
-      <div class="row g-5 mt_dec--30">
-          <%- include ("models/nft-rows.ejs", {nfts: nfts}) %>
-      </div>     
+  <div id="pane-listed-nfts" class="tab-pane fade active show" aria-labelledby="nav-listed-tab" role="tabpanel">
+    <div class="rn-product-area rn-section-gapTop">
+      <div class="container"> 
+        <div class="row g-5 mt_dec--30">
+            <%- include ("models/nft-rows.ejs", {nfts: nfts}) %>
+        </div>     
+      </div>
+    </div>
+  </div>
+  <div id="pane-unlisted-nfts" class="tab-pane fade" aria-labelledby="nav-unlisted-tab" role="tabpanel">
+    <div class="rn-product-area rn-section-gapTop">
+      <div class="container"> 
+        <div class="row g-5 mt_dec--30">
+            <%- include ("models/unlisted-collection-nft-rows.ejs", {unlistedNfts: unlistedNfts}) %>
+        </div>     
+      </div>
     </div>
   </div>
   <!-- Modal require -->
