@@ -155,13 +155,12 @@
     $('#bulkButton').on('click', function () {
       
     });
-    $(window).endlessScroll({
+    $('#exploreSection').endlessScroll({
       pagesToKeep: 10,
       inflowPixels: 600,
       fireOnce: false,
       fireDelay: false,
-      loader: '<div class="loading"><div>',
-      callback: function(p){
+      callback: function(){
         var markerIteration = 0;
         var marker = '<%=marker%>';
           $.get(

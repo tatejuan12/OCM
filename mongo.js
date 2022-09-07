@@ -382,7 +382,6 @@ var methods = {
     try {
       const db = client.db("Additional-Traits");
       let collection = db.collection("Collections");
-      console.log(collectionName);
       await collection.updateOne(
         {
           name: collectionName,

@@ -83,13 +83,6 @@
     <div class="container"> 
       <div class="row g-5 mt_dec--30">
           <%- include ("models/nft-rows.ejs", {nfts: nfts}) %>
-        <div class="row">
-          <div class="col-lg-12">
-              <div class="view-more-btn mt--50">
-                  <a class="btn btn-primary-alta btn-large w-100" id="fetchCollection">View More Items</a>
-              </div>
-          </div>
-        </div>
       </div>     
     </div>
   </div>
@@ -136,19 +129,30 @@
     var iteration = 0;
     var marker = 1;
     $('#fetchCollection').on('click', function () {
-      $.get(`<%=url%>/get-additional-collection-nfts?name=<%=collectionDetails.name%>&issuer=<%=collectionDetails.issuer%>&marker=${marker}&markerIteration=${iteration}`,
-        function(data) {
-          iteration++;
-          var updateNfts = [];
-          $("#exploreSection").append(data[0])
-          marker = data[1]
-          const cardsUnlisted = document.getElementById("exploreSection").querySelectorAll(".col-5");
-          cardsUnlisted.forEach(element => {
-            element.classList.add("sal-animate")
-          });
-        }
-      )
+      
     });
+    $(window).data('getReady', true).scroll(function(e) {
+      if ($(window).data('getReady') == false) return;
+
+      if ($(document).height() - $(this).height() - 2000 < $(this).scrollTop()) {
+        console.log("2000")
+        $(window).data('getReady', false);
+        $.get(`<%=url%>/get-additional-collection-nfts?name=<%=collectionDetails.name%>&issuer=<%=collectionDetails.issuer%>&marker=${marker}&markerIteration=${iteration}`,
+         function(data) {
+           iteration++;
+           var updateNfts = [];
+           $("#exploreSection").append(data[0])
+           marker = data[1]
+           const cardsUnlisted = document.getElementById("exploreSection").querySelectorAll(".col-5");
+           cardsUnlisted.forEach(element => {
+             element.classList.add("sal-animate")
+           });
+           $(window).data('getReady', true);
+         }
+        )
+
+      }
+    })
   </script>
 </body>
 
