@@ -9,7 +9,7 @@
       <%if (nft.https_image == undefined && imageExt.has(nft.substring(nft.lastIndexOf('.') + 1))) {%>
           <img src="<%= nft%> " alt="unlisted NFT image" draggable="false" loading="lazy">
         <%} else if (nft.http_image == undefined && vidExt.has(nft.substring(nft.lastIndexOf('.') + 1))) {%>
-          <video controls autoplay>
+          <video autoplay>
             <source src="<%= nft%>" type="video/mp4">
             <source src="<%= nft%>" type="video/webm">
             <source src="<%= nft%>" type="video/ogg">
@@ -18,7 +18,7 @@
         <img src="<%= nft.http_image%> " alt="unlisted NFT image" draggable="false" loading="lazy">
       
         <%} else if (vidExt.has(nft.http_image.substring(nft.http_image.lastIndexOf('.') + 1))) {%>
-        <video controls autoplay>
+        <video autoplay>
           <source src="<%= nft.http_image%>" type="video/mp4">
           <source src="<%= nft.http_image%>" type="video/webm">
           <source src="<%= nft.http_image%>" type="video/ogg">

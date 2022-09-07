@@ -14,7 +14,11 @@
           <img src="<%= nft.httpsImage%> " alt="Nft_Profile" draggable="false" loading="lazy">
         <!-- JPG/JPEG/PNG/GIF -->
         <% } else if (vidExt.has(nft.httpsImage.substring(nft.httpsImage.lastIndexOf('.') + 1))) { %>
-          <video src="<%= nft.httpsImage%>"></video>
+          <video autoplay loop>
+            <source src="<%= nft.httpsImage%>" type="video/mp4">
+            <source src="<%= nft.httpsImage%>" type="video/webm">
+            <source src="<%= nft.httpsImage%>" type="video/ogg">
+          </video>
         <% } else {%>
           <img src="<%= nft.httpsImage%> " alt="unlisted NFT image" draggable="false" loading="lazy">
         <%};%>
