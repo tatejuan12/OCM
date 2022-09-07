@@ -16,7 +16,6 @@
                 <ul class="mainmenu">
                   <li><a class="its_new" href="/">Home</a></li>
                   </li>
-                  <li><a href="about">About</a>
                   </li>
                   <li class="has-droupdown has-menu-child">
                     <a class="its_new" href="explore?page=0">Explore</a>
@@ -33,6 +32,13 @@
         <ul class="submenu">
           <li><a href="<%login ? __append("profile") : __append('#')%>" <%if (!login) __append("onclick=\"customAlert.alert('Connect Wallet to View Profile')\"")%>>Account <span class="icon i-account"></span></a></li>
           <li><a href="<%login ? __append("edit-profile") : __append('#')%>" <%if (!login) __append("onclick=\"customAlert.alert('Connect Wallet to Update Profile')\"")%>>Update Profile <span class="icon i-edit"></span></a></li>
+        </ul>
+      </li>
+      <li class="has-droupdown has-menu-child">
+        <a href="about" class="its_new">About</a>
+        <ul class="submenu">
+          <li><a href="about">About</a></li>
+          <li><a href="metadata">Metadata</a></li>
         </ul>
       </li>
       <!-- End Mainmanu Nav -->
@@ -114,7 +120,6 @@
               <li>
                 <a class="nav-link its_new" href="/">Home</a>
               </li>
-              <li><a href="about">About</a>
               </li>
               <li class="has-droupdown has-menu-child">
                 <a class="its_new" href="explore">Explore</a>
@@ -132,6 +137,13 @@
                 <ul class="submenu">
                   <li><a href="profile">Your Profile <span class="icon i-account"></span></a></li>
                   <li><a href="<%login ? __append("edit-profile") : __append('#')%>" <%if (!login) __append("onclick=\"customAlert.alert('Connect Wallet to Update Profile')\"")%>>Update Profile <span class="icon i-edit"></span></a></li>
+                </ul>
+              </li>
+              <li class="has-droupdown has-menu-child">
+                <a href="about" class="its_new">About</a>
+                <ul class="submenu">
+                  <li><a href="about">About</a></li>
+                  <li><a href="metadata">Metadata</a></li>
                 </ul>
               </li>
             </ul>

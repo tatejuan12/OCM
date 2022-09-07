@@ -61,11 +61,11 @@
     <div class="container">
       <div class="row mb--50 align-items-center">
         <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-          <h3 class="title mb--0" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800">OnChain MarketPlace: Metadata Standards</h3>
+          <h3 class="title mb--0" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800">OnChain Marketplace: Metadata Standards</h3>
         </div>
       </div>
       <div class="row mb--50 align-items-center">
-        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+        <div class="col-lg-6 col-md-6 col-sm-6 col-12 metadata">
           <h5>OCM Presentations</h5>
           <p>NFTokens often entail unique and identifiable data, this is commonly referred to as Metadata. This
             data storage allows NFTokens to be clearly distinguished and displayed, in an interoperable manner,
@@ -73,15 +73,144 @@
             OCM follows a widely agreed standard for metadata representation, and details are given below.
             Pleas ensure all relevant data is formatted as explained below, this will allow seamless and efficient
             listing and trading throughout platforms.</p>
+            <h5>XRPL NFToken Standard (XLS-20)</h5>
+          <p>OCM supports the XLS-20 standard for NFTokens on the XRPL. More details can be found <a href="https://xrpl.org/nftoken.html" target="_blank">here</a>. <br>
+            This standard does not store metadata on the XRPL network. Instead, issuers are required to host the
+            metadata elsewhere, and use a Unique Resource Identifier (URI), to point to the details surrounding
+            the NFToken. <br>
+            This URI should typically direct users to a hosted JSON file, that contains all the relevant metadata
+            for the NFToken. Details on NFTokens and URIs, within the XRPL, can be found <a href="https://xrpl.org/" target="_blank">here</a>. <br>
+            It is vital that the token is minted purposely, as the data cannot be altered on the XRPL (other than
+            being burnt). The following describes how the metadata should be displayed and hosted.</p>
+            <h5>OCM Metadata Standard</h5>
+            <img src="../assets/images/code/metadata.png" class="mb--50" alt="metadata standard">
+            <div class="table-responsive">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Field</th>
+                    <th>JSON Format</th>
+                    <th>Options</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tr>
+                  <td>name</td>
+                  <td>String</td>
+                  <td>True</td>
+                  <td>The name of the asset that the NFToken represents/is.
+                    This should be a short phrase that is easy to read, and
+                    understandable by users.</td>
+                </tr>
+                <tr>
+                  <td>description</td>
+                  <td>String</td>
+                  <td>True</td>
+                  <td>A description of the purpose of the NFToken and/or the
+                    project it represents. This should be a quick summary that
+                    provides context to the purpose of the asset. This should be a moderately lengthened paragraph, but one that is
+                    concise and direct.</td></tr>
+                <tr><td>image</td>
+                  <td>String</td>
+                  <td>True</td>
+                  <td>This is the URL link (please see below for more details),
+                    to the visual representation of the asset. File types
+                    include, &#39;.png&#39;, &#39;.jpg&#39;, &#39;.jpeg&#39;, &#39;.gif&#39;, &#39;.mp4&#39;, &#39;.webm&#39;,
+                    &#39;.ogg&#39;.</td></tr>
+                <tr><td>external_url</td>
+                  <td>String</td>
+                  <td>True</td>
+                  <td>This should be a ‘https’ formatted URL, that points to an
+                    external website giving more details on the NFToken.
+                    Examples include project websites, further readings, and
+                    blogs.</td></tr>
+                <tr><td>attributes</td>
+                  <td>Array</td>
+                  <td>True</td>
+                  <td>This will be an array of objects, that contains the unique
+                    attributes of the NFToken, to be displayed.<br>
+                    Each object in the array contains 2 fields. <br>
+                    1. “trait_type”, refers to the name of the trait.<br>
+                    2. “value”, refers to the value of the trait.<br>
+                    Both values can exist as either a String, or a Number.
+                    These should be clear and concise descriptors of the
+                    unique characteristics of the NFToken.<br>
+                    The exact contents are not strict, and can be modified to
+                    suit your use-case (but the JSON naming convention
+                    must remain constant).</td>
+                </tr>
+                <tr><td>collection</td>
+                  <td>Object</td>
+                  <td>True</td>
+                  <td>This object represents the group (or groups) that the
+                    NFToken belongs to.<br>
+                    It contains 2 fields.<br>
+                    1. “family”, refers to the wider group/collection the
+                    NFToken represents.<br>
+                    2. “name”, refers to the subgroup within the family
+                    the NFToken represents.<br>
+                    Both values should exist as a string. They should be
+                    concise phrases, identical to other NFTokens of the same
+                    category.</td>
+                </tr>
+                <tr><td>edition</td>
+                  <td>Number</td>
+                  <td>True</td>
+                  <td>This is a number that represents what edition/release
+                    number the NFToken represents. It should be a whole,
+                    positive number.</td>
+                </tr>
+                <tr><td>date</td>
+                  <td>Number</td>
+                  <td>True</td>
+                  <td>This should be a UNIX timestamp (in milliseconds),
+                    representing the minting date, or the date the NFToken
+                    Image/Details were developed.
+                    It refers to the number of milliseconds that have passed
+                    since Unix Epoch (January 1st, 1970)</td>
+                </tr>
+                <tr><td>compiler</td>
+                  <td>String</td>
+                  <td>True</td>
+                  <td>This should be a simple string, referring to the
+                    compiler/artist that generated the artwork.</td>
+                </tr>
+              </table>
+              <p class="mb--50"><i>
+                Please note, that while all fields are optional. Failure to include relevant details may result in a
+                  misrepresentation of your NFTokens.
+                  As per all JSON files, ensure the formatting (capitalisations and spelling) are correct.
+              </i></p>
+            </div>
+            <h5>Linking URLs in Metadata and NFToken URIs</h5>
+            <p>The following content is applicable to URLs that exist in both the URI of the NFToken, and the
+              metadata endpoint.</p>
+            <p>OCM supports 2 URL formats: "https" protocol and IPFS protocol.</p>
+            <p>Any data that does not exist on the IPFS system, should be displayed using “https” standards (i.e.
+              “https://onchainmarketplace.net/”). This hosting type is applicable to those that wish to be able to
+              alter/modify metadata representations, after NFToken minting, or to any issuers that need to maintain
+              control of endpoints. Please note, OCM will update/retrieve any “https” linked data once every 24hrs</p>
+            <p>For immutable and permanent data hosting, the IPFS protocol may be used. Data should be
+              represented as per the official recommendation for best practises, found <a href="https://docs.ipfs.tech/how-to/best-practices-for-nft-data/#types-of-ipfs-links-and-when-to-use-them" target="_blank">here</a>.
+              This means all IPFS stored data should be displayed as ipfs://<CID></p>
+            <h5>Minting on the XRPL</h5>
+            <p>Minting NFTokens on the XRPL is a simple, and cost-effective, process.
+              Official documentation can be found <a href="https://xrpl.org/nftokenmint.html#nftokenmint" target="_blank">here</a>.</p>
+            <p>A free Desktop Application has been supplied by OCM, to allow developers to mint NFTokens with
+              ease and in a trustless manner. This process requires no coding knowledge and streamlines the OCM
+              listing process. There is no obligation to list or utilise OCM after using the free application.
+              This can be found at the bottom of the site <a href="https://onchainmarketplace.net/" target="_blank">here</a>.</p>
+            <h5>Uploading Metadata to IPFS</h5>
+            <p>There are many methods to upload and host metadata immutably on IPFS.
+              Developers can refer to the official documentation <a href="https://ipfs.io/" target="_blank">here</a>.</p>
+            <p><a href="https://www.pinata.cloud/" target="_blank">Pinata</a>, is also an affordable and simple platform that can streamline this
+              process with no coding knowledge required. Their services are recommended for those who aren&#39;t
+              confident following the official documentations.</p>
+            <p>  <a href="https://docs.opensea.io/docs/metadata-standards" target="_blank">Opensea Metadata Standards</a></p>
         </div>
       </div>
-      <img src="../assets/images/code/metadata.png" alt="metadata standard">
     </div>
   </div>
-
-  <a href="https://docs.opensea.io/docs/metadata-standards" target="_blank">Opensea Metadata Standards</a>
-
-
   <%- include('sections/footer.ejs') -%>
   <!-- Start Top To Bottom Area  -->
   <div class="rn-progress-parent">

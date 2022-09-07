@@ -24559,3 +24559,10 @@ Collection nav
 #attribs{
   margin: 8px 0;
 }
+.active-light-mode .metadata a{
+  color: blue;
+}
+.metadata td:nth-child(4){
+  max-height: 115px;
+  min-width: 300px;
+}
