@@ -1,26 +1,3 @@
-<!-- <div class="collection-card" data-sal="slide-up" data-sal-delay="150" data-sal-duration="800">
-  <a href="collection?name=<%=collection.name%>&issuer=<%=collection.issuer%>&page=0">
-    <img src="<%=collection.banner_url%> " alt="" class="CC-banner">
-    <div class="collection-card-content">
-      <div class="CCC-logo">
-        <img src="<%=collection.logo_url%>" alt="" class="CCC-icon">
-      </div>
-      <div class="CCC-collection-name">
-        <h4 class="nus"><%=collection.name %> </h4>
-      </div>
-      <div class="CCC-owner">
-        <p>by <a href="<%=collection.link%>" target="_blank"><%=collection.brand%></a></p>
-      </div>
-      <div class="CCC-description">
-        <p><%= collection.description %> </p>
-      </div>
-      <div class="CCC-item-count">
-        <p><%= collection.items %> <span>items</span></p>
-      </div>
-    </div>
-    
-  </a>
-</div> -->
 <div data-sal="slide-up" data-sal-delay="200" data-sal-duration="800" class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-12">
   <a href="collection?name=<%=collection.name%>&issuer=<%=collection.issuer%>&page=0" class="rn-collection-inner-one">
       <div class="collection-wrapper">
@@ -41,7 +18,8 @@
           </div>
           <div class="collection-deg">
               <h6 class="title nus"><%=collection.name %></h6>
-              <span class="items"><%= collection.numberOfNFTs %></span>
+              <%const formatter = Intl.NumberFormat('en', {notation: 'compact'});%>
+              <span class="items"><%= formatter.format(collection.numberOfNFTs) %> Items</span>
           </div>
       </div>
   </a>
