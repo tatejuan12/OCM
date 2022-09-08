@@ -663,10 +663,10 @@ var methods = {
       await client.close();
     }
   },
-  addNftToQueried: async function (NFTokenID, wallet, permanent, issuer) {
+  addNftToQueried: async function (NFTokenID, wallet, permanent, issuer, sessionWallet) {
     var checker = false;
     const client = await getClient();
-    var payholder = wallet;
+    var payholder = sessionWallet;
     if (!client) return;
     try {
       const db = client.db("NFTokens");

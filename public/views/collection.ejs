@@ -156,7 +156,6 @@
       if ($(window).data('getReady') == false) return;
 
       if ($(document).height() - $(this).height() - 2000 < $(this).scrollTop()) {
-        console.log("2000")
         $(window).data('getReady', false);
         $.get(`<%=url%>/get-additional-collection-nfts?name=<%=collectionDetails.name%>&issuer=<%=collectionDetails.issuer%>&marker=${marker}&markerIteration=${iteration}`,
          function(data) {

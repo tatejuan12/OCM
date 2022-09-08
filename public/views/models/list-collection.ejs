@@ -1,0 +1,72 @@
+<div class="modalLI">
+  <div class="listItem" id="listItem">
+    <div class=" contentWrap">
+      <div class="modalHead">
+        <h2>List Item</h2>
+        <button type="button" onclick="closeModal()" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="margin-bottom: 20px;"></button>
+      </div>
+      <div class="NFTDeets">
+        <div class="NFImage" id="listImage">
+          <img draggable="false" src="assets/images/activity/qmark600.png" id="yourNFT">
+        </div>
+        <div class="LIInner">
+          <div class="autofills">
+            <label for="tokenID">Token ID:&nbsp;</label>
+            <input type="text" id="tokenID" readonly>
+            <label for="issuer">Issuer:&nbsp;</label>
+            <input type="text" id="issuer" readonly>
+            <label for="taxon">TAXON:&nbsp;</label>
+            <input type="text" id="taxon" readonly>
+            <label for="currentHolder">Current Holder:&nbsp;</label>
+            <input type="text" id="currentHolder" readonly>
+          </div>
+          <div class="monies">
+            <p class="finePrint">*Should take 5 minutes, but please allow up to 3 hours for the nft to be listed</p>
+          </div>
+        </div>
+      </div>
+      <div class="listButtons">
+        <button class="listButton" onclick="getListNftCollection(0.49)">Temporary Listing (0.98 XRP)</button>
+        <!-- <button class="listButton" onclick="getListNft(1)">Permanent Listing</button> -->
+      </div>
+      <!-- <div class="aboutListing" id="aboutListing">
+        <p class="finePrint"><strong>Permanent</strong>: 2 XRP fee. This item will live permanently in our database. <br>
+          <strong>Temporary</strong>: 1 XRP fee. This item will be removed from our database upon sale or offer cancel.
+        </p>
+      </div> -->
+    </div>
+  </div>
+  <script>
+    function peekaboo() {
+      var box = document.getElementById("aboutListing")
+      box.toggleAttribute("ghost");
+    }
+
+
+    function closeModal() {
+      var box = document.getElementById("listItem");
+      //   var overlay = document.querySelectorAll("modal-backdrop")
+      $('#listItem').hide("fast", "linear");
+    }
+
+    function populateListNft(data) {
+      $('#tokenID').val(data.NFTokenID);
+      $('#issuer').val(data.issuer);
+      $('#taxon').val(data.taxon);
+      $('#currentHolder').val(data.currentHolder);
+      $('#listItem').show("fast", "linear");
+      var imageExt = new Set(['jpg', 'jpeg', 'png', 'gif']); var vidExt = new Set(['mp4', 'mov', 'avi', 'webm', 'mpg', 'wmv']);
+       if (imageExt.has(data.image.substring(data.image.lastIndexOf('.') + 1))) {
+          $('#listImage').html(`<img src="${data.image} " alt="Image" draggable="false" loading="lazy">`);
+       } else if (vidExt.has(data.image.substring(data.image.lastIndexOf('.') + 1))) {
+          $('#listImage').html(`<video controls autoplay>
+            <source src="${data.image}" type="video/mp4">
+            <source src="${data.image}" type="video/webm">
+            <source src="${data.image}" type="video/ogg">
+          </video>`);
+       } else {
+          $('#listImage').html(`<image src="${data.image}">`);
+      };
+    }
+  </script>
+</div>

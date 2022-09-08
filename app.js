@@ -683,6 +683,25 @@ server.post("/list-nft-payload", async (req, res, next) => {
     res.send(response);
   } else res.sendStatus(400);
 });
+server.post("/list-nft-payload-collection", async (req, res, next) => {
+  if (req.session.login) {
+    const payload = await xumm.payloads.listNftPayload(
+      process.env.XRPL_ISSUER_PAYMENT_ADDRESS,
+      req.body.holder,
+      req.body.fee,
+      req.useragent.isMobile,
+      req.body.return_url
+    );
+    const response = {
+      payload: payload,
+      NFTokenID: req.body.NFTokenID,
+      holder: req.body.holder,
+      issuer: req.body.issuer,
+      fee: req.body.fee,
+    };
+    res.send(response);
+  } else res.sendStatus(400);
+});
 server.post("/list-nft-subscription", async (req, res, next) => {
   const result = await xumm.subscriptions.listNftSubscription(req, res);
   var permanent = false;
@@ -693,6 +712,21 @@ server.post("/list-nft-subscription", async (req, res, next) => {
       req.session.wallet,
       permanent,
       req.body.issuer
+    );
+  }
+});
+server.post("/list-nft-subscription-collection", async (req, res, next) => {
+  const result = await xumm.subscriptions.listNftSubscription(req, res);
+  var permanent = false;
+  var currentWallet = req.session.wallet
+  if (req.body.fee == "1") permanent = true;
+  if (result) {
+    mongoClient.query.addNftToQueried(
+      req.body.NFTokenID,
+      req.body.holder,
+      permanent,
+      req.body.issuer,
+      currentWallet,
     );
   }
 });

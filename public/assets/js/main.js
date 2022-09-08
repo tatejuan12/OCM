@@ -1005,6 +1005,34 @@ function getListNft(fee) {
     },
   });
 }
+function getListNftCollection(fee) {
+  const NFTokenID = $("#tokenID").val();
+  const issuer = $("#issuer").val();
+  const holder = $("#currentHolder").val();
+  $.ajax({
+    type: "POST",
+    url: "/list-nft-payload-collection",
+    data: {
+      return_url: window.location.href,
+      fee: fee,
+      NFTokenID: NFTokenID,
+      issuer: issuer,
+      holder: holder,
+    },
+    success: function (result) {
+      window.location.href = result.payload.next.always;
+      $.ajax({
+        type: "POST",
+        url: "/list-nft-subscription-collection",
+        data: result,
+
+        error: function (resulty) {
+          console.warn("Payment is expired, failed or was cancelled.");
+        },
+      });
+    },
+  });
+}
 
 $("#startMint").click(function () {
   var uri = document.getElementById("URI").value;
