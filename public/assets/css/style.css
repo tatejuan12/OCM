@@ -24566,3 +24566,6 @@ Collection nav
   max-height: 115px;
   min-width: 300px;
 }
+.metadata img{
+  margin-bottom: 50px;
+}
