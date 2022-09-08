@@ -1,13 +1,13 @@
 <div class="offers-slice">
-    <div class="offers-wrap">
-      <div class="offers-content">
-        <h5><%=sellOffers.price%> <%=sellOffers.token%></h5>
-        <span><%= sellOffers.account %></span>
-      </div>
-      <div class="offers-content">
-        <% if (isOwner === false){%>
-          <button class="btn btn-primary" onclick="NFTokenAcceptSellOffer('<%=sellOffers.index%>', '<%=NFToken%>')">Accept Offer</button>
-        <%}%>
-      </div>
+  <div class="offers-wrap">
+    <div class="offers-content">
+      <h5><%=sellOffers.price%> <%=sellOffers.token%></h5>
+      <span><%= sellOffers.account %></span>
+    </div>
+    <div class="offers-content">
+      <% if (isOwner === false){%>
+        <button class="btn btn-primary" onclick="NFTokenAcceptSellOffer('<%=sellOffers.index%>', '<%=NFToken%>')">Accept Offer</button>
+      <%}%>
     </div>
   </div>
+</div>

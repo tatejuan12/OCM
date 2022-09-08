@@ -6,7 +6,7 @@
   <div class="product-style-one no-overlay with-placeBid">
     <div class="card-thumbnail">
       <%var imageExt = new Set(['jpg', 'jpeg', 'png', 'gif', '']); var vidExt = new Set(['mp4', 'ogg', 'webm']);%>
-      <%if (nft.https_image == undefined && imageExt.has(nft.substring(nft.lastIndexOf('.') + 1))) {%>
+      <%if (nft.http_image == undefined && imageExt.has(nft.substring(nft.lastIndexOf('.') + 1))) {%>
           <img src="<%= nft%> " alt="unlisted NFT image" draggable="false" loading="lazy">
         <%} else if (nft.http_image == undefined && vidExt.has(nft.substring(nft.lastIndexOf('.') + 1))) {%>
           <video autoplay>
