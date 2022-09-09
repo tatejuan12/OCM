@@ -814,6 +814,8 @@ function xummSignin() {
       console.log(result);
       $('#qrModal').modal('toggle');
       $('#qrCodeImage').attr('src', result.refs.qr_png)
+      $('#xummLink').attr('href', result.next.always)
+
       $.ajax({
         type: "POST",
         url: "/sign-in-subscription",
@@ -847,7 +849,20 @@ function setBuyOfferBid(NFToken) {
       $('#placebidModal').modal('toggle')
       $('#qrModal').modal('toggle');
       $('#qrCodeImage').attr('src', result.refs.qr_png)
-      $('#xummLink').attr('href', result.next.always)
+      $('#xummLink').attr('href', result.next.always);
+      $.ajax({
+        type: "POST",
+        url: "/XUMM-sign-subscription",
+        data: result,
+        success: function (resulty) {
+          console.log(resulty)
+          $('#qrModal').modal('toggle');
+        },
+        error: function (resulty) {
+          console.warn("Sign in expired, failed or was cancelled.");
+          $('#qrModal').modal('toggle');
+        },
+      });
     },
   });
 }

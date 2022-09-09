@@ -556,6 +556,9 @@ server.post("/sign-in-subscription", speedLimiter, async (req, res) => {
     mongoClient.query.initiateUser(req.session.wallet);
   }
 });
+server.post("/XUMM-sign-subscription", speedLimiter, async (req, res) => {
+  const result = await xumm.subscriptions.watchSubscripion(req, res);
+})
 server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
   const payload = await xumm.payloads.redeemNftPayload(
     req.session.wallet,
