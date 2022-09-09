@@ -240,7 +240,7 @@ var methods = {
         }
         if (filters.filterBrands) {
           aggregateQuery.push({
-            $match: { "issuer": filters.filterBrands }, //look for issuer of collection
+            $match: { "issuer": {$in: filters.filterBrands.split(',')} }, //look for issuer of collection
           });
         }
         if (filters.filterFamilies) {
