@@ -318,7 +318,7 @@ var methods = {
       let collection = db.collection("Expired-Listings");
       var query = {
         $match: { $or: [ {"uriMetadata.collection.name": collectionName}, {"uriMetadata.collection.name": null} ]  },
-        $match: { issuer: issuer },
+        $match: {issuer: issuer},
       };
       const aggregate = collection
         .aggregate([query])
@@ -344,7 +344,7 @@ var methods = {
       let collection = db.collection("Eligible-Listings");
       var query = {
         $match: { $or: [ {"uriMetadata.collection.name": collectionName}, {"uriMetadata.collection.name": null} ]  },
-        $match: { issuer: issuer },
+        $match: {issuer: issuer},
       };
       const aggregate = collection
         .aggregate([query])
