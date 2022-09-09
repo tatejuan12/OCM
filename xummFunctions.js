@@ -503,11 +503,11 @@ var subscriptions = {
       subscription = sdk.payload.subscribe(req.body.payload, (event) => {
         if (event.data.signed) {
           var verify = verifyTransaction(event.data.txid);
-          if (verify) {
+          if (verify === true) {
             console.log("signed")
             resolve("signed");
           }
-          else if (verify == false) {
+          else {
             res.status(401).send(false);
             resolve(false);
           }
