@@ -674,6 +674,7 @@ server.post("/list-nft-payload", async (req, res, next) => {
       req.useragent.isMobile,
       req.body.return_url
     );
+    console.log(payload);
     const response = {
       payload: payload,
       NFTokenID: req.body.NFTokenID,

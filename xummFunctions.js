@@ -502,8 +502,15 @@ var subscriptions = {
     var promise = new Promise(function (resolve) {
       subscription = sdk.payload.subscribe(req.body.payload, (event) => {
         if (event.data.signed) {
-          console.log("signed");
-          resolve("signed");
+          var verify = verifyTransaction(event.data.txid);
+          if (verify) {
+            console.log("signed")
+            resolve("signed");
+          }
+          else if (verify == false) {
+            res.status(401).send(false);
+            resolve(false);
+          }
         } else if (event.data.signed == false) {
           res.status(401).send(false);
           resolve(false);
@@ -1499,7 +1506,61 @@ var xrpls = {
       await client.disconnect();
     }
   },
+  verifyTransaction: async function (txID) {
+    const client = await getXrplClientMain();
+    try {
+        try {
+            var result = await client.request({
+                "command": "tx",
+                "transaction": txID,
+            })    
+            
+            if(result.result.meta.TransactionResult == "tesSUCCESS"){
+                var executed = true
+            } else {
+                var executed = false
+            }
+
+        } catch (error) {
+            var executed = false
+        }
+
+        return executed
+    } catch (error) {
+        console.log(error)
+        return null
+    } finally {
+        await client.disconnect()
+    }
+  },
 };
+async function verifyTransaction(txID) {
+  const client = await getXrplClientMain();
+    try {
+        try {
+            var result = await client.request({
+                "command": "tx",
+                "transaction": txID,
+            })    
+            
+            if(result.result.meta.TransactionResult == "tesSUCCESS"){
+                var executed = true
+            } else {
+                var executed = false
+            }
+
+        } catch (error) {
+            var executed = false
+        }
+
+        return executed
+    } catch (error) {
+        console.log(error)
+        return null
+    } finally {
+        await client.disconnect()
+    }
+}
 async function getPayload(request) {
   const payload = await sdk.payload.create(request);
   return payload;
