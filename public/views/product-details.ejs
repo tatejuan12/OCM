@@ -391,18 +391,19 @@
     <!-- main JS -->
     <script src="assets/js/main.js"></script>
     <script>
+      var wallet = '<%=wallet%>'
       $.post("/get-profile-info?id=<%-nft.tokenID%>", function(data) {
         $("#buy-offer-container").html(data[0]);
         $("#sell-offer-container").html(data[1]);
         $("#owner-name").html(`<h6 class = "name" style = "display: inline-block" >${data[2]}</h6>`);
         $("#owner-name").attr("href", `/profile?wallet=${data[2]}`);
         $("#profile-thumbnail-container").html(`<img src="${data[3]}" class="profile-thumbnail transition" onerror="this.src='assets/images/icons/unknown-user.png'">`)
-        console.log(data)
+        if (wallet){
         if (!data[4]) {
           $("#buy-offer-btn-container").html('<button type="button" class="btn btn-primary-alta mt--30" data-bs-toggle="modal" data-bs-target="#placebidModal" onclick="getCurrencyBalance()">Place an Offer</button>');
         } else if (data[4]) {
           $("#buy-offer-btn-container").html('<button type="button" class="btn btn-primary-alta mt--30" data-bs-toggle="modal" data-bs-target="#placebidModal">Place a Sell Offer</button>');
-        }
+        }}
       })
       currNft = '<%=nft.tokenID%>';
     </script>

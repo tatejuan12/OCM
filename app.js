@@ -409,6 +409,7 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
   }
   if (promises[0]) {
     res.render("views/product-details", {
+      wallet: wallet,
       isOwner: isOwner,
       nft: promises[0],
       nfts: promises[1],
