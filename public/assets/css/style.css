@@ -24568,3 +24568,11 @@ Collection nav
 .metadata img{
   margin-bottom: 50px;
 }
+.redeem video{
+  max-width: 1000px;
+}
+@media only screen and (max-width: 768px) {
+  .redeem video {
+    max-width: 90%;
+  }
+}

@@ -498,27 +498,29 @@ var subscriptions = {
     }
   },
   listNftSubscription: async function (req, res) {
+    try {
     var subscription = false;
     var promise = new Promise(function (resolve) {
       subscription = sdk.payload.subscribe(req.body.payload, (event) => {
         if (event.data.signed) {
-          var verify = verifyTransaction(event.data.txid);
-          if (verify === true) {
-            console.log("signed")
-            resolve("signed");
-          }
-          else {
-            res.status(401).send(false);
-            resolve(false);
-          }
+            resolve(event.data.txid);
         } else if (event.data.signed == false) {
-          res.status(401).send(false);
           resolve(false);
         }
       });
     });
-    try {
-      return await promise;
+
+    var txID = await promise;
+
+    var verify = await verifyTransaction(txID);
+    if (verify === true) {
+        console.log("signed")
+        return "signed";
+      }
+      else {
+        res.status(401).send(false);
+        return false;
+      }
     } catch (error) {
       console.error("There was an error with the payload: \n" + error);
     }
@@ -1535,7 +1537,8 @@ var xrpls = {
   },
 };
 async function verifyTransaction(txID) {
-  const client = await getXrplClientMain();
+  const client = await getXrplClient();
+  console.log('checking transaction' + txID)
     try {
         try {
             var result = await client.request({
@@ -1545,12 +1548,15 @@ async function verifyTransaction(txID) {
             
             if(result.result.meta.TransactionResult == "tesSUCCESS"){
                 var executed = true
+                console.log('txid verified true')
             } else {
                 var executed = false
+                console.log('txid verified false')
             }
 
         } catch (error) {
             var executed = false
+            console.log('error validating')
         }
 
         return executed

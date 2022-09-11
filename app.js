@@ -254,6 +254,10 @@ server.get("/partners", speedLimiter, (req, res) => {
   defaultLocals(req, res);
   res.render("views/partners");
 });
+server.get("/redeem-setup", speedLimiter, (req, res) => {
+  defaultLocals(req, res);
+  res.render("views/redeem-info");
+});
 server.get("/collection", speedLimiter, async (req, res) => {
   const page = parseInt(req.query.page);
   const wallet = req.session.wallet;
@@ -709,7 +713,7 @@ server.post("/list-nft-subscription", async (req, res, next) => {
   var permanent = false;
   if (req.body.fee == "1") permanent = true;
   if (result) {
-    mongoClient.query.addNftToQueried(
+    await mongoClient.query.addNftToQueried(
       req.body.NFTokenID,
       req.session.wallet,
       permanent,
