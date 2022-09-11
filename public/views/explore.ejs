@@ -61,11 +61,19 @@
       <div class="default-exp-wrapper default-exp-expand">
         <div class="inner">
           <div class="filter-select-option">
-            <label class="filter-leble">SORT BY LIKES</label>
+            <label class="filter-leble">Likes</label>
             <select id="sort-likes">
               <option data-display="Likes" value='' class="option disabled" selected disabled>Likes</option>
               <option value=-1>Most liked</option>
               <option value=1>Least liked</option>
+            </select>
+          </div>
+          <div class="filter-select-option">
+            <label class="filter-leble">Price</label>
+            <select id="sort-price">
+              <option data-display="Price" value='' class="option disabled" selected disabled>Price</option>
+              <option value=1>Low to High</option>
+              <option value=-1>High to Low</option>
             </select>
           </div>
           <div class="filter-select-option">
@@ -111,12 +119,16 @@
                   </div>
                   <div class="price__output--wrap">
                     <div class="price--filter">
-                      <a class="btn btn-primary" onclick="handleFilterSort()">Apply Filter</a>
+                      
                     </div>
                   </div>
                 </div>
               </form>
             </div>
+          </div>
+          <div class="filter-select-option">
+            <a class="btn btn-primary mr--10" onclick="handleFilterSort()">Apply Filter</a>
+            <a class="btn btn-secondary btn-small" href="/explore?page=0">Reset Filters</a>
           </div>
         </div>
       </div>
@@ -186,6 +198,7 @@
     function handleFilterSort() {
       const jsonFilterSort = {
         sortLikes: document.getElementById("sort-likes").value,
+        sortPrice: document.getElementById("sort-price").value,
         filterExtras: document.getElementById("filter-extras").value,
         filterBrands: document.getElementById("filter-brands").value,
         filterFamilies: document.getElementById("filter-family").value,
@@ -196,6 +209,8 @@
       var url = `?page=<%=page%>`;
       if (jsonFilterSort.sortLikes)
         url += `&sortLikes=${jsonFilterSort.sortLikes}`;
+      if (jsonFilterSort.sortPrice)
+        url += `&sortPrice=${jsonFilterSort.sortPrice}`;
       if (jsonFilterSort.filterExtras)
         url += `&filterExtras=${jsonFilterSort.filterExtras}`;
       if (jsonFilterSort.filterBrands)

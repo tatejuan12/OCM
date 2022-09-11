@@ -229,6 +229,11 @@ var methods = {
             $sort: { likesLength: parseInt(filters.sortLikes) },
           });
         }
+        if (filters.sortPrice) {
+          aggregateQuery.push({
+            $sort: {"sellOffers.0.xrpValue": parseInt(filters.sortPrice)} },
+          )
+        }
         if (filters.filterExtras == "Verified") {
           aggregateQuery.push({
             $match: { "verified.status": true },

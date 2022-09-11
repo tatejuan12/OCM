@@ -209,6 +209,7 @@ server.get("/explore", speedLimiter, async (req, res) => {
 
   const filter = {
     sortLikes: req.query.sortLikes,
+    sortPrice: req.query.sortPrice,
     filterExtras: req.query.filterExtras,
     filterBrands: req.query.filterBrands,
     filterFamilies: req.query.filterFamilies,
