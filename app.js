@@ -671,7 +671,7 @@ server.post("/list-nft-payload", async (req, res, next) => {
     const payload = await xumm.payloads.listNftPayload(
       process.env.XRPL_ISSUER_PAYMENT_ADDRESS,
       req.session.wallet,
-      req.body.fee,
+      process.env.LISTING_PRICE,
       req.useragent.isMobile,
       req.body.return_url
     );

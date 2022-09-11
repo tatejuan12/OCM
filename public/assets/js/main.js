@@ -979,7 +979,7 @@ function decrementLike(nftId, DOM) {
   });
 }
 
-function getListNft(fee) {
+function getListNft() {
   const NFTokenID = $("#tokenID").val();
   const issuer = $("#issuer").val();
   $.ajax({
@@ -987,7 +987,6 @@ function getListNft(fee) {
     url: "/list-nft-payload",
     data: {
       return_url: window.location.href,
-      fee: fee,
       NFTokenID: NFTokenID,
       issuer: issuer,
     },
