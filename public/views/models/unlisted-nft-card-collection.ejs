@@ -18,7 +18,12 @@
         <%} else {%>
           <img src="<%= nft.httpsImage%> " alt="unlisted NFT image" draggable="false" loading="lazy">
         <%};%>
-      <a class="btn btn-primary nft-list-btn" onclick='populateListNft( {"NFTokenID": "<%=nft.tokenID%>" , "issuer" : "<%=nft.issuer%>" , "taxon" : "<%=nft.taxon%>" , "currentHolder" : "<%=nft.currentOwner%>", "image":"<%=nft.httpsImage%>" })'>List NFT</a>
+        <%console.log(login)%>
+        <%if (login) {%>
+          <a class="btn btn-primary nft-list-btn" onclick='populateListNft( {"NFTokenID": "<%=nft.tokenID%>" , "issuer" : "<%=nft.issuer%>" , "taxon" : "<%=nft.taxon%>" , "currentHolder" : "<%=nft.currentOwner%>", "image":"<%=nft.httpsImage%>" })'>List NFT</a>
+        <%} else {%>
+          <a class="btn btn-primary nft-list-btn" onclick="customAlert.alert('Connect Wallet to List Item')">List NFT</a>
+        <%}%>
     </div>
     <div class="product-share-wrapper">
       <div class="share-btn share-btn-activation dropdown">

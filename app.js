@@ -287,6 +287,11 @@ server.get("/collection", speedLimiter, async (req, res) => {
     if (wallet !== collectionDetails.issuer) {
       await mongoClient.query.incrementViewCollection(collectionName);
     }
+    if (req.session.wallet != undefined) {
+      var login = true;
+    } else {
+      var login = false;
+    }
     defaultLocals(req, res);
     res.render("views/collection", {
       nfts: nfts,
@@ -297,6 +302,7 @@ server.get("/collection", speedLimiter, async (req, res) => {
       floor: floorPrice,
       items: items,
       wallet: wallet,
+      login: login,
     });
   } else res.redirect("collection?page=0");
 });
