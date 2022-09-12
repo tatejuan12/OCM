@@ -1004,7 +1004,7 @@ function getListNft() {
     },
   });
 }
-function getListNftCollection(fee) {
+function getListNftCollection() {
   const NFTokenID = $("#tokenID").val();
   const issuer = $("#issuer").val();
   const holder = $("#currentHolder").val();
@@ -1013,7 +1013,6 @@ function getListNftCollection(fee) {
     url: "/list-nft-payload-collection",
     data: {
       return_url: window.location.href,
-      fee: fee,
       NFTokenID: NFTokenID,
       issuer: issuer,
       holder: holder,
