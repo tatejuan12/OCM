@@ -189,13 +189,12 @@
     var markerIterationUnlisted = 0;
     var markerUnlisted = '<%=marker%>';
     $("#moreUnlistedNftsLoad").click(function() {
-      $.get(
-        `<%=url%>/get-additional-unlisted-nfts?wallet=<%=user.wallet%>&marker=${markerUnlisted}&markerIteration=${markerIterationUnlisted}`,
-        function(data) {
+      $.get(`<%=url%>/get-additional-unlisted-nfts?wallet=<%=user.wallet%>&marker=${markerUnlisted}&markerIteration=${markerIterationUnlisted}`,
+        function(returnData) {
           markerIterationUnlisted++;
           var updateNfts = [];
-          $("#exploreSectionUnlisted").append(data[0])
-          markerUnlisted = data[1]
+          $("#pane-unlisted-nfts").append(returnData[0])
+          markerUnlisted = returnData[1]
           const cardsUnlisted = document.getElementById("exploreSectionUnlisted").querySelectorAll(".col-5");
           cardsUnlisted.forEach(element => {
             element.classList.add("sal-animate")

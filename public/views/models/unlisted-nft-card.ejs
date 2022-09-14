@@ -5,6 +5,7 @@
 <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12 nft-card-wrap">
   <div class="product-style-one no-overlay with-placeBid">
     <div class="card-thumbnail">
+      <%console.log(nft)%>
       <%var imageExt = new Set(['jpg', 'jpeg', 'png', 'gif', '']); var vidExt = new Set(['mp4', 'ogg', 'webm']);%>
       <%if (nft.http_image == undefined && imageExt.has(nft.substring(nft.lastIndexOf('.') + 1))) {%>
           <img src="<%= nft%> " alt="unlisted NFT image" draggable="false" loading="lazy">

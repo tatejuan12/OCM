@@ -827,13 +827,16 @@ server.get("/get-additional-unlisted-nfts", speedLimiter, async (req, res) => {
       marker
     );
     var updateNfts = [];
-    for (var i = markerIteration * NFTSPERPAGE; i < nfts.length; i++) {
-      updateNfts.push(nfts[i]);
+    for (var i = markerIteration * NFTSPERPAGE; i < xrplNfts.length; i++) {
+      updateNfts.push(xrplNfts[i]);
+      var rawData = xrplNfts[i];
     }
     res.render(
-      "views/models/nft-rows-load.ejs",
+      "views/models/unlisted-nft-rows.ejs",
       {
-        nfts: nfts,
+        nfts: xrplNfts,
+        wallet: wallet,
+        rawData: rawData,
       },
       async function (err, html) {
         if (err) throw "Couldn't get NFTS\n" + err;
