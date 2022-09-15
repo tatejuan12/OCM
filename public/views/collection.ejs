@@ -56,19 +56,19 @@
               <div class="rn-author-info-content">
                 <h4 class="title nus"> <%= collectionDetails.name %> </h4>
                 <div class="follow-area">
-                   <div class="follow followers">
+                  <div class="follow followers">
                     <span><%=items%> <a class="color-body">Items</a></span>
                   </div>
                   <div class="follow following">
                     <span><%=floor%> XRP <a class="color-body">Floor Price</a></span>
                   </div>
-              </div>
+                </div>
                 <%if (wallet == collectionDetails.issuer) {%>
-                  <div>
-                    <div class="follow following">
-                      <span><a class="color-body">collection Views: </a><%=collectionDetails.views%></span>
-                    </div>
+                <div>
+                  <div class="follow following">
+                    <span><a class="color-body">collection Views: </a><%=collectionDetails.views%></span>
                   </div>
+                </div>
                 <%}%>
               </div>
               </div>
@@ -94,86 +94,86 @@
       <div class="container"> 
         <div class="row g-5 mt_dec--30">
             <%- include ("models/nft-rows.ejs", {nfts: nfts}) %>
-        </div>     
-      </div>
-    </div>
-  </div>
-  <div id="pane-unlisted-nfts" class="tab-pane fade" aria-labelledby="nav-unlisted-tab" role="tabpanel">
-    <div class="rn-product-area rn-section-gapTop">
-      <div class="container"> 
-        <div class="row g-5 mt_dec--30">
-            <%- include ("models/unlisted-collection-nft-rows.ejs", {unlistedNfts: unlistedNfts, login: login}) %>
-        </div>     
-      </div>
-    </div>
-  </div>
-  <!-- Modal require -->
-  <%- include('sections/popup-modal.ejs') -%>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="pane-unlisted-nfts" class="tab-pane fade" aria-labelledby="nav-unlisted-tab" role="tabpanel">
+          <div class="rn-product-area rn-section-gapTop">
+            <div class="container">
+              <div class="row g-5 mt_dec--30">
+                <%- include ("models/unlisted-collection-nft-rows.ejs", {unlistedNfts: unlistedNfts, login: login}) %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Modal require -->
+        <%- include('sections/popup-modal.ejs') -%>
 
 
 
-  <%- include('sections/footer.ejs') -%>
+        <%- include('sections/footer.ejs') -%>
 
-  <!-- Start Top To Bottom Area  -->
-  <div class="rn-progress-parent">
-    <svg class="rn-back-circle svg-inner" width="100%" height="100%" viewBox="-1 -1 102 102">
-      <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
-    </svg>
-  </div>
-  <!-- End Top To Bottom Area  -->
-  <!-- JS ============================================ -->
-  <script src="assets/js/vendor/jquery.js"></script>
-  <script src="assets/js/vendor/jquery.nice-select.min.js"></script>
-  <script src="assets/js/vendor/jquery-ui.js"></script>
-  <script src="assets/js/vendor/modernizer.min.js"></script>
-  <script src="assets/js/vendor/feather.min.js"></script>
-  <script src="assets/js/vendor/slick.min.js"></script>
-  <script src="assets/js/vendor/bootstrap.min.js"></script>
-  <script src="assets/js/vendor/sal.min.js"></script>
-  <script src="assets/js/vendor/waypoint.js"></script>
-  <script src="assets/js/vendor/wow.js"></script>
-  <script src="assets/js/vendor/particles.js"></script>
-  <script src="assets/js/vendor/jquery.style.swicher.js"></script>
-  <script src="assets/js/vendor/js.cookie.js"></script>
-  <script src="assets/js/vendor/count-down.js"></script>
-  <script src="assets/js/vendor/counter-up.js"></script>
-  <script src="assets/js/vendor/isotop.js"></script>
-  <script src="assets/js/vendor/imageloaded.js"></script>
-  <script src="assets/js/vendor/backtoTop.js"></script>
-  <script src="assets/js/vendor/scrolltrigger.js"></script>
-  <script src="assets/js/vendor/jquery.custom-file-input.js"></script>
-  <script src="assets/js/vendor/savePopup.js"></script>
-  <script src="assets/js/vendor/jquery.endless-scroll.js"></script>
-  <!-- main JS -->
-  <script src="assets/js/main.js"></script>
-  <script>
-    var iteration = 1;
-    var marker = 1;
-    $('#fetchCollection').on('click', function () {
-      
-    });
-    $(window).data('getReady', true).scroll(function(e) {
-      if ($(window).data('getReady') == false) return;
+        <!-- Start Top To Bottom Area  -->
+        <div class="rn-progress-parent">
+          <svg class="rn-back-circle svg-inner" width="100%" height="100%" viewBox="-1 -1 102 102">
+            <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
+          </svg>
+        </div>
+        <!-- End Top To Bottom Area  -->
+        <!-- JS ============================================ -->
+        <script src="assets/js/vendor/jquery.js"></script>
+        <script src="assets/js/vendor/jquery.nice-select.min.js"></script>
+        <script src="assets/js/vendor/jquery-ui.js"></script>
+        <script src="assets/js/vendor/modernizer.min.js"></script>
+        <script src="assets/js/vendor/feather.min.js"></script>
+        <script src="assets/js/vendor/slick.min.js"></script>
+        <script src="assets/js/vendor/bootstrap.min.js"></script>
+        <script src="assets/js/vendor/sal.min.js"></script>
+        <script src="assets/js/vendor/waypoint.js"></script>
+        <script src="assets/js/vendor/wow.js"></script>
+        <script src="assets/js/vendor/particles.js"></script>
+        <script src="assets/js/vendor/jquery.style.swicher.js"></script>
+        <script src="assets/js/vendor/js.cookie.js"></script>
+        <script src="assets/js/vendor/count-down.js"></script>
+        <script src="assets/js/vendor/counter-up.js"></script>
+        <script src="assets/js/vendor/isotop.js"></script>
+        <script src="assets/js/vendor/imageloaded.js"></script>
+        <script src="assets/js/vendor/backtoTop.js"></script>
+        <script src="assets/js/vendor/scrolltrigger.js"></script>
+        <script src="assets/js/vendor/jquery.custom-file-input.js"></script>
+        <script src="assets/js/vendor/savePopup.js"></script>
+        <script src="assets/js/vendor/jquery.endless-scroll.js"></script>
+        <!-- main JS -->
+        <script src="assets/js/main.js"></script>
+        <script>
+          var iteration = 1;
+          var marker = 1;
+          $('#fetchCollection').on('click', function() {
 
-      if ($(document).height() - $(this).height() - 2000 < $(this).scrollTop()) {
-        $(window).data('getReady', false);
-        $.get(`<%=url%>/get-additional-collection-nfts?name=<%=collectionDetails.name%>&issuer=<%=collectionDetails.issuer%>&marker=${marker}&markerIteration=${iteration}`,
-         function(data) {
-           iteration++;
-           var updateNfts = [];
-           $("#exploreSection").append(data[0])
-           marker = data[1]
-           const cardsUnlisted = document.getElementById("exploreSection").querySelectorAll(".col-5");
-           cardsUnlisted.forEach(element => {
-             element.classList.add("sal-animate")
-           });
-           $(window).data('getReady', true);
-         }
-        )
+          });
+          $(window).data('getReady', true).scroll(function(e) {
+            if ($(window).data('getReady') == false) return;
 
-      }
-    })
-  </script>
+            if (($(".row.g-5").offset().top + $(".row.g-5").height() - $(window).height()) < $(this).scrollTop()) {
+              $(window).data('getReady', false);
+              $.get(`<%=url%>/get-additional-collection-nfts?name=<%=collectionDetails.name%>&issuer=<%=collectionDetails.issuer%>&marker=${marker}&markerIteration=${iteration}`,
+                function(data) {
+                  iteration++;
+                  var updateNfts = [];
+                  $("#exploreSection").append(data[0])
+                  marker = data[1]
+                  const cardsUnlisted = document.getElementById("exploreSection").querySelectorAll(".col-5");
+                  cardsUnlisted.forEach(element => {
+                    element.classList.add("sal-animate")
+                  });
+                  $(window).data('getReady', true);
+                }
+              )
+
+            }
+          })
+        </script>
 </body>
 
 </html>

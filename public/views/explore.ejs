@@ -119,7 +119,7 @@
                   </div>
                   <div class="price__output--wrap">
                     <div class="price--filter">
-                      
+
                     </div>
                   </div>
                 </div>
@@ -173,29 +173,36 @@
   <script src="assets/js/vendor/jquery.custom-file-input.js"></script>
   <script src="assets/js/vendor/savePopup.js"></script>
   <!-- main JS -->
-  <script src="assets/js/main.js"></script> 
-  <script> 
+  <script src="assets/js/main.js"></script>
+  <script>
+    var iteration = 1;
     var filterOptions = <%- JSON.stringify(filterOptions) %>;
-    $('#filter-brands').change(function () {
+    $('#filter-brands').change(function() {
       var val = $('#filter-brands').val();
       $('#filter-family').empty();
       $('#filter-collection').empty();
-      for (var i = 0; i < filterOptions.length; i ++) {
+      for (var i = 0; i < filterOptions.length; i++) {
         if (val == filterOptions[i].issuers) {
           $('#filter-family').append(`<option data-display="Select Family" value='' selected disabled>Select Family</option>`);
           $('#filter-collection').append(`<option data-display="Select Collection" value='' selected disabled>Select Collection</option>`);
-          for (var fam = 0; fam < filterOptions[i].familyFilters.length; fam ++) {
+          for (var fam = 0; fam < filterOptions[i].familyFilters.length; fam++) {
             $('#filter-family').append(`<option value="${filterOptions[i].familyFilters[fam]}">${filterOptions[i].familyFilters[fam]}</option>`);
           }
-          for (var col = 0; col < filterOptions[i].nameFilters.length; col ++) {
+          for (var col = 0; col < filterOptions[i].nameFilters.length; col++) {
             $('#filter-collection').append(`<option value="${filterOptions[i].nameFilters[col]}">${filterOptions[i].nameFilters[col]}</option>`);
           }
         }
       }
-        $('select').niceSelect('destroy');
-        $('select').niceSelect();
-      });
+      $('select').niceSelect('destroy');
+      $('select').niceSelect();
+    });
+
     function handleFilterSort() {
+      var url = urlFilterConstructor();
+      return url;
+    }
+
+    function urlFilterConstructor() {
       const jsonFilterSort = {
         sortLikes: document.getElementById("sort-likes").value,
         sortPrice: document.getElementById("sort-price").value,
@@ -206,7 +213,7 @@
         filterPriceMin: document.getElementById("filter-price-min").value,
         filterPriceMax: document.getElementById("filter-price-max").value
       }
-      var url = `?page=<%=page%>`;
+      var url = `?markerIteration=${iteration}`;
       if (jsonFilterSort.sortLikes)
         url += `&sortLikes=${jsonFilterSort.sortLikes}`;
       if (jsonFilterSort.sortPrice)
@@ -223,8 +230,27 @@
         url += `&filterPriceMin=${jsonFilterSort.filterPriceMin}`;
       if (jsonFilterSort.filterPriceMax)
         url += `&filterPriceMax=${jsonFilterSort.filterPriceMax}`;
-      window.location.search = url;
+      return url;
     }
+    $(window).data('getReady', true).scroll(function(e) {
+      if ($(window).data('getReady') == false) return;
+      if (($(".row.g-5").offset().top + $(".row.g-5").height() - $(window).height()) < $(this).scrollTop()) {
+        $(window).data('getReady', false);
+
+        $.get(`<%=url%>/get-additional-explore-nfts${urlFilterConstructor()}`,
+          function(data) {
+            iteration++;
+            $("#exploreSection").append(data)
+            const cardsUnlisted = document.getElementById("exploreSection").querySelectorAll(".col-5");
+            cardsUnlisted.forEach(element => {
+              element.classList.add("sal-animate")
+            });
+            $(window).data('getReady', true);
+          }
+        )
+
+      }
+    })
   </script>
 
 </html>
