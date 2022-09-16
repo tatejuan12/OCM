@@ -27,6 +27,7 @@ const csurf = require("csurf");
 const helmet = require("helmet");
 const minifyHtml = require("express-minify-html");
 const slowDown = require("express-slow-down");
+const { send } = require("express/lib/response");
 const mongoStore = new MongoDBStore({
   uri: process.env.MONGO_URI,
   databaseName: "Sessions",
@@ -264,8 +265,18 @@ server.get("/collection", speedLimiter, async (req, res) => {
   if (!isNaN(page)) {
     const collectionName = req.query.name;
     const issuer = req.query.issuer;
-    const nfts = await mongoClient.query.getNftsByCollection(collectionName, issuer, NFTSPERPAGE, page);
-    const unlistedNfts = await mongoClient.query.getUnlistedCollectionNfts(collectionName, issuer, NFTSPERPAGE, page)
+    const nfts = await mongoClient.query.getNftsByCollection(
+      collectionName,
+      issuer,
+      NFTSPERPAGE,
+      page
+    );
+    const unlistedNfts = await mongoClient.query.getUnlistedCollectionNfts(
+      collectionName,
+      issuer,
+      NFTSPERPAGE,
+      page
+    );
     const collectionDetails = await mongoClient.query.getNftsCollection(
       collectionName,
       issuer
@@ -730,7 +741,7 @@ server.post("/list-nft-subscription", async (req, res, next) => {
 server.post("/list-nft-subscription-collection", async (req, res, next) => {
   const result = await xumm.subscriptions.listNftSubscription(req, res);
   var permanent = false;
-  var currentWallet = req.session.wallet
+  var currentWallet = req.session.wallet;
   if (req.body.fee == "1") permanent = true;
   if (result) {
     mongoClient.query.addNftToQueried(
@@ -738,7 +749,7 @@ server.post("/list-nft-subscription-collection", async (req, res, next) => {
       req.body.holder,
       permanent,
       req.body.issuer,
-      currentWallet,
+      currentWallet
     );
   }
 });
@@ -883,6 +894,36 @@ server.get(
       );
       res.send(returnData);
     } else res.sendStatus(400);
+  }
+);
+server.get(
+  "/get-additional-explore-nfts",
+  speedLimiter,
+  async (req, res, next) => {
+    const markerIteration = req.query.markerIteration;
+    const filter = {
+      sortLikes: req.query.sortLikes,
+      sortPrice: req.query.sortPrice,
+      filterExtras: req.query.filterExtras,
+      filterBrands: req.query.filterBrands,
+      filterFamilies: req.query.filterFamilies,
+      filterCollections: req.query.filterCollections,
+      filterPriceMin: req.query.filterPriceMin,
+      filterPriceMax: req.query.filterPriceMax,
+    };
+    if (parseInt(filter.filterPriceMin) > parseInt(filter.filterPriceMax)) {
+      filter.filterPriceMax = undefined;
+      filter.filterPriceMin = undefined;
+    }
+    if (!isNaN(markerIteration)) {
+      promiseNfts = new Promise(function (resolve, reject) {
+        resolve(
+          mongoClient.query.getNfts(NFTSPERPAGE, markerIteration, filter)
+        );
+      });
+      res.render("views/models/nft-rows-load", { nfts: await promiseNfts });
+    }
+    res.status(400).send();
   }
 );
 server.get("/get-token-balance", speedLimiter, async (req, res) => {

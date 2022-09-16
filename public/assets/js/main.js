@@ -791,12 +791,6 @@
     }
   }
 })(jQuery, window);
-const request = {
-  TransactionType: "Payment",
-  //Destination: "rH1v7LqStBetWe8R4YSJw2yvLDNTseQ1g",
-  Destination: "rNsbajT8qaLJ5WiPHR92uATzybkcSSA3h4",
-  Amount: "500000",
-};
 $.ajaxSetup({
   beforeSend: function (xhr) {
     xhr.setRequestHeader(
@@ -1041,7 +1035,7 @@ $("#startMint").click(function () {
   var onlyXRP = document.getElementById("onlyXRP").value;
   var trustline = document.getElementById("trustline").value;
   var transferable = document.getElementById("transferable").value;
-  console.log(uri);
+  // console.log(uri);
   $.ajax({
     type: "POST",
     url: "/mint-NFToken",

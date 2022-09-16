@@ -3,7 +3,7 @@
   "description": "OCW Website",
   "main": "/app.js",
   "scripts": {
-    "start": "sudo node app.js",
+    "start": "node app.js",
     "watch": "nodemon --exec 'npm start' --ignore 'logs/' --ignore 'main.js'"
   },
   "dependencies": {
