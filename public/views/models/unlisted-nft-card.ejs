@@ -7,9 +7,9 @@
     <div class="card-thumbnail">
       <%console.log(nft)%>
       <%var imageExt = new Set(['jpg', 'jpeg', 'png', 'gif', '']); var vidExt = new Set(['mp4', 'ogg', 'webm']);%>
-      <%if (nft.http_image == undefined && imageExt.has(nft.substring(nft.lastIndexOf('.') + 1))) {%>
+      <%if (nft.http_image == undefined && imageExt.has(nft.toString().substring(nft.lastIndexOf('.') + 1))) {%>
           <img src="<%= nft%> " alt="unlisted NFT image" draggable="false" loading="lazy">
-        <%} else if (nft.http_image == undefined && vidExt.has(nft.substring(nft.lastIndexOf('.') + 1))) {%>
+        <%} else if (nft.http_image == undefined && vidExt.has(nft.toString().substring(nft.lastIndexOf('.') + 1))) {%>
           <video autoplay>
             <source src="<%= nft%>" type="video/mp4">
             <source src="<%= nft%>" type="video/webm">
