@@ -6,7 +6,11 @@
     </div>
     <div class="offers-content">
       <% if (isOwner === false){%>
+        <%if (sellOffers.destination == undefined || sellOffers.destination == wallet) {%>
         <button class="btn btn-primary" onclick="NFTokenAcceptSellOffer('<%=sellOffers.index%>', '<%=NFToken%>')">Accept Offer</button>
+        <%} else if (sellOffers.destination !== wallet) {%>
+          <button class="btn btn-primary" disabled>Not Destination</button>
+        <%}%>
       <%}%>
     </div>
   </div>
