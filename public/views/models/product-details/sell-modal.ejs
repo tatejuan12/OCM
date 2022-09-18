@@ -20,13 +20,15 @@
                   <input id="destination" type="text" name="value">
                   <span>Destination</span>
                 </div>
-                <div class="expiry-select-option">
-                  <select id="expiry-time">
-                    <option data-display="Select Expiry" value='' selected disabled>Select Expiry</option>
-                    <option value="<%= new Date(Date.now() + 1 * 24 * 60 * 60 * 1000) %>">1 Day</option>
-                    <option value="<%= new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) %>">7 Days</option>
-                    <option value="<%= new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) %>">30 Days</option>
-                  </select>
+                <div class="bid-content-mid" id="formData">
+                  <div class="expiry-select-option">
+                    <select id="expiry-time">
+                      <option data-display="Select Expiry" value='' selected disabled>Select Expiry</option>
+                      <option value="<%= new Date(Date.now() + 1 * 24 * 60 * 60 * 1000) %>">1 Day</option>
+                      <option value="<%= new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) %>">7 Days</option>
+                      <option value="<%= new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) %>">30 Days</option>
+                    </select>
+                  </div>
                 </div>
               </div>
             </div>
