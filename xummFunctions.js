@@ -14,12 +14,14 @@ var payloads = {
   NFTokenCreateOffer: async function (
     NFToken,
     value,
+    destination,
+    expiry,
     mobile,
     return_url,
     flags
   ) {
     const nftOwner = await xrpls.getcurrentNftHolder(NFToken);
-    console.log(value);
+    console.log(expiry);
     try {
       value = parseFloat(value);
       value = value * 1000000;
@@ -61,10 +63,16 @@ var payloads = {
         txjson: {
           TransactionType: "NFTokenCreateOffer",
           NFTokenID: NFToken,
+          Expiration: expiry,
+          Destination: destination,
           Amount: value,
           Flags: 1,
         },
+        custom_meta: {
+          Instruction: `Sign this transaction to make a sell offer of ${value} on TokenID - ${NFToken}`
+        }
       };
+      console.log(request)
       if (mobile)
         request.options["return_url"] = {
           app: return_url,
@@ -75,6 +83,7 @@ var payloads = {
         };
 
       const payload = await getPayload(request);
+      console.log(payload)
       return payload;
     }
   },

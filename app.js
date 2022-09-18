@@ -515,11 +515,15 @@ server.post("/payload", speedLimiter, async (req, res) => {
 server.post("/nftoken-create-offer", speedLimiter, async (req, res) => {
   const NFToken = req.body.NFToken;
   const value = req.body.value;
+  const destination = req.body.destination;
+  const expiry = req.body.expiry;
   const flags = req.body.flags;
-  console.log(flags);
+  var parseExp = parseInt(expiry);
   const payload = await xumm.payloads.NFTokenCreateOffer(
     NFToken,
     value,
+    destination,
+    parseExp,
     req.useragent.isMobile,
     req.body.return_url,
     flags
