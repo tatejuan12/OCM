@@ -220,6 +220,12 @@
                         </div>
                       </div>
                       <%}%>
+                      <% if (nft.stakable.status) {%>
+                        <div class="top-seller-inner-one">
+                          <h6 class="name-title">Staking Weight</h6>
+                          <p><%=nft.stakable.value%></p>
+                        </div>
+                      <%}%>
                       <div class="top-seller-inner-one">
                         <h6 class="name-title">Owner</h6>
                         <div class="top-seller-wrapper">
