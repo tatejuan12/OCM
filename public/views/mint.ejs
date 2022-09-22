@@ -146,7 +146,7 @@
                 </div>
                 <div class="pb--20">
                   <label for="transfer-fee">Transfer Fee:</label>
-                  <input type="number" id="transfer-fee" placeholder="0% - 50%" max="50">
+                  <input type="number" id="transfer-fee" placeholder="0 - 50" min="0" max="50">
                 </div>
                 <div class="col-md-4 col-sm-4">
                   <div class="input-box pb--20 rn-check-box">
@@ -248,36 +248,50 @@
     function attributeRemove(element) {
       $(element).closest('div').remove()
     }
+
+
     const loggedIn = <%- JSON.stringify(wallet) %>
+
     function submitMintingInformation() {
-      var attributesObj = [];
+      var formData = new FormData();
       const time = new Date().getTime();
+
+      var attributesObj = [];      
       for (var a = 0; a < $('#propertiesContent .properties-content-main').length; a++) {
         attributesObj[a] = {
           "trait_type": $(`.attribute-name:eq(${a})`).val(),
           "value": $(`.attribute-value:eq(${a})`).val()
         }
       };
+
       const imageName = document.getElementById("name").value.replace(" ", "-");
       const extension = "https://ocw-space.sgp1.digitaloceanspaces.com/nft-images/";
+
       const jsonData = {
         name: document.getElementById("name").value,
         description: document.getElementById("description").value,
         image: extension + loggedIn + time + ".png",
-        collection: document.getElementById("collection-name").value,
+        collection: {
+          name: document.getElementById("collection-name").value,
+        },
         externalUrl: document.getElementById("externalUrl").value,
         attributes: attributesObj,
       }
+      
       const fileName = loggedIn + time;
       const image = document.getElementById("createinputfile").files[0];
       const taxon = $('#taxon-value').val();
       const transferFee = $('#transfer-fee').val();
+      const jsonLink = "https://ocw-space.sgp1.digitaloceanspaces.com/nft-jsons/"+loggedIn+time+".json";
+      formData.append("image", document.getElementById("createinputfile").files[0])
+
       var burnable = document.getElementById("burnable").checked;
       var transferable = document.getElementById("transferable").checked;
       var onlyXRP = document.getElementById("only-xrp").checked;
       var trustline = document.getElementById("trustline").checked;
-      const jsonLink = "https://ocw-space.sgp1.digitaloceanspaces.com/nft-jsons/"+loggedIn+time+".json";
+
       const returnUrl = window.location.href;
+
       $.ajax({
       type: "POST",
       url: "/mint-no-IPFS-payload",
@@ -285,7 +299,6 @@
         returnUrl: returnUrl,
         fileName: fileName,
         jsonData: jsonData,
-        image: image,
         taxon: taxon,
         transferFee: transferFee,
         burnable: burnable,
@@ -294,14 +307,24 @@
         trustline: trustline,
         jsonLink: jsonLink,
       },
-      success: function(resulty) {
-        window.location.href = result.payload.next.always,
+      success: function(result) {
+        console.log(result)
         $.ajax({
           type: "POST",
           url: "/mint-no-IPFS-subscription",
           data: result,
+          
+          success: function(image, jsonData) {
+            $.ajax({
+              type:"POST",
+              url: "/upload-nft-items",
+              data: {
+                image: image,
+                json: jsonData
+              }
+            })
+          }
         })
-        customAlert.alert('NFT successfully minted and listed');
       },
       error: function(resulty) {
         customAlert.alert('Error minting NFT')

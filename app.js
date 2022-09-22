@@ -632,13 +632,14 @@ server.post("/mint-no-IPFS-payload", speedLimiter, async (req, res) => {
   const jsonData = dataBody.jsonData;
   const image = dataBody.image;
   const fileName = dataBody.fileName;
+  const return_url = dataBody.returnUrl
   if (req.session.login) {
     const payload = await xumm.payloads.mintNftPayload(
       process.env.XRPL_ISSUER_PAYMENT_ADDRESS,
       req.session.wallet,
       process.env.MINTING_PRICE,
       req.useragent.isMobile,
-      req.body.return_url
+      return_url,
     );
     console.log(payload);
     const response = {
@@ -650,6 +651,7 @@ server.post("/mint-no-IPFS-payload", speedLimiter, async (req, res) => {
       image: image,
       fileName: fileName,
     };
+    console.log(response)
     res.send(response);
   } else res.sendStatus(400);
 })
