@@ -24575,3 +24575,6 @@ Collection nav
     max-width: 90%;
   }
 }
+.card{
+  background-color: var(--background-color-1);
+}

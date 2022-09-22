@@ -28,6 +28,27 @@ const upload = multer({
 }).single("upload");
 
 var methods = {
+  uploadNFTImage: async function (req, img, epoch) {
+    var result = false;
+    const param = {
+      Bucket: "ocw-space/nft-images",
+      Key: req.session.wallet + epoch + ".png",
+      Body: img.buffer,
+      ACL: "public-read",
+    }
+    const uploadPromise = new Promise(function (resolve, reject) {
+      s3.upload(param, function (err, data) {
+        if (err) reject(err);
+        else resolve(true);
+      });
+    });
+
+    result = await uploadPromise.catch((er) => {
+      console.log(err);
+      return false;
+    });
+    return result;
+  },
   uploadProfile: async function (req, img) {
     var result = false;
     const param = {

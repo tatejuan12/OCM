@@ -356,6 +356,10 @@ server.get("/metadata", speedLimiter, (req, res) => {
   defaultLocals(req, res);
   res.render("views/metadata");
 });
+server.get("/mint", speedLimiter, (req, res) => {
+  defaultLocals(req, res);
+  res.render("views/mint");
+});
 server.get("/minting-help", speedLimiter, (req, res) => {
   defaultLocals(req, res);
   res.render("views/minting-help");
@@ -440,7 +444,10 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
 });
 server.get("/mint", speedLimiter, (req, res) => {
   defaultLocals(req, res);
-  res.render("views/mint");
+  const wallet = req.session.wallet;
+  res.render("views/mint", {
+    wallet: wallet,
+  });
 });
 server.get("/search", speedLimiter, async (req, res) => {
   defaultLocals(req, res);
@@ -619,6 +626,48 @@ server.post("/decrement-like", speedLimiter, async (req, res) => {
     });
   } else success = false;
   success ? res.status(200).end() : res.status(406).end();
+});
+server.post("/mint-no-IPFS-payload", speedLimiter, async (req, res) => {
+  const dataBody = req.body;
+  const jsonData = dataBody.jsonData;
+  const image = dataBody.image;
+  const fileName = dataBody.fileName;
+  if (req.session.login) {
+    const payload = await xumm.payloads.mintNftPayload(
+      process.env.XRPL_ISSUER_PAYMENT_ADDRESS,
+      req.session.wallet,
+      process.env.MINTING_PRICE,
+      req.useragent.isMobile,
+      req.body.return_url
+    );
+    console.log(payload);
+    const response = {
+      payload: payload,
+      NFTokenID: req.body.NFTokenID,
+      issuer: req.body.issuer,
+      fee: req.body.fee,
+      jsonData: jsonData,
+      image: image,
+      fileName: fileName,
+    };
+    res.send(response);
+  } else res.sendStatus(400);
+})
+server.post("/mint-no-IPFS-subscription", 
+  upload.fields([{ name: "image", maxCount: 1 }]),
+  speedLimiter,
+  async (req, res) => {
+    const dataBody = req.body;
+    const jsonData = dataBody.jsonData;
+    const image = dataBody.image;
+    const fileName = dataBody.fileName;
+    //if (dataBody) {
+    //  if (image) {
+    //    if (
+    //      (result = await xumm.payloads.mintObject())
+    //    )
+    //  }
+    //}
 });
 server.post(
   "/update-user",

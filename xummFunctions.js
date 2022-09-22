@@ -346,6 +346,37 @@ var payloads = {
     const payload = await getPayload(request);
     return payload;
   },
+  mintNftPayload: async function (
+    address,
+    ownAddress,
+    fee,
+    mobile,
+    return_url
+  ) {
+    const paymentAmount = (fee * 1000000).toString();
+    const request = {
+      options: {
+        submit: true,
+        expire: 240,
+      },
+      txjson: {
+        TransactionType: "Payment",
+        Account: ownAddress,
+        Destination: address,
+        Amount: paymentAmount,
+      },
+    };
+    if (mobile)
+      request.options["return_url"] = {
+        app: return_url,
+      };
+    else
+      request.options["return_url"] = {
+        web: return_url,
+      };
+    const payload = await getPayload(request);
+    return payload;
+  },
   mintObject: async function (uri, taxon, transferFee, memo, burnable, onlyXRP, trustline, transferable) {
       try {
         //CONDUCT CHECKS
