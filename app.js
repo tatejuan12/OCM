@@ -453,6 +453,10 @@ server.get("/search", speedLimiter, async (req, res) => {
     searchedItem: searchedItem,
   });
 });
+server.get("/create-collection", speedLimiter, async (req, res) => {
+  await defaultLocals(req, res);
+  res.render("views/create-collection");
+})
 
 //! ---------------------OCW API--------------------------------//
 server.post("/get-profile-info", speedLimiter, async (req, res, next) => {
@@ -1001,7 +1005,8 @@ function checkViews(req, next) {
   }
 }
 
-function defaultLocals(req, res) {
+async function defaultLocals (req, res) {
+  var isVerified = mongoClient.query.verified(wallet)
   try {
     var login =
       req.session.login != undefined && req.session ? req.session.login : false;
@@ -1017,10 +1022,12 @@ function defaultLocals(req, res) {
     res.locals.mobile = mobile;
     res.locals.url = process.env.SERVER_URL;
     res.locals.path = req.path;
+    res.locals.isVerified = isVerified;
     // console.log(res.locals.fulUrl);
     if (typeof req.csrfToken === "function") {
       res.locals.csrfToken = req.csrfToken();
     }
+    console.log(res.locals.csrfToken)
   } catch (err) {
     console.error("Error settings locals: " + err);
   } finally {

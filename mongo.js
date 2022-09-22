@@ -753,7 +753,7 @@ var methods = {
 
       let query = {};
 
-      const cursor = await collection.find();
+      const cursor = collection.find();
 
       return await cursor.toArray();
     } catch (err) {
@@ -936,6 +936,24 @@ var methods = {
   } finally {
       await client.close()
   }
+  },
+  verified: async function (wallet) {
+    var client = await getClient();
+    if (!client) return;
+    try {
+      const db = client.db("Additional-Traits");
+      let collection = db.collection("Verified-Issuers");
+      let query = {
+        issuingAccounts: wallet
+      }
+      const aggregate = await (collection.find(query).limit(1)).toArray();
+      const res = aggregate.length>0;
+      return res;
+    } catch (error) {
+      console.log(error)
+    } finally {
+        await client.close()
+    }
   },
 };
 

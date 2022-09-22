@@ -8007,7 +8007,8 @@ a:hover {
 .nice-select .option + .option {
   border-top: 1px solid var(--color-border);
 }
-.nice-select.open .list {
+.nice-select.open .list,
+.active-light-mode .collection-single-wized .create-collection-input input {
   background: var(--color-primary-alta);
 }
 .nice-select .current {
@@ -21857,6 +21858,16 @@ body.active-light-mode {
   .offer-wrapper {
   background-color: var(--color-white);
 }
+.active-light-mode .collection-single-wized .create-collection-input.logo-image .logo-c-image.logo label,
+.active-light-mode .collection-single-wized .create-collection-input.feature-image .logo-c-image.feature label,
+.active-light-mode .collection-single-wized .create-collection-input.banner-image .logo-c-image.banner label {
+  background: var(--color-primary);
+}
+.active-light-mode .collection-single-wized .create-collection-input.logo-image .logo-c-image.logo label:hover,
+.active-light-mode .collection-single-wized .create-collection-input.feature-image .logo-c-image.feature label:hover,
+.active-light-mode .collection-single-wized .create-collection-input.banner-image .logo-c-image.banner label:hover {
+  background: var(--color-primary-alta);
+}
 .active-light-mode h1,
 .active-light-mode h2,
 .active-light-mode h3,
@@ -21909,7 +21920,9 @@ body.active-light-mode {
 .active-light-mode .upload-variant-title-wrapper p span,
 .active-light-mode .rbt-single-widget.widget_recent_entries .inner a,
 .active-light-mode .upcoming-projects tr th span,
-.active-light-mode .change-pass-wrapper input {
+.active-light-mode .change-pass-wrapper input,
+.active-light-mode .collection-single-wized .create-collection-input textarea,
+.active-light-mode .collection-single-wized .create-collection-input .nice-select {
   color: var(--color-light-heading);
 }
 .active-light-mode
@@ -22130,7 +22143,10 @@ body.active-light-mode {
 }
 .active-light-mode .author-button-area .btn,
 .active-light-mode .author-button-area .at-follw,
-.active-light-mode .left-nav .nav.nav-tabs button {
+.active-light-mode .left-nav .nav.nav-tabs button,
+.active-light-mode .collection-single-wized .create-collection-input input,
+.active-light-mode .collection-single-wized .create-collection-input textarea,
+.active-light-mode .collection-single-wized .create-collection-input .nice-select {
   background: var(--color-gray-2);
   color: var(--color-light-heading);
 }
@@ -22251,6 +22267,210 @@ body.active-light-mode {
   .heighest-bid
   a {
   color: var(--color-white);
+}
+.create-collection-form-wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+  background: var(--background-color-1);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+}
+@media only screen and (max-width: 479px) {
+  .create-collection-form-wrapper {
+    padding: 10px;
+  }
+}
+.create-collection-form-wrapper .button-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+@media only screen and (max-width: 400px) {
+  .create-collection-form-wrapper .button-wrapper .btn:last-child {
+    margin-top: 15px;
+  }
+}
+
+.create-collection-form-wrapper .nuron-information .single-notice-setting .content-text p {
+  font-size: var(--font-size-b1);
+  font-weight: 500;
+}
+
+.creat-collection-area h2 {
+  margin-bottom: 50px;
+}
+
+.collection-single-wized {
+  margin-bottom: 30px;
+}
+.collection-single-wized.banner {
+  background: var(--background-color-1);
+  padding: 25px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border);
+}
+@media only screen and (max-width: 479px) {
+  .collection-single-wized.banner {
+    padding: 15px;
+  }
+}
+.collection-single-wized .title {
+  margin-bottom: 10px;
+}
+.collection-single-wized .title.required {
+  position: relative;
+  display: table;
+}
+.collection-single-wized .title.required::after {
+  position: absolute;
+  content: "*";
+  right: -13px;
+  top: 0;
+  color: var(--color-danger);
+  font-size: 16px;
+}
+.collection-single-wized span.sub {
+  margin-bottom: 10px;
+}
+.collection-single-wized .create-collection-input.logo-image .logo-c-image img {
+  border: 3px dashed var(--color-border);
+  object-fit: cover;
+  margin-top: 15px;
+  cursor: pointer;
+}
+.collection-single-wized .create-collection-input.logo-image .logo-c-image.logo {
+  position: relative;
+  display: inline-block;
+}
+.collection-single-wized .create-collection-input.logo-image .logo-c-image.logo label {
+  position: absolute;
+  cursor: pointer;
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  background: var(--background-color-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 19px;
+  right: 13px;
+  border: 1px solid var(--color-border);
+  transition: var(--transition);
+}
+.collection-single-wized .create-collection-input.logo-image .logo-c-image.logo label:hover {
+  background: var(--color-primary);
+}
+.collection-single-wized .create-collection-input .brows-file-wrapper input {
+  display: none;
+}
+.collection-single-wized .create-collection-input.feature-image .logo-c-image img {
+  object-fit: cover;
+  border: 3px dashed var(--color-border);
+  border-radius: 6px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+.collection-single-wized .create-collection-input.feature-image .logo-c-image.feature {
+  position: relative;
+  display: inline-block;
+}
+.collection-single-wized .create-collection-input.feature-image .logo-c-image.feature label {
+  position: absolute;
+  cursor: pointer;
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  background: var(--background-color-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 2px;
+  right: -10px;
+  border: 1px solid var(--color-border);
+  transition: var(--transition);
+}
+.collection-single-wized .create-collection-input.feature-image .logo-c-image.feature label:hover {
+  background: var(--color-primary);
+}
+.collection-single-wized .create-collection-input.banner-image .logo-c-image img {
+  width: 100%;
+  object-fit: cover;
+  border: 3px dashed var(--color-border);
+  border-radius: 6px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+.collection-single-wized .create-collection-input.banner-image .logo-c-image.banner {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+.collection-single-wized .create-collection-input.banner-image .logo-c-image.banner label {
+  position: absolute;
+  cursor: pointer;
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  background: var(--background-color-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: -1px;
+  right: -10px;
+  border: 1px solid var(--color-border);
+  transition: var(--transition);
+}
+.collection-single-wized .create-collection-input.banner-image .logo-c-image.banner label:hover {
+  background: var(--color-primary);
+}
+.collection-single-wized .create-collection-input input {
+  background: var(--background-color-4);
+  border-radius: 5px;
+  color: var(--color-white);
+  font-size: 14px;
+  padding: 10px 20px;
+  border: 2px solid var(--color-border);
+  transition: 0.3s;
+  margin-top: 15px;
+}
+.collection-single-wized .create-collection-input input:focus {
+  border: 2px solid var(--color-primary);
+}
+.collection-single-wized .create-collection-input input.name {
+  height: 50px;
+}
+.collection-single-wized .create-collection-input input.url {
+  height: 50px;
+}
+.collection-single-wized .create-collection-input textarea {
+  background: var(--background-color-4);
+  height: 210px;
+  border-radius: 5px;
+  color: var(--color-white);
+  font-size: 14px;
+  padding: 10px 20px;
+  border: 2px solid var(--color-border);
+  transition: var(--transition);
+  margin-top: 15px;
+}
+.collection-single-wized .create-collection-input .nice-select {
+  margin-top: 15px;
+  padding: 0px 32px 0 22px;
+  width: 100%;
+  background: var(--background-color-4);
+  border-radius: 5px;
+  color: var(--color-white);
+  border: 2px solid var(--color-border);
+  transition: var(--transition);
+  height: 50px;
+  line-height: 45px;
+}
+.collection-single-wized .create-collection-input .nice-select::after {
+  right: 18px;
+  top: 55%;
+}
+.collection-single-wized .create-collection-input .nice-select.open .list {
+  width: 100%;
 }
 .active-light-mode
   .place-bet-area.into-banner
@@ -24085,6 +24305,10 @@ body.active-light-mode {
 }
 .listButtons button:last-of-type {
   background-color: var(--color-primary-alta);
+}
+.active-light-mode .collection-single-wized .create-collection-input input:focus,
+.active-light-mode .collection-single-wized .create-collection-input textarea:focus {
+  border-color: var(--color-primary);
 }
 .LIInner {
   display: flex;
