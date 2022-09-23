@@ -68,12 +68,12 @@ var methods = {
 
       let collection = db.collection("Collections");
 
-      let query = { };
-      if (name) query.$set["name"] = name;
-      if (brand) query.$set["brand"] = brand;
-      if (url) query.$set["url"] = url;
-      if (issuer) query.$set["issuer"] = issuer;
-      if (description) query.$set["description"] = description;
+      let query = {};
+      if (name) query.name = name;
+      if (brand) query.brand = brand;
+      if (url) query.url = url;
+      if (issuer) query.issuer = issuer;
+      if (description) query.description = description;
 
       let res = await collection.insertOne(query);
 
