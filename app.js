@@ -152,6 +152,7 @@ server.get("/profile", speedLimiter, async (req, res) => {
     }
 
     defaultLocals(req, res);
+    var isVerified = await mongoClient.query.verified(wallet)
     const profile_pic = digitalOcean.functions.getProfileLink(wallet);
     nftsPromise = new Promise(function (resolve, reject) {
       const nfts = xumm.xrpl.getAccountsNfts(wallet, NFTSPERPAGE);
@@ -184,6 +185,7 @@ server.get("/profile", speedLimiter, async (req, res) => {
       promises[0][0]
     );
     res.render("views/profile", {
+      isVerified: isVerified,
       isOwner: isOwner,
       marker: marker,
       nfts: ownerNfts,
@@ -454,8 +456,11 @@ server.get("/search", speedLimiter, async (req, res) => {
   });
 });
 server.get("/create-collection", speedLimiter, async (req, res) => {
-  await defaultLocals(req, res);
-  res.render("views/create-collection");
+  var isVerified = await mongoClient.query.verified(req.query.wallet)
+  if (isVerified) {
+    defaultLocals(req, res);
+    res.render("views/create-collection");
+  }
 })
 
 //! ---------------------OCW API--------------------------------//
@@ -1049,12 +1054,11 @@ function checkViews(req, next) {
   }
 }
 
-async function defaultLocals (req, res) {
+function defaultLocals (req, res) {
   try {
     var login =
       req.session.login != undefined && req.session ? req.session.login : false;
     var wallet = req.session.wallet != null ? req.session.wallet : false;
-    var isVerified = await mongoClient.query.verified(wallet)
     var mobile =
       req.useragent.isMobile != undefined && req.useragent.isMobile
         ? req.useragent.isMobile
@@ -1066,10 +1070,9 @@ async function defaultLocals (req, res) {
     res.locals.mobile = mobile;
     res.locals.url = process.env.SERVER_URL;
     res.locals.path = req.path;
-    res.locals.isVerified = isVerified;
     // console.log(res.locals.fulUrl);
     if (typeof req.csrfToken === "function") {
-      res.locals.csrfToken = await req.csrfToken();
+      res.locals.csrfToken = req.csrfToken();
     }
   } catch (err) {
     console.error("Error settings locals: " + err);

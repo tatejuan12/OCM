@@ -78,6 +78,12 @@
                 <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#pane-unlisted-nfts" type="button" role="tab" aria-controls="nav-profile" aria-selected="true">Un-Listed</button>
                 <button class="nav-link" id="nav-liked-tab" data-bs-toggle="tab" data-bs-target="#pane-liked-nfts" type="button" role="tab" aria-controls="nav-liked" aria-selected="false">Liked</button>
                 <button class="nav-link" id="nav-offers-tab" data-bs-toggle="tab" data-bs-target="#pane-offers" type="button" role="tab" aria-controls="nav-accountOffers" aria-selected="false">Account Offers</button>
+                <%if (isVerified) {%>
+                <button class="nav-link dropdown" id="nav-offers-tab"data-bs-toggle="dropdown" type="button" role="tab" aria-controls="" aria-expanded="false">Verified Tools</button>
+                <ul class="dropdown-menu">
+                  <li><a href="create-collection" class="dropdown-item">Create Collection</a></li>
+                </ul>
+                <%}%>
                 <%}%>
               </div>
             </nav>
