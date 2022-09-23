@@ -50,6 +50,50 @@ var methods = {
 
     return result;
   },
+  uploadCollectionLogo: async function (req, img) {
+    var result = false;
+    const param = {
+      Bucket: "ocw-space/collections/logo",
+      Key: req.body.name + "_logo.png",
+      Body: img.buffer,
+      ACL: "public-read",
+    };
+    const uploadPromise = new Promise(function (resolve, reject) {
+      s3.upload(param, function (err, data) {
+        if (err) reject(err);
+        else resolve(true);
+      });
+    });
+
+    result = await uploadPromise.catch((err) => {
+      console.log(err);
+      return false;
+    });
+
+    return result;
+  },
+  uploadCollectionBanner: async function (req, img) {
+    var result = false;
+    const param = {
+      Bucket: "ocw-space/collections/banner",
+      Key: req.body.name + "_banner.png",
+      Body: img.buffer,
+      ACL: "public-read",
+    };
+    const uploadPromise = new Promise(function (resolve, reject) {
+      s3.upload(param, function (err, data) {
+        if (err) reject(err);
+        else resolve(true);
+      });
+    });
+
+    result = await uploadPromise.catch((err) => {
+      console.log(err);
+      return false;
+    });
+
+    return result;
+  },
   uploadCover: async function (req, img) {
     var result = false;
     const param = {

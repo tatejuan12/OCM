@@ -570,6 +570,12 @@ var {
   height: 50px;
   width: 50px;
 }
+.active-light-mode .i-create-col{
+  background-image: url(../images/icons/Favorites/icons8-add-to-collection-50.png);
+}
+.i-create-col{
+  background-image: url(../images/icons/Favorites-light/icons8-add-to-collection-50.png);
+}
 /*---------------------------
 	List Style 
 ---------------------------*/

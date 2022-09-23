@@ -39,6 +39,22 @@
   </div>
 
   <%- include('sections/header.ejs') -%>
+  <div class="rn-breadcrumb-inner ptb--30">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-6 col-12">
+                    <h5 class="title text-center text-md-start">Create Collection</h5>
+                </div>
+                <div class="col-lg-6 col-md-6 col-12">
+                    <ul class="breadcrumb-list">
+                        <li class="item"><a href="/">Home</a></li>
+                        <li class="separator"><i class="feather-chevron-right"></i></li>
+                        <li class="item current">Crete Collection</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 
   <!-- start Create Collection -->
   <div class="creat-collection-area pt--80">
@@ -50,7 +66,7 @@
 
                     <div class="create-collection-input logo-image">
                         <div class="logo-c-image logo">
-                            <img id="rbtinput1" src="../assets/images/profile/profile-01.jpg" alt="Profile-NFT">
+                            <img id="rbtinput1" src="../assets/images/profile/300x300.jpg" alt="Profile-NFT">
                             <label for="fatima" title="No File Choosen">
                                 <span class="text-center color-white"><i class="feather-edit"></i></span>
                             </label>
@@ -70,7 +86,7 @@
                     <label class="title">Cover Image</label>
                     <div class="create-collection-input feature-image">
                         <div class="logo-c-image feature">
-                            <img id="rbtinput2" src="assets/images/profile/cover-04.png" alt="Profile-NFT">
+                            <img id="rbtinput2" src="assets/images/profile/1500x500.jpg" alt="Profile-NFT">
                             <label for="nipa" title="No File Choosen">
                                 <span class="text-center color-white"><i class="feather-edit"></i></span>
                             </label>
@@ -84,36 +100,14 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="collection-single-wized banner">
-                    <label class="title">Featured image</label>
-                    <div class="create-collection-input feature-image">
-                        <div class="logo-c-image feature">
-                            <img id="createfileImage" src="assets/images/profile/cover-03.jpg" alt="Profile-NFT">
-                            <label for="createinputfile" title="No File Choosen">
-                                <span class="text-center color-white"><i class="feather-edit"></i></span>
-                            </label>
-                        </div>
-                        <div class="button-area">
-                            <div class="brows-file-wrapper">
-                                <!-- actual upload which is hidden -->
-                                <input name="createinputfile" id="createinputfile" type="file">
-                                <!-- our custom upload button -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
             </div>
 
             <div class="col-lg-7">
-                <div class="create-collection-form-wrapper">
+                <div class="create-collection-form-wrapper" id="collectionForm">
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="collection-single-wized">
-                                <label for="name" class="title required">Name</label>
+                                <label for="name" class="title required">Collection Name</label>
                                 <div class="create-collection-input">
                                     <input id="name" class="name" type="text" required>
                                 </div>
@@ -121,13 +115,29 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="collection-single-wized">
-                                <label for="url" class="title">URL</label>
+                                <label for="brand" class="title required">Brand</label>
+                                <div class="create-collection-input">
+                                    <input id="brand" class="brand" type="text" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="collection-single-wized">
+                                <label for="url" class="title required">URL</label>
                                 <div class="create-collection-input">
                                     <input id="url" class="url" type="text" required>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
+                            <div class="collection-single-wized">
+                                <label for="issuer" class="title required">Issuer</label>
+                                <div class="create-collection-input">
+                                    <input id="issuer" class="issuer" type="text" required>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="col-lg-12">
                             <div class="collection-single-wized">
                                 <label class="title">Category</label>
                                 <div class="create-collection-input">
@@ -142,7 +152,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="col-lg-12">
                             <div class="collection-single-wized">
                                 <label for="description" class="title">Description</label>
@@ -151,7 +161,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <!-- <div class="col-lg-6">
                             <div class="collection-single-wized">
                                 <label for="earning" class="title">Creator Earnings</label>
                                 <div class="create-collection-input">
@@ -166,8 +176,8 @@
                                     <input id="wallet" class="url" type="text">
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-12">
+                        </div> -->
+                        <!-- <div class="col-lg-12">
                             <div class="nuron-information mb--30">
                                 <div class="single-notice-setting">
                                     <div class="input">
@@ -181,11 +191,11 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="col-lg-12">
                             <div class="button-wrapper">
                                 <!-- <a href="#" class="btn btn-primary btn-large mr--30" data-bs-toggle="modal" data-bs-target="#collectionModal">Preview</a> -->
-                                <a href="#" class="btn btn-primary-alta btn-large">Create</a>
+                                <button class="btn btn-primary-alta btn-large" type="submit" id="subCollection" onclick="submitUpdateProfileForm()">Create</button>
                             </div>
                         </div>
                     </div>
@@ -198,6 +208,34 @@
 
   <!-- Modal require -->
   <%- include('sections/popup-modal.ejs') -%>
+  <!-- <div class="rn-popup-modal upload-modal-wrapper modal fade" id="collectionModal" tabindex="-1" aria-hidden="true">
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i data-feather="x"></i></button>
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content share-wrapper">
+            <div class="modal-body">
+                <a href="product-details.html" class="rn-collection-inner-one">
+                    <div class="collection-wrapper">
+                        <div class="collection-big-thumbnail">
+                            <img src="assets/images/collection/collection-lg-01.jpg" alt="Nft_Profile">
+                        </div>
+                        <div class="collenction-small-thumbnail">
+                            <img src="assets/images/collection/collection-sm-01.jpg" alt="Nft_Profile">
+                            <img src="assets/images/collection/collection-sm-02.jpg" alt="Nft_Profile">
+                            <img src="assets/images/collection/collection-sm-03.jpg" alt="Nft_Profile">
+                        </div>
+                        <div class="collection-profile">
+                            <img src="assets/images/client/client-15.png" alt="Nft_Profile">
+                        </div>
+                        <div class="collection-deg">
+                            <h6 class="title">Cubic Trad</h6>
+                            <span class="items">27 Items</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div> -->
 
 
 
@@ -234,7 +272,31 @@
   <script src="assets/js/vendor/savePopup.js"></script>
   <!-- main JS -->
   <script src="assets/js/main.js"></script>
-
+  <script>
+  function submitUpdateProfileForm() {
+    const formData = new FormData();
+    formData.append("name", document.getElementById("name").value.replace(" ", "_"));
+    formData.append("brand", document.getElementById("brand").value);
+    formData.append("link", document.getElementById("url").value);
+    formData.append("issuer", document.getElementById("issuer").value);
+    formData.append("collection-logo", document.getElementById("fatima").files[0]);
+    formData.append("cover-img", document.getElementById("nipa").files[0]);
+    $.ajax({
+      type: "POST",
+      url: "/create-collection",
+      data: formData,
+      processData: false,
+      contentType: false,
+      enctype: "multipart/form-data",
+      success: function(resulty) {
+        customAlert.alert('Collection Created')
+      },
+      error: function(resulty) {
+        customAlert.alert('Error Creating Collection')
+      },
+    });
+  }
+  </script>
 </body>
 
 </html>

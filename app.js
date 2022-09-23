@@ -624,6 +624,50 @@ server.post("/decrement-like", speedLimiter, async (req, res) => {
   } else success = false;
   success ? res.status(200).end() : res.status(406).end();
 });
+server.post("/create-collection",
+  upload.fields([{name: "collection-logo", maxCount: 1}, {name: "cover-img", maxCount: 1}]),
+  speedLimiter,
+  async (req, res) => {
+    console.log('started uploading data')
+    const formDataBody = req.body;
+    const formDataFiles = req.files;
+    var result = false;
+    if (formDataFiles) {
+      if (formDataFiles["collection-logo"]) {
+        if (
+          (result = await digitalOcean.functions.uploadCollectionLogo(
+            req,
+            formDataFiles["collection-logo"][0]
+          ))
+        )
+      result = true;
+      console.log('uploaded logo')
+      }
+      if (formDataFiles["cover-img"]) {
+        if (
+          (result = await digitalOcean.functions.uploadCollectionBanner(
+            req,
+            formDataFiles["cover-img"][0]
+          ))
+        )
+      result = true;
+      console.log('uploaded banner')
+      }
+    }
+    if (
+      await mongoClient.query.createCollection(
+        formDataBody["name"],
+        formDataBody["brand"],
+        formDataBody["url"],
+        formDataBody["issuer"],
+        formDataBody["description"],
+      )
+    )
+    console.log('done')
+    result = true;
+    result ? res.status(200).send("Modified") : res.status(500).send("Failed");
+  }
+)
 server.post(
   "/update-user",
   upload.fields([{ name: "profile-img", maxCount: 1 }, { name: "cover-img" }]),
@@ -661,7 +705,7 @@ server.post(
         formDataBody["website"]
       )
     )
-      result = true;
+    result = true;
     result ? res.status(200).send("Modified") : res.status(500).send("Failed");
   }
 );
@@ -1006,11 +1050,11 @@ function checkViews(req, next) {
 }
 
 async function defaultLocals (req, res) {
-  var isVerified = mongoClient.query.verified(wallet)
   try {
     var login =
       req.session.login != undefined && req.session ? req.session.login : false;
     var wallet = req.session.wallet != null ? req.session.wallet : false;
+    var isVerified = await mongoClient.query.verified(wallet)
     var mobile =
       req.useragent.isMobile != undefined && req.useragent.isMobile
         ? req.useragent.isMobile
@@ -1025,9 +1069,8 @@ async function defaultLocals (req, res) {
     res.locals.isVerified = isVerified;
     // console.log(res.locals.fulUrl);
     if (typeof req.csrfToken === "function") {
-      res.locals.csrfToken = req.csrfToken();
+      res.locals.csrfToken = await req.csrfToken();
     }
-    console.log(res.locals.csrfToken)
   } catch (err) {
     console.error("Error settings locals: " + err);
   } finally {

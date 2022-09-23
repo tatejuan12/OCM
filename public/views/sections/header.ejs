@@ -32,6 +32,7 @@
         <ul class="submenu">
           <li><a href="<%login ? __append("profile") : __append('#')%>" <%if (!login) __append("onclick=\"customAlert.alert('Connect Wallet to View Profile')\"")%>>Account <span class="icon i-account"></span></a></li>
           <li><a href="<%login ? __append("edit-profile") : __append('#')%>" <%if (!login) __append("onclick=\"customAlert.alert('Connect Wallet to Update Profile')\"")%>>Update Profile <span class="icon i-edit"></span></a></li>
+          <%if (isVerified) {%><li><a href="create-collection">Create Collection<span class="icon i-create-col"></span></a></li><%}%>
         </ul>
       </li>
       <li class="has-droupdown has-menu-child">
@@ -97,7 +98,6 @@
             </li>
           </ul>
         </div>
-        <%console.log(isVerified)%>
 
 
       </div>

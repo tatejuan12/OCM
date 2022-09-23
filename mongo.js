@@ -60,6 +60,31 @@ var methods = {
       await client.close();
     }
   },
+  createCollection: async function (name, brand, url, issuer, description) {
+    const client = await getClient();
+    if (!client) return;
+    try {
+      const db = client.db("Additional-Traits");
+
+      let collection = db.collection("Collections");
+
+      let query = { };
+      if (name) query.$set["name"] = name;
+      if (brand) query.$set["brand"] = brand;
+      if (url) query.$set["url"] = url;
+      if (issuer) query.$set["issuer"] = issuer;
+      if (description) query.$set["description"] = description;
+
+      let res = await collection.insertOne(query);
+
+      return res.modifiedCount > 0 ? true : false;
+      //   return res > 0 ? true : false;
+    } catch (err) {
+      console.log("Database error" + err);
+    } finally {
+      await client.close();
+    }
+  },
   initiateUser: async function (wallet) {
     var checker = false;
     const client = await getClient();

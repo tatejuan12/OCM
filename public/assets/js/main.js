@@ -1108,3 +1108,14 @@ function getCurrencyBalance() {
     console.error("Couldn't parse balance");
   }
 }
+//collection form submit button disabler
+$(function () {
+  $('#subCollection').attr('disabled', true);
+  $('#collectionForm').change(function () {
+      if ($('#name').val() != '' && $('#brand').val() != '' && $('#url').val() != '' && $('#issuer').val() != '') {
+          $('#subCollection').attr('disabled', false);
+      } else {
+          $('#subCollection').attr('disabled', true);
+      }
+  });
+});
