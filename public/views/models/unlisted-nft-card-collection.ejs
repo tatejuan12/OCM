@@ -10,7 +10,7 @@
         <img src="<%= nft.httpsImage%> " alt="unlisted NFT image" draggable="false" loading="lazy">
       
         <%} else if (vidExt.has(nft.httpsImage.substring(nft.httpsImage.lastIndexOf('.') + 1))) {%>
-        <video controls autoplay>
+        <video autoplay loop>
           <source src="<%= nft.httpsImage%>" type="video/mp4">
           <source src="<%= nft.httpsImage%>" type="video/webm">
           <source src="<%= nft.httpsImage%>" type="video/ogg">

@@ -328,9 +328,10 @@ var methods = {
     try {
       const db = client.db("Additional-Traits");
       let collection = db.collection("Collections");
+      var issuerArray = issuer.split(",");
       var query = {
         name: collectionName,
-        issuer: issuer,
+        issuer: {$in: issuerArray}
       };
       const results = collection.findOne(query);
       return await results;
@@ -372,9 +373,12 @@ var methods = {
     try {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
+      var returnedName = collectionName.replace("_", " ");
+      var issuerArray = issuer.split(",");
+      console.log(returnedName)
       var query = {
-        $match: { $or: [ {"uriMetadata.collection.name": collectionName}, {"uriMetadata.collection.name": null} ]  },
-        $match: {issuer: issuer},
+        $match: { $or: [ {"uriMetadata.collection.name": new RegExp(returnedName, "i")}, {"uriMetadata.collection.name": null} ],
+        issuer: {$in: issuerArray}},
       };
       const aggregate = collection
         .aggregate([query])
@@ -517,12 +521,12 @@ var methods = {
       var returnedName = collectionName.replace("_", " ");
       let query = {
         $or: [ {"uriMetadata.collection.name": new RegExp(returnedName, "i")}, {"uriMetadata.collection.name": null} ],
-        "issuer": issuer 
+        issuer: {$in: issuer}
       };
       const result = await collection.count(query);
       return result;
     } catch (err) {
-      console.error("Database error" + err);
+      console.error("Database error " + err);
     } finally {
       await client.close();
     }
@@ -829,7 +833,7 @@ var methods = {
           $gt: 0,
         },
         $or: [ {"uriMetadata.collection.name": new RegExp(returnedName, "i")}, {"uriMetadata.collection.name": null} ],
-        "issuer": issuer
+        "issuer": {$in: issuer}
       };
       let query02 = {
         projection: {

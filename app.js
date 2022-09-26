@@ -291,11 +291,11 @@ server.get("/collection", speedLimiter, async (req, res) => {
     );
     const floorPrice = await mongoClient.query.getCollectionFloorPrice(
       collectionName,
-      issuer
+      issuer.split(",")
     );
     const items = await mongoClient.query.totalCollectionItems(
       collectionName,
-      issuer
+      issuer.split(",")
     );
     if (wallet !== collectionDetails.issuer) {
       await mongoClient.query.incrementViewCollection(collectionName);
