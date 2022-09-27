@@ -835,10 +835,10 @@ server.get("/get-additional-unlisted-nfts", speedLimiter, async (req, res) => {
       var rawData = unlistedNfts[i];
     }
     console.log('next step, Render')
-    res.render("views/models/unlisted-nft-card.ejs", {
+    res.render("views/models/unlisted-nft-rows.ejs", {
         wallet: wallet,
         rawData: rawData,
-        nft: unlistedNftsToReturn,
+        nfts: unlistedNftsToReturn,
       },
       async function (err, html) {
         if (err) throw "Couldn't get NFTS\n" + err;
