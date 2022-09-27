@@ -347,9 +347,11 @@ var methods = {
     try {
       const db = client.db("NFTokens");
       let collection = db.collection("Expired-Listings");
+      var issuerArray = issuer.split(",");
+      console.log(issuerArray)
       var query = {
-        $match: { $or: [ {"uriMetadata.collection.name": collectionName}, {"uriMetadata.collection.name": null} ]  },
-        $match: {issuer: issuer},
+        $match: { $or: [ {"uriMetadata.collection.name": collectionName}, {"uriMetadata.collection.name": null} ], 
+        issuer: {$in: issuerArray}}
       };
       const aggregate = collection
         .aggregate([query])
@@ -375,7 +377,6 @@ var methods = {
       let collection = db.collection("Eligible-Listings");
       var returnedName = collectionName.replace("_", " ");
       var issuerArray = issuer.split(",");
-      console.log(returnedName)
       var query = {
         $match: { $or: [ {"uriMetadata.collection.name": new RegExp(returnedName, "i")}, {"uriMetadata.collection.name": null} ],
         issuer: {$in: issuerArray}},
@@ -833,7 +834,7 @@ var methods = {
           $gt: 0,
         },
         $or: [ {"uriMetadata.collection.name": new RegExp(returnedName, "i")}, {"uriMetadata.collection.name": null} ],
-        "issuer": {$in: issuer}
+        issuer: {$in: issuer}
       };
       let query02 = {
         projection: {
