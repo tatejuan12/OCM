@@ -67,12 +67,13 @@ var methods = {
       const db = client.db("Additional-Traits");
 
       let collection = db.collection("Collections");
+      var issuerArray = issuer.split(",");
 
       let query = {};
       if (name) query.name = name;
       if (brand) query.brand = brand;
       if (url) query.url = url;
-      if (issuer) query.issuer = issuer;
+      if (issuer) query.issuer = issuerArray;
       if (description) query.description = description;
 
       let res = await collection.insertOne(query);

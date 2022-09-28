@@ -633,7 +633,6 @@ server.post("/create-collection",
   upload.fields([{name: "collection-logo", maxCount: 1}, {name: "cover-img", maxCount: 1}]),
   speedLimiter,
   async (req, res) => {
-    console.log('started uploading data')
     const formDataBody = req.body;
     const formDataFiles = req.files;
     var result = false;
