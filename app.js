@@ -812,14 +812,11 @@ server.get("/get-additional-unlisted-nfts", speedLimiter, async (req, res) => {
     for (let nft of xrplNfts[0]) {
       const returnedNft = await mongoClient.query.getNft(nft.NFTokenID);
       if (returnedNft == null) unlistedNfts.push(nft);
-      console.log('checking if NFT is unlisted')
     }
-    console.log(markerIteration*NFTSPERPAGE)
-    for (var i = markerIteration * NFTSPERPAGE; i < xrplNfts.length; i++) {
+    for (var i = markerIteration * NFTSPERPAGE; i < xrplNfts[0].length; i++) {
       var queuedIDFinder = await mongoClient.query.checkQueue(
         unlistedNfts[i].NFTokenID
       );
-      console.log('looping ' + [i])
       var theNFT = unlistedNfts[i].NFTokenID;
       if (queuedIDFinder == null) {
         //check to see if the NFT isn't in the queue for listing with !==.
@@ -834,8 +831,7 @@ server.get("/get-additional-unlisted-nfts", speedLimiter, async (req, res) => {
       }
       var rawData = unlistedNfts[i];
     }
-    console.log('next step, Render')
-    res.render("views/models/unlisted-nft-rows.ejs", {
+    res.render("views/models/unlisted-nft-rows-load.ejs", {
         wallet: wallet,
         rawData: rawData,
         nfts: unlistedNftsToReturn,
@@ -845,6 +841,7 @@ server.get("/get-additional-unlisted-nfts", speedLimiter, async (req, res) => {
         returnData.push(html);
       }
     );
+    returnData.push(xrplNfts[1])
     res.send(returnData);
   } else res.sendStatus(400);
 });
