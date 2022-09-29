@@ -641,16 +641,16 @@ server.post(
         req.session.wallet,
         process.env.MINTING_PRICE,
         req.useragent.isMobile,
-        return_url
+        dataBody.return_url
       );
       const response = {
         payload: payload,
         NFTokenID: req.body.NFTokenID,
         issuer: req.session.wallet,
         fee: req.body.fee,
-        jsonData: jsonData,
-        image: image,
-        fileName: fileName,
+        jsonData: dataBody.jsonData,
+        image: dataBody.image,
+        fileName: dataBody.fileName,
       };
       console.log(response);
       res.send(response);

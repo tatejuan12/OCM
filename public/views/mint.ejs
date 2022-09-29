@@ -280,6 +280,7 @@
       const jsonLink = `https://ocw-space.sgp1.digitaloceanspaces.com/nft-jsons/${fileName}.json`;
       const formData = new FormData();
       const returnUrl = window.location.href;
+      formData.append("returnUrl", returnUrl);
       formData.append("jsonData", JSON.stringify(jsonData))
       formData.append("taxon", $('#taxon-value').val());
       formData.append("transferFee", $('tranfer-fee').val());
@@ -289,8 +290,6 @@
       formData.append("transferable", document.getElementById("transferable").checked);
       formData.append("onlyXRP", document.getElementById("only-xrp").checked);
       formData.append("trustline", document.getElementById("trustline").checked);
-      console.log("checking here");
-      console.log(formData.get("taxon"));
 
       $.ajax({
         type: "POST",
