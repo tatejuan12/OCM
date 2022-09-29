@@ -69,26 +69,26 @@
             <div class="upload-area">
 
               <div class="upload-formate mb--30">
-                  <h6 class="title">
-                      Upload file
-                  </h6>
-                  <p class="formate">
-                      Drag or choose your file to upload
-                  </p>
+                <h6 class="title">
+                  Upload file
+                </h6>
+                <p class="formate">
+                  Drag or choose your file to upload
+                </p>
               </div>
 
               <div class="brows-file-wrapper">
-                  <!-- actual upload which is hidden -->
-                  <input name="createinputfile" id="createinputfile" type="file" class="inputfile" />
-                  <img id="createfileImage" src="" alt="" data-black-overlay="6">
-                  <!-- our custom upload button -->
-                  <label for="createinputfile" title="No File Choosen">
-                      <i class="feather-upload"></i>
-                      <span class="text-center">Choose a File</span>
-                      <p class="text-center mt--10">PNG, GIF, WEBP, MP4 or MP3. <br>    Max 100Mb.</p>
-                  </label>
+                <!-- actual upload which is hidden -->
+                <input name="createinputfile" id="createinputfile" type="file" class="inputfile" />
+                <img id="createfileImage" src="" alt="" data-black-overlay="6">
+                <!-- our custom upload button -->
+                <label for="createinputfile" title="No File Choosen">
+                  <i class="feather-upload"></i>
+                  <span class="text-center">Choose a File</span>
+                  <p class="text-center mt--10">PNG, GIF, WEBP, MP4 or MP3. <br> Max 100Mb.</p>
+                </label>
               </div>
-          </div>
+            </div>
           </div>
         </div>
 
@@ -230,9 +230,9 @@
   <script src="assets/js/main.js"></script>
   <!-- comment for empty commit -->
   <script>
-    var i=0;
+    var i = 0;
     $('#attribs').click(function() {
-        $(`<div class="properties-content-main" id="atts">
+      $(`<div class="properties-content-main" id="atts">
                     <span class="attribute-item-bubble">
                       <label for="attributeName">Title</label>
                       <input type="text" id="attributeName" class="attribute-name">
@@ -243,7 +243,7 @@
                     </span>
                     <a class="close-btn attributeRemove" onclick="attributeRemove(this)"><i class="icon i-close"></i></a>
                 </div>`).appendTo('#propertiesContent');
-        i++;
+      i++;
     });
 
     function attributeRemove(element) {
@@ -254,10 +254,8 @@
     const loggedIn = <%- JSON.stringify(wallet) %>
 
     function submitMintingInformation() {
-      const formData = new FormData();
       const time = new Date().getTime();
-      console.log(formData)
-      var attributesObj = [];      
+      var attributesObj = [];
       for (var a = 0; a < $('#propertiesContent .properties-content-main').length; a++) {
         attributesObj[a] = {
           "trait_type": $(`.attribute-name:eq(${a})`).val(),
@@ -277,52 +275,53 @@
         externalUrl: document.getElementById("externalUrl").value,
         attributes: attributesObj,
       };
-      
+
       const fileName = loggedIn + time;
       const jsonLink = `https://ocw-space.sgp1.digitaloceanspaces.com/nft-jsons/${fileName}.json`;
-
+      const formData = new FormData();
       const returnUrl = window.location.href;
-      formData.append("jsonData", jsonData)
-      formData.append("taxon", $('#taxon-value').val())
+      formData.append("jsonData", JSON.stringify(jsonData))
+      formData.append("taxon", $('#taxon-value').val());
       formData.append("transferFee", $('tranfer-fee').val());
       formData.append("jsonLink", jsonLink);
-      formData.append("image", document.getElementById('createinputfile').files[0])
+      formData.append("image", document.getElementById('createinputfile').files[0]);
       formData.append("burnable", document.getElementById("burnable").checked);
       formData.append("transferable", document.getElementById("transferable").checked);
       formData.append("onlyXRP", document.getElementById("only-xrp").checked);
       formData.append("trustline", document.getElementById("trustline").checked);
-      console.log(formData);
+      console.log("checking here");
+      console.log(formData.get("taxon"));
 
       $.ajax({
-      type: "POST",
-      url: "/mint-no-IPFS-payload",
-      data: formData,
-      processData: false,
-      contentType: false,
-      enctype: "multipart/form-data",
-      success: function(result) {
-        console.log(result)
-        $.ajax({
-          type: "POST",
-          url: "/mint-no-IPFS-subscription",
-          data: result,
-          
-          success: function(image, jsonData) {
-            $.ajax({
-              type:"POST",
-              url: "/upload-nft-items",
-              data: {
-                image: image,
-                json: jsonData
-              },
-            })
-          }
-        })
-      },
-      error: function(resulty) {
-        customAlert.alert('Error minting NFT')
-      },
-    });
+        type: "POST",
+        url: "/mint-no-IPFS-payload",
+        data: formData,
+        processData: false,
+        contentType: false,
+        enctype: "multipart/form-data",
+        success: function(result) {
+          console.log(result)
+          $.ajax({
+            type: "POST",
+            url: "/mint-no-IPFS-subscription",
+            data: result,
+
+            success: function(image, jsonData) {
+              $.ajax({
+                type: "POST",
+                url: "/upload-nft-items",
+                data: {
+                  image: image,
+                  json: jsonData
+                },
+              })
+            }
+          })
+        },
+        error: function(resulty) {
+          customAlert.alert('Error minting NFT')
+        },
+      });
     }
   </script>
 </body>

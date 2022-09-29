@@ -627,31 +627,38 @@ server.post("/decrement-like", speedLimiter, async (req, res) => {
   } else success = false;
   success ? res.status(200).end() : res.status(406).end();
 });
-server.post("/mint-no-IPFS-payload", speedLimiter, async (req, res) => {
-  const dataBody = req.body;
-  console.log(dataBody)
-  if (req.session.login) {
-    const payload = await xumm.payloads.mintNftPayload(
-      process.env.XRPL_ISSUER_PAYMENT_ADDRESS,
-      req.session.wallet,
-      process.env.MINTING_PRICE,
-      req.useragent.isMobile,
-      return_url,
-    );
-    const response = {
-      payload: payload,
-      NFTokenID: req.body.NFTokenID,
-      issuer: req.session.wallet,
-      fee: req.body.fee,
-      jsonData: jsonData,
-      image: image,
-      fileName: fileName,
-    };
-    console.log(response)
-    res.send(response);
-  } else res.sendStatus(400);
-})
-server.post("/mint-no-IPFS-subscription", 
+server.post(
+  "/mint-no-IPFS-payload",
+  upload.any(),
+  speedLimiter,
+  async (req, res) => {
+    const dataBody = req.body;
+    console.log(dataBody);
+    res.sendStatus(200);
+    if (req.session.login) {
+      const payload = await xumm.payloads.mintNftPayload(
+        process.env.XRPL_ISSUER_PAYMENT_ADDRESS,
+        req.session.wallet,
+        process.env.MINTING_PRICE,
+        req.useragent.isMobile,
+        return_url
+      );
+      const response = {
+        payload: payload,
+        NFTokenID: req.body.NFTokenID,
+        issuer: req.session.wallet,
+        fee: req.body.fee,
+        jsonData: jsonData,
+        image: image,
+        fileName: fileName,
+      };
+      console.log(response);
+      res.send(response);
+    } else res.sendStatus(400);
+  }
+);
+server.post(
+  "/mint-no-IPFS-subscription",
   upload.fields([{ name: "image", maxCount: 1 }]),
   speedLimiter,
   async (req, res) => {
@@ -666,7 +673,8 @@ server.post("/mint-no-IPFS-subscription",
     //    )
     //  }
     //}
-});
+  }
+);
 server.post(
   "/update-user",
   upload.fields([{ name: "profile-img", maxCount: 1 }, { name: "cover-img" }]),
