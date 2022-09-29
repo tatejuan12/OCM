@@ -629,10 +629,7 @@ server.post("/decrement-like", speedLimiter, async (req, res) => {
 });
 server.post("/mint-no-IPFS-payload", speedLimiter, async (req, res) => {
   const dataBody = req.body;
-  const jsonData = dataBody.jsonData;
-  const image = dataBody.image;
-  const fileName = dataBody.fileName;
-  const return_url = dataBody.returnUrl;
+  console.log(dataBody)
   if (req.session.login) {
     const payload = await xumm.payloads.mintNftPayload(
       process.env.XRPL_ISSUER_PAYMENT_ADDRESS,
