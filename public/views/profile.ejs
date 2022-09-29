@@ -194,6 +194,7 @@
       $.get(`<%=url%>/get-additional-unlisted-nfts?wallet=<%=user.wallet%>&marker=${markerUnlisted}&markerIteration=${markerIterationUnlisted}`,
         function(returnData) {
           var updateNfts = [];
+          console.log(returnData)
           $("#unlisted-nfts").append(returnData[0])
           markerUnlisted = returnData[1]
           const cardsUnlisted = document.getElementById("exploreSectionUnlisted").querySelectorAll(".col-5");
