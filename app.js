@@ -28,6 +28,7 @@ const helmet = require("helmet");
 const minifyHtml = require("express-minify-html");
 const slowDown = require("express-slow-down");
 const { send } = require("express/lib/response");
+const { rejects } = require("assert");
 const mongoStore = new MongoDBStore({
   uri: process.env.MONGO_URI,
   databaseName: "Sessions",
@@ -44,7 +45,11 @@ const server = express();
 
 server.use(compression());
 server.use(bodyParser.json()); // for parsing serverlication/json
-server.use(bodyParser.urlencoded({ extended: true })); // for parsing serverlication/x-www-form-urlencoded
+server.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+); // for parsing serverlication/x-www-form-urlencoded
 server.set("view engine", "ejs"); // Setting rendering agent to ejs
 server.use(helmet({ contentSecurityPolicy: false }));
 server.set("views", path.join(__dirname, "/public")); // Makes views for rendering the public dir
@@ -633,8 +638,15 @@ server.post(
   speedLimiter,
   async (req, res) => {
     const dataBody = req.body;
-    console.log(dataBody);
-    res.sendStatus(200);
+    const dataFiles = req.files;
+    var jsonData;
+    // console.log(dataBody);
+    console.log(dataFiles[0]);
+    try {
+      jsonData = JSON.parse(dataBody.jsonData);
+    } catch (err) {
+      console.error(`Couldn't parse jsonData \n ${err}`);
+    }
     if (req.session.login) {
       const payload = await xumm.payloads.mintNftPayload(
         process.env.XRPL_ISSUER_PAYMENT_ADDRESS,
@@ -643,23 +655,24 @@ server.post(
         req.useragent.isMobile,
         dataBody.return_url
       );
-      const response = {
-        payload: payload,
-        NFTokenID: req.body.NFTokenID,
-        issuer: req.session.wallet,
-        fee: req.body.fee,
-        jsonData: dataBody.jsonData,
-        image: dataBody.image,
-        fileName: dataBody.fileName,
-      };
-      console.log(response);
-      res.send(response);
+      if (payload) {
+        const response = {
+          payload: payload,
+          NFTokenID: req.body.NFTokenID,
+          issuer: req.session.wallet,
+          fee: req.body.fee,
+          jsonData: jsonData,
+          image: dataFiles[0],
+          fileName: dataBody.fileName,
+        };
+        res.send(response);
+      } else res.sendStatus(400);
     } else res.sendStatus(400);
   }
 );
 server.post(
   "/mint-no-IPFS-subscription",
-  upload.fields([{ name: "image", maxCount: 1 }]),
+  upload.any(),
   speedLimiter,
   async (req, res) => {
     const dataBody = req.body;
@@ -673,6 +686,7 @@ server.post(
     //    )
     //  }
     //}
+    res.sendStatus(200);
   }
 );
 server.post(
@@ -680,6 +694,7 @@ server.post(
   upload.fields([{ name: "profile-img", maxCount: 1 }, { name: "cover-img" }]),
   speedLimiter,
   async (req, res) => {
+    console.log(req.body);
     const formDataBody = req.body;
     const formDataFiles = req.files;
     var result = false;
@@ -1018,27 +1033,7 @@ server.use((err, req, res, next) => {
   defaultLocals(req, res);
   res.status(500).render("views/500.ejs");
 });
-// try {
-//   serverSecure = proxiedHttps.createServer(
-//     {
-//       key: fs.readFileSync(
-//         `${process.env.SSL_CERTIFICATE_PATH}priv.key`,
-//         "utf8"
-//       ),
-//       cert: fs.readFileSync(
-//         `${process.env.SSL_CERTIFICATE_PATH}chain.pem`,
-//         "utf8"
-//       ),
-//       ca: fs.readFileSync(`/opt/OCM/root.pem`, "utf8"),
-//     },
-//     server
-//   );
-//   serverSecure.listen(443, () => {
-//     console.log("Server Listening on Port 443");
-//   });
-// } catch (err) {
-//   console.warn("SSL not found");
-// }
+
 server.listen(process.env.PORT, () => {
   console.log("Server Listening on Port 80");
 });

@@ -290,7 +290,6 @@
       formData.append("transferable", document.getElementById("transferable").checked);
       formData.append("onlyXRP", document.getElementById("only-xrp").checked);
       formData.append("trustline", document.getElementById("trustline").checked);
-
       $.ajax({
         type: "POST",
         url: "/mint-no-IPFS-payload",

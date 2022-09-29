@@ -69,10 +69,10 @@ var payloads = {
           Flags: 1,
         },
         custom_meta: {
-          Instruction: `Sign this transaction to make a sell offer of ${value} on TokenID - ${NFToken}`
-        }
+          Instruction: `Sign this transaction to make a sell offer of ${value} on TokenID - ${NFToken}`,
+        },
       };
-      console.log(request)
+      console.log(request);
       if (mobile)
         request.options["return_url"] = {
           app: return_url,
@@ -83,7 +83,7 @@ var payloads = {
         };
 
       const payload = await getPayload(request);
-      console.log(payload)
+      console.log(payload);
       return payload;
     }
   },
@@ -377,74 +377,93 @@ var payloads = {
     const payload = await getPayload(request);
     return payload;
   },
-  mintObject: async function (uri, taxon, transferFee, memo, burnable, onlyXRP, trustline, transferable) {
-      try {
-        //CONDUCT CHECKS
-        if (memo != undefined && memo != "") {
-            var memoHex = xrpl.convertStringToHex(memo)
-        }
-
-        if (isNaN(taxon) || Number(taxon) % 1 != 0) {
-            console.log(`DEFINED TAXON IS NOT A WHOLE NUMBER, AND HENCE IS INVALID`)
-            return
-        } else {
-            var taxon = Number(taxon)
-        }
-
-        if (isNaN(transferFee) || (transferFee < 0 || transferFee > 50) || (Number(transferFee) * 1000) % 1 != 0) {
-            console.log(`DEFINED TRANSFER FEE IS NOT A NUMBER BETWEEN 0 AND 50 WITH 3 OR LESS DECIMAL PLACES`)
-            return
-        } else {
-            var transferFee = Number(transferFee) * 1000
-        }
-
-        if (!transferable && transferFee != 0) {
-            console.log(`TRANSFERABLE FLAG MUST BE TRUE TO INCLUDE A TRANSFER FEE`)
-            return
-        }
-
-        //CALCULATE THE FLAGS
-        var flags = 0
-        if (burnable) flags += 1
-        if (onlyXRP) flags += 2
-        if (trustline) flags += 4
-        if (transferable) flags += 8
-
-        var mintObject = {
-            "TransactionType": "NFTokenMint",
-            "NFTokenTaxon": taxon
-        }
-
-        if (memoHex != undefined) {
-            mintObject.Memos = [{
-                "Memo": {
-                    "MemoData": memoHex
-                }
-            }]
-        }
-
-        if (uri != undefined && uri != "") {
-            mintObject.URI = xrpl.convertStringToHex(uri)
-        }
-
-
-        if (transferFee != 0) {
-            mintObject.TransferFee = transferFee
-        }
-
-        if (flags != 0) {
-            mintObject.Flags = flags
-        }
-
-        const payload = await getPayload(mintObject);
-        return payload;
-      } catch (err) {
-        console.log("Minting error " + err);
+  mintObject: async function (
+    uri,
+    taxon,
+    transferFee,
+    memo,
+    burnable,
+    onlyXRP,
+    trustline,
+    transferable
+  ) {
+    try {
+      //CONDUCT CHECKS
+      if (memo != undefined && memo != "") {
+        var memoHex = xrpl.convertStringToHex(memo);
       }
+
+      if (isNaN(taxon) || Number(taxon) % 1 != 0) {
+        console.log(
+          `DEFINED TAXON IS NOT A WHOLE NUMBER, AND HENCE IS INVALID`
+        );
+        return;
+      } else {
+        var taxon = Number(taxon);
+      }
+
+      if (
+        isNaN(transferFee) ||
+        transferFee < 0 ||
+        transferFee > 50 ||
+        (Number(transferFee) * 1000) % 1 != 0
+      ) {
+        console.log(
+          `DEFINED TRANSFER FEE IS NOT A NUMBER BETWEEN 0 AND 50 WITH 3 OR LESS DECIMAL PLACES`
+        );
+        return;
+      } else {
+        var transferFee = Number(transferFee) * 1000;
+      }
+
+      if (!transferable && transferFee != 0) {
+        console.log(`TRANSFERABLE FLAG MUST BE TRUE TO INCLUDE A TRANSFER FEE`);
+        return;
+      }
+
+      //CALCULATE THE FLAGS
+      var flags = 0;
+      if (burnable) flags += 1;
+      if (onlyXRP) flags += 2;
+      if (trustline) flags += 4;
+      if (transferable) flags += 8;
+
+      var mintObject = {
+        TransactionType: "NFTokenMint",
+        NFTokenTaxon: taxon,
+      };
+
+      if (memoHex != undefined) {
+        mintObject.Memos = [
+          {
+            Memo: {
+              MemoData: memoHex,
+            },
+          },
+        ];
+      }
+
+      if (uri != undefined && uri != "") {
+        mintObject.URI = xrpl.convertStringToHex(uri);
+      }
+
+      if (transferFee != 0) {
+        mintObject.TransferFee = transferFee;
+      }
+
+      if (flags != 0) {
+        mintObject.Flags = flags;
+      }
+
+      const payload = await getPayload(mintObject);
+      return payload;
+    } catch (err) {
+      console.log("Minting error " + err);
+    }
   },
 };
 var subscriptions = {
-  transactionSubscription: async function () {
+  transactionSubscription: async function (req, res) {
     const subscription = false;
     try {
       subscription = await sdk.payload.subscribe(req.body, (event) => {
@@ -539,25 +558,24 @@ var subscriptions = {
   },
   listNftSubscription: async function (req, res) {
     try {
-    var subscription = false;
-    var promise = new Promise(function (resolve) {
-      subscription = sdk.payload.subscribe(req.body.payload, (event) => {
-        if (event.data.signed) {
+      var subscription = false;
+      var promise = new Promise(function (resolve) {
+        subscription = sdk.payload.subscribe(req.body.payload, (event) => {
+          if (event.data.signed) {
             resolve(event.data.txid);
-        } else if (event.data.signed == false) {
-          resolve(false);
-        }
+          } else if (event.data.signed == false) {
+            resolve(false);
+          }
+        });
       });
-    });
 
-    var txID = await promise;
+      var txID = await promise;
 
-    var verify = await verifyTransaction(txID);
-    if (verify === true) {
-        console.log("signed")
+      var verify = await verifyTransaction(txID);
+      if (verify === true) {
+        console.log("signed");
         return "signed";
-      }
-      else {
+      } else {
         res.status(401).send(false);
         return false;
       }
@@ -587,90 +605,91 @@ var subscriptions = {
 };
 var xrpls = {
   getAccountTokens: async function (address) {
-
     try {
-        //define 
-        var client = new xrpl.Client("wss://xls20-sandbox.rippletest.net:51233")
+      //define
+      var client = new xrpl.Client("wss://xls20-sandbox.rippletest.net:51233");
 
-        //console.log("Connecting to XRPL")
-        //Try Connect to XRPL 
-        var count = 0
-        while (count < 6) {
-            if (count >= 3) {
-                var client = new xrpl.Client("wss://xls20-sandbox.rippletest.net:51233")
-            }
-
-            try {
-                await client.connect()
-                //console.log(`\tConnected`)
-                break
-            } catch (err) {
-                //console.log(`                    Failed ${count}`)
-                count += 1
-            }
+      //console.log("Connecting to XRPL")
+      //Try Connect to XRPL
+      var count = 0;
+      while (count < 6) {
+        if (count >= 3) {
+          var client = new xrpl.Client(
+            "wss://xls20-sandbox.rippletest.net:51233"
+          );
         }
 
-        //try 5 times to get an array of all account NFTs
-        var count = 0
-        while (count < 5) {
-            try {
-                var allTokens = []
-                var marker = "begin"
-                while (marker != null) {
-                    //console.log("Retrieving")
-                    if (marker == 'begin') {
-                        var accountTokens = await client.request({
-                            "command": "account_lines",
-                            "ledger_index": "validated",
-                            "account": address,
-                            "limit": 400
-                        })
-                    } else {
-                        var accountTokens = await client.request({
-                            "command": "account_lines",
-                            "ledger_index": "validated",
-                            "account": address,
-                            "marker": marker,
-                            "limit": 400
-                        })
-                    }
-
-                    var allTokens = allTokens.concat(accountTokens.result.lines)
-                    var marker = accountTokens.result.marker
-                }
-                break
-            } catch (err) {
-                //console.log(`                    Failed ${count}`)
-                count += 1
-            }
+        try {
+          await client.connect();
+          //console.log(`\tConnected`)
+          break;
+        } catch (err) {
+          //console.log(`                    Failed ${count}`)
+          count += 1;
         }
+      }
 
-
-        var tokensHeld = []
-        for(a in allTokens){
-
-            if (allTokens[a].balance <= `0`) continue
-
-            if (allTokens[a].currency.length > 3) {
-                var name = xrpl.convertHexToString(allTokens[a].currency).replace(/\0/g, '')
+      //try 5 times to get an array of all account NFTs
+      var count = 0;
+      while (count < 5) {
+        try {
+          var allTokens = [];
+          var marker = "begin";
+          while (marker != null) {
+            //console.log("Retrieving")
+            if (marker == "begin") {
+              var accountTokens = await client.request({
+                command: "account_lines",
+                ledger_index: "validated",
+                account: address,
+                limit: 400,
+              });
             } else {
-                var name = allTokens[a].currency
+              var accountTokens = await client.request({
+                command: "account_lines",
+                ledger_index: "validated",
+                account: address,
+                marker: marker,
+                limit: 400,
+              });
             }
 
-            tokensHeld.push({
-                "issuer": allTokens[a].account,
-                "hex": allTokens[a].currency,
-                "balance": allTokens[a].balance,
-                "name": name
-            })
+            var allTokens = allTokens.concat(accountTokens.result.lines);
+            var marker = accountTokens.result.marker;
+          }
+          break;
+        } catch (err) {
+          //console.log(`                    Failed ${count}`)
+          count += 1;
+        }
+      }
+
+      var tokensHeld = [];
+      for (a in allTokens) {
+        if (allTokens[a].balance <= `0`) continue;
+
+        if (allTokens[a].currency.length > 3) {
+          var name = xrpl
+            .convertHexToString(allTokens[a].currency)
+            .replace(/\0/g, "");
+        } else {
+          var name = allTokens[a].currency;
         }
 
-        return tokensHeld
+        tokensHeld.push({
+          issuer: allTokens[a].account,
+          hex: allTokens[a].currency,
+          balance: allTokens[a].balance,
+          name: name,
+        });
+      }
+
+      return tokensHeld;
     } catch (error) {
-        console.log(error)
-        return null
+      console.log(error);
+      return null;
     } finally {
-        await client.disconnect()
+      await client.disconnect();
     }
   },
   getNftImage: async function (nftURI, retryCount = 0) {
@@ -1551,61 +1570,59 @@ var xrpls = {
   verifyTransaction: async function (txID) {
     const client = await getXrplClientMain();
     try {
-        try {
-            var result = await client.request({
-                "command": "tx",
-                "transaction": txID,
-            })    
-            
-            if(result.result.meta.TransactionResult == "tesSUCCESS"){
-                var executed = true
-            } else {
-                var executed = false
-            }
+      try {
+        var result = await client.request({
+          command: "tx",
+          transaction: txID,
+        });
 
-        } catch (error) {
-            var executed = false
+        if (result.result.meta.TransactionResult == "tesSUCCESS") {
+          var executed = true;
+        } else {
+          var executed = false;
         }
+      } catch (error) {
+        var executed = false;
+      }
 
-        return executed
+      return executed;
     } catch (error) {
-        console.log(error)
-        return null
+      console.log(error);
+      return null;
     } finally {
-        await client.disconnect()
+      await client.disconnect();
     }
   },
 };
 async function verifyTransaction(txID) {
   const client = await getXrplClient();
-  console.log('checking transaction' + txID)
+  console.log("checking transaction" + txID);
+  try {
     try {
-        try {
-            var result = await client.request({
-                "command": "tx",
-                "transaction": txID,
-            })    
-            
-            if(result.result.meta.TransactionResult == "tesSUCCESS"){
-                var executed = true
-                console.log('txid verified true')
-            } else {
-                var executed = false
-                console.log('txid verified false')
-            }
+      var result = await client.request({
+        command: "tx",
+        transaction: txID,
+      });
 
-        } catch (error) {
-            var executed = false
-            console.log('error validating')
-        }
-
-        return executed
+      if (result.result.meta.TransactionResult == "tesSUCCESS") {
+        var executed = true;
+        console.log("txid verified true");
+      } else {
+        var executed = false;
+        console.log("txid verified false");
+      }
     } catch (error) {
-        console.log(error)
-        return null
-    } finally {
-        await client.disconnect()
+      var executed = false;
+      console.log("error validating");
     }
+
+    return executed;
+  } catch (error) {
+    console.log(error);
+    return null;
+  } finally {
+    await client.disconnect();
+  }
 }
 async function getPayload(request) {
   const payload = await sdk.payload.create(request);
