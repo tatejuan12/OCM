@@ -320,6 +320,16 @@
               data: {
                 image: image,
                 json: jsonData
+              },
+              success: function () {
+                $.ajax({
+                  type:"POST",
+                  url: "/mint-item",
+                  data: {
+                    json: jsonData
+                  },
+                  current page = result.payload.request.always
+                })
               }
             })
           }
