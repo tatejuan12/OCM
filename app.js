@@ -632,7 +632,7 @@ server.post("/mint-no-IPFS-payload", speedLimiter, async (req, res) => {
   const jsonData = dataBody.jsonData;
   const image = dataBody.image;
   const fileName = dataBody.fileName;
-  const return_url = dataBody.returnUrl
+  const return_url = dataBody.returnUrl;
   if (req.session.login) {
     const payload = await xumm.payloads.mintNftPayload(
       process.env.XRPL_ISSUER_PAYMENT_ADDRESS,
@@ -641,11 +641,10 @@ server.post("/mint-no-IPFS-payload", speedLimiter, async (req, res) => {
       req.useragent.isMobile,
       return_url,
     );
-    console.log(payload);
     const response = {
       payload: payload,
       NFTokenID: req.body.NFTokenID,
-      issuer: req.body.issuer,
+      issuer: req.session.wallet,
       fee: req.body.fee,
       jsonData: jsonData,
       image: image,
