@@ -44,10 +44,12 @@ const NFTSPERPAGE = 25;
 const server = express();
 
 server.use(compression());
-server.use(bodyParser.json()); // for parsing serverlication/json
+server.use(bodyParser.json({ limit: "110mb" })); // for parsing serverlication/json
 server.use(
   bodyParser.urlencoded({
     extended: true,
+    parameterLimit: 100000,
+    limit: "110mb",
   })
 ); // for parsing serverlication/x-www-form-urlencoded
 server.set("view engine", "ejs"); // Setting rendering agent to ejs
@@ -637,35 +639,25 @@ server.post(
   upload.any(),
   speedLimiter,
   async (req, res) => {
-    const dataBody = req.body;
-    const dataFiles = req.files;
-    var jsonData;
-    // console.log(dataBody);
-    console.log(dataFiles[0]);
-    try {
-      jsonData = JSON.parse(dataBody.jsonData);
-    } catch (err) {
-      console.error(`Couldn't parse jsonData \n ${err}`);
-    }
     if (req.session.login) {
       const payload = await xumm.payloads.mintNftPayload(
         process.env.XRPL_ISSUER_PAYMENT_ADDRESS,
         req.session.wallet,
         process.env.MINTING_PRICE,
         req.useragent.isMobile,
-        dataBody.return_url
+        req.body.return_url
       );
       if (payload) {
         const response = {
-          payload: payload,
-          NFTokenID: req.body.NFTokenID,
-          issuer: req.session.wallet,
-          fee: req.body.fee,
-          jsonData: jsonData,
-          image: dataFiles[0],
-          fileName: dataBody.fileName,
+          // payload: payload,
+          // NFTokenID: req.body.NFTokenID,
+          // issuer: req.session.wallet,
+          // fee: req.body.fee,
+          // jsonData: jsonData,
+          // image: dataFiles[0],
+          // fileName: dataBody.fileName,
         };
-        res.send(response);
+        res.send(payload);
       } else res.sendStatus(400);
     } else res.sendStatus(400);
   }
@@ -676,9 +668,23 @@ server.post(
   speedLimiter,
   async (req, res) => {
     const dataBody = req.body;
-    const jsonData = dataBody.jsonData;
-    const image = dataBody.image;
-    const fileName = dataBody.fileName;
+    try {
+      dataBody.jsonData = JSON.parse(dataBody.jsonData);
+    } catch (err) {
+      console.error("Couldn't parse jsonData");
+      console.error(err);
+    }
+    //Wrap the code below with a check to see if user has signed the transaction. See other subscription functions as reference
+    const epoch = new Date().getTime();
+    dataBody.jsonData[
+      "image"
+    ] = `https://ocw-space.sgp1.digitaloceanspaces.com/nft-images/${req.session.wallet}${epoch}.png`;
+    dataBody[
+      "jsonLink"
+    ] = `https://ocw-space.sgp1.digitaloceanspaces.com/nft-jsons/${req.session.wallet}${epoch}.json`;
+    digitalOcean.functions.uploadNFTImage(req, req.files[0], epoch);
+    //Put function here to upload json
+
     //if (dataBody) {
     //  if (image) {
     //    if (
