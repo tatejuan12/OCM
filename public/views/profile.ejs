@@ -97,9 +97,6 @@
             <div class="loader-images"></div>
             <span class="loader-disclaimer">Querying the XRPL, please be patient</span>
           </div>
-          <%if (isMarker) {%>
-            <div class="load-more-div"><button id="moreUnlistedNftsLoad" class="btn btn-load-more">Load More</button></div>
-          <%}%>
         </div>
         <div id="pane-liked-nfts" class="tab-pane fade" aria-labelledby="nav-liked-tab" role="tabpanel">
           <%- include ("models/nft-rows.ejs", {nfts: likedNfts}) %>
@@ -179,20 +176,33 @@
           )
       }
     });
+    var isMarker = '<%=isMarker%>'
     $("#unlisted-nfts").load("<%=url%>/get-account-unlisted-nfts?wallet=<%=user.wallet%>",
       function() {
         const cards = document.getElementById("pane-unlisted-nfts").querySelectorAll(".col-5");
         cards.forEach(element => {
           element.classList.add("sal-animate")
         });
+        if (isMarker) {
+        $('#pane-unlisted-nfts').append(`
+        <div class="load-more-div">
+              <button class="special-btn" id="moreUnlistedNftsLoad" onclick="loadMoreNfts()">
+                <i class="icon i-flashlight"></i>
+                <span class="button-text">Find More</span>
+                <span class="button-loader"></span>
+              </button>
+            </div>
+        `)}
       })
 
     var markerIterationUnlisted = 0;
     var markerUnlisted = '<%=marker%>';
-    $("#moreUnlistedNftsLoad").click(function() {
-      markerIterationUnlisted++;
+    function loadMoreNfts() {
+      document.querySelector('.special-btn').classList.add('loading')
+      document.querySelector('.special-btn').setAttribute('disabled')
       $.get(`<%=url%>/get-additional-unlisted-nfts?wallet=<%=user.wallet%>&marker=${markerUnlisted}&markerIteration=${markerIterationUnlisted}`,
         function(returnData) {
+          markerIterationUnlisted++;
           var updateNfts = [];
           $("#exploreSectionUnlisted").append(returnData[0])
           markerUnlisted = returnData[1]
@@ -202,9 +212,11 @@
               element.classList.add("sal-animate");
             }
           });
+          document.querySelector('.special-btn').classList.remove('loading')
+          document.querySelector('.special-btn').removeAttribute('disabled')
         }
       )
-    })
+    }
   </script>
 </body>
 

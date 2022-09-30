@@ -794,7 +794,6 @@ server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
   });
 });
 server.get("/get-additional-unlisted-nfts", speedLimiter, async (req, res) => {
-  console.log('function started')
   var wallet = req.query.wallet;
   var unlistedNfts = [];
   var unlistedNftsToReturn = [];
@@ -802,7 +801,6 @@ server.get("/get-additional-unlisted-nfts", speedLimiter, async (req, res) => {
   var markerIteration = req.query.markerIteration;
   var returnData = [];
   if (wallet && marker && markerIteration) {
-    console.log('passed')
     const xrplNfts = await xumm.xrpl.getAccountsNfts(
       wallet,
       NFTSPERPAGE,
@@ -813,13 +811,12 @@ server.get("/get-additional-unlisted-nfts", speedLimiter, async (req, res) => {
       const returnedNft = await mongoClient.query.getNft(nft.NFTokenID);
       if (returnedNft == null) unlistedNfts.push(nft);
     }
-    for (var i = markerIteration * NFTSPERPAGE; i < xrplNfts[0].length; i++) {
+    for (var i = 0; i < unlistedNfts.length; i++) {
       var queuedIDFinder = await mongoClient.query.checkQueue(
         unlistedNfts[i].NFTokenID
       );
       var theNFT = unlistedNfts[i].NFTokenID;
       if (queuedIDFinder == null) {
-        //check to see if the NFT isn't in the queue for listing with !==.
         const data = await xumm.xrpl.getNftImage(unlistedNfts[i].URI);
         if (data) {
           unlistedNftsToReturn[i] = data;

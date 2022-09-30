@@ -554,6 +554,12 @@ var {
 .i-close{
   background-image: url(../images/icons/Favorites/icons8-close-100.png);
 }
+.active-light-mode .i-flashlight{
+  background-image: url(../images/icons/Favorites/icons8-flash-light-50.png);
+}
+.i-flashlight{
+  background-image: url(../images/icons/Favorites-light/icons8-flash-light-50.png);
+}
 .i-up {
   background-image: url(../images/icons/Favorites/icons8-up-50.png);
 }
@@ -17973,6 +17979,12 @@ NFT product styles mobile layout
     justify-content: space-around;
     display: flex;
     }
+  #exploreSectionUnlisted .nft-card-wrap {
+    max-width: 50%;
+    padding: 8px;
+    justify-content: space-around;
+    display: flex;
+    }
   .product-style-one a .product-name {
     font-size: 15px;
     margin-top: 0;
@@ -24574,5 +24586,115 @@ Collection nav
 @media only screen and (max-width: 768px) {
   .redeem video {
     max-width: 90%;
+  }
+}
+.active-light-mode .special-btn{
+  background-color: var(--color-white);
+}
+.special-btn{
+  background-color: var(--background-color-4);  
+  border-radius: 35px;
+  font-weight: bold;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.25s ease;
+  width: 210px;
+  position: relative;
+  height: 60px;
+  overflow: hidden;
+}
+.special-btn:not(.loading):hover {
+  box-shadow: 0px 2px 15px 0px #b7b9bd57;
+}
+.special-btn:not(.loading):hover i {
+  transform: translate(7px);
+}
+.special-btn i{
+  position: absolute;
+  left: 20px;
+  pointer-events: none;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+.active-light-mode .button-text{
+  color: #000;
+}
+.special-btn .button-text{
+  width:130px;
+  display: block;
+  position: absolute;
+  left:60px;
+  pointer-events: none;
+  transition: all 0.25s ease;
+}
+.button-loader{
+  position:absolute;
+  width:60px;
+  height:60px;
+  z-index:100;
+  border-radius: 50%;
+  top: 0;
+  left:0px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.25s ease;
+}
+.active-light-mode .button-loader:after{
+  border-left: 3px solid #000;
+}
+.active-light-mode .button-loader:before{
+  border-left: 3px solid #000;
+}
+.button-loader:after{
+  content:'';
+  width:44px;
+  height:44px;
+  border-radius: 50%;
+  border:3px solid transparent;
+  border-left: 3px solid #fff;
+  animation:loading infinite 0.8s ease 0.05s;
+  position:absolute;
+}
+.button-loader:before{
+  content:'';
+  width:44px;
+  height:44px;
+  border-radius: 50%;
+  border:3px solid transparent;
+  border-left: 3px solid #fff;
+  animation:loading infinite 0.8s linear;
+  position:absolute;
+  opacity: 0.6;
+}
+.special-btn.loading{
+  width:60px;
+}
+.special-btn.loading i{
+  transform:rotate(-90deg);
+  padding-bottom: 4px;
+  padding-left:3px;
+}
+.special-btn.loading .text{
+  transform:translate(-140px);
+}
+.special-btn.loading .button-loader{
+  opacity: 1;
+}
+@keyframes loading{
+  0%{
+    transform:rotate(0deg);
+  }
+  100%{
+    transform:rotate(360deg);
   }
 }
