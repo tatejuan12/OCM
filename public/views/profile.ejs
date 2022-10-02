@@ -94,8 +94,14 @@
       <div id="pane-listed-nfts" class="tab-pane fade active show" aria-labelledby="nav-listed-tab" role="tabpanel">
         <%- include ("models/nft-rows.ejs", {nfts:nfts}) %>
         <%if (isMarker) {%>
-          <div class="load-more-div"><button id="moreListedNftsLoad" class="btn btn-load-more">Load More</button></div>
-        <%}%>
+          <div class="load-more-div">
+            <button class="special-btn" id="moreListedNftsLoad">
+              <i class="icon i-flashlight"></i>
+              <span class="button-text">Find More</span>
+              <span class="button-loader"></span>
+            </button>
+          </div>
+        <%}%> 
       </div>
       <% if (isOwner) {%>
         <div id="pane-unlisted-nfts" class="tab-pane fade" aria-labelledby="nav-unlisted-tab" role="tabpanel">
@@ -103,9 +109,7 @@
             <div class="loader-images"></div>
             <span class="loader-disclaimer">Querying the XRPL, please be patient</span>
           </div>
-          <%if (isMarker) {%>
-            <div class="load-more-div"><button id="moreUnlistedNftsLoad" class="btn btn-load-more">Load More</button></div>
-          <%}%>        </div>
+        </div>
         <div id="pane-liked-nfts" class="tab-pane fade" aria-labelledby="nav-liked-tab" role="tabpanel">
           <%- include ("models/nft-rows.ejs", {nfts: likedNfts}) %>
         </div>
@@ -161,54 +165,67 @@
     $('#bulkButton').on('click', function () {
       
     });
-    $('#exploreSection').endlessScroll({
-      pagesToKeep: 10,
-      inflowPixels: 600,
-      fireOnce: false,
-      fireDelay: false,
-      callback: function(){
-        var markerIteration = 0;
-        var marker = '<%=marker%>';
-          $.get(
-            `<%=url%>/get-additional-listed-nfts?wallet=<%=user.wallet%>&marker=${marker}&markerIteration=${markerIteration}`,
-            function(data) {
-              markerIteration++;
-              var updateNfts = [];
-              $("#exploreSection").append(data[0])
-              marker = data[1]
-              const cards = document.getElementById("exploreSection").querySelectorAll(".col-5");
-              cards.forEach(element => {
-                element.classList.add("sal-animate")
-              });
-            }
-          )
-      }
-    });
-    $("#unlisted-nfts").load("<%=url%>/get-account-unlisted-nfts?wallet=<%=user.wallet%>",
-      function() {
-        const cards = document.getElementById("pane-unlisted-nfts").querySelectorAll(".col-5");
-        cards.forEach(element => {
-          element.classList.add("sal-animate")
-        });
-      })
-
-    var markerIterationUnlisted = 0;
-    var markerUnlisted = '<%=marker%>';
-    $("#moreUnlistedNftsLoad").click(function() {
-      $.get(
-        `<%=url%>/get-additional-unlisted-nfts?wallet=<%=user.wallet%>&marker=${markerUnlisted}&markerIteration=${markerIterationUnlisted}`,
-        function(data) {
-          markerIterationUnlisted++;
-          var updateNfts = [];
-          $("#exploreSectionUnlisted").append(data[0])
-          markerUnlisted = data[1]
-          const cardsUnlisted = document.getElementById("exploreSectionUnlisted").querySelectorAll(".col-5");
-          cardsUnlisted.forEach(element => {
-            element.classList.add("sal-animate")
-          });
-        }
-      )
+    $('#moreListedNftsLoad').on('click', function(){
+      var markerIteration = 0;
+      var marker = '<%=marker%>';
+      document.getElementById('moreListedNftsLoad').classList.add('loading')
+      document.getElementById('moreListedNftsLoad').disabled = true;
+        $.get(
+          `<%=url%>/get-additional-listed-nfts?wallet=<%=user.wallet%>&marker=${marker}&markerIteration=${markerIteration}`,
+          function(data) {
+            markerIteration++;
+            var updateNfts = [];
+            $("#exploreSection").append(data[0])
+            marker = data[1]
+            const cards = document.getElementById("exploreSection").querySelectorAll(".col-5");
+            cards.forEach(element => {
+              element.classList.add("sal-animate")
+            });
+            document.getElementById('moreListedNftsLoad').classList.remove('loading')
+            document.getElementById('moreListedNftsLoad').disabled = false;
+          }
+        )
     })
+  var isMarker = '<%=isMarker%>'
+  $("#unlisted-nfts").load("<%=url%>/get-account-unlisted-nfts?wallet=<%=user.wallet%>",
+    function() {
+      const cards = document.getElementById("pane-unlisted-nfts").querySelectorAll(".col-5");
+      cards.forEach(element => {
+        element.classList.add("sal-animate")
+      });
+      if (isMarker) {
+      $('#pane-unlisted-nfts').append(`
+      <div class="load-more-div">
+            <button class="special-btn" id="moreUnlistedNftsLoad" onclick="loadMoreNfts()">
+              <i class="icon i-flashlight"></i>
+              <span class="button-text">Find More</span>
+              <span class="button-loader"></span>
+            </button>
+          </div>
+      `)}
+    })
+  var markerIterationUnlisted = 0;
+  var markerUnlisted = '<%=marker%>';
+  function loadMoreNfts() {
+    document.querySelector('.special-btn').classList.add('loading')
+    document.querySelector('.special-btn').disabled = true;
+    $.get(`<%=url%>/get-additional-unlisted-nfts?wallet=<%=user.wallet%>&marker=${markerUnlisted}&markerIteration=${markerIterationUnlisted}`,
+      function(returnData) {
+        markerIterationUnlisted++;
+        var updateNfts = [];
+        $("#exploreSectionUnlisted").append(returnData[0])
+        markerUnlisted = returnData[1]
+        const cardsUnlisted = document.getElementById("pane-unlisted-nfts").querySelectorAll(".col-5");
+        cardsUnlisted.forEach(element => {
+          if (!$(element).hasClass("sal-animate")){
+            element.classList.add("sal-animate");
+          }
+        });
+        document.querySelector('.special-btn').classList.remove('loading')
+        document.querySelector('.special-btn').disabled = false;
+      }
+    )
+  }
   </script>
 </body>
 

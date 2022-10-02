@@ -849,6 +849,56 @@ server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
     nfts: unlistedNftsToReturn,
   });
 });
+server.get("/get-additional-unlisted-nfts", speedLimiter, async (req, res) => {
+  var wallet = req.query.wallet;
+  var unlistedNfts = [];
+  var unlistedNftsToReturn = [];
+  var marker = req.query.marker;
+  var markerIteration = req.query.markerIteration;
+  var returnData = [];
+  if (wallet && marker && markerIteration) {
+    const xrplNfts = await xumm.xrpl.getAccountsNfts(
+      wallet,
+      NFTSPERPAGE,
+      marker
+    );
+    var updateNfts = [];
+    for (let nft of xrplNfts[0]) {
+      const returnedNft = await mongoClient.query.getNft(nft.NFTokenID);
+      if (returnedNft == null) unlistedNfts.push(nft);
+    }
+    for (var i = 0; i < unlistedNfts.length; i++) {
+      var queuedIDFinder = await mongoClient.query.checkQueue(
+        unlistedNfts[i].NFTokenID
+      );
+      var theNFT = unlistedNfts[i].NFTokenID;
+      if (queuedIDFinder == null) {
+        const data = await xumm.xrpl.getNftImage(unlistedNfts[i].URI);
+        if (data) {
+          unlistedNftsToReturn[i] = data;
+          unlistedNftsToReturn[i].taxon = unlistedNfts[i].NFTokenTaxon;
+          unlistedNftsToReturn[i].issuer = unlistedNfts[i].Issuer;
+          unlistedNftsToReturn[i].currentHolder = wallet;
+          unlistedNftsToReturn[i].NFTokenID = unlistedNfts[i].NFTokenID;
+        }
+      }
+      var rawData = unlistedNfts[i];
+    }
+    res.render("views/models/unlisted-nft-rows-load.ejs", {
+        wallet: wallet,
+        rawData: rawData,
+        nfts: unlistedNftsToReturn,
+      },
+      async function (err, html) {
+        if (err) throw "Couldn't get NFTS\n" + err;
+        returnData.push(html);
+      }
+    );
+    returnData.push(xrplNfts[1])
+    res.send(returnData);
+  } else res.sendStatus(400);
+});
+
 server.get("/get-additional-listed-nfts", speedLimiter, async (req, res) => {
   var wallet = req.query.wallet;
   var marker = req.query.marker;
@@ -863,35 +913,6 @@ server.get("/get-additional-listed-nfts", speedLimiter, async (req, res) => {
     const nfts = await mongoClient.query.matchXrplNftsWithMongoDB(
       null,
       xrplNfts
-    );
-    var updateNfts = [];
-    for (var i = markerIteration * NFTSPERPAGE; i < nfts.length; i++) {
-      updateNfts.push(nfts[i]);
-    }
-    res.render(
-      "views/models/nft-rows-load.ejs",
-      {
-        nfts: nfts,
-      },
-      async function (err, html) {
-        if (err) throw "Couldn't get NFTS\n" + err;
-        returnData.push(html);
-      }
-    );
-    returnData.push(xrplNfts[1]);
-    res.send(returnData);
-  } else res.sendStatus(400);
-});
-server.get("/get-additional-unlisted-nfts", speedLimiter, async (req, res) => {
-  var wallet = req.query.wallet;
-  var marker = req.query.marker;
-  var markerIteration = req.query.markerIteration;
-  var returnData = [];
-  if (wallet && marker && markerIteration) {
-    const xrplNfts = await xumm.xrpl.getAccountsNfts(
-      wallet,
-      NFTSPERPAGE,
-      marker
     );
     var updateNfts = [];
     for (var i = markerIteration * NFTSPERPAGE; i < nfts.length; i++) {

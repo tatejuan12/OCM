@@ -1,0 +1,3 @@
+  <% nfts.forEach(function(res){%>
+  <%- include('unlisted-nft-card.ejs', {nft:res, rawData:rawData, wallet:wallet})%>
+  <%}); %>
