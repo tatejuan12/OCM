@@ -196,7 +196,7 @@
       if (isMarker) {
       $('#pane-unlisted-nfts').append(`
       <div class="load-more-div">
-            <button class="special-btn" id="moreUnlistedNftsLoad" onclick="loadMoreNfts()">
+            <button class="special-btn" id="moreUnlistedNftsLoad" onclick="loadMoreNfts(this)">
               <i class="icon i-flashlight"></i>
               <span class="button-text">Find More</span>
               <span class="button-loader"></span>
@@ -206,9 +206,9 @@
     })
   var markerIterationUnlisted = 0;
   var markerUnlisted = '<%=marker%>';
-  function loadMoreNfts() {
-    document.querySelector('.special-btn').classList.add('loading')
-    document.querySelector('.special-btn').disabled = true;
+  function loadMoreNfts(elem) {
+    $(elem).addClass('loading');
+    $(elem).prop('disabled', true);
     $.get(`<%=url%>/get-additional-unlisted-nfts?wallet=<%=user.wallet%>&marker=${markerUnlisted}&markerIteration=${markerIterationUnlisted}`,
       function(returnData) {
         markerIterationUnlisted++;
@@ -221,8 +221,8 @@
             element.classList.add("sal-animate");
           }
         });
-        document.querySelector('.special-btn').classList.remove('loading')
-        document.querySelector('.special-btn').disabled = false;
+        $(elem).removeClass('loading');
+        $(elem).prop('disabled', false);
       }
     )
   }
