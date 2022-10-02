@@ -685,11 +685,11 @@ server.post(
     ] = `https://ocw-space.sgp1.digitaloceanspaces.com/nft-jsons/${req.session.wallet}${epoch}.json`;
     
     if (!allowedExtensions.exec(req.files[0].value)) {
-      res.status(500).send("Failed")
+      res.status(415).send("Failed")
     } else {
       digitalOcean.functions.uploadNFTImage(req, req.files[0], epoch);
+          //Put function here to upload json
     }
-    //Put function here to upload json
 
     //if (dataBody) {
     //  if (image) {
