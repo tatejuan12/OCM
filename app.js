@@ -668,6 +668,7 @@ server.post(
   speedLimiter,
   async (req, res) => {
     const dataBody = req.body;
+    var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
     try {
       dataBody.jsonData = JSON.parse(dataBody.jsonData);
     } catch (err) {
@@ -682,7 +683,12 @@ server.post(
     dataBody[
       "jsonLink"
     ] = `https://ocw-space.sgp1.digitaloceanspaces.com/nft-jsons/${req.session.wallet}${epoch}.json`;
-    digitalOcean.functions.uploadNFTImage(req, req.files[0], epoch);
+    
+    if (!allowedExtensions.exec(req.files[0].value)) {
+      res.status(500).send("Failed")
+    } else {
+      digitalOcean.functions.uploadNFTImage(req, req.files[0], epoch);
+    }
     //Put function here to upload json
 
     //if (dataBody) {
