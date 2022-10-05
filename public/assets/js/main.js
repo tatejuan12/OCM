@@ -997,7 +997,7 @@ function getListNft() {
         data: result,
 
         error: function (resulty) {
-          console.warn("Payment in expired, failed or was cancelled.");
+          console.warn("Payment is expired, failed or was cancelled.");
         },
       });
     },

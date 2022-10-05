@@ -43,7 +43,29 @@ var methods = {
       });
     });
 
-    result = await uploadPromise.catch((er) => {
+    result = await uploadPromise.catch((err) => {
+      console.log(err);
+      return false;
+    });
+    return result;
+  },
+  uploadNFTJson: async function (req, json, epoch) {
+    var result = false;
+    let jsonStrng = JSON.stringify(json);
+    const param = {
+      Bucket: "ocw-space/nft-jsons",
+      Key: req.session.wallet + epoch + ".json",
+      Body: jsonStrng,
+      ACL: "public-read",
+    }
+    const uploadPromise = new Promise(function (resolve, reject) {
+      s3.upload(param, function (err, data) {
+        if (err) reject(err);
+        else resolve(true);
+      });
+    });
+
+    result = await uploadPromise.catch((err) => {
       console.log(err);
       return false;
     });

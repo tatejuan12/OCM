@@ -648,16 +648,10 @@ server.post(
         req.body.return_url
       );
       if (payload) {
-        const response = {
-          // payload: payload,
-          // NFTokenID: req.body.NFTokenID,
-          // issuer: req.session.wallet,
-          // fee: req.body.fee,
-          // jsonData: jsonData,
-          // image: dataFiles[0],
-          // fileName: dataBody.fileName,
-        };
-        res.send(payload);
+        response = {
+          payload: payload,
+        }
+        res.send(response);
       } else res.sendStatus(400);
     } else res.sendStatus(400);
   }
@@ -671,33 +665,38 @@ server.post(
     var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
     try {
       dataBody.jsonData = JSON.parse(dataBody.jsonData);
+      dataBody.payload = JSON.parse(dataBody.payload);
     } catch (err) {
       console.error("Couldn't parse jsonData");
       console.error(err);
     }
     //Wrap the code below with a check to see if user has signed the transaction. See other subscription functions as reference
-    const epoch = new Date().getTime();
-    dataBody.jsonData[
-      "image"
-    ] = `https://ocw-space.sgp1.digitaloceanspaces.com/nft-images/${req.session.wallet}${epoch}.png`;
-    dataBody[
-      "jsonLink"
-    ] = `https://ocw-space.sgp1.digitaloceanspaces.com/nft-jsons/${req.session.wallet}${epoch}.json`;
-    
-    if (!allowedExtensions.exec(req.files[0].value)) {
-      res.status(415).send("Failed")
-    } else {
-      digitalOcean.functions.uploadNFTImage(req, req.files[0], epoch);
-          //Put function here to upload json
+    const result = await xumm.subscriptions.mintNftSubscription(dataBody.payload, res);
+    if (result) {
+      const epoch = new Date().getTime();
+      dataBody.jsonData[
+        "image"
+      ] = `https://ocw-space.sgp1.digitaloceanspaces.com/nft-images/${req.session.wallet}${epoch}.png`;
+      dataBody[
+        "jsonLink"
+      ] = `https://ocw-space.sgp1.digitaloceanspaces.com/nft-jsons/${req.session.wallet}${epoch}.json`;
+      console.log(req.files[0])
+      if (!allowedExtensions.exec(req.files[0].originalname)) {
+        res.status(415).send("Failed")
+      } else {
+        digitalOcean.functions.uploadNFTImage(req, req.files[0], epoch);
+            //Put function here to upload json
+        digitalOcean.functions.uploadNFTJson(req, dataBody.jsonData, epoch);
+      }
+  
+      //if (dataBody) {
+      //  if (image) {
+      //    if (
+      //      (result = await xumm.payloads.mintObject())
+      //    )
+      //  }
+      //}
     }
-
-    //if (dataBody) {
-    //  if (image) {
-    //    if (
-    //      (result = await xumm.payloads.mintObject())
-    //    )
-    //  }
-    //}
     res.sendStatus(200);
   }
 );

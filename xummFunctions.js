@@ -558,6 +558,7 @@ var subscriptions = {
   },
   listNftSubscription: async function (req, res) {
     try {
+      console.log(req)
       var subscription = false;
       var promise = new Promise(function (resolve) {
         subscription = sdk.payload.subscribe(req.body.payload, (event) => {
@@ -583,7 +584,34 @@ var subscriptions = {
       console.error("There was an error with the payload: \n" + error);
     }
   },
-  NFTokenAcceptSubscription: async function (req, res) {
+  mintNftSubscription: async function (payload, res) {
+    try {
+      console.log(payload)
+      var subscription = false;
+      var promise = new Promise(function (resolve) {
+        subscription = sdk.payload.subscribe(payload, (event) => {
+          if (event.data.signed) {
+            resolve(event.data.txid);
+          } else if (event.data.signed == false) {
+            resolve(false);
+          }
+        });
+      });
+
+      var txID = await promise;
+
+      var verify = await verifyTransaction(txID);
+      if (verify === true) {
+        console.log("signed");
+        return "signed";
+      } else {
+        res.status(401).send(false);
+        return false;
+      }
+    } catch (error) {
+      console.error("There was an error with the payload: \n" + error);
+    }
+  },  NFTokenAcceptSubscription: async function (req, res) {
     var subscription = false;
     var promise = new Promise(function (resolve) {
       subscription = sdk.payload.subscribe(req.body.payload, (event) => {
