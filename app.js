@@ -639,6 +639,7 @@ server.post(
   upload.any(),
   speedLimiter,
   async (req, res) => {
+    console.log(req.files)
     if (req.session.login) {
       const payload = await xumm.payloads.mintNftPayload(
         process.env.XRPL_ISSUER_PAYMENT_ADDRESS,
@@ -680,24 +681,28 @@ server.post(
       dataBody[
         "jsonLink"
       ] = `https://ocw-space.sgp1.digitaloceanspaces.com/nft-jsons/${req.session.wallet}${epoch}.json`;
-      console.log(req.files[0])
+
       if (!allowedExtensions.exec(req.files[0].originalname)) {
         res.status(415).send("Failed")
       } else {
         digitalOcean.functions.uploadNFTImage(req, req.files[0], epoch);
-            //Put function here to upload json
         digitalOcean.functions.uploadNFTJson(req, dataBody.jsonData, epoch);
+        if (dataBody) {
+          const mintPload = await xumm.payloads.mintObject(
+            dataBody.jsonLink, 
+            dataBody.taxon, 
+            dataBody.transferFee, 
+            "OnChain Marketplace website minted NFT",
+            dataBody.burnable, 
+            dataBody.onlyXRP, 
+            dataBody.trustline, 
+            dataBody.transferable
+            );
+          console.log(mintPload)
+          res.status(200).send(mintPload);
+        }
       }
-  
-      //if (dataBody) {
-      //  if (image) {
-      //    if (
-      //      (result = await xumm.payloads.mintObject())
-      //    )
-      //  }
-      //}
     }
-    res.sendStatus(200);
   }
 );
 server.post(

@@ -142,11 +142,11 @@
               <div class="card card-body">
                 <div class="pb--20">
                   <label for="taxon-value">Taxon:</label>
-                  <input type="number" id="taxon-value" placeholder='e.g "3"'>
+                  <input type="number" id="taxon-value" value="1" placeholder='e.g "3"'>
                 </div>
                 <div class="pb--20">
                   <label for="transfer-fee">Transfer Fee:</label>
-                  <input type="number" id="transfer-fee" placeholder="0 - 50" min="0" max="50">
+                  <input type="number" id="transferFee" value="0" placeholder="0 - 50" min="0" max="50">
                 </div>
                 <div class="col-md-4 col-sm-4">
                   <div class="input-box pb--20 rn-check-box">
@@ -277,17 +277,19 @@
       const returnUrl = window.location.href;
       formData.append("jsonData", JSON.stringify(jsonData))
       formData.append("taxon", $('#taxon-value').val());
-      formData.append("transferFee", $('tranfer-fee').val());
+      formData.append("transferFee", $('#transferFee').val());
       formData.append("image", document.getElementById('createinputfile').files[0]);
       formData.append("burnable", document.getElementById("burnable").checked);
       formData.append("transferable", document.getElementById("transferable").checked);
       formData.append("onlyXRP", document.getElementById("only-xrp").checked);
       formData.append("trustline", document.getElementById("trustline").checked);
-      $.ajax({
+      var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+      if (allowedExtensions.exec(document.getElementById('createinputfile').files[0].name)) {
+        $.ajax({
         type: "POST",
         url: "/mint-no-IPFS-payload",
         data: {
-          return_url: returnUrl
+          return_url: returnUrl,
         },
 
         success: function (result) {
@@ -300,8 +302,8 @@
             contentType: false,
             enctype: "multipart/form-data",
             data: formData,
-            success: function () {
-              window.location = "/profile"
+            success: function (result) {
+              console.log(result.payload.next.always)
             },
           })
         },
@@ -309,6 +311,9 @@
           customAlert.alert('Error minting NFT')
         },
       });
+      } else {
+        customAlert.alert('inncorect file type')
+      }
     }
   </script>
 </body>
