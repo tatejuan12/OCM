@@ -9,8 +9,8 @@ var s3 = new aws.S3({ endpoint: process.env.S3_ENDPOINT });
 aws.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: "sgp1",
 });
+s3.config.region = "ap-southeast-1";
 const upload = multer({
   storage: multerS3({
     s3,
@@ -26,7 +26,6 @@ const upload = multer({
     },
   }),
 }).single("upload");
-
 var methods = {
   uploadNFTImage: async function (req, img, epoch) {
     var result = false;
@@ -35,7 +34,7 @@ var methods = {
       Key: req.session.wallet + epoch + ".png",
       Body: img.buffer,
       ACL: "public-read",
-    }
+    };
     const uploadPromise = new Promise(function (resolve, reject) {
       s3.upload(param, function (err, data) {
         if (err) reject(err);
@@ -57,7 +56,7 @@ var methods = {
       Key: req.session.wallet + epoch + ".json",
       Body: jsonStrng,
       ACL: "public-read",
-    }
+    };
     const uploadPromise = new Promise(function (resolve, reject) {
       s3.upload(param, function (err, data) {
         if (err) reject(err);
