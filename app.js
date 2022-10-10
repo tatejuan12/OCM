@@ -56,7 +56,7 @@ server.set("view engine", "ejs"); // Setting rendering agent to ejs
 server.use(helmet({ contentSecurityPolicy: false }));
 server.set("views", path.join(__dirname, "/public")); // Makes views for rendering the public dir
 server.use(express.static(__dirname + "/public", { dotfiles: "allow" })); // Essential so JS and CSS is acccessible by requests
-server.use(logger({ path: __dirname + "/logs/logs.log" })); // Logs data, every connection will log browser info and request url
+//server.use(logger({ path: __dirname + "/logs/logs.log" })); // Logs data, every connection will log browser info and request url
 server.use(
   session({
     secret: "some secret",
@@ -639,7 +639,6 @@ server.post(
   upload.any(),
   speedLimiter,
   async (req, res) => {
-    console.log(req.files)
     if (req.session.login) {
       const payload = await xumm.payloads.mintNftPayload(
         process.env.XRPL_ISSUER_PAYMENT_ADDRESS,
@@ -653,8 +652,8 @@ server.post(
           payload: payload,
         }
         res.send(response);
-      } else res.sendStatus(400);
-    } else res.sendStatus(400);
+      } else res.status(400).send('Error getting Payload');
+    } else res.status(400).send('Please sign in.');
   }
 );
 server.post(
@@ -688,6 +687,7 @@ server.post(
         digitalOcean.functions.uploadNFTImage(req, req.files[0], epoch);
         digitalOcean.functions.uploadNFTJson(req, dataBody.jsonData, epoch);
         if (dataBody) {
+          console.log(dataBody)
           const mintPload = await xumm.payloads.mintObject(
             dataBody.jsonLink, 
             dataBody.taxon, 

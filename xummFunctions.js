@@ -423,10 +423,10 @@ var payloads = {
 
       //CALCULATE THE FLAGS
       var flags = 0;
-      if (burnable) flags += 1;
-      if (onlyXRP) flags += 2;
-      if (trustline) flags += 4;
-      if (transferable) flags += 8;
+      if (burnable == 'true') flags += 1;
+      if (onlyXRP == 'true') flags += 2;
+      if (trustline == 'true') flags += 4;
+      if (transferable == 'true') flags += 8;
 
       var mintObject = {
         TransactionType: "NFTokenMint",
