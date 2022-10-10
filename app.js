@@ -423,6 +423,7 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
   }
   if (promises[0]) {
     res.render("views/product-details", {
+      wallet: wallet,
       isOwner: isOwner,
       nft: promises[0],
       nfts: promises[1],
@@ -576,6 +577,9 @@ server.post("/sign-in-subscription", speedLimiter, async (req, res) => {
     mongoClient.query.initiateUser(req.session.wallet);
   }
 });
+server.post("/XUMM-sign-subscription", speedLimiter, async (req, res) => {
+  const result = await xumm.subscriptions.watchSubscripion(req, res);
+})
 server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
   const payload = await xumm.payloads.redeemNftPayload(
     req.session.wallet,

@@ -805,18 +805,23 @@ function xummSignin() {
     url: "/sign-in-payload",
     data: { return_url: window.location.href },
     success: function (result) {
-      window.location.href = result.next.always;
+      console.log(result);
+      $('#qrModal').modal('toggle');
+      $('#qrCodeImage').attr('src', result.refs.qr_png)
+      $('#xummLink').attr('href', result.next.always)
 
       $.ajax({
         type: "POST",
         url: "/sign-in-subscription",
         data: result,
         success: function (resulty) {
-          console.log(resulty);
-          location.reload();
+          console.log(resulty)
+          $('#qrModal').modal('toggle');
+          $('#rbt-site-header').html('<a href="/logout" id="logout" class="btn btn-primary-alta btn-small">Log out</a>')
         },
         error: function (resulty) {
           console.warn("Sign in expired, failed or was cancelled.");
+          $('#qrModal').modal('toggle');
         },
       });
     },
@@ -835,7 +840,23 @@ function setBuyOfferBid(NFToken) {
       flags: 0,
     },
     success: function (result) {
-      window.location.href = result.next.always;
+      $('#placebidModal').modal('toggle')
+      $('#qrModal').modal('toggle');
+      $('#qrCodeImage').attr('src', result.refs.qr_png)
+      $('#xummLink').attr('href', result.next.always);
+      $.ajax({
+        type: "POST",
+        url: "/XUMM-sign-subscription",
+        data: result,
+        success: function (resulty) {
+          console.log(resulty)
+          $('#qrModal').modal('toggle');
+        },
+        error: function (resulty) {
+          console.warn("Sign in expired, failed or was cancelled.");
+          $('#qrModal').modal('toggle');
+        },
+      });
     },
   });
 }

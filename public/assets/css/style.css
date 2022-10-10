@@ -19039,6 +19039,16 @@ NFT product styles mobile layout
   display: block;
   margin-top: 20px;
 }
+.modal-content .bid-content-qr{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-content .bid-content-qr img{
+  margin-bottom: 25px;
+  border-radius: 4px;
+  max-width: 200px;
+}
 .rn-bid-details .rn-bid-content .top-seller-inner-one {
   padding-top: 10px;
 }
@@ -19578,7 +19588,7 @@ body.modal-open {
 .rn-popup-modal .modal-content {
   background-color: var(--background-color-2);
   border: 0 none;
-  padding: 40px 20px;
+  padding: 16px 8px;
   border-radius: 10px;
   z-index: -1;
   overflow: visible;
