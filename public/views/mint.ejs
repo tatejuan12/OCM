@@ -189,27 +189,6 @@
       </form>
     </div>
   </div>
-
-  <div class="modal fade" id="mintingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Scan QR code</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <img src="" alt="XUMM payload qr code" id="qrCodeImage">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <a type="button" class="btn btn-primary" href="" id="xummLink">Open in XUMM</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <%- include('sections/footer.ejs') -%>
   <!-- Start Top To Bottom Area  -->
   <div class="rn-progress-parent">
@@ -307,7 +286,7 @@
         success: function (result) {
 
           //qr code modal toggle
-          $('#mintingModal').modal('toggle');
+          $('#qrModal').modal('toggle');
           $('#qrCodeImage').attr('src', result.payload.refs.qr_png)
           $('#xummLink').attr('href', result.payload.next.always)
 
@@ -324,6 +303,7 @@
               $('#xummLink').attr('href', result.next.always)
             },
             error: function (result) {
+              $('#qrModal').modal('toggle');
               customAlert.alert(result.responseText)
             }
           })
