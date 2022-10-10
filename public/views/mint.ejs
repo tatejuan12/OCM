@@ -56,96 +56,168 @@
       </div>
     </div>
   </div>
-
-
-
-  <h1 style="text-align: center; margin-top: 30px;">Coming Soon...</h1>
-
-  <div class="col-lg-7 mintModal">
+  <div class="container">
+    <div class="col justify-content-center">
+      <h3>Minting</h3>
+      <p>Minting is the act of registering/ validating an asset on a blockchain network, these assets are called NFTs (Non Fungible Tokens). OCM uses the XRPL network to successfully mint your NFToken on the XRPL. Follow the steps bellow to mint successfully on the XRPL.</p>
+      <p>A fee of 2XRP is taken before you are able to complete the minting transaction. Pay the 2XRP fee then sign your minting transaction when the QR code changes.</p>
+      <p>Head to your account page unlisteds to view your new NFToken.</p>
+      <ol class="list-group list-group-numbered">
+        <li class="list-group-item d-flex justify-content-between align-items-start">
+          <div class="ms-2 me-auto">
+            <div class="fw-bold">Upload Image</div>
+            Upload any image no larger than 10Mb.
+          </div>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-start">
+          <div class="ms-2 me-auto">
+            <div class="fw-bold">Metadata</div>
+            Complete all information in the form below, this will be the metadata linked to your NFToken.
+          </div>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-start">
+          <div class="ms-2 me-auto">
+            <div class="fw-bold">Advanced Options</div>
+            Refine how your NFToken will be minted on the XRPL with even more options.
+          </div>
+        </li>
+      </ol>
+      <p>For more information go <a href="https://xrpl.org/nftoken.html#nftoken" target="_blank">here.</a></p>
+    </div>
+  </div>
+  <div class="col-lg-7 mt--20 mintModal">
     <div class="form-wrapper-one mintModalContent">
-      <form class="row" action="#">
+      <form class="row" action="#" id="mintForm-01">
         <div class="col-md-12">
           <div class="input-box pb--20">
-            <label for="URI" class="form-label">Image URI</label>
-            <input id="URI" placeholder="e. g. `ipfs.com/your-image`">
+            <div class="upload-area">
+
+              <div class="upload-formate mb--30">
+                <h6 class="title">
+                  Upload file
+                </h6>
+                <p class="formate">
+                  Drag or choose your file to upload
+                </p>
+              </div>
+
+              <div class="brows-file-wrapper">
+                <!-- actual upload which is hidden -->
+                <input name="createinputfile" id="createinputfile" type="file" class="inputfile" />
+                <img id="createfileImage" src="assets/images/upload-variants/image-placeholder.jpg" alt="" data-black-overlay="6">
+                <!-- our custom upload button -->
+                <label for="createinputfile" title="No File Choosen">
+                  <i class="feather-upload"></i>
+                  <span class="text-center">Choose a File</span>
+                  <p class="text-center mt--10">PNG, GIF, WEBP, MP4 or MP3. <br> Max 10Mb.</p>
+                </label>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="col-md-12">
           <div class="input-box pb--20">
-            <label for="name" class="form-label">Product Name</label>
-            <input id="name" placeholder="e. g. `Wesley The Whale`">
+            <label for="name" class="form-label">NFT Name</label>
+            <input id="name" placeholder="e. g. 'Wesley The Whale'">
           </div>
         </div>
 
         <div class="col-md-12">
           <div class="input-box pb--20">
             <label for="Description" class="form-label">Description</label>
-            <textarea id="Description" rows="3" placeholder="e. g. “Worlds best NFT...”"></textarea>
+            <textarea id="description" rows="3" placeholder="e. g. 'Worlds best NFT...'"></textarea>
           </div>
         </div>
-
-        <div class="AssetFormTraitSection">
-          <div class="AFTS-content">
-            <div class="AFTS-content-main">
-              <span>Properties</span>
+        <div class="col-md-12">
+          <div class="input-box pb--20">
+            <label for="collection-name" class="form-label">Collection Name</label>
+            <input id="collection-name" placeholder="e. g. 'The Pod'">
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="input-box pb--20">
+            <label for="externalUrl" class="form-label">External Url</label>
+            <input id="externalUrl" placeholder="e.g. 'https://onchainwhales.net'">
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="AssetFormTraitSection input-box">
+            <div class="AFTS-content">
+              <div class="AFTS-content-main">
+                <span>Attributes</span>
+              </div>
+              <div class="AFTS-content-secondary">
+                <div class="properties-content" id="propertiesContent">
+                </div>
+              </div>
+              <a class="btn btn-secondary" id="attribs">+ attribute</a>
             </div>
-            <div class="AFTS-content-secondary">
-              <div class="properties-content" id="propertiesContent">
-
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="advanced-mint input-box">
+            <div>
+              <button class="btn btn-warning mb--20" type="button" data-bs-toggle="collapse" data-bs-target="#advancedMintingOptions" aria-expanded="false" aria-controls="collapseExample">
+                Advanced Options
+              </button>
+            </div>
+            <div class="collapse " id="advancedMintingOptions">
+              <div class="card card-body">
+                <div class="pb--20">
+                  <label for="taxon-value">Taxon:</label>
+                  <input type="number" id="taxon-value" value="1" placeholder='e.g "3"'>
+                </div>
+                <div class="pb--20">
+                  <label for="transfer-fee">Transfer Fee:</label>
+                  <input type="number" id="transferFee" value="0" placeholder="0 - 50" min="0" max="50">
+                </div>
+                <div class="col-md-4 col-sm-4">
+                  <div class="input-box pb--20 rn-check-box">
+                    <input class="rn-check-box-input" type="checkbox" id="burnable">
+                    <label class="rn-check-box-label" for="burnable">
+                      Burnable
+                    </label>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-4">
+                  <div class="input-box pb--20 rn-check-box">
+                    <input class="rn-check-box-input" type="checkbox" id="transferable" checked>
+                    <label class="rn-check-box-label" for="transferable">
+                      Transferable
+                    </label>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-4">
+                  <div class="input-box pb--20 rn-check-box">
+                    <input class="rn-check-box-input" type="checkbox" id="only-xrp">
+                    <label class="rn-check-box-label" for="only-xrp">
+                      Only $XRP
+                    </label>
+                  </div>
+                </div>
+                <div class="col-md-4 col-sm-4">
+                  <div class="input-box pb--20 rn-check-box">
+                    <input class="rn-check-box-input" type="checkbox" id="trustline">
+                    <label class="rn-check-box-label" for="trustline">
+                      Trustline
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
-            <a class="btn btn-secondary" id="attribs">+ property</a>
-          </div>
-        </div>
-
-        <div class="col-md-4 col-sm-4">
-          <div class="input-box pb--20 rn-check-box">
-            <input class="rn-check-box-input" type="checkbox" id="putonsale">
-            <label class="rn-check-box-label" for="putonsale">
-              Put on Sale
-            </label>
-          </div>
-        </div>
-
-        <div class="col-md-4 col-sm-4">
-          <div class="input-box pb--20 rn-check-box">
-            <input class="rn-check-box-input" type="checkbox" id="instantsaleprice">
-            <label class="rn-check-box-label" for="instantsaleprice">
-              Instant Sale
-            </label>
-          </div>
-        </div>
-
-        <div class="col-md-4 col-sm-4">
-          <div class="input-box pb--20 rn-check-box">
-            <input class="rn-check-box-input" type="checkbox" id="unlockpurchased">
-            <label class="rn-check-box-label" for="unlockpurchased">
-              Unlock Purchased
-            </label>
-          </div>
-        </div>
-        <div class="advanced-mint">
-          <span>advanced</span>
-          <div>
-            <ul>
-              <li>royalty</li>
-              <li>taxon</li>
-              <li>flages</li>
-            </ul>
           </div>
         </div>
 
         <div class="col-md-12 col-xl-4">
           <div class="input-box">
-            <a class="btn btn-primary btn-large w-100" id="startMint">MINT</a>
+            <!-- make an are you sure modal popup on click of mint button -->
+            <a class="btn btn-primary btn-large w-100" id="startMint" onclick="submitMintingInformation()">MINT</a>
           </div>
         </div>
       </form>
     </div>
   </div>
-  <!-- create new product area -->
-
   <%- include('sections/footer.ejs') -%>
   <!-- Start Top To Bottom Area  -->
   <div class="rn-progress-parent">
@@ -178,26 +250,110 @@
   <script src="assets/js/vendor/savePopup.js"></script>
   <!-- main JS -->
   <script src="assets/js/main.js"></script>
+  <!-- comment for empty commit -->
   <script>
-    var i=0;
+    var i = 0;
     $('#attribs').click(function() {
-      i++;
-        $(`<div class="properties-content-main" id="atts-${i}">
+      $(`<div class="properties-content-main" id="atts">
                     <span class="attribute-item-bubble">
                       <label for="attributeName">Title</label>
-                      <input type="text" id="attributeName-${i}">
+                      <input type="text" id="attributeName" class="attribute-name">
                     </span>
                     <span class="attribute-item-bubble">
                       <label for="attributeValue">Value</label>
-                      <input type="text" id="attributeValue-${i}">
+                      <input type="text" id="attributeValue" class="attribute-value">
                     </span>
                     <a class="close-btn attributeRemove" onclick="attributeRemove(this)"><i class="icon i-close"></i></a>
                 </div>`).appendTo('#propertiesContent');
-
+      i++;
     });
 
     function attributeRemove(element) {
       $(element).closest('div').remove()
+    }
+
+    const loggedIn = <%- JSON.stringify(wallet) %>
+    function submitMintingInformation() {
+      const time = new Date().getTime();
+      var attributesObj = [];
+      for (var a = 0; a < $('#propertiesContent .properties-content-main').length; a++) {
+        attributesObj[a] = {
+          "trait_type": $(`.attribute-name:eq(${a})`).val(),
+          "value": $(`.attribute-value:eq(${a})`).val()
+        }
+      };
+
+
+      const jsonData = {
+        name: document.getElementById("name").value,
+        description: document.getElementById("description").value,
+        collection: {
+          name: document.getElementById("collection-name").value,
+        },
+        externalUrl: document.getElementById("externalUrl").value,
+        attributes: attributesObj,
+      };
+      const formData = new FormData();
+      const returnUrl = window.location.href;
+      formData.append("jsonData", JSON.stringify(jsonData))
+      formData.append("taxon", $('#taxon-value').val());
+      formData.append("transferFee", $('#transferFee').val());
+      formData.append("image", document.getElementById('createinputfile').files[0]);
+      formData.append("burnable", document.getElementById("burnable").checked);
+      formData.append("transferable", document.getElementById("transferable").checked);
+      formData.append("onlyXRP", document.getElementById("only-xrp").checked);
+      formData.append("trustline", document.getElementById("trustline").checked);
+      var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+      const documentImage = document.getElementById('createinputfile').files[0];
+      if (documentImage.size <= 10000000) {
+      if (allowedExtensions.exec(documentImage.name)) {
+        $.ajax({
+        type: "POST",
+        url: "/mint-no-IPFS-payload",
+        data: {
+          return_url: returnUrl,
+          size: documentImage.size,
+        },
+
+        success: function (result) {
+
+          //qr code modal toggle
+          $('#qrTitle').html('Payment');
+          $('#qrModal').modal('toggle');
+          $('#qrCodeImage').attr('src', result.payload.refs.qr_png)
+          $('#xummLink').attr('href', result.payload.next.always)
+
+          formData.append("payload", JSON.stringify(result.payload));
+          $.ajax({
+            type: "POST",
+            url: "/mint-no-IPFS-subscription",
+            processData: false,
+            contentType: false,
+            enctype: "multipart/form-data",
+            data: formData,
+            success: function (result) {
+              $('#qrTitle').html('Mint');
+              $('#qrCodeImage').attr('src', result.refs.qr_png)
+              $('#xummLink').attr('href', result.next.always)
+            },
+            error: function (result) {
+              $('#qrModal').modal('toggle');
+              customAlert.alert(result.responseText)
+            }
+          })
+        },
+        error: function(resulty) {
+          customAlert.alert(resulty.responseText)
+        },
+      });
+      } else {
+        customAlert.alert('Incorrect file type')
+      }} else {
+        customAlert.alert('File is too large')
+        setTimeout(function() {
+          location.reload()
+        }, 1000)
+      }
     }
   </script>
 </body>

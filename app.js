@@ -28,6 +28,7 @@ const helmet = require("helmet");
 const minifyHtml = require("express-minify-html");
 const slowDown = require("express-slow-down");
 const { send } = require("express/lib/response");
+const { rejects } = require("assert");
 const mongoStore = new MongoDBStore({
   uri: process.env.MONGO_URI,
   databaseName: "Sessions",
@@ -43,13 +44,19 @@ const NFTSPERPAGE = 25;
 const server = express();
 
 server.use(compression());
-server.use(bodyParser.json()); // for parsing serverlication/json
-server.use(bodyParser.urlencoded({ extended: true })); // for parsing serverlication/x-www-form-urlencoded
+server.use(bodyParser.json({ limit: "10mb" })); // for parsing serverlication/json
+server.use(
+  bodyParser.urlencoded({
+    extended: true,
+    parameterLimit: 100000,
+    limit: "10mb",
+  })
+); // for parsing serverlication/x-www-form-urlencoded
 server.set("view engine", "ejs"); // Setting rendering agent to ejs
 server.use(helmet({ contentSecurityPolicy: false }));
 server.set("views", path.join(__dirname, "/public")); // Makes views for rendering the public dir
 server.use(express.static(__dirname + "/public", { dotfiles: "allow" })); // Essential so JS and CSS is acccessible by requests
-server.use(logger({ path: __dirname + "/logs/logs.log" })); // Logs data, every connection will log browser info and request url
+//server.use(logger({ path: __dirname + "/logs/logs.log" })); // Logs data, every connection will log browser info and request url
 server.use(
   session({
     secret: "some secret",
@@ -79,26 +86,11 @@ server.use(
 server.use(cors("*"));
 server.use(csrfProtection);
 const authorizedIps = [
-  "14.201.212.126",
-  undefined,
-  "1.145.188.214",
-  "103.231.88.10",
-  "27.99.115.205",
-  "220.235.196.107",
-  "1.132.108.195", //Liam
-  "27.99.115.205",
-  "116.206.228.203",
-  "139.218.13.37", //Juanito
-  "175.176.36.102", //Kuro OCW mod
-  "180.232.74.234", // Kuro office
-  "136.158.11.167", //B OCW mod
-  "136.158.2.105", //kazu OCW mod
-  "174.118.238.12", //Razzle OCW mod
-  "14.201.212.126",
-  "122.171.23.129", //Ron
-  "99.228.46.244", // crypto survivor
-  "36.71.36.93", //Dejavus
-  "110.54.195.57", //BINCE
+
+];
+const authorizedAccounts = [
+  "rsDKpLW4qeWpgB3g1CsVFbSPSf44CTFxF8",
+
 ];
 //! ---------------------Custom middleware--------------------------------//
 server.use((req, res, next) => {
@@ -433,6 +425,7 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
   }
   if (promises[0]) {
     res.render("views/product-details", {
+      wallet: wallet,
       isOwner: isOwner,
       nft: promises[0],
       nfts: promises[1],
@@ -442,7 +435,9 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
 });
 server.get("/mint", speedLimiter, (req, res) => {
   defaultLocals(req, res);
-  res.render("views/mint");
+  if (authorizedAccounts == req.session.wallet) {
+    res.render("views/mint");
+  }  
 });
 server.get("/search", speedLimiter, async (req, res) => {
   defaultLocals(req, res);
@@ -591,6 +586,9 @@ server.post("/sign-in-subscription", speedLimiter, async (req, res) => {
     mongoClient.query.initiateUser(req.session.wallet);
   }
 });
+server.post("/XUMM-sign-subscription", speedLimiter, async (req, res) => {
+  const result = await xumm.subscriptions.watchSubscripion(req, res);
+})
 server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
   const payload = await xumm.payloads.redeemNftPayload(
     req.session.wallet,
@@ -673,10 +671,82 @@ server.post("/create-collection",
   }
 )
 server.post(
+  "/mint-no-IPFS-payload",
+  upload.any(),
+  speedLimiter,
+  async (req, res) => {
+    if (req.body.size <= 10000000){
+    if (req.session.login) {
+      const payload = await xumm.payloads.mintNftPayload(
+        process.env.XRPL_ISSUER_PAYMENT_ADDRESS,
+        req.session.wallet,
+        process.env.MINTING_PRICE,
+        req.useragent.isMobile,
+        req.body.return_url
+      );
+      if (payload) {
+        response = {
+          payload: payload,
+        }
+        res.send(response);
+      } else res.status(400).send('Error getting Payload');
+    } else res.status(401).send('Please sign in.');
+  } else res.status(400).send('File is too large')
+}
+);
+server.post(
+  "/mint-no-IPFS-subscription",
+  upload.any(),
+  speedLimiter,
+  async (req, res) => {
+    const dataBody = req.body;
+    var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+    try {
+      dataBody.jsonData = JSON.parse(dataBody.jsonData);
+      dataBody.payload = JSON.parse(dataBody.payload);
+    } catch (err) {
+      console.error("Couldn't parse jsonData");
+      console.error(err);
+    }
+    //Wrap the code below with a check to see if user has signed the transaction. See other subscription functions as reference
+    const result = await xumm.subscriptions.mintNftSubscription(dataBody.payload, res);
+    if (result) {
+      const epoch = new Date().getTime();
+      dataBody.jsonData[
+        "image"
+      ] = `https://ocw-space.sgp1.digitaloceanspaces.com/nft-images/${req.session.wallet}${epoch}.png`;
+      dataBody[
+        "jsonLink"
+      ] = `https://ocw-space.sgp1.digitaloceanspaces.com/nft-jsons/${req.session.wallet}${epoch}.json`;
+
+      if (!allowedExtensions.exec(req.files[0].originalname)) {
+        res.status(415).send("Failed")
+      } else {
+        digitalOcean.functions.uploadNFTImage(req, req.files[0], epoch);
+        digitalOcean.functions.uploadNFTJson(req, dataBody.jsonData, epoch);
+        if (dataBody) {
+          const mintPload = await xumm.payloads.mintObject(
+            dataBody.jsonLink, 
+            dataBody.taxon, 
+            dataBody.transferFee, 
+            "OnChain Marketplace website minted NFT",
+            dataBody.burnable, 
+            dataBody.onlyXRP, 
+            dataBody.trustline, 
+            dataBody.transferable
+            );
+          res.status(200).send(mintPload);
+        }
+      }
+    } else res.status(402).send('Payment not valid')
+  }
+);
+server.post(
   "/update-user",
   upload.fields([{ name: "profile-img", maxCount: 1 }, { name: "cover-img" }]),
   speedLimiter,
   async (req, res) => {
+    console.log(req.body);
     const formDataBody = req.body;
     const formDataFiles = req.files;
     var result = false;
@@ -809,10 +879,6 @@ server.post("/list-nft-subscription-collection", async (req, res, next) => {
     );
   }
 });
-server.post("/mint-NFToken", async (req, res, next) => {
-  console.log(req.body);
-});
-
 server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
   var wallet;
   var unlistedNfts = [];
@@ -1036,27 +1102,7 @@ server.use((err, req, res, next) => {
   defaultLocals(req, res);
   res.status(500).render("views/500.ejs");
 });
-// try {
-//   serverSecure = proxiedHttps.createServer(
-//     {
-//       key: fs.readFileSync(
-//         `${process.env.SSL_CERTIFICATE_PATH}priv.key`,
-//         "utf8"
-//       ),
-//       cert: fs.readFileSync(
-//         `${process.env.SSL_CERTIFICATE_PATH}chain.pem`,
-//         "utf8"
-//       ),
-//       ca: fs.readFileSync(`/opt/OCM/root.pem`, "utf8"),
-//     },
-//     server
-//   );
-//   serverSecure.listen(443, () => {
-//     console.log("Server Listening on Port 443");
-//   });
-// } catch (err) {
-//   console.warn("SSL not found");
-// }
+
 server.listen(process.env.PORT, () => {
   console.log("Server Listening on Port 80");
 });

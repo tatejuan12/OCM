@@ -805,18 +805,23 @@ function xummSignin() {
     url: "/sign-in-payload",
     data: { return_url: window.location.href },
     success: function (result) {
-      window.location.href = result.next.always;
+      console.log(result);
+      $('#qrModal').modal('toggle');
+      $('#qrCodeImage').attr('src', result.refs.qr_png)
+      $('#xummLink').attr('href', result.next.always)
 
       $.ajax({
         type: "POST",
         url: "/sign-in-subscription",
         data: result,
         success: function (resulty) {
-          console.log(resulty);
-          location.reload();
+          console.log(resulty)
+          $('#qrModal').modal('toggle');
+          $('#rbt-site-header').html('<a href="/logout" id="logout" class="btn btn-primary-alta btn-small">Log out</a>')
         },
         error: function (resulty) {
           console.warn("Sign in expired, failed or was cancelled.");
+          $('#qrModal').modal('toggle');
         },
       });
     },
@@ -835,7 +840,23 @@ function setBuyOfferBid(NFToken) {
       flags: 0,
     },
     success: function (result) {
-      window.location.href = result.next.always;
+      $('#placebidModal').modal('toggle')
+      $('#qrModal').modal('toggle');
+      $('#qrCodeImage').attr('src', result.refs.qr_png)
+      $('#xummLink').attr('href', result.next.always);
+      $.ajax({
+        type: "POST",
+        url: "/XUMM-sign-subscription",
+        data: result,
+        success: function (resulty) {
+          console.log(resulty)
+          $('#qrModal').modal('toggle');
+        },
+        error: function (resulty) {
+          console.warn("Sign in expired, failed or was cancelled.");
+          $('#qrModal').modal('toggle');
+        },
+      });
     },
   });
 }
@@ -978,7 +999,6 @@ function decrementLike(nftId, DOM) {
     },
   });
 }
-
 function getListNft() {
   const NFTokenID = $("#tokenID").val();
   const issuer = $("#issuer").val();
@@ -998,7 +1018,7 @@ function getListNft() {
         data: result,
 
         error: function (resulty) {
-          console.warn("Payment in expired, failed or was cancelled.");
+          console.warn("Payment is expired, failed or was cancelled.");
         },
       });
     },
@@ -1032,40 +1052,40 @@ function getListNftCollection() {
   });
 }
 
-$("#startMint").click(function () {
-  var uri = document.getElementById("URI").value;
-  var taxon = document.getElementById("taxon").value;
-  var transferFee = document.getElementById("transferFee").value;
-  var memo = document.getElementById("memo").value;
-  var burnable = document.getElementById("burnable").value;
-  var onlyXRP = document.getElementById("onlyXRP").value;
-  var trustline = document.getElementById("trustline").value;
-  var transferable = document.getElementById("transferable").value;
-  // console.log(uri);
-  $.ajax({
-    type: "POST",
-    url: "/mint-NFToken",
-    data: {
-      return_url: window.location.href,
-      uri: uri,
-      taxon: taxon,
-      transferFee: transferFee,
-      memo: memo,
-      burnable: burnable,
-      onlyXRP: onlyXRP,
-      trustline: trustline,
-      transferable: transferable,
-    },
-    success: function (result) {
-      customAlert.alert("NFT minted successfully!");
-    },
-    error: function (result) {
-      customAlert.alert(
-        "Error, failed to mint NFT. Check your inputs and try again."
-      );
-    },
-  });
-});
+// $("#startMint").click(function () {
+//   var uri = document.getElementById("URI").value;
+//   var taxon = document.getElementById("taxon").value;
+//   var transferFee = document.getElementById("transferFee").value;
+//   var memo = document.getElementById("memo").value;
+//   var burnable = document.getElementById("burnable").value;
+//   var onlyXRP = document.getElementById("onlyXRP").value;
+//   var trustline = document.getElementById("trustline").value;
+//   var transferable = document.getElementById("transferable").value;
+//   // console.log(uri);
+//   $.ajax({
+//     type: "POST",
+//     url: "/mint-NFToken",
+//     data: {
+//       return_url: window.location.href,
+//       uri: uri,
+//       taxon: taxon,
+//       transferFee: transferFee,
+//       memo: memo,
+//       burnable: burnable,
+//       onlyXRP: onlyXRP,
+//       trustline: trustline,
+//       transferable: transferable,
+//     },
+//     success: function (result) {
+//       customAlert.alert("NFT minted successfully!");
+//     },
+//     error: function (result) {
+//       customAlert.alert(
+//         "Error, failed to mint NFT. Check your inputs and try again."
+//       );
+//     },
+//   });
+// });
 
 //No underscores looks for nus class and removes
 window.onload = function noUnderscores() {

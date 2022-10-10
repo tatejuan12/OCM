@@ -9,8 +9,8 @@ var s3 = new aws.S3({ endpoint: process.env.S3_ENDPOINT });
 aws.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: "sgp1",
 });
+s3.config.region = "ap-southeast-1";
 const upload = multer({
   storage: multerS3({
     s3,
@@ -26,8 +26,50 @@ const upload = multer({
     },
   }),
 }).single("upload");
-
 var methods = {
+  uploadNFTImage: async function (req, img, epoch) {
+    var result = false;
+    const param = {
+      Bucket: "ocw-space/nft-images",
+      Key: req.session.wallet + epoch + ".png",
+      Body: img.buffer,
+      ACL: "public-read",
+    };
+    const uploadPromise = new Promise(function (resolve, reject) {
+      s3.upload(param, function (err, data) {
+        if (err) reject(err);
+        else resolve(true);
+      });
+    });
+
+    result = await uploadPromise.catch((err) => {
+      console.log(err);
+      return false;
+    });
+    return result;
+  },
+  uploadNFTJson: async function (req, json, epoch) {
+    var result = false;
+    let jsonStrng = JSON.stringify(json);
+    const param = {
+      Bucket: "ocw-space/nft-jsons",
+      Key: req.session.wallet + epoch + ".json",
+      Body: jsonStrng,
+      ACL: "public-read",
+    };
+    const uploadPromise = new Promise(function (resolve, reject) {
+      s3.upload(param, function (err, data) {
+        if (err) reject(err);
+        else resolve(true);
+      });
+    });
+
+    result = await uploadPromise.catch((err) => {
+      console.log(err);
+      return false;
+    });
+    return result;
+  },
   uploadProfile: async function (req, img) {
     var result = false;
     const param = {
