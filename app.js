@@ -86,26 +86,11 @@ server.use(
 server.use(cors("*"));
 server.use(csrfProtection);
 const authorizedIps = [
-  "14.201.212.126",
-  undefined,
-  "1.145.188.214",
-  "103.231.88.10",
-  "27.99.115.205",
-  "220.235.196.107",
-  "1.132.108.195", //Liam
-  "27.99.115.205",
-  "116.206.228.203",
-  "139.218.13.37", //Juanito
-  "175.176.36.102", //Kuro OCW mod
-  "180.232.74.234", // Kuro office
-  "136.158.11.167", //B OCW mod
-  "136.158.2.105", //kazu OCW mod
-  "174.118.238.12", //Razzle OCW mod
-  "14.201.212.126",
-  "122.171.23.129", //Ron
-  "99.228.46.244", // crypto survivor
-  "36.71.36.93", //Dejavus
-  "110.54.195.57", //BINCE
+
+];
+const authorizedAccounts = [
+  "rsDKpLW4qeWpgB3g1CsVFbSPSf44CTFxF8",
+
 ];
 //! ---------------------Custom middleware--------------------------------//
 server.use((req, res, next) => {
@@ -363,10 +348,6 @@ server.get("/metadata", speedLimiter, (req, res) => {
   defaultLocals(req, res);
   res.render("views/metadata");
 });
-server.get("/mint", speedLimiter, (req, res) => {
-  defaultLocals(req, res);
-  res.render("views/mint");
-});
 server.get("/minting-help", speedLimiter, (req, res) => {
   defaultLocals(req, res);
   res.render("views/minting-help");
@@ -451,10 +432,9 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
 });
 server.get("/mint", speedLimiter, (req, res) => {
   defaultLocals(req, res);
-  const wallet = req.session.wallet;
-  res.render("views/mint", {
-    wallet: wallet,
-  });
+  if (authorizedAccounts == req.session.wallet) {
+    res.render("views/mint");
+  }  
 });
 server.get("/search", speedLimiter, async (req, res) => {
   defaultLocals(req, res);
@@ -653,7 +633,7 @@ server.post(
         }
         res.send(response);
       } else res.status(400).send('Error getting Payload');
-    } else res.status(400).send('Please sign in.');
+    } else res.status(401).send('Please sign in.');
   }
 );
 server.post(
@@ -687,7 +667,6 @@ server.post(
         digitalOcean.functions.uploadNFTImage(req, req.files[0], epoch);
         digitalOcean.functions.uploadNFTJson(req, dataBody.jsonData, epoch);
         if (dataBody) {
-          console.log(dataBody)
           const mintPload = await xumm.payloads.mintObject(
             dataBody.jsonLink, 
             dataBody.taxon, 
@@ -698,11 +677,10 @@ server.post(
             dataBody.trustline, 
             dataBody.transferable
             );
-          console.log(mintPload)
           res.status(200).send(mintPload);
         }
       }
-    }
+    } else res.status(402).send('Payment not valid')
   }
 );
 server.post(
@@ -843,10 +821,6 @@ server.post("/list-nft-subscription-collection", async (req, res, next) => {
     );
   }
 });
-server.post("/mint-NFToken", async (req, res, next) => {
-  console.log(req.body);
-});
-
 server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
   var wallet;
   var unlistedNfts = [];

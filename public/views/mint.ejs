@@ -323,6 +323,9 @@
               $('#qrCodeImage').attr('src', result.refs.qr_png)
               $('#xummLink').attr('href', result.next.always)
             },
+            error: function (result) {
+              customAlert.alert(result.responseText)
+            }
           })
         },
         error: function(resulty) {
