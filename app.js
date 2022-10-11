@@ -90,7 +90,7 @@ const authorizedIps = [
 ];
 const authorizedAccounts = [
   "rsDKpLW4qeWpgB3g1CsVFbSPSf44CTFxF8",
-
+  "rHoFRf8NXrDC1VBWw3CL5Z4oQAm1mL5H2h",
 ];
 //! ---------------------Custom middleware--------------------------------//
 server.use((req, res, next) => {
@@ -435,9 +435,7 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
 });
 server.get("/mint", speedLimiter, (req, res) => {
   defaultLocals(req, res);
-  if (authorizedAccounts == req.session.wallet) {
-    res.render("views/mint");
-  }  
+  res.render("views/mint");
 });
 server.get("/search", speedLimiter, async (req, res) => {
   defaultLocals(req, res);
@@ -685,7 +683,7 @@ server.post(
         req.body.return_url
       );
       if (payload) {
-        response = {
+        const response = {
           payload: payload,
         }
         res.send(response);
@@ -814,7 +812,6 @@ server.post("/report-nft", upload.any(), speedLimiter, async (req, res) => {
 });
 server.post("/list-nft-payload", async (req, res, next) => {
   if (req.session.login) {
-    console.log(req.body);
     const payload = await xumm.payloads.listNftPayload(
       process.env.XRPL_ISSUER_PAYMENT_ADDRESS,
       req.session.wallet,
@@ -822,7 +819,6 @@ server.post("/list-nft-payload", async (req, res, next) => {
       req.useragent.isMobile,
       req.body.return_url
     );
-    console.log(payload);
     const response = {
       payload: payload,
       NFTokenID: req.body.NFTokenID,

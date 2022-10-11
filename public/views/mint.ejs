@@ -131,6 +131,8 @@
         </div>
         <div class="col-md-12">
           <div class="input-box pb--20">
+            <label for="collection-family" class="form-label">Collection Family</label>
+            <input id="collection-family" placeholder="e. g. 'Whales'">
             <label for="collection-name" class="form-label">Collection Name</label>
             <input id="collection-name" placeholder="e. g. 'The Pod'">
           </div>
@@ -288,6 +290,7 @@
         name: document.getElementById("name").value,
         description: document.getElementById("description").value,
         collection: {
+          family: document.getElementById("collection-family").value,
           name: document.getElementById("collection-name").value,
         },
         externalUrl: document.getElementById("externalUrl").value,

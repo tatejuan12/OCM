@@ -21,7 +21,6 @@ var payloads = {
     flags
   ) {
     const nftOwner = await xrpls.getcurrentNftHolder(NFToken);
-    console.log(expiry);
     try {
       value = parseFloat(value);
       value = value * 1000000;
@@ -55,23 +54,44 @@ var payloads = {
       const payload = await getPayload(request);
       return payload;
     } else {
-      const request = {
-        options: {
-          submit: true,
-          expire: 240,
-        },
-        txjson: {
-          TransactionType: "NFTokenCreateOffer",
-          NFTokenID: NFToken,
-          Expiration: expiry,
-          Destination: destination,
-          Amount: value,
-          Flags: 1,
-        },
-        custom_meta: {
-          Instruction: `Sign this transaction to make a sell offer of ${value} on TokenID - ${NFToken}`,
-        },
-      };
+      console.log(destination)
+      if (destination.length > 1) {
+        request = {
+          options: {
+            submit: true,
+            expire: 240,
+          },
+          txjson: {
+            TransactionType: "NFTokenCreateOffer",
+            NFTokenID: NFToken,
+            Expiration: expiry,
+            Destination: destination,
+            Amount: value,
+            Flags: 1,
+          },
+          custom_meta: {
+            Instruction: `Sign this transaction to make a sell offer of ${value} on TokenID - ${NFToken}`,
+          },
+        };
+      } else {
+        request = {
+          options: {
+            submit: true,
+            expire: 240,
+          },
+          txjson: {
+            TransactionType: "NFTokenCreateOffer",
+            NFTokenID: NFToken,
+            Expiration: expiry,
+            Amount: value,
+            Flags: 1,
+          },
+          custom_meta: {
+            Instruction: `Sign this transaction to make a sell offer of ${value} on TokenID - ${NFToken}`,
+          },
+        };
+      }
+      
       console.log(request);
       if (mobile)
         request.options["return_url"] = {
@@ -366,6 +386,7 @@ var payloads = {
         Amount: paymentAmount,
       },
     };
+    console.log(request);
     if (mobile)
       request.options["return_url"] = {
         app: return_url,
