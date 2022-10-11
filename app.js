@@ -720,8 +720,8 @@ server.post(
       if (!allowedExtensions.exec(req.files[0].originalname)) {
         res.status(415).send("Failed")
       } else {
-        digitalOcean.functions.uploadNFTImage(req, req.files[0], epoch);
-        digitalOcean.functions.uploadNFTJson(req, dataBody.jsonData, epoch);
+        //digitalOcean.functions.uploadNFTImage(req, req.files[0], epoch);
+        //digitalOcean.functions.uploadNFTJson(req, dataBody.jsonData, epoch);
         if (dataBody) {
           const mintPload = await xumm.payloads.mintObject(
             dataBody.jsonLink, 
@@ -733,7 +733,16 @@ server.post(
             dataBody.trustline, 
             dataBody.transferable
             );
-          res.status(200).send(mintPload);
+            res.send(mintPload)
+          const txID = await xumm.subscriptions.xummTransInfo(mintPload, res)
+          const NFTokenId = await xumm.xrpl.nftIDFromTxID(txID)
+          await mongoClient.query.addNftToQueried(
+            NFTokenId,
+            req.session.wallet,
+            false,
+            req.session.wallet
+          );
+
         }
       }
     } else res.status(402).send('Payment not valid')

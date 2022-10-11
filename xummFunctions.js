@@ -605,6 +605,21 @@ var subscriptions = {
       console.error("There was an error with the payload: \n" + error);
     }
   },
+  xummTransInfo: async function (payload, res) {
+      var subscription = false;
+      var promise = new Promise(function (resolve) {
+        subscription = sdk.payload.subscribe(payload, (event) => {
+          if (event.data.signed) {
+            resolve(event.data.txid);
+          } else if (event.data.signed == false) {
+            resolve(false);
+          }
+        });
+      });
+    var txInfo = await promise;
+
+    return txInfo;
+  },
   mintNftSubscription: async function (payload, res) {
     try {
       console.log(payload)
@@ -632,7 +647,8 @@ var subscriptions = {
     } catch (error) {
       console.error("There was an error with the payload: \n" + error);
     }
-  },  NFTokenAcceptSubscription: async function (req, res) {
+  },
+  NFTokenAcceptSubscription: async function (req, res) {
     var subscription = false;
     var promise = new Promise(function (resolve) {
       subscription = sdk.payload.subscribe(req.body.payload, (event) => {
@@ -1178,7 +1194,7 @@ var xrpls = {
   getAccountsNfts: async function (address, numberOfNFTs, marker) {
     try {
       //define
-      var client = new xrpl.Client("wss://xls20-sandbox.rippletest.net:51233");
+      var client = new getXrplClient();
       var cname = "marker";
 
       //console.log("Connecting to XRPL")
@@ -1641,6 +1657,83 @@ var xrpls = {
     } finally {
       await client.disconnect();
     }
+  },
+  nftIDFromTxID: async function (txID) {
+    try {
+      var client = await getXrplClient();
+
+      //CHECK AND VERIFY NFT
+      try {
+          var result = await client.request({
+              "command": "tx",
+              "transaction": txID,
+          })
+      } catch (error) {
+          console.log(`TRANSACTION DOES NOT EXIST ON THE GIVEN NETWORK`)
+          return null
+      }
+
+      //check it was a successful transaction
+      if (result.result.meta.TransactionResult != "tesSUCCESS") {
+          console.log(`MINTING FAILED`)
+          return null
+      }
+
+      //check it was a minting transaction
+      if (result.result.TransactionType != "NFTokenMint") {
+          console.log(`NOT A MINTING TRANSACTION`)
+          return null
+      }
+
+      //find all mentioned NFTIds
+      var nfts = {}
+      for (a in result.result.meta.AffectedNodes) {
+          if ("ModifiedNode" in result.result.meta.AffectedNodes[a]) {
+              if (result.result.meta.AffectedNodes[a].ModifiedNode.LedgerEntryType != "NFTokenPage") continue
+
+              if (result.result.meta.AffectedNodes[a].ModifiedNode.PreviousFields.NFTokens == undefined) continue
+
+              var combined = result.result.meta.AffectedNodes[a].ModifiedNode.FinalFields.NFTokens.concat(result.result.meta.AffectedNodes[a].ModifiedNode.PreviousFields.NFTokens)
+          } else if ("CreatedNode" in result.result.meta.AffectedNodes[a]) {
+              if (result.result.meta.AffectedNodes[a].CreatedNode.LedgerEntryType != "NFTokenPage") continue
+
+              var combined = result.result.meta.AffectedNodes[a].CreatedNode.NewFields.NFTokens
+          } else {
+              var combined = []
+          }
+
+          for (a in combined) {
+              if (!(combined[a].NFToken.NFTokenID in nfts)) {
+                  nfts[combined[a].NFToken.NFTokenID] = 0
+              }
+
+              nfts[combined[a].NFToken.NFTokenID] += 1
+          }
+      }
+
+      //calculate outcomes 
+      var keys = Object.keys(nfts)
+      var total = 0
+      for (a in keys) {
+          if (nfts[keys[a]] % 2 != 0) {
+              var nftID = keys[a]
+              total += 1
+          }
+      }
+
+      //only return if 1 result
+      if (total != 1) {
+          console.log(`FUNCTION FAILED TO FIND NEW NFTID -> FOUND ${total}`)
+          return null
+      }
+
+      return nftID
+  } catch (error) {
+      console.log(error)
+      return null
+  } finally {
+      await client.disconnect()
+  }
   },
 };
 async function verifyTransaction(txID) {
