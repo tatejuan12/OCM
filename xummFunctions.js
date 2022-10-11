@@ -1194,7 +1194,7 @@ var xrpls = {
   getAccountsNfts: async function (address, numberOfNFTs, marker) {
     try {
       //define
-      var client = new getXrplClient();
+      var client = await getXrplClient();
       var cname = "marker";
 
       //console.log("Connecting to XRPL")
@@ -1702,12 +1702,12 @@ var xrpls = {
               var combined = []
           }
 
-          for (a in combined) {
-              if (!(combined[a].NFToken.NFTokenID in nfts)) {
-                  nfts[combined[a].NFToken.NFTokenID] = 0
+          for (b in combined) {
+              if (!(combined[b].NFToken.NFTokenID in nfts)) {
+                  nfts[combined[b].NFToken.NFTokenID] = 0
               }
 
-              nfts[combined[a].NFToken.NFTokenID] += 1
+              nfts[combined[b].NFToken.NFTokenID] += 1
           }
       }
 
