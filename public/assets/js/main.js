@@ -864,7 +864,11 @@ function setSellOfferBid(NFToken) {
   const value = document.getElementById("value").value;
   const destination = document.getElementById("destination").value;
   const expiry = document.getElementById("expiry-time").value;
-  var expiryEpoch = ((new Date(expiry).getTime()) / 1000) - 946684800;
+  if (expiry != 0) {
+    var expiryEpoch = ((new Date(expiry).getTime()) / 1000) - 946684800;
+  } else {
+    var expiryEpoch = 0
+  }
   console.log(expiryEpoch)
   $.ajax({
     type: "POST",

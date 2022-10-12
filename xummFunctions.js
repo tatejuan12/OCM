@@ -54,44 +54,30 @@ var payloads = {
       const payload = await getPayload(request);
       return payload;
     } else {
-      console.log(destination)
-      if (destination.length > 1) {
-        request = {
-          options: {
-            submit: true,
-            expire: 240,
-          },
-          txjson: {
-            TransactionType: "NFTokenCreateOffer",
-            NFTokenID: NFToken,
-            Expiration: expiry,
-            Destination: destination,
-            Amount: value,
-            Flags: 1,
-          },
-          custom_meta: {
-            Instruction: `Sign this transaction to make a sell offer of ${value} on TokenID - ${NFToken}`,
-          },
-        };
-      } else {
-        request = {
-          options: {
-            submit: true,
-            expire: 240,
-          },
-          txjson: {
-            TransactionType: "NFTokenCreateOffer",
-            NFTokenID: NFToken,
-            Expiration: expiry,
-            Amount: value,
-            Flags: 1,
-          },
-          custom_meta: {
-            Instruction: `Sign this transaction to make a sell offer of ${value} on TokenID - ${NFToken}`,
-          },
-        };
-      }
+      request = {
+        options: {
+          submit: true,
+          expire: 240,
+        },
+        txjson: {
+          TransactionType: "NFTokenCreateOffer",
+          NFTokenID: NFToken,
+          Expiration: expiry,
+          Destination: destination,
+          Amount: value,
+          Flags: 1,
+        },
+        custom_meta: {
+          Instruction: `Sign this transaction to make a sell offer of ${value} on TokenID - ${NFToken}`,
+        },
+      };
       
+      if (destination.length < 1){
+        delete request.txjson.Destination
+      }
+      if (expiry == 0){
+        delete request.txjson.Expiration;
+      }
       console.log(request);
       if (mobile)
         request.options["return_url"] = {
