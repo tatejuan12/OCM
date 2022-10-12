@@ -375,6 +375,28 @@
               $('#qrTitle').html('Mint');
               $('#qrCodeImage').attr('src', result.refs.qr_png)
               $('#xummLink').attr('href', result.next.always.replace('https', 'xumm'))
+
+              $.ajax({
+                type: "POST",
+                url: "/minting-confirmation",
+                data: {
+                  payload: result,
+                },
+                success: function (result) {
+                  $('#qrTitle').html('Success!')
+                  $('#qrCodeImage').attr('src', '')
+                  setTimeout(function () {
+                    window.location.href = "/profile";
+                  }, 2000)
+                },
+                error: function (result) {
+                  $('#qrTitle').html('Error')
+                  $('#qrCodeImage').attr('src', '')
+                  setTimeout(function () {
+                    window.location.reload()
+                  }, 2500)
+                }
+              })
             },
             error: function (result) {
               $('#qrModal').modal('toggle');

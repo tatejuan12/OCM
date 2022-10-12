@@ -816,7 +816,8 @@ function xummSignin() {
         data: result,
         success: function (resulty) {
           $('#qrModal').modal('toggle');
-          $('#rbt-site-header').html('<a href="/logout" id="logout" class="btn btn-primary-alta btn-small">Log out</a>')
+          $('#rbt-site-header').html('<a href="/logout" id="logout" class="btn btn-primary-alta btn-small">Log out</a>');
+          window.location.href = "/profile";
         },
         error: function (resulty) {
           console.warn("Sign in expired, failed or was cancelled.");

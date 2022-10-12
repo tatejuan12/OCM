@@ -725,8 +725,8 @@ server.post(
       if (!allowedExtensions.exec(req.files[0].originalname)) {
         res.status(415).send("Failed")
       } else {
-        digitalOcean.functions.uploadNFTImage(req, req.files[0], epoch);
-        digitalOcean.functions.uploadNFTJson(req, dataBody.jsonData, epoch);
+        //digitalOcean.functions.uploadNFTImage(req, req.files[0], epoch);
+        //digitalOcean.functions.uploadNFTJson(req, dataBody.jsonData, epoch);
         if (dataBody) {
           const mintPload = await xumm.payloads.mintObject(
             dataBody.jsonLink, 
@@ -739,25 +739,30 @@ server.post(
             dataBody.transferable,
             req.session.user_token,
             );
-          res.send(mintPload)
-          const txID = await xumm.subscriptions.xummTransInfo(mintPload, res)
-          const NFTokenId = await xumm.xrpl.nftIDFromTxID(txID)
-          console.log(NFTokenId)
-          if (NFTokenId == false) {
-            res.status(418).send("Minting transaction not signed correctly");
-          } else {
-          await mongoClient.query.addNftToQueried(
-            NFTokenId,
-            req.session.wallet,
-            false,
-            req.session.wallet
-          );
-          }
+          res.status(200).send(mintPload)
         }
       }
     } else res.status(402).send('Payment not valid')
   }
 );
+server.post("/minting-confirmation", upload.any(), speedLimiter, async (req, res) => {
+  const mintPload = req.body.payload;
+  console.log('mint-confrirmations')
+  const txID = await xumm.subscriptions.xummTransInfo(mintPload, res)
+  const NFTokenId = await xumm.xrpl.nftIDFromTxID(txID)
+  console.log(NFTokenId)
+  if (NFTokenId == false) {
+    res.status(418).send("Minting transaction not signed correctly");
+  } else {
+  await mongoClient.query.addNftToQueried(
+    NFTokenId,
+    req.session.wallet,
+    false,
+    req.session.wallet
+  );
+  res.status(200).send('NFT minted')
+  }
+});
 server.post(
   "/update-user",
   upload.fields([{ name: "profile-img", maxCount: 1 }, { name: "cover-img" }]),

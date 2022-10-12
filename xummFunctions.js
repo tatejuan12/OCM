@@ -612,11 +612,27 @@ var subscriptions = {
     }
   },
   xummTransInfo: async function (payload, res) {
+    console.log(payload)
       var subscription = false;
       var promise = new Promise(function (resolve) {
         subscription = sdk.payload.subscribe(payload, (event) => {
           if (event.data.signed) {
             resolve(event.data.txid);
+          } else if (event.data.signed == false) {
+            resolve(false);
+          }
+        });
+      });
+    var txInfo = await promise;
+
+    return txInfo;
+  },
+  xummSignCheck: async function (payload, res) {
+    var subscription = false;
+      var promise = new Promise(function (resolve) {
+        subscription = sdk.payload.subscribe(payload, (event) => {
+          if (event.data.signed) {
+            resolve(true);
           } else if (event.data.signed == false) {
             resolve(false);
           }
