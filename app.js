@@ -249,6 +249,10 @@ server.get("/partners", speedLimiter, (req, res) => {
   defaultLocals(req, res);
   res.render("views/partners");
 });
+server.get("/devnet", speedLimiter, (req, res) => {
+  defaultLocals(req, res);
+  res.render("views/devnet");
+});
 server.get("/redeem-setup", speedLimiter, (req, res) => {
   defaultLocals(req, res);
   res.render("views/redeem-info");

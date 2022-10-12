@@ -358,7 +358,7 @@
         success: function (result) {
 
           //qr code modal toggle
-          $('#qrTitle').html('Payment');
+          $('#qrTitle').html('Payment 2XRP');
           $('#qrModal').modal('toggle');
           $('#qrCodeImage').attr('src', result.payload.refs.qr_png)
           $('#xummLink').attr('href', result.payload.next.always.replace('https', 'xumm'))
