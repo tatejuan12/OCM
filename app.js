@@ -686,7 +686,7 @@ server.post(
         const response = {
           payload: payload,
         }
-        res.send(response);
+        res.status(200).send(response);
       } else res.status(400).send('Error getting Payload');
     } else res.status(401).send('Please sign in.');
   } else res.status(400).send('File is too large')
