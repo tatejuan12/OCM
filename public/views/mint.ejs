@@ -324,7 +324,7 @@
           $('#qrTitle').html('Payment');
           $('#qrModal').modal('toggle');
           $('#qrCodeImage').attr('src', result.payload.refs.qr_png)
-          $('#xummLink').attr('href', `'${result.payload.next.always}'`)
+          $('#xummLink').attr('href', result.payload.next.always.replace('https', 'xumm'))
 
           formData.append("payload", JSON.stringify(result.payload));
           $.ajax({
@@ -337,7 +337,7 @@
             success: function (result) {
               $('#qrTitle').html('Mint');
               $('#qrCodeImage').attr('src', result.refs.qr_png)
-              $('#xummLink').attr('href', `'${result.next.always}'`)
+              $('#xummLink').attr('href', result.next.always.replace('https', 'xumm'))
             },
             error: function (result) {
               $('#qrModal').modal('toggle');
