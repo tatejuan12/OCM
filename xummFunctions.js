@@ -387,14 +387,6 @@ var payloads = {
       },
     };
     console.log(request);
-    if (mobile)
-      request.options["return_url"] = {
-        app: return_url,
-      };
-    else
-      request.options["return_url"] = {
-        web: return_url,
-      };
     const payload = await getPayload(request);
     return payload;
   },
