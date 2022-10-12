@@ -582,6 +582,12 @@ var {
 .i-create-col{
   background-image: url(../images/icons/Favorites-light/icons8-add-to-collection-50.png);
 }
+.active-light-mode .i-mint{
+  background-image: url(../images/icons/Favorites/icons8-mint-48.png);
+}
+.i-mint{
+  background-image: url(../images/icons/Favorites-light/icons8-mint-48.png);
+}
 /*---------------------------
 	List Style 
 ---------------------------*/
