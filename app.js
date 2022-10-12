@@ -678,6 +678,7 @@ server.post(
       const payload = await xumm.payloads.mintNftPayload(
         process.env.XRPL_ISSUER_PAYMENT_ADDRESS,
         req.session.wallet,
+        req.session.user_token,
         process.env.MINTING_PRICE,
         req.useragent.isMobile,
         req.body.return_url
@@ -731,17 +732,23 @@ server.post(
             dataBody.burnable, 
             dataBody.onlyXRP, 
             dataBody.trustline, 
-            dataBody.transferable
+            dataBody.transferable,
+            req.session.user_token,
             );
           res.send(mintPload)
           const txID = await xumm.subscriptions.xummTransInfo(mintPload, res)
           const NFTokenId = await xumm.xrpl.nftIDFromTxID(txID)
+          console.log(NFTokenId)
+          if (NFTokenId == false) {
+            res.status(418).send("Minting transaction not signed correctly");
+          } else {
           await mongoClient.query.addNftToQueried(
             NFTokenId,
             req.session.wallet,
             false,
             req.session.wallet
           );
+          }
         }
       }
     } else res.status(402).send('Payment not valid')

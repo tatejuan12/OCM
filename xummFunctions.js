@@ -369,6 +369,7 @@ var payloads = {
   mintNftPayload: async function (
     address,
     ownAddress,
+    userToken,
     fee,
     mobile,
     return_url
@@ -379,6 +380,7 @@ var payloads = {
         submit: true,
         expire: 240,
       },
+      user_token: userToken,
       txjson: {
         TransactionType: "Payment",
         Account: ownAddress,
@@ -387,6 +389,14 @@ var payloads = {
       },
     };
     console.log(request);
+    if (mobile)
+      request.options["return_url"] = {
+        app: return_url,
+      };
+    else
+      request.options["return_url"] = {
+        web: return_url,
+      };
     const payload = await getPayload(request);
     return payload;
   },
@@ -398,7 +408,8 @@ var payloads = {
     burnable,
     onlyXRP,
     trustline,
-    transferable
+    transferable,
+    userToken
   ) {
     try {
       //CONDUCT CHECKS
@@ -442,12 +453,15 @@ var payloads = {
       if (transferable == 'true') flags += 8;
 
       var mintObject = {
-        TransactionType: "NFTokenMint",
-        NFTokenTaxon: taxon,
+        user_token: userToken,
+        txjson: {
+          TransactionType: "NFTokenMint",
+          NFTokenTaxon: taxon,  
+        },
       };
 
       if (memoHex != undefined) {
-        mintObject.Memos = [
+        mintObject.txjson.Memos = [
           {
             Memo: {
               MemoData: memoHex,
@@ -457,17 +471,17 @@ var payloads = {
       }
 
       if (uri != undefined && uri != "") {
-        mintObject.URI = xrpl.convertStringToHex(uri);
+        mintObject.txjson.URI = xrpl.convertStringToHex(uri);
       }
 
       if (transferFee != 0) {
-        mintObject.TransferFee = transferFee;
+        mintObject.txjson.TransferFee = transferFee;
       }
 
       if (flags != 0) {
-        mintObject.Flags = flags;
+        mintObject.txjson.Flags = flags;
       }
-
+      console.log(mintObject);
       const payload = await getPayload(mintObject);
       return payload;
     } catch (err) {
@@ -614,7 +628,6 @@ var subscriptions = {
   },
   mintNftSubscription: async function (payload, res) {
     try {
-      console.log(payload)
       var subscription = false;
       var promise = new Promise(function (resolve) {
         subscription = sdk.payload.subscribe(payload, (event) => {
@@ -630,7 +643,6 @@ var subscriptions = {
 
       var verify = await verifyTransaction(txID);
       if (verify === true) {
-        console.log("signed");
         return "signed";
       } else {
         res.status(401).send(false);
@@ -1662,19 +1674,19 @@ var xrpls = {
           })
       } catch (error) {
           console.log(`TRANSACTION DOES NOT EXIST ON THE GIVEN NETWORK`)
-          return null
+          return false;
       }
 
       //check it was a successful transaction
       if (result.result.meta.TransactionResult != "tesSUCCESS") {
           console.log(`MINTING FAILED`)
-          return null
+          return false;
       }
 
       //check it was a minting transaction
       if (result.result.TransactionType != "NFTokenMint") {
           console.log(`NOT A MINTING TRANSACTION`)
-          return null
+          return false;
       }
 
       //find all mentioned NFTIds
