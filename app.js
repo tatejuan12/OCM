@@ -733,7 +733,7 @@ server.post(
             dataBody.trustline, 
             dataBody.transferable
             );
-            res.send(mintPload)
+          res.send(mintPload)
           const txID = await xumm.subscriptions.xummTransInfo(mintPload, res)
           const NFTokenId = await xumm.xrpl.nftIDFromTxID(txID)
           await mongoClient.query.addNftToQueried(
@@ -742,7 +742,6 @@ server.post(
             false,
             req.session.wallet
           );
-
         }
       }
     } else res.status(402).send('Payment not valid')
