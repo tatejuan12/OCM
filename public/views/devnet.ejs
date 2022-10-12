@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>OCM || Devnet</title>
+  <meta name="robots" content="noindex, follow" />
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="Cache-control" content="no-store">
+  <meta name="theme-style-mode" content="0"> <!-- 0 == light, 1 == dark -->
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png">
+  <!-- CSS 
+    ============================================ -->
+  <link rel="stylesheet" href="assets/css/vendor/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/vendor/slick.css">
+  <link rel="stylesheet" href="assets/css/vendor/slick-theme.css">
+  <link rel="stylesheet" href="assets/css/vendor/nice-select.css">
+  <link rel="stylesheet" href="assets/css/plugins/feature.css">
+  <link rel="stylesheet" href="assets/css/plugins/jquery-ui.min.css">
+
+  <!-- Style css -->
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body class="template-color-1">
+  <!-- Preloader -->
+  <div class="preloader">
+    <div class='loader'>
+      <div class='circle'></div>
+      <div class='circle'></div>
+      <div class='circle'></div>
+      <div class='circle'></div>
+      <div class='circle'></div>
+    </div>
+  </div>
+  <%- include('sections/header.ejs') -%>
+
+  <!-- start page title area -->
+  <div class="rn-breadcrumb-inner ptb--30">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 col-md-6 col-12">
+          <h5 class="title text-center text-md-start">Devnet Setup</h5>
+        </div>
+        <div class="col-lg-6 col-md-6 col-12">
+          <ul class="breadcrumb-list">
+            <li class="item"><a href="/">Home</a></li>
+            <li class="separator"><i class="feather-chevron-right"></i></li>
+            <li class="item current">Devnet Setup</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="col justify-content-center">
+      <h3>Devnet XUMM setup</h3>
+      <p>Open XUMM and turn on developer mode to clearly see what XRPL network you are connected to. <br> <strong>Settings -> Advanced -> Developer Mode</strong> </p>
+      <p>Open XUMM and scan the QR code below. Please note this is the only possible way to connect to the devnet by scanning this QRcode.</p>
+      <img src="assets/images/connect/devnetQr.png" alt="" width="200px" height="200px">
+      <p>To then connect to the XRPL NFT-Devnet, please follow these steps carefully. <br><strong>Settings -> Advanced -> Node -> Custom -> xls20-sandbox.rippletest.net:51233 </strong><br></p>
+      <p> NOTE: This will mean you cannot see funds in your Mainnet Wallets, <strong>YOU HAVE NOT LOST YOUR FUNDS</strong> 
+        To change back to the mainnet and conduct normal transactions there, please go <br> <strong>Settings -> Advanced -> Node -> Main net -> wss://xrplcluster.com</strong> </p>
+      <p>You can now interact with the NFT-Devnet using you XUMM wallet.</p>
+    </div>
+  </div>
+  <%- include('sections/footer.ejs') -%>
+  <!-- Start Top To Bottom Area  -->
+  <div class="rn-progress-parent">
+    <svg class="rn-back-circle svg-inner" width="100%" height="100%" viewBox="-1 -1 102 102">
+      <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
+    </svg>
+  </div>
+  <!-- End Top To Bottom Area  -->
+  <!-- JS ============================================ -->
+  <script src="assets/js/vendor/jquery.js"></script>
+  <script src="assets/js/vendor/jquery.nice-select.min.js"></script>
+  <script src="assets/js/vendor/jquery-ui.js"></script>
+  <script src="assets/js/vendor/modernizer.min.js"></script>
+  <script src="assets/js/vendor/feather.min.js"></script>
+  <script src="assets/js/vendor/slick.min.js"></script>
+  <script src="assets/js/vendor/bootstrap.min.js"></script>
+  <script src="assets/js/vendor/sal.min.js"></script>
+  <script src="assets/js/vendor/waypoint.js"></script>
+  <script src="assets/js/vendor/wow.js"></script>
+  <script src="assets/js/vendor/particles.js"></script>
+  <script src="assets/js/vendor/jquery.style.swicher.js"></script>
+  <script src="assets/js/vendor/js.cookie.js"></script>
+  <script src="assets/js/vendor/count-down.js"></script>
+  <script src="assets/js/vendor/counter-up.js"></script>
+  <script src="assets/js/vendor/isotop.js"></script>
+  <script src="assets/js/vendor/imageloaded.js"></script>
+  <script src="assets/js/vendor/backtoTop.js"></script>
+  <script src="assets/js/vendor/scrolltrigger.js"></script>
+  <script src="assets/js/vendor/jquery.custom-file-input.js"></script>
+  <script src="assets/js/vendor/savePopup.js"></script>
+  <!-- main JS -->
+  <script src="assets/js/main.js"></script>
+</body>
+
+</html>
