@@ -725,8 +725,8 @@ server.post(
       if (!allowedExtensions.exec(req.files[0].originalname)) {
         res.status(415).send("Failed")
       } else {
-        //digitalOcean.functions.uploadNFTImage(req, req.files[0], epoch);
-        //digitalOcean.functions.uploadNFTJson(req, dataBody.jsonData, epoch);
+        digitalOcean.functions.uploadNFTImage(req, req.files[0], epoch);
+        digitalOcean.functions.uploadNFTJson(req, dataBody.jsonData, epoch);
         if (dataBody) {
           const mintPload = await xumm.payloads.mintObject(
             dataBody.jsonLink, 
