@@ -725,8 +725,8 @@ server.post(
       if (!allowedExtensions.exec(req.files[0].originalname)) {
         res.status(415).send("Failed")
       } else {
-        digitalOcean.functions.uploadNFTImage(req, req.files[0], epoch);
-        digitalOcean.functions.uploadNFTJson(req, dataBody.jsonData, epoch);
+        //digitalOcean.functions.uploadNFTImage(req, req.files[0], epoch);
+        //digitalOcean.functions.uploadNFTJson(req, dataBody.jsonData, epoch);
         if (dataBody) {
           const mintPload = await xumm.payloads.mintObject(
             dataBody.jsonLink, 
@@ -751,14 +751,14 @@ server.post("/minting-confirmation", upload.any(), speedLimiter, async (req, res
   const txID = await xumm.subscriptions.xummTransInfo(mintPload, res)
   const NFTokenId = await xumm.xrpl.nftIDFromTxID(txID)
   console.log(NFTokenId)
-  if (NFTokenId == false) {
+  if (NFTokenId.nftID == false) {
     res.status(418).send("Minting transaction not signed correctly");
   } else {
   await mongoClient.query.addNftToQueried(
-    NFTokenId,
-    req.session.wallet,
+    NFTokenId[0],
+    NFTokenId[1],
     false,
-    req.session.wallet
+    NFTokenId[1]
   );
   res.status(200).send('NFT minted')
   }

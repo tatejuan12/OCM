@@ -598,7 +598,6 @@ var subscriptions = {
     }
   },
   xummTransInfo: async function (payload, res) {
-    console.log(payload)
       var subscription = false;
       var promise = new Promise(function (resolve) {
         subscription = sdk.payload.subscribe(payload, (event) => {
@@ -1679,7 +1678,9 @@ var xrpls = {
           return false;
       }
 
+      var account = result.result.Account;
       //check it was a successful transaction
+
       if (result.result.meta.TransactionResult != "tesSUCCESS") {
           console.log(`MINTING FAILED`)
           return false;
@@ -1733,7 +1734,7 @@ var xrpls = {
           return null
       }
 
-      return nftID
+      return [nftID, account]
   } catch (error) {
       console.log(error)
       return null
