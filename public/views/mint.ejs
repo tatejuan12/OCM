@@ -130,11 +130,12 @@
             <div class="upload-area">
 
               <div class="upload-formate mb--30">
-                <h6 class="title">
+                <h6 class="form-label required">
                   Upload file
                 </h6>
                 <p class="formate">
-                  Drag or choose your file to upload
+                  Drag or choose your file to upload <br>
+                  (JPG, JPEG, PNG, GIF)
                 </p>
               </div>
 
@@ -146,7 +147,7 @@
                 <label for="createinputfile" title="No File Choosen">
                   <i class="feather-upload"></i>
                   <span class="text-center">Choose a File</span>
-                  <p class="text-center mt--10">PNG, GIF, WEBP, MP4 or MP3. <br> Max 10Mb.</p>
+                  <p class="text-center mt--10">JPG, JPEG, PNG, GIF <br> Max 10Mb.</p>
                 </label>
               </div>
             </div>
@@ -155,22 +156,22 @@
 
         <div class="col-md-12">
           <div class="input-box pb--20">
-            <label for="name" class="form-label">NFT Name</label>
+            <label for="name" class="form-label required">NFT Name</label>
             <input id="name" placeholder="e. g. 'Wesley The Whale'">
           </div>
         </div>
 
         <div class="col-md-12">
           <div class="input-box pb--20">
-            <label for="Description" class="form-label">Description</label>
+            <label for="Description" class="form-label required">Description</label>
             <textarea id="description" rows="3" placeholder="e. g. 'Worlds best NFT...'"></textarea>
           </div>
         </div>
         <div class="col-md-12">
           <div class="input-box pb--20">
-            <label for="collection-family" class="form-label">Collection Family</label>
+            <label for="collection-family" class="form-label required">Collection Family</label>
             <input id="collection-family" placeholder="e. g. 'Whales'">
-            <label for="collection-name" class="form-label">Collection Name</label>
+            <label for="collection-name" class="form-label required">Collection Name</label>
             <input id="collection-name" placeholder="e. g. 'The Pod'">
           </div>
         </div>
@@ -208,7 +209,7 @@
                   <input type="number" id="taxon-value" value="1" placeholder='e.g "3"'>
                 </div>
                 <div class="pb--20">
-                  <label for="transfer-fee">Transfer Fee:</label>
+                  <label for="transfer-fee">Royalty Percentage:</label>
                   <input type="number" id="transferFee" value="0" placeholder="0 - 50" min="0" max="50">
                 </div>
                 <div class="col-md-4 col-sm-4">
@@ -316,9 +317,11 @@
       const time = new Date().getTime();
       var attributesObj = [];
       for (var a = 0; a < $('#propertiesContent .properties-content-main').length; a++) {
-        attributesObj[a] = {
-          "trait_type": $(`.attribute-name:eq(${a})`).val(),
-          "value": $(`.attribute-value:eq(${a})`).val()
+          if ($(`.attribute-name:eq(${a})`).val() != '' && $(`.attribute-value:eq(${a})`).val() != '') {
+            attributesObj[a] = {
+            "trait_type": $(`.attribute-name:eq(${a})`).val(),
+            "value": $(`.attribute-value:eq(${a})`).val()
+          }
         }
       };
 

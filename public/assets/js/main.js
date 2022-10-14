@@ -1143,3 +1143,18 @@ $(function () {
       }
   });
 });
+//Mint Form button Disabler
+$(function () {
+  $('#startMint').attr('onclick', 'allFields()');
+  $('#mintForm-01').change(function () {
+    if ($('#name').val() != '' && $('#description').val() != '' && $('#collection-family') != '' && $('#collection-name') != '' && $('#createinputfile').val() != '') {
+      $('#startMint').attr('onclick', 'submitMintingInformation()');
+    } else {
+      $('#startMint').attr('onclick', 'allFields()');
+    }
+  })
+})
+//Complete all fileds alert
+function allFields () {
+  alert('Please Complete Required Fields')
+}
