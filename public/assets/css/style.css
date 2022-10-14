@@ -24968,3 +24968,22 @@ Collection nav
   top: 9%;
   left: 5%;
 }
+@media only screen and (max-width: 768px) {
+  .bat{
+    right: 6%;
+    top: 2%;
+  }
+  .ghost{
+    top: 51%;
+    left: 70%;
+    max-width: 100px;
+  }
+  .web{
+    top: 22%;
+    right: 15%;
+    max-width: 100px;
+  }
+  .torch{
+    display: none;
+  }
+}
