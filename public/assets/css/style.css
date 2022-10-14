@@ -59,7 +59,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
 :root {
-  /*00a3ff*/
+  /*00a3ff primary OCM color*/
   --color-primary: #FF7518;
   --color-primary-alta: #212e48;
   --color-gray: #f6f6f6;
@@ -24946,4 +24946,25 @@ Collection nav
 }
 .card{
   background-color: var(--background-color-1);
+}
+.halloween img{
+  width: 200px;
+  position: absolute;
+}
+.bat{
+  right: 6%;
+  top: 2%;
+}
+.ghost{
+  top: 50%;
+  left: 0;
+}
+.web{
+  top: 35%;
+  right: 15%;
+}
+.torch{
+  transform: rotate(-50deg);
+  top: 9%;
+  left: 5%;
 }
