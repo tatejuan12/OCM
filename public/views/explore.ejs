@@ -64,24 +64,24 @@
             <label class="filter-leble">Likes</label>
             <select id="sort-likes">
               <option data-display="Likes" value='' class="option disabled" selected disabled>Likes</option>
-              <option value=-1>Most liked</option>
-              <option value=1>Least liked</option>
+              <option value=-1 id="mostLiked">Most liked</option>
+              <option value=1 id="leastLiked">Least liked</option>
             </select>
           </div>
           <div class="filter-select-option">
             <label class="filter-leble">Price</label>
             <select id="sort-price">
               <option data-display="Price" value='' class="option disabled" selected disabled>Price</option>
-              <option value=1>Low to High</option>
-              <option value=-1>High to Low</option>
+              <option value=1 id="priceLH">Low to High</option>
+              <option value=-1 id="priceHL">High to Low</option>
             </select>
           </div>
           <div class="filter-select-option">
             <label class="filter-leble">Extras</label>
             <select id="filter-extras">
               <option data-display="Select Option" value='' selected disabled>Select Option</option>
-              <option value="Verified">Verified</option>
-              <option value="Staykable">Staykable</option>
+              <option value="Verified" id="verifiedOption">Verified</option>
+              <option value="Staykable" id="staykableOption">Staykable</option>
             </select>
           </div>
           <div class="filter-select-option">
@@ -89,7 +89,7 @@
             <select id="filter-brands">
               <option data-display="Select Brand" class="option disabled" value='' selected disabled>Select Brand</option>
               <% filterOptions.forEach(function(res){%>
-              <option value="<%=res.issuers%>"><%=res._id%></option>
+              <option value="<%=res.issuers%>" id="<%=res.issuers%>"><%=res._id%></option>
               <%}); %>
             </select>
           </div>
@@ -132,10 +132,10 @@
           </div>
         </div>
       </div>
-
       <%- include ("models/nft-rows.ejs", {nfts:nfts}) %>
-
-      <%- include ("models/pagination.ejs" , {page:page, queries:queries}) %>
+      <nav class="pagination-wrapper" aria-label="Page navigation example">
+      </nav>
+      <!-- <%#- include ("models/pagination.ejs" , {page:page, queries:queries}) %> -->
     </div>
   </div>
   <!-- end product area -->
@@ -177,6 +177,44 @@
   <script>
     var iteration = 1;
     var filterOptions = <%- JSON.stringify(filterOptions) %>;
+    console.log(filterOptions)
+    $(window).on('load', function () {
+      var url = (new URL(location.href)).searchParams;
+      const s = 'selected';
+      if (url.get('sortLikes')) {
+        var srtL = url.get('sortLikes')
+        if (srtL == -1) {
+          $('#mostLiked').attr(s, s)
+        } else if (srtL == 1) {
+          $('#leastLiked').attr(s, s)
+        }
+      }
+      if (url.get('sortPrice')) {
+        var sP = url.get('sortPrice')
+        if (sP == 1) {
+          $('#priceLH').attr(s,s)
+        } else if (sP == -1) {
+          $('#priceHL').arrt(s,s)
+        }
+      }
+      if (url.get('filterExtras')) {
+        var fE = url.get('filterExtras')
+        if (fE == 'Verified') {
+          $('#verifiedOption').attr(s,s)
+        } else if (fE == 'Staykable') {
+          $('#staykableOption').attr(s,s)
+        }
+      }
+      if (url.get('filterBrands')) {
+        var fB = url.get('filterBrands')
+        for (filter of filterOptions){
+          if (fB == filter.issuers[0]) {
+            $(`#${filter.issuers[0]}`).attr(s,s)
+          }
+        }
+      }
+      $('select').niceSelect('update');
+    })
     $('#filter-brands').change(function() {
       var val = $('#filter-brands').val();
       $('#filter-family').empty();
@@ -193,8 +231,7 @@
           }
         }
       }
-      $('select').niceSelect('destroy');
-      $('select').niceSelect();
+      $('select').niceSelect('update');
     });
 
     function handleFilterSort() {
@@ -239,13 +276,17 @@
 
         $.get(`<%=url%>/get-additional-explore-nfts${urlFilterConstructor()}`,
           function(data) {
-            iteration++;
-            $("#exploreSection").append(data)
-            const cardsUnlisted = document.getElementById("exploreSection").querySelectorAll(".col-5");
-            cardsUnlisted.forEach(element => {
-              element.classList.add("sal-animate")
-            });
-            $(window).data('getReady', true);
+            if (data == 'empty'){
+              $('.pagination-wrapper').html('No more NFTs found')
+            } else {
+              iteration++;
+              $("#exploreSection").append(data)
+              const cardsUnlisted = document.getElementById("exploreSection").querySelectorAll(".col-5");
+              cardsUnlisted.forEach(element => {
+                element.classList.add("sal-animate")
+              });
+              $(window).data('getReady', true);
+            }
           }
         )
 

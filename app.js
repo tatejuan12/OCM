@@ -1081,7 +1081,11 @@ server.get(
           mongoClient.query.getNfts(NFTSPERPAGE, markerIteration, filter)
         );
       });
-      res.render("views/models/nft-rows-load", { nfts: await promiseNfts });
+      if ((await promiseNfts).length == 0) {
+        res.status(200).send('empty')
+      } else {
+        res.render("views/models/nft-rows-load", { nfts: await promiseNfts });
+      }
     }
     res.status(400).send();
   }
