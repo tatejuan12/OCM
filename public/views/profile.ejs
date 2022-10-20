@@ -53,11 +53,17 @@
         <div class="col-lg-12">
           <div class="author-wrapper">
             <div class="author-inner">
-              <div class="user-thumbnail">
-                <img src="<%=profile_pic%>" alt="user profile image" onerror="this.src='https://www.ui-avatars.com/api/?background=random&length=3&font-size=0.33&uppercase=false&size=200&name=<%=user.wallet%>'">
+              <div class="user-thumbnail">                
+                <img style="margin-right: 14px;" src="<%=profile_pic%>" alt="user profile image" onerror="this.src='https://www.ui-avatars.com/api/?background=random&length=3&font-size=0.33&uppercase=false&size=200&name=<%=user.wallet%>'" >
+                <a href="edit-profile" style="margin-left: -26px;margin-top:19px;z-index: 1;"><i style="margin-left: -32px;" class="icon i-edit"></i></a>
               </div>
               <div class="rn-author-info-content">
-                <h4 class="title"><%= user.wallet %></h4>
+                <%if (user.project == undefined) {%>
+                  <h4 class="title"><%=user.wallet%></h4>
+                <%} else {%>
+                  <h4 class="title"><%=user.project%></h4>
+                  <p class="wallet-copy"><a onclick="navigator.clipboard.writeText(`<%=user.wallet%>`)"><%=user.wallet%></a><i class="icon i-copy"></i></p>
+                <%}%>
               </div>
             </div>
           </div>

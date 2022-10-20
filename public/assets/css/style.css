@@ -220,6 +220,25 @@ h6,
   line-height: 1.4074;
   color: var(--color-heading);
 }
+h2.title.gradient-text{
+    font-size: var(--h2);
+    background: linear-gradient(90deg, rgba(97,180,58,1) 0%, rgba(175,180,64,1) 24%, rgba(29,180,253,1) 50%, rgba(205,43,55,1) 71%, rgba(252,176,69,1) 100%);    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradient 15s ease infinite;
+}
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
 
 h1,
 .h1 {
@@ -588,6 +607,16 @@ var {
 }
 .i-mint{
   background-image: url(../images/icons/Favorites-light/icons8-mint-48.png);
+}
+.active-light-mode .i-copy{
+  background-image: url(../images/icons/Favorites/icons8-copy-48.png);
+  max-width: 12px;
+  background-repeat: no-repeat;
+}
+.i-copy{
+  background-image: url(../images/icons/Favorites-light/icons8-copy-48.png);
+  max-width: 12px;
+  background-repeat: no-repeat;
 }
 /*---------------------------
 	List Style 
@@ -12727,6 +12756,22 @@ span.rn-badge-card::before {
 }
 
 .hamberger button.hamberger-button {
+  padding: 5px;
+  margin: 0;
+  border: 0 none;
+  font-size: 21px;
+  display: flex;
+  margin-top: 0px;
+  color: var(--color-body);
+  margin-right: 0px;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  justify-content: center;
+  align-items: center;
+}
+.setting-option .profile-menu-option{
   padding: 5px;
   margin: 0;
   border: 0 none;
@@ -24998,4 +25043,9 @@ Collection nav
   .torch{
     display: none;
   }
+}
+.wallet-copy{
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
 }
