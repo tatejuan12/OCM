@@ -78,7 +78,6 @@ var payloads = {
       if (expiry == 0){
         delete request.txjson.Expiration;
       }
-      console.log(request);
       if (mobile)
         request.options["return_url"] = {
           app: return_url,
@@ -89,7 +88,6 @@ var payloads = {
         };
 
       const payload = await getPayload(request);
-      console.log(payload);
       return payload;
     }
   },
@@ -105,7 +103,6 @@ var payloads = {
           NFTokenBuyOffer: offerId,
         },
       };
-      console.log(request);
       if (mobile)
         request.options["return_url"] = {
           app: return_url,
@@ -127,7 +124,6 @@ var payloads = {
           NFTokenSellOffer: offerId,
         },
       };
-      console.log(return_url);
       if (mobile)
         request.options["return_url"] = {
           app: return_url,
@@ -374,7 +370,6 @@ var payloads = {
         Amount: paymentAmount,
       },
     };
-    console.log(request);
     if (mobile)
       request.options["return_url"] = {
         app: return_url,
@@ -467,7 +462,6 @@ var payloads = {
       if (flags != 0) {
         mintObject.txjson.Flags = flags;
       }
-      console.log(mintObject);
       const payload = await getPayload(mintObject);
       return payload;
     } catch (err) {
@@ -494,7 +488,6 @@ var subscriptions = {
     } catch (error) {
       console.error("There was an error with the payload: \n" + error);
     }
-    console.log(subscription);
   },
   signInSubscription: async function (req, res) {
     var subscription = false;
@@ -571,7 +564,6 @@ var subscriptions = {
   },
   listNftSubscription: async function (req, res) {
     try {
-      console.log(req)
       var subscription = false;
       var promise = new Promise(function (resolve) {
         subscription = sdk.payload.subscribe(req.body.payload, (event) => {
@@ -1774,6 +1766,17 @@ async function verifyTransaction(txID) {
   }
 }
 async function getPayload(request) {
+  if (request.txjson.Memo == undefined) {
+    memo = 'OnChain Markeplace - www.onchainmarketplace.net';
+    var memoHex = xrpl.convertStringToHex(memo)
+    request.txjson.Memos = [
+      {
+        Memo: {
+          MemoData: memoHex,
+        },
+      },
+    ];;
+  }
   const payload = await sdk.payload.create(request);
   return payload;
 }
@@ -1883,8 +1886,7 @@ async function sendRequestRedeem(ipAddress, address) {
     req.write(postData);
     req.end();
   });
-  console.log(await promiseRequest);
-  return promiseRequest;
+  return await promiseRequest;
 }
 async function getXrplReserve() {
   const client = await getXrplClient();
