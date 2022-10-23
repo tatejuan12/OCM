@@ -926,36 +926,75 @@ server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
   var wallet;
   var unlistedNfts = [];
   var unlistedNftsToReturn = [];
+
   if (req.query.wallet) wallet = req.query.wallet;
   else wallet = req.session.wallet;
   const marker = req.query.marker;
   const nfts = await xumm.xrpl.getAccountsNfts(wallet, NFTSPERPAGE, marker);
+
+  //find out what ones are listed
+  var checkListingPromises = []
   for (let nft of nfts[0]) {
-    const returnedNft = await mongoClient.query.getNft(nft.NFTokenID);
-    if (returnedNft == null) unlistedNfts.push(nft);
+
+      var checkNftStatusPromise = new Promise(function(resolve, reject) {
+          var returnedNft = mongoClient.query.getNft(nft.NFTokenID);
+          resolve(returnedNft)
+      })
+
+      checkListingPromises.push(checkNftStatusPromise)
   }
+
+  var listingStatusResults = await Promise.all(checkListingPromises) //wait to get listing status on returned NFTS
+
+  for (var i = 0; i < nfts[0].length; i++) {
+      if (listingStatusResults[i] == null) unlistedNfts.push(nfts[0][i]);
+  }
+
+
+  //get unlisted NFT promises
+  var unlistedNftDetailsPromises = []
   for (var i = 0; i < unlistedNfts.length; i++) {
-    var queuedIDFinder = await mongoClient.query.checkQueue(
-      unlistedNfts[i].NFTokenID
-    );
-    var theNFT = unlistedNfts[i].NFTokenID;
-    if (queuedIDFinder == null) {
-      //check to see if the NFT isn't in the queue for listing with !==.
-      const data = await xumm.xrpl.getNftImage(unlistedNfts[i].URI);
-      if (data) {
-        unlistedNftsToReturn[i] = data;
-        unlistedNftsToReturn[i].taxon = unlistedNfts[i].NFTokenTaxon;
-        unlistedNftsToReturn[i].issuer = unlistedNfts[i].Issuer;
-        unlistedNftsToReturn[i].currentHolder = wallet;
-        unlistedNftsToReturn[i].NFTokenID = unlistedNfts[i].NFTokenID;
-      }
-    }
-    var rawData = unlistedNfts[i];
+
+      var queuedStatusPromise = new Promise(function(resolve, reject) {
+          var queuedStatus = mongoClient.query.checkQueue(
+              unlistedNfts[i].NFTokenID
+          );
+          resolve(queuedStatus)
+      })
+
+      var nftDataPromise = new Promise(function(resolve, reject) {
+          var nftData = xumm.xrpl.getNftImage(unlistedNfts[i].URI);
+          resolve(nftData)
+      })
+
+      unlistedNftDetailsPromises.push(queuedStatusPromise)
+      unlistedNftDetailsPromises.push(nftDataPromise)
   }
+
+  var listingStatusResults = await Promise.all(unlistedNftDetailsPromises) //wait for promises to resolve
+
+  //transform data
+  for (var i = 0; i < unlistedNfts.length; i++) {
+
+      var queuedStatus = listingStatusResults[(i * 2)]
+      var nftData = listingStatusResults[(i * 2) + 1]
+
+      if (queuedStatus == null) {
+          //check to see if the NFT isn't in the queue for listing with !==.
+          if (nftData) {
+              unlistedNftsToReturn[i] = nftData;
+              unlistedNftsToReturn[i].taxon = unlistedNfts[i].NFTokenTaxon;
+              unlistedNftsToReturn[i].issuer = unlistedNfts[i].Issuer;
+              unlistedNftsToReturn[i].currentHolder = wallet;
+              unlistedNftsToReturn[i].NFTokenID = unlistedNfts[i].NFTokenID;
+          }
+      }
+  }
+
   res.render("views/models/unlisted-nft-rows.ejs", {
-    wallet: wallet,
-    rawData: rawData,
-    nfts: unlistedNftsToReturn,
+      wallet: wallet,
+      rawData: unlistedNfts,
+      nfts: unlistedNftsToReturn,
   });
 });
 server.get("/get-additional-unlisted-nfts", speedLimiter, async (req, res) => {
