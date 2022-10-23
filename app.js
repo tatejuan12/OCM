@@ -260,10 +260,13 @@ server.get("/redeem-setup", speedLimiter, (req, res) => {
 server.get("/collection", speedLimiter, async (req, res) => {
   const page = parseInt(req.query.page);
   const wallet = req.session.wallet;
+
   if (!isNaN(page)) {
+
     const collectionName = req.query.name;
     const issuer = req.query.issuer;
     var promisesArray = [];
+
     nftsPromise = new Promise(function (resolve, reject) {
       const nfts = mongoClient.query.getNftsByCollection(collectionName, issuer, NFTSPERPAGE, page);
       resolve(nfts);
@@ -279,28 +282,53 @@ server.get("/collection", speedLimiter, async (req, res) => {
       );
       resolve(collectionDetails);
     })
+    floorPricePromise = new Promise(function (resolve, reject) {
+      const floorPrice = mongoClient.query.getCollectionFloorPrice(
+          collectionName,
+          issuer.split(",")
+        );
+      resolve(floorPrice);
+    })
+    listedItemsPromise = new Promise(function (resolve, reject) {
+      const listedItems = mongoClient.query.totalCollectionItems(
+          collectionName,
+          issuer.split(",")
+        );
+      resolve(listedItems);
+    })
+    unlistedItemsPromise = new Promise(function (resolve, reject) {
+      const unlistedItems = mongoClient.query.unlistedCollectionItems(
+          collectionName,
+          issuer.split(",")
+        );
+      resolve(unlistedItems);
+    });
     promisesArray.push(nftsPromise)
     promisesArray.push(unlistedNftsPromise)
     promisesArray.push(collectionDetailsPromise)
+    promisesArray.push(floorPricePromise)
+    promisesArray.push(listedItemsPromise)
+    promisesArray.push(unlistedItemsPromise)
+
     var collectionResults = await Promise.all(promisesArray)
-    
+
+    var nfts = collectionResults[0]
+    var unlistedNfts = collectionResults[1]
+    var collectionStuff = collectionResults[2]
+    var floorPrice = collectionResults[3]
+    var listedItems = collectionResults[4]
+    var unlistedItems = collectionResults[5]
+
+    if (wallet !== collectionStuff.issuer) {
+      mongoClient.query.incrementViewCollection(collectionName);
+    }
     const collection_logo = digitalOcean.functions.getCollectionLogoLink(
-      collectionResults[2].name
+      collectionStuff.name
     );
     const collection_banner = digitalOcean.functions.getCollectionBannerLink(
-      collectionResults[2].name
+      collectionStuff.name
     );
-    const floorPrice = await mongoClient.query.getCollectionFloorPrice(
-      collectionName,
-      issuer.split(",")
-    );
-    const items = await mongoClient.query.totalCollectionItems(
-      collectionName,
-      issuer.split(",")
-    );
-    if (wallet !== collectionResults[2].issuer) {
-      await mongoClient.query.incrementViewCollection(collectionName);
-    }
+
     if (req.session.wallet != undefined) {
       var login = true;
     } else {
@@ -308,20 +336,21 @@ server.get("/collection", speedLimiter, async (req, res) => {
     }
     defaultLocals(req, res);
     res.render("views/collection", {
-      nfts: collectionResults[0],
-      unlistedNfts: collectionResults[1],
-      collectionDetails: collectionResults[2],
+      nfts: nfts,
+      unlistedNfts: unlistedNfts,
+      collectionDetails: collectionStuff,
       collection_logo: collection_logo,
       collection_banner: collection_banner,
       floor: floorPrice,
-      items: items,
+      items: listedItems + unlistedItems,
       wallet: wallet,
       login: login,
     });
   } else res.redirect("collection?page=0");
 });
 server.get("/collections", speedLimiter, async (req, res) => {
-  var collections = await mongoClient.query.getCollections();
+  // add limit to amount of collections fetched
+  var collections = await mongoClient.query.getCollections(NFTSPERPAGE);
   var promisesArray = [] 
   for (var i = 0; i < collections.length; i++) { 
       var collectionsImagesPromise = new Promise(function(resolve, reject) {

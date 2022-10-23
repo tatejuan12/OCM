@@ -352,12 +352,15 @@ var methods = {
       let collection = db.collection("Expired-Listings");
       var issuerArray = issuer.split(",");
       var returnedName = collectionName.split(",");
-      var query = {
+      var query = [{
         $match: { $or: [ {"uriMetadata.collection.name": new RegExp(returnedName, "i")}, {"uriMetadata.collection.name": null} ], 
-        issuer: {$in: issuerArray}}
-      };
+        issuer: {$in: issuerArray}},
+      },
+      {
+        $sort: {"uriMetadata.name": 1}
+      }];
       const aggregate = collection
-        .aggregate([query])
+        .aggregate(query,{collation: { locale: "en_US", numericOrdering: true }})
         .skip(NFTSPERPAGE * page)
         .limit(NFTSPERPAGE);
       return await aggregate.toArray();
@@ -380,14 +383,17 @@ var methods = {
       let collection = db.collection("Eligible-Listings");
       var returnedName = collectionName.replaceAll("_", " ");
       var issuerArray = issuer.split(",");
-      var query = {
+      var query = [{
         $match: { $or: [ {"uriMetadata.collection.name": new RegExp(returnedName, "i")}, {"uriMetadata.collection.name": null} ],
         issuer: {$in: issuerArray}},
-      };
+      },
+      {
+        $sort: {"uriMetadata.name": 1}
+      }];
       const aggregate = collection
-        .aggregate([query])
-        .skip(NFTSPERPAGE * page)
-        .limit(NFTSPERPAGE);
+      .aggregate(query,{collation: { locale: "en_US", numericOrdering: true }})
+      .skip(NFTSPERPAGE * page)
+      .limit(NFTSPERPAGE);
       return await aggregate.toArray();
     } catch (err) {
       console.log("Database error" + err);
@@ -684,7 +690,7 @@ var methods = {
       return res;
     }
   },
-  getCollections: async function () {
+  getCollections: async function (limit) {
     var result;
     const client = await getClient();
     if (!client) return;
@@ -693,7 +699,7 @@ var methods = {
 
       let collection = db.collection("Collections");
 
-      let res = collection.find();
+      let res = collection.find().limit(limit);
       const array = await res.toArray();
 
       return array;

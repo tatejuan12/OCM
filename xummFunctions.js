@@ -669,27 +669,7 @@ var xrpls = {
   getAccountTokens: async function (address) {
     try {
       //define
-      var client = new xrpl.Client("wss://xls20-sandbox.rippletest.net:51233");
-
-      //console.log("Connecting to XRPL")
-      //Try Connect to XRPL
-      var count = 0;
-      while (count < 6) {
-        if (count >= 3) {
-          var client = new xrpl.Client(
-            "wss://xls20-sandbox.rippletest.net:51233"
-          );
-        }
-
-        try {
-          await client.connect();
-          //console.log(`\tConnected`)
-          break;
-        } catch (err) {
-          //console.log(`                    Failed ${count}`)
-          count += 1;
-        }
-      }
+      var client = await getXrplClient()
 
       //try 5 times to get an array of all account NFTs
       var count = 0;
@@ -1794,7 +1774,6 @@ async function getXrplClient() {
 
     try {
       await client.connect();
-      // console.log(`\tConnected`);
       break;
     } catch (err) {
       //console.log(`                    Failed ${count}`)
