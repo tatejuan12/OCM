@@ -24288,6 +24288,7 @@ body.active-light-mode {
 .profile-thumbnail {
   display: inline-block;
   width: 35px;
+  height: 35px;
   border-radius: 50px;
   border-width: 5px;
   border-color: var(--background-color-1);

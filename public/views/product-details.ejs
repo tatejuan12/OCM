@@ -82,11 +82,11 @@
                     <img src="assets/images/icons/staykx.png" class="stakeable" alt="stakeable collection" loading="lazy">
                     <%}%>
                   <div class="rn-pd-thumbnail">
-                    <%var imageExt = new Set(['jpg', 'jpeg', 'png', 'gif']); var vidExt = new Set(['mp4', 'mov', 'avi', 'webm', 'mpg', 'wmv']);%>
-                    <% if (imageExt.has(nft.httpsImage.substring(nft.httpsImage.lastIndexOf('.') + 1))) { %>
+                    <%var imageExt = new Set(['image/jpg', 'image/jpeg', 'image/png', 'image/gif']); var vidExt = new Set(['video/mp4', 'video/mov', 'video/avi', 'video/webm', 'video/mpg', 'video/wmv']);%>
+                    <% if (imageExt.has(nft.fileType)) { %>
                       <img src="<%=nft.httpsImage%> " alt="Nft_Profile">
                     <!-- JPG/JPEG/PNG/GIF -->
-                    <% } else if (vidExt.has(nft.httpsImage.substring(nft.httpsImage.lastIndexOf('.') + 1))) { %>
+                    <% } else if (vidExt.has(nft.fileType)) { %>
                       <video controls autoplay loop>
                         <source src="<%=nft.httpsImage%>" type="video/mp4">
                         <source src="<%=nft.httpsImage%>" type="video/webm">

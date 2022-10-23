@@ -9,11 +9,11 @@
 
 
         <!-- CHECKING FILE EXTENSION AND REQUIRED CONTAINER -->
-        <%var imageExt = new Set(['jpg', 'jpeg', 'png', 'gif']); var vidExt = new Set(['mp4', 'mov', 'avi', 'webm', 'mpg', 'wmv']);%>
-        <% if (imageExt.has(nft.httpsImage.substring(nft.httpsImage.lastIndexOf('.') + 1))) { %>
-          <img src="<%= nft.httpsImage%> " alt="Nft_Profile" draggable="false" loading="lazy">
+        <%var imageExt = new Set(['image/jpg', 'image/jpeg', 'image/png', 'image/gif']); var vidExt = new Set(['video/mp4', 'video/mov', 'video/avi', 'video/webm', 'video/mpg', 'video/wmv']);%>
+        <%if (imageExt.has(nft.fileType)) { %>
+          <img src="<%= nft.thumbnail%>" alt="Nft_Profile" draggable="false" loading="lazy">
         <!-- JPG/JPEG/PNG/GIF -->
-        <% } else if (vidExt.has(nft.httpsImage.substring(nft.httpsImage.lastIndexOf('.') + 1))) { %>
+        <% } else if (vidExt.has(nft.fileType)) { %>
           <video autoplay loop>
             <source src="<%= nft.httpsImage%>" type="video/mp4">
             <source src="<%= nft.httpsImage%>" type="video/webm">

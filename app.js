@@ -263,27 +263,32 @@ server.get("/collection", speedLimiter, async (req, res) => {
   if (!isNaN(page)) {
     const collectionName = req.query.name;
     const issuer = req.query.issuer;
-    const nfts = await mongoClient.query.getNftsByCollection(
-      collectionName,
-      issuer,
-      NFTSPERPAGE,
-      page
-    );
-    const unlistedNfts = await mongoClient.query.getUnlistedCollectionNfts(
-      collectionName,
-      issuer,
-      NFTSPERPAGE,
-      page
-    );
-    const collectionDetails = await mongoClient.query.getNftsCollection(
-      collectionName,
-      issuer
-    );
+    var promisesArray = [];
+    nftsPromise = new Promise(function (resolve, reject) {
+      const nfts = mongoClient.query.getNftsByCollection(collectionName, issuer, NFTSPERPAGE, page);
+      resolve(nfts);
+    });
+    unlistedNftsPromise = new Promise(function (resolve, reject) {
+      const unlistedNfts = mongoClient.query.getUnlistedCollectionNfts(collectionName, issuer, NFTSPERPAGE, page);
+      resolve(unlistedNfts);
+    });
+    collectionDetailsPromise = new Promise(function (resolve, reject) {
+      const collectionDetails = mongoClient.query.getNftsCollection(
+        collectionName,
+        issuer
+      );
+      resolve(collectionDetails);
+    })
+    promisesArray.push(nftsPromise)
+    promisesArray.push(unlistedNftsPromise)
+    promisesArray.push(collectionDetailsPromise)
+    var collectionResults = await Promise.all(promisesArray)
+    
     const collection_logo = digitalOcean.functions.getCollectionLogoLink(
-      collectionDetails.name
+      collectionResults[2].name
     );
     const collection_banner = digitalOcean.functions.getCollectionBannerLink(
-      collectionDetails.name
+      collectionResults[2].name
     );
     const floorPrice = await mongoClient.query.getCollectionFloorPrice(
       collectionName,
@@ -293,7 +298,7 @@ server.get("/collection", speedLimiter, async (req, res) => {
       collectionName,
       issuer.split(",")
     );
-    if (wallet !== collectionDetails.issuer) {
+    if (wallet !== collectionResults[2].issuer) {
       await mongoClient.query.incrementViewCollection(collectionName);
     }
     if (req.session.wallet != undefined) {
@@ -303,9 +308,9 @@ server.get("/collection", speedLimiter, async (req, res) => {
     }
     defaultLocals(req, res);
     res.render("views/collection", {
-      nfts: nfts,
-      unlistedNfts: unlistedNfts,
-      collectionDetails: collectionDetails,
+      nfts: collectionResults[0],
+      unlistedNfts: collectionResults[1],
+      collectionDetails: collectionResults[2],
       collection_logo: collection_logo,
       collection_banner: collection_banner,
       floor: floorPrice,
@@ -317,24 +322,42 @@ server.get("/collection", speedLimiter, async (req, res) => {
 });
 server.get("/collections", speedLimiter, async (req, res) => {
   var collections = await mongoClient.query.getCollections();
-  //make script to fetch 3 images from the collection to display on the collection page using the issuer address.
-  for (var i = 0; i < collections.length; i++) {
-    collections[i].sampleImages =
-      await mongoClient.query.getRandomCollectionImages(
-        collections[i].name,
-        collections[i].issuer
-      );
+  var promisesArray = [] 
+  for (var i = 0; i < collections.length; i++) { 
+      var collectionsImagesPromise = new Promise(function(resolve, reject) {
+          var randomImages = mongoClient.query.getRandomCollectionImages( 
+              collections[i].name, 
+              collections[i].issuer
+          );
+          resolve(randomImages)  
+      })
+      var collectionsTotalItemsListedPromise = new Promise(function(resolve, reject) {
+          var totalItemsListed = mongoClient.query.totalCollectionItems( 
+              collections[i].name, 
+              collections[i].issuer
+          );
+          resolve(totalItemsListed)  
+      })
+      var collectionsTotalItemsUnlistedPromise = new Promise(function(resolve, reject) {
+          var totalItemsUnlisted = mongoClient.query.unlistedCollectionItems( 
+              collections[i].name, 
+              collections[i].issuer
+          );
+          resolve(totalItemsUnlisted)  
+      })
+      promisesArray.push(collectionsImagesPromise) 
+      promisesArray.push(collectionsTotalItemsListedPromise) 
+      promisesArray.push(collectionsTotalItemsUnlistedPromise) 
+  }
+  var collectionResults = await Promise.all(promisesArray) 
+  for (var i = 0; i < collections.length; i++) { 
+      collections[i].sampleImages = collectionResults[(Number(i) * 3)]
+      collections[i].numberOfNFTs = Number(collectionResults[(Number(i) * 3) + 1]) + Number(collectionResults[(Number(i) * 3) + 2]) //add the listed and unlisted values together
   }
   collections = appendColletionsImagesUrls(collections);
-  for (var i = 0; i < collections.length; i++) {
-    collections[i].numberOfNFTs = await mongoClient.query.totalCollectionItems(
-      collections[i].name,
-      collections[i].issuer
-    );
-  }
   defaultLocals(req, res);
   res.render("views/collections", {
-    collections: collections,
+      collections: collections,
   });
 });
 server.get("/create-collection", speedLimiter, (req, res) => {

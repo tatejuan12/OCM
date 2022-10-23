@@ -177,6 +177,7 @@
   <script>
     var iteration = 1;
     var filterOptions = <%- JSON.stringify(filterOptions) %>;
+    console.log(filterOptions)
     $(window).on('load', function () {
       var url = (new URL(location.href)).searchParams;
       const s = 'selected';
