@@ -381,7 +381,7 @@ var methods = {
     try {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
-      var returnedName = collectionName.replaceAll("_", " ");
+      var returnedName = collectionName.replace(/_/g, " ");
       var issuerArray = issuer.split(",");
       var query = [{
         $match: { $or: [ {"uriMetadata.collection.name": new RegExp(returnedName, "i")}, {"uriMetadata.collection.name": null} ],
@@ -892,7 +892,7 @@ var methods = {
     try {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
-      var returnedName = collectionName.replaceAll('_', ' ')
+      var returnedName = collectionName.replace(/_/g, ' ')
       var query = [
         {
           $match: {issuer: {$in: issuer}}            
