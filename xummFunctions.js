@@ -199,116 +199,13 @@ var payloads = {
       };
     const client = await getXrplClient();
     try {
-      if (ipAddress == "OCW") {
-        //wallet of issuer
-        var nftWallet = xrpl.Wallet.fromSeed(process.env.XRPL_ISSUER_SEED);
-
-        //console.log(`\nScanning NFTs held by ${nftWallet.classicAddress}`)
-        //Try Select an NFT up to 5 times
-        var count = 0;
-        var payload = false;
-        while (count < 5) {
-          try {
-            var accountNFTs = await client.request({
-              method: "account_nfts",
-              ledger_index: "validated",
-              account: nftWallet.classicAddress,
-              limit: 400,
-            });
-
-            var nftSelection = accountNFTs.result.account_nfts;
-            var nftID =
-              nftSelection[
-                Math.floor(
-                  Math.random() * (nftSelection.length - 1 - 0 + 1) + 0
-                )
-              ].NFTokenID;
-            break;
-          } catch (err) {
-            //console.log(`                    Failed ${count}`)
-            count += 1;
-          }
-        }
-
-        //If could no select NFT in 5 attempts
-        if (nftID == undefined) {
-          //console.log('Could Not Select NFT')
-          return;
-        }
-
-        //console.log(`\tRandom NFT selected -> NFTokenID: ${nftID}`);
-        //set expiry of offer 5 minutes from now
-        var expiry = +(Date.now() / 1000 - 946684800 + 300)
-          .toString()
-          .split(".")[0];
-
-        //mint NFT
-        //Try Place mint up to 5 times
-        //console.log(`\nSetting Sell Or or Chosen NFT`);
-        var count = 0;
-        while (count < 5) {
-          try {
-            var nftSellPrep = await client.autofill({
-              TransactionType: "NFTokenCreateOffer",
-              Account: nftWallet.classicAddress,
-              NFTokenID: nftID,
-              Amount: "10000000",
-              Flags: 1,
-              Destination: address,
-              Expiration: expiry,
-            });
-            nftSellPrep.LastLedgerSequence -= 15;
-            var nftSellSigned = nftWallet.sign(nftSellPrep);
-            var nftSellResult = await client.submitAndWait(
-              nftSellSigned.tx_blob
-            );
-
-            if (nftSellResult.result.meta.TransactionResult == "tesSUCCESS") {
-              for (a in nftSellResult.result.meta.AffectedNodes) {
-                if (
-                  "CreatedNode" in nftSellResult.result.meta.AffectedNodes[a]
-                ) {
-                  if (
-                    nftSellResult.result.meta.AffectedNodes[a].CreatedNode
-                      .LedgerEntryType == "NFTokenOffer"
-                  ) {
-                    var nftOfferIndex =
-                      nftSellResult.result.meta.AffectedNodes[a].CreatedNode
-                        .LedgerIndex;
-                  }
-                }
-              }
-            } else {
-              throw "Error wth acc";
-            }
-            break;
-          } catch (err) {
-            console.log(err);
-            //console.log(`                    Failed ${count}`)
-            count += 1;
-          }
-        }
-
-        //if could not sell NFT
-        if (nftOfferIndex == undefined) {
-          //console.log('Could Not Place order')
-          return;
-        }
-
-        //console.log(`\tOffer Index: ${nftOfferIndex}`)
-
-        //this object will be used in the Xumm object
-        //this allows to generate a relevant Xumm qrCode
-        request.txjson["NFTokenSellOffer"] = nftOfferIndex;
-        payload = await getPayload(request);
-      } else {
         const obj = await sendRequestRedeem(ipAddress, address);
 
         request.txjson["NFTokenSellOffer"] = obj[0].NFTokenSellOffer;
+        tokenID = obj[1]
         payload = await getPayload(request);
-      }
       if (payload) {
-        return payload;
+        return [payload, tokenID];
       } else throw "Couldn't get payload";
     } catch (error) {
       return;
@@ -555,7 +452,7 @@ var subscriptions = {
           });
         } else if (event.data.signed == false) {
           res.status(401).send(false);
-          return true;
+          return false;
         }
       });
     } catch (error) {

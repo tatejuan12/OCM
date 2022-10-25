@@ -19119,6 +19119,73 @@ NFT product styles mobile layout
   border-radius: 4px;
   max-width: 200px;
 }
+.active-dark-mode .modal-content{
+  background-color: var(--background-color-3);
+}
+
+.modal-content .list-modal-wrap{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+  width: 100%;
+  padding: 8px;
+  align-items: center;
+}
+.active-light-mode .modal-content{
+  background-color: #fff;
+}
+.active-light-mode .list-modal-wrap .list-img{
+  border: 8px solid #fff;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+}
+.list-modal-wrap .list-img{
+  max-width: 250px;
+  max-height: 400px;
+  overflow: hidden;
+  margin-top: -10%;
+  margin-bottom: 40px;
+  border-radius: 16px;
+  border: 8px solid var(--background-color-4);
+  box-shadow: rgba(175, 175, 226, 0.397) 0px 50px 100px -20px, rgba(255, 255, 255, 0.3) 0px 30px 60px -30px;
+}
+.accordion .card{
+  background: none;
+  border: none;
+}
+.accordion .card-body input{
+  font-size: 14px;
+}
+.list-modal-wrap .accordion a{
+  color: var(--color-light-body);
+}
+.list-modal-wrap .list-img img{
+  border-radius: 8px;
+  max-width: 250px;
+}
+.list-modal-wrap .list-img video{
+  max-width: 250px;
+}
+.list-modal-wrap .listing-info{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.list-modal-wrap .modal-footer{
+  border: none;
+  margin-top: 20px;
+  margin-bottom: -40px;
+}
+.list-modal-wrap .modal-footer button{
+  width: 200px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+}
+.modal-content.rounded{
+  border-radius: 16px;
+}
 .rn-bid-details .rn-bid-content .top-seller-inner-one {
   padding-top: 10px;
 }
@@ -24151,7 +24218,6 @@ body.active-light-mode {
 .loader-disclaimer{
   width: auto;
   height: 10px;
-  margin: 20px auto 20px auto;
   border-radius: 10px;
   display: block;
   position: relative;
@@ -24325,11 +24391,32 @@ body.active-light-mode {
 .contentWrap {
   max-width: 100%;
 }
-.NFTDeets img {
+#listModal{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 200px;
+  border-radius: 15px;
+}
+.modal-content .list-image {
   max-width: 250px;
+  max-height: 250px;
   margin: 10px 20px;
+  margin-top: -140px;
+  overflow: hidden;
+  border: 8px solid #fff;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px,
     rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+}
+.modal-content .modal-btn{
+  margin-bottom: -22px;
+}
+.list-image img{
+  border-radius: 7.5px;
 }
 .NFTDeets {
   display: flex;

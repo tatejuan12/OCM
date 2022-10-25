@@ -27,9 +27,9 @@
           <img src="<%= nft.http_image%> " alt="unlisted NFT image" draggable="false" loading="lazy">
         <%};%>
       <%if (nft.http_image == undefined) {%>
-        <a class="btn btn-primary nft-list-btn" onclick='populateListNft( {"NFTokenID": "<%=rawData.NFTokenID%>" , "issuer" : "<%=rawData.Issuer%>" , "taxon" : "<%=rawData.NFTokenTaxon%>" , "currentHolder" : "<%=wallet%>", "image":"<%=nft%>" })'>List NFT</a>
+        <a class="btn btn-primary nft-list-btn" onclick='populateListNft( {"NFTokenID": "<%=rawData.NFTokenID%>" , "issuer" : "<%=rawData.Issuer%>" , "taxon" : "<%=rawData.NFTokenTaxon%>" , "currentHolder" : "<%=wallet%>", "image":"<%=nft%>", "name":"Un-named NFT" })'>List NFT</a>
       <%} else {%>
-        <a class="btn btn-primary nft-list-btn" onclick='populateListNft( {"NFTokenID": "<%=nft.NFTokenID%>" , "issuer" : "<%=nft.issuer%>" , "taxon" : "<%=nft.taxon%>" , "currentHolder" : "<%=nft.currentHolder%>", "image":"<%=nft.http_image%>" })'>List NFT</a>
+        <a class="btn btn-primary nft-list-btn" onclick='populateListNft( {"NFTokenID": "<%=nft.NFTokenID%>" , "issuer" : "<%=nft.issuer%>" , "taxon" : "<%=nft.taxon%>" , "currentHolder" : "<%=nft.currentHolder%>", "image":"<%=nft.http_image%>", "name":"<%=nft.name%>" })'>List NFT</a>
       <%}%>
     </div>
     <div class="product-share-wrapper">
@@ -46,9 +46,9 @@
       </div>
     </div>
     <%if (nft.http_image == undefined) {%>
-      <a onclick='populateListNft( {"NFTokenID": "<%=rawData.NFTokenID%>" , "issuer" : "<%=rawData.Issuer%>" , "taxon" : "<%=rawData.NFTokenTaxon%>" , "currentHolder" : "<%=wallet%>", "image":"<%=nft%>" })'><span class="product-name">Un-named NFT</span></a>
+      <a onclick='populateListNft( {"NFTokenID": "<%=rawData.NFTokenID%>" , "issuer" : "<%=rawData.Issuer%>" , "taxon" : "<%=rawData.NFTokenTaxon%>" , "currentHolder" : "<%=wallet%>", "image":"<%=nft%>" , "name":"Un-named NFT" })'><span class="product-name">Un-named NFT</span></a>
     <%} else {%>
-      <a onclick='populateListNft( {"NFTokenID": "<%=nft.NFTokenID%>" , "issuer" : "<%=nft.issuer%>" , "taxon" : "<%=nft.taxon%>" , "currentHolder" : "<%=nft.currentHolder%>", "image":"<%=nft.http_image%>" })'><span class="product-name"><%= nft.name %></span></a>
+      <a onclick='populateListNft( {"NFTokenID": "<%=nft.NFTokenID%>" , "issuer" : "<%=nft.issuer%>" , "taxon" : "<%=nft.taxon%>" , "currentHolder" : "<%=nft.currentHolder%>", "image":"<%=nft.http_image%>" , "name":"<%=nft.name%>" })'><span class="product-name"><%= nft.name %></span></a>
     <%}%>
     </div>
   </div>

@@ -650,11 +650,16 @@ server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
     req.body.return_url,
     req.body.ipAddress
   );
-  res.status(200).send(payload);
-  const result = await xumm.subscriptions.watchSubscripion(payload);
+  console.log(payload)
+  res.status(200).send(payload[0]);
+  const result = await xumm.subscriptions.watchSubscripion(payload[0]);
 });
 server.post("/redeem-nft-subscription", speedLimiter, async (req, res) => {
   const payload = await xumm.subscriptions.redeemNftSubscription(req, res);
+  //console.log(payload)
+  if (payload) {
+    //send information on NFT to DB
+  }
   // console.log(payload);
   // const result = await xumm.subscriptions.watchSubscripion(payload);
   // console.log(result);
