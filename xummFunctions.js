@@ -664,19 +664,42 @@ var xrpls = {
           "ipfs://",
           "https://ipfs.onchainwhales.net/ipfs/"
         );
-      } else if (nftURI.startsWith("https://")) {
-        var httpURI = nftURI;
       } else {
-        randomFunctionToThrowError();
-      }
+        var httpURI = nftURI;
+      } 
 
       //get metadata
-      
-      var uriMetadata = await httpAPI(httpURI);
+      try {
+        var uriMetadata = await httpAPI(httpURI);
+      } catch (error) {
+        var data = {
+            name: 'Un-named NFT',
+            description: "",
+            image: "assets/images/icons/link-error.png",
+            edition: 0,
+            date: 0,
+            external_url: '',
+            attributes: [],
+            http_image: "assets/images/icons/link-error.png",
+            http_uri: "assets/images/icons/link-error.png",
+          }
+          return data;
+      }
 
       //find image
       if (uriMetadata.constructor != Object) {
-        return httpURI;
+        var data = {
+          name: 'Un-named NFT',
+          description: "",
+          image: httpURI,
+          edition: 0,
+          date: 0,
+          external_url: '',
+          attributes: [],
+          http_image: httpURI,
+          http_uri: httpURI,
+        }
+        return data;
       } else {
         if ("image" in uriMetadata) {
           var imagePointer = uriMetadata.image;
@@ -686,20 +709,40 @@ var xrpls = {
               "ipfs://",
               "https://ipfs.onchainwhales.net/ipfs/"
             );
-          } else if (imagePointer.startsWith("https://")) {
-            var httpImage = imagePointer;
           } else {
-            randomFunctionToThrowError();
+            var httpImage = imagePointer;
           }
+        } else if ("video" in uriMetadata) {
+            var imagePointer = uriMetadata.video;
+
+            if (imagePointer.startsWith("ipfs://")) {
+              var httpImage = imagePointer.replace(
+                "ipfs://",
+                "https://ipfs.onchainwhales.net/ipfs/"
+              );
+            } else {
+              var httpImage = imagePointer;
+            } 
         } else {
-          randomFunctionToThrowError();
+          var httpImage = "assets/images/icons/link-error.png"
         }
       }
       json["http_image"] = httpImage;
       json["http_uri"] = httpURI;
       return json;
     } catch (error) {
-      return null;
+        var data = {
+            name: 'Un-named NFT',
+            description: "",
+            image: "assets/images/icons/link-error.png",
+            edition: 0,
+            date: 0,
+            external_url: '',
+            attributes: [],
+            http_image: "assets/images/icons/link-error.png",
+            http_uri: "assets/images/icons/link-error.png",
+          }
+          return data;    
     }
   },
   getnftOffers: async function (tokenId) {
@@ -1591,6 +1634,72 @@ var xrpls = {
       await client.disconnect()
   }
   },
+  getAllAccountNFTs: async function (address) {
+    try {
+        //define 
+        var client = new xrpl.Client("wss://xls20-sandbox.rippletest.net:51233")
+
+        //console.log("Connecting to XRPL")
+        //Try Connect to XRPL 
+        var count = 0
+        while (count < 6) {
+            if (count >= 3) {
+                var client = new xrpl.Client("wss://xls20-sandbox.rippletest.net:51233")
+            }
+
+            try {
+                await client.connect()
+                //console.log(`\tConnected`)
+                break
+            } catch (err) {
+                //console.log(`                    Failed ${count}`)
+                count += 1
+            }
+        }
+
+        //try 5 times to get an array of all account NFTs
+        var count = 0
+        while (count < 5) {
+            try {
+                var allNFTs = []
+                var marker = "begin"
+                while (marker != null) {
+                    //console.log("Retrieving")
+                    if (marker == 'begin') {
+                        var accountNFTs = await client.request({
+                            "command": "account_nfts",
+                            "ledger_index": "validated",
+                            "account": address,
+                            "limit": 400
+                        })
+                    } else {
+                        var accountNFTs = await client.request({
+                            "command": "account_nfts",
+                            "ledger_index": "validated",
+                            "account": address,
+                            "marker": marker,
+                            "limit": 400
+                        })
+                    }
+
+                    var allNFTs = allNFTs.concat(accountNFTs.result.account_nfts)
+                    var marker = accountNFTs.result.marker
+                }
+                break
+            } catch (err) {
+                //console.log(`                    Failed ${count}`)
+                count += 1
+            }
+        }
+
+        return allNFTs
+    } catch (error) {
+        console.log(error)
+        return null
+    } finally {
+        await client.disconnect()
+    }
+}
 };
 async function verifyTransaction(txID) {
   const client = await getXrplClient();

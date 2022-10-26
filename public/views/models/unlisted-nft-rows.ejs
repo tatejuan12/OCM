@@ -7,11 +7,8 @@
 </script>
 
 <div class="row g-5" id="exploreSectionUnlisted">
-  <!-- Product -->
   <% nfts.forEach(function(res){%>
-  <%var i = 0%>
-  <%- include('unlisted-nft-card.ejs', {nft:res, rawData:rawData[i], wallet:wallet})%>
-  <%i++%>
+  <%- include('unlisted-nft-card.ejs', {nft:res, rawData:rawData, wallet:wallet})%>
   <%}); %>
 </div>
 <%- include("list.ejs")%>

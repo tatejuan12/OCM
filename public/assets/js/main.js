@@ -1158,3 +1158,24 @@ $(function () {
 function allFields () {
   alert('Please Complete Required Fields')
 }
+function populateListNft(data) {
+  $('#tokenID').val(data.NFTokenID);
+  $('#issuer').val(data.issuer);
+  $('#taxon').val(data.taxon);
+  $('#assetName').text(data.name)
+  $('#currentHolder').val(data.currentHolder); 
+  $('#link').attr('href', `https://bithomp.com/explorer/${data.NFTokenID}`)
+  var imageExt = new Set(['jpg', 'jpeg', 'png', 'gif']); var vidExt = new Set(['mp4', 'mov', 'avi', 'webm', 'mpg', 'wmv']);
+   if (imageExt.has(data.image.substring(data.image.lastIndexOf('.') + 1))) {
+      $('#listImage').html(`<img src="${data.image} " alt="Nft_Profile" draggable="false" loading="lazy">`);
+   } else if (vidExt.has(data.image.substring(data.image.lastIndexOf('.') + 1))) {
+      $('#listImage').html(`<video controls>
+        <source src="${data.image}" type="video/mp4">
+        <source src="${data.image}" type="video/webm">
+        <source src="${data.image}" type="video/ogg">
+      </video>`);
+   } else {
+      $('#listImage').html(`<image src="${data.image}">`);
+  };
+  $('#exampleModalCenter').modal('toggle');
+}

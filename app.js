@@ -1023,12 +1023,24 @@ server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
         unlistedNftsToReturn[i].issuer = unlistedNfts[i].Issuer;
         unlistedNftsToReturn[i].currentHolder = wallet;
         unlistedNftsToReturn[i].NFTokenID = unlistedNfts[i].NFTokenID;
+        unlistedNftsToReturn[i].fileType = unlistedNftsToReturn[i].http_image.substring(unlistedNftsToReturn[i].http_image.lastIndexOf('.') + 1)
       } else {
-        unlistedNftsToReturn[i] = "assets/images/icons/link-error.png";
+        unlistedNftsToReturn[i] = {
+          name: "Broken NFT",
+          description: 'No NFT data found',
+          image: '',
+          edition: 0,
+          date: 0,
+          external_url: '',
+          attributes: [],
+          http_image: 'assets/images/icons/link-error.png',
+          http_uri: ''
+        }
         unlistedNftsToReturn[i].taxon = unlistedNfts[i].NFTokenTaxon;
         unlistedNftsToReturn[i].issuer = unlistedNfts[i].Issuer;
         unlistedNftsToReturn[i].currentHolder = wallet;
         unlistedNftsToReturn[i].NFTokenID = unlistedNfts[i].NFTokenID;
+        unlistedNftsToReturn[i].fileType = 'png'
       }
     }
   }
@@ -1087,7 +1099,67 @@ server.get("/get-additional-unlisted-nfts", speedLimiter, async (req, res) => {
     res.send(returnData);
   } else res.sendStatus(400);
 });
+server.get("/bulk-list-account-unlisted-nfts", speedLimiter, async (req, res) => {
+  var wallet = req.session.wallet;
+  const nfts = await xumm.xrpl.getAllAccountNFTs(wallet);
 
+  //find out what ones are listed
+  var checkListingPromises = []
+  for (a in nfts) {
+
+      var checkNftStatusPromise = new Promise(function(resolve, reject) {
+          var returnedNft = mongoClient.query.getNft(nfts[a].NFTokenID);
+          resolve(returnedNft)
+      })
+
+      var queuedStatusPromise = new Promise(function(resolve, reject) {
+          var queuedStatus = mongoClient.query.checkQueue(
+              nfts[a].NFTokenID
+          );
+          resolve(queuedStatus)
+      })
+
+      checkListingPromises.push(checkNftStatusPromise)
+      checkListingPromises.push(queuedStatusPromise)
+  }
+
+  var listingStatusResults = await Promise.all(checkListingPromises) //wait to get listing status on returned NFTS
+
+  //get all unlisted && not-queued
+  var unlistedNfts = [];
+  for (var i = 0; i < nfts.length; i++) {
+      if (listingStatusResults[(i * 2)] == null && listingStatusResults[(i *2) + 1] == null) unlistedNfts.push(nfts[i]);
+  }
+
+  //IF IMAGES IS TOO SLOW
+  //COMMENT OUT FROM HERE!!!
+
+  //get unlisted NFT promises
+  var unlistedNftDetailsPromises = []
+  for (var i = 0; i < unlistedNfts.length; i++) {
+
+      var nftDataPromise = new Promise(function(resolve, reject) {
+          var nftData = xumm.xrpl.getNftImage(unlistedNfts[i].URI);
+          resolve(nftData)
+      })
+
+      unlistedNftDetailsPromises.push(nftDataPromise)
+  }
+
+  var listingStatusResults = await Promise.all(unlistedNftDetailsPromises) //wait for promises to resolve
+
+  //transform data
+  for (var i = 0; i < unlistedNfts.length; i++) {
+      unlistedNfts[i].data = listingStatusResults[i]
+  }
+
+  //IF IMAGES IS TOO SLOW
+  //COMMENT OUT TO HERE!!!
+
+  //DO WHAT YOU NEED FROM HERE
+  console.log(unlistedNfts)
+  return unlistedNfts;
+});
 server.get("/get-additional-listed-nfts", speedLimiter, async (req, res) => {
   var wallet = req.query.wallet;
   var marker = req.query.marker;
