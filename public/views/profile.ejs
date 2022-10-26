@@ -79,9 +79,9 @@
           <div class="tab-wrapper-one">
             <nav class="tab-button-one">
               <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                <button class="nav-link" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#pane-listed-nfts" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Listed</button>
+                <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#pane-listed-nfts" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Listed</button>
                 <% if (isOwner) {%>
-                <button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#pane-unlisted-nfts" type="button" role="tab" aria-controls="nav-profile" aria-selected="true">Un-Listed</button>
+                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#pane-unlisted-nfts" type="button" role="tab" aria-controls="nav-profile" aria-selected="true">Un-Listed</button>
                 <button class="nav-link" id="nav-liked-tab" data-bs-toggle="tab" data-bs-target="#pane-liked-nfts" type="button" role="tab" aria-controls="nav-liked" aria-selected="false">Liked</button>
                 <button class="nav-link" id="nav-offers-tab" data-bs-toggle="tab" data-bs-target="#pane-offers" type="button" role="tab" aria-controls="nav-accountOffers" aria-selected="false">Account Offers</button>
                 <%if (isVerified) {%>
@@ -97,7 +97,7 @@
         </div>
       </div>
 
-      <div id="pane-listed-nfts" class="tab-pane fade" aria-labelledby="nav-listed-tab" role="tabpanel">
+      <div id="pane-listed-nfts" class="tab-pane fade active show" aria-labelledby="nav-listed-tab" role="tabpanel">
         <%- include ("models/nft-rows.ejs", {nfts:nfts}) %>
         <%if (isMarker) {%>
           <div class="load-more-div">
@@ -110,7 +110,7 @@
         <%}%> 
       </div>
       <% if (isOwner) {%>
-        <div id="pane-unlisted-nfts" class="tab-pane fade active show" aria-labelledby="nav-unlisted-tab" role="tabpanel">
+        <div id="pane-unlisted-nfts" class="tab-pane fade" aria-labelledby="nav-unlisted-tab" role="tabpanel">
           <div class="d-flex flex-row-reverse bd-highlight">
             <button class="btn btn-primary mb-3" id="bulkButton">
               List All
