@@ -421,7 +421,7 @@ var subscriptions = {
         if (event.data.signed) {
           sdk.payload.get(event.data.payload_uuidv4).then((data) => {
             // res.status(200).send(true);
-            resolve("Signed subscription");
+            resolve("signed");
           });
         } else if (event.data.signed == false) {
           // res.status(401).send(false);
@@ -671,7 +671,7 @@ var xrpls = {
       }
 
       //get metadata
-
+      
       var uriMetadata = await httpAPI(httpURI);
 
       //find image

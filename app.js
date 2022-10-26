@@ -457,37 +457,41 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
     resolve(nfts);
   });
   const promises = await Promise.all([nftPromise, nftsPromise]);
-  if (promises[0].uriMetadata.collection.name !== null) {
-    var nftCollection = promises[0].uriMetadata.collection.name
-      .toLowerCase()
-      .replace(" ", "_");
+  if (promises[0] !== null) {
+    if (promises[0].uriMetadata.collection.name !== null) {
+      var nftCollection = promises[0].uriMetadata.collection.name
+        .toLowerCase()
+        .replace(" ", "_");
+    } else {
+      var nftCollection = "no collection";
+    }
+    const isOwner = wallet == promises[0].currentOwner;
+    if (nftCollection !== "no collection") {
+      var collection_logo =
+        digitalOcean.functions.getProductCollectionLogoLink(nftCollection);
+    } else {
+      var collection_logo = null;
+    }
+    //increment views on the NFT if it is not the owner, issuer or they aren't logged in
+    if (
+      wallet != promises[0].currentOwner &&
+      wallet != promises[0].issuer &&
+      wallet != undefined
+    ) {
+      mongoClient.query.incrementView(nftId);
+    }
+    if (promises[0]) {
+      res.render("views/product-details", {
+        wallet: wallet,
+        isOwner: isOwner,
+        nft: promises[0],
+        nfts: promises[1],
+        collection_logo: collection_logo,
+      });
+    } else next()
   } else {
-    var nftCollection = "no collection";
-  }
-  const isOwner = wallet == promises[0].currentOwner;
-  if (nftCollection !== "no collection") {
-    var collection_logo =
-      digitalOcean.functions.getProductCollectionLogoLink(nftCollection);
-  } else {
-    var collection_logo = null;
-  }
-  //increment views on the NFT if it is not the owner, issuer or they aren't logged in
-  if (
-    wallet != promises[0].currentOwner &&
-    wallet != promises[0].issuer &&
-    wallet != undefined
-  ) {
-    mongoClient.query.incrementView(nftId);
-  }
-  if (promises[0]) {
-    res.render("views/product-details", {
-      wallet: wallet,
-      isOwner: isOwner,
-      nft: promises[0],
-      nfts: promises[1],
-      collection_logo: collection_logo,
-    });
-  } else next();
+    res.render("views/no-product")
+  }  
 });
 server.get("/mint", speedLimiter, (req, res) => {
   defaultLocals(req, res);
@@ -653,6 +657,9 @@ server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
   console.log(payload)
   res.status(200).send(payload[0]);
   const result = await xumm.subscriptions.watchSubscripion(payload[0]);
+  // if (result == "signed") {
+  //   mongoClient.query.recentlyRedeemed()
+  // }
 });
 server.post("/redeem-nft-subscription", speedLimiter, async (req, res) => {
   const payload = await xumm.subscriptions.redeemNftSubscription(req, res);
@@ -965,7 +972,6 @@ server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
   else wallet = req.session.wallet;
   const marker = req.query.marker;
   const nfts = await xumm.xrpl.getAccountsNfts(wallet, NFTSPERPAGE, marker);
-
   //find out what ones are listed
   var checkListingPromises = []
   for (let nft of nfts[0]) {
@@ -983,7 +989,6 @@ server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
   for (var i = 0; i < nfts[0].length; i++) {
       if (listingStatusResults[i] == null) unlistedNfts.push(nfts[0][i]);
   }
-
 
   //get unlisted NFT promises
   var unlistedNftDetailsPromises = []
@@ -1006,25 +1011,27 @@ server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
   }
 
   var listingStatusResults = await Promise.all(unlistedNftDetailsPromises) //wait for promises to resolve
-
   //transform data
   for (var i = 0; i < unlistedNfts.length; i++) {
-
-      var queuedStatus = listingStatusResults[(i * 2)]
-      var nftData = listingStatusResults[(i * 2) + 1]
-
-      if (queuedStatus == null) {
-          //check to see if the NFT isn't in the queue for listing with !==.
-          if (nftData) {
-              unlistedNftsToReturn[i] = nftData;
-              unlistedNftsToReturn[i].taxon = unlistedNfts[i].NFTokenTaxon;
-              unlistedNftsToReturn[i].issuer = unlistedNfts[i].Issuer;
-              unlistedNftsToReturn[i].currentHolder = wallet;
-              unlistedNftsToReturn[i].NFTokenID = unlistedNfts[i].NFTokenID;
-          }
+    var queuedStatus = listingStatusResults[(i * 2)]
+    var nftData = listingStatusResults[(i * 2) + 1]
+    if (queuedStatus == null) {
+      //check to see if the NFT isn't in the queue for listing with !==.
+      if (nftData) {
+        unlistedNftsToReturn[i] = nftData;
+        unlistedNftsToReturn[i].taxon = unlistedNfts[i].NFTokenTaxon;
+        unlistedNftsToReturn[i].issuer = unlistedNfts[i].Issuer;
+        unlistedNftsToReturn[i].currentHolder = wallet;
+        unlistedNftsToReturn[i].NFTokenID = unlistedNfts[i].NFTokenID;
+      } else {
+        unlistedNftsToReturn[i] = "assets/images/icons/link-error.png";
+        unlistedNftsToReturn[i].taxon = unlistedNfts[i].NFTokenTaxon;
+        unlistedNftsToReturn[i].issuer = unlistedNfts[i].Issuer;
+        unlistedNftsToReturn[i].currentHolder = wallet;
+        unlistedNftsToReturn[i].NFTokenID = unlistedNfts[i].NFTokenID;
       }
+    }
   }
-
   res.render("views/models/unlisted-nft-rows.ejs", {
       wallet: wallet,
       rawData: unlistedNfts,

@@ -617,6 +617,13 @@ var {
   max-width: 12px;
   background-repeat: no-repeat;
 }
+.active-light-mode .i-eye{
+  background-image: url(../images/icons/Favorites/icons8-eye-48.png);
+}
+
+.i-eye{
+  background-image: url(../images/icons/Favorites-light/icons8-eye-48.png);
+}
 /*---------------------------
 	List Style 
 ---------------------------*/
