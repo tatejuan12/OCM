@@ -239,7 +239,6 @@
     $(elem).prop('disabled', true);
     $.get(`<%=url%>/get-additional-unlisted-nfts?wallet=<%=user.wallet%>&marker=${markerUnlisted}&markerIteration=${markerIterationUnlisted}`,
       function(returnData) {
-        console.log(returnData)
         markerUnlisted = returnData[1]
         markerIterationUnlisted++;
         var updateNfts = [];
