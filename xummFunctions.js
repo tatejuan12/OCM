@@ -71,11 +71,11 @@ var payloads = {
           Instruction: `Sign this transaction to make a sell offer of ${value} on TokenID - ${NFToken}`,
         },
       };
-      
-      if (destination.length < 1){
-        delete request.txjson.Destination
+
+      if (destination.length < 1) {
+        delete request.txjson.Destination;
       }
-      if (expiry == 0){
+      if (expiry == 0) {
         delete request.txjson.Expiration;
       }
       if (mobile)
@@ -199,11 +199,11 @@ var payloads = {
       };
     const client = await getXrplClient();
     try {
-        const obj = await sendRequestRedeem(ipAddress, address);
+      const obj = await sendRequestRedeem(ipAddress, address);
 
-        request.txjson["NFTokenSellOffer"] = obj[0].NFTokenSellOffer;
-        tokenID = obj[1]
-        payload = await getPayload(request);
+      request.txjson["NFTokenSellOffer"] = obj[0].NFTokenSellOffer;
+      tokenID = obj[1];
+      payload = await getPayload(request);
       if (payload) {
         return [payload, tokenID];
       } else throw "Couldn't get payload";
@@ -325,16 +325,16 @@ var payloads = {
 
       //CALCULATE THE FLAGS
       var flags = 0;
-      if (burnable == 'true') flags += 1;
-      if (onlyXRP == 'true') flags += 2;
-      if (trustline == 'true') flags += 4;
-      if (transferable == 'true') flags += 8;
+      if (burnable == "true") flags += 1;
+      if (onlyXRP == "true") flags += 2;
+      if (trustline == "true") flags += 4;
+      if (transferable == "true") flags += 8;
 
       var mintObject = {
         user_token: userToken,
         txjson: {
           TransactionType: "NFTokenMint",
-          NFTokenTaxon: taxon,  
+          NFTokenTaxon: taxon,
         },
       };
 
@@ -487,31 +487,31 @@ var subscriptions = {
     }
   },
   xummTransInfo: async function (payload, res) {
-      var subscription = false;
-      var promise = new Promise(function (resolve) {
-        subscription = sdk.payload.subscribe(payload, (event) => {
-          if (event.data.signed) {
-            resolve(event.data.txid);
-          } else if (event.data.signed == false) {
-            resolve(false);
-          }
-        });
+    var subscription = false;
+    var promise = new Promise(function (resolve) {
+      subscription = sdk.payload.subscribe(payload, (event) => {
+        if (event.data.signed) {
+          resolve(event.data.txid);
+        } else if (event.data.signed == false) {
+          resolve(false);
+        }
       });
+    });
     var txInfo = await promise;
 
     return txInfo;
   },
   xummSignCheck: async function (payload, res) {
     var subscription = false;
-      var promise = new Promise(function (resolve) {
-        subscription = sdk.payload.subscribe(payload, (event) => {
-          if (event.data.signed) {
-            resolve(true);
-          } else if (event.data.signed == false) {
-            resolve(false);
-          }
-        });
+    var promise = new Promise(function (resolve) {
+      subscription = sdk.payload.subscribe(payload, (event) => {
+        if (event.data.signed) {
+          resolve(true);
+        } else if (event.data.signed == false) {
+          resolve(false);
+        }
       });
+    });
     var txInfo = await promise;
 
     return txInfo;
@@ -566,7 +566,7 @@ var xrpls = {
   getAccountTokens: async function (address) {
     try {
       //define
-      var client = await getXrplClient()
+      var client = await getXrplClient();
 
       //try 5 times to get an array of all account NFTs
       var count = 0;
@@ -666,39 +666,39 @@ var xrpls = {
         );
       } else {
         var httpURI = nftURI;
-      } 
+      }
 
       //get metadata
       try {
         var uriMetadata = await httpAPI(httpURI);
       } catch (error) {
         var data = {
-            name: 'Un-named NFT',
-            description: "",
-            image: "assets/images/icons/link-error.png",
-            edition: 0,
-            date: 0,
-            external_url: '',
-            attributes: [],
-            http_image: "assets/images/icons/link-error.png",
-            http_uri: "assets/images/icons/link-error.png",
-          }
-          return data;
+          name: "Un-named NFT",
+          description: "",
+          image: "assets/images/icons/link-error.png",
+          edition: 0,
+          date: 0,
+          external_url: "",
+          attributes: [],
+          http_image: "assets/images/icons/link-error.png",
+          http_uri: "assets/images/icons/link-error.png",
+        };
+        return data;
       }
 
       //find image
       if (uriMetadata.constructor != Object) {
         var data = {
-          name: 'Un-named NFT',
+          name: "Un-named NFT",
           description: "",
           image: httpURI,
           edition: 0,
           date: 0,
-          external_url: '',
+          external_url: "",
           attributes: [],
           http_image: httpURI,
           http_uri: httpURI,
-        }
+        };
         return data;
       } else {
         if ("image" in uriMetadata) {
@@ -713,36 +713,36 @@ var xrpls = {
             var httpImage = imagePointer;
           }
         } else if ("video" in uriMetadata) {
-            var imagePointer = uriMetadata.video;
+          var imagePointer = uriMetadata.video;
 
-            if (imagePointer.startsWith("ipfs://")) {
-              var httpImage = imagePointer.replace(
-                "ipfs://",
-                "https://ipfs.onchainwhales.net/ipfs/"
-              );
-            } else {
-              var httpImage = imagePointer;
-            } 
+          if (imagePointer.startsWith("ipfs://")) {
+            var httpImage = imagePointer.replace(
+              "ipfs://",
+              "https://ipfs.onchainwhales.net/ipfs/"
+            );
+          } else {
+            var httpImage = imagePointer;
+          }
         } else {
-          var httpImage = "assets/images/icons/link-error.png"
+          var httpImage = "assets/images/icons/link-error.png";
         }
       }
       json["http_image"] = httpImage;
       json["http_uri"] = httpURI;
       return json;
     } catch (error) {
-        var data = {
-            name: 'Un-named NFT',
-            description: "",
-            image: "assets/images/icons/link-error.png",
-            edition: 0,
-            date: 0,
-            external_url: '',
-            attributes: [],
-            http_image: "assets/images/icons/link-error.png",
-            http_uri: "assets/images/icons/link-error.png",
-          }
-          return data;    
+      var data = {
+        name: "Un-named NFT",
+        description: "",
+        image: "assets/images/icons/link-error.png",
+        edition: 0,
+        date: 0,
+        external_url: "",
+        attributes: [],
+        http_image: "assets/images/icons/link-error.png",
+        http_uri: "assets/images/icons/link-error.png",
+      };
+      return data;
     }
   },
   getnftOffers: async function (tokenId) {
@@ -1561,145 +1561,165 @@ var xrpls = {
 
       //CHECK AND VERIFY NFT
       try {
-          var result = await client.request({
-              "command": "tx",
-              "transaction": txID,
-          })
+        var result = await client.request({
+          command: "tx",
+          transaction: txID,
+        });
       } catch (error) {
-          console.log(`TRANSACTION DOES NOT EXIST ON THE GIVEN NETWORK`)
-          return false;
+        console.log(`TRANSACTION DOES NOT EXIST ON THE GIVEN NETWORK`);
+        return false;
       }
 
       var account = result.result.Account;
       //check it was a successful transaction
 
       if (result.result.meta.TransactionResult != "tesSUCCESS") {
-          console.log(`MINTING FAILED`)
-          return false;
+        console.log(`MINTING FAILED`);
+        return false;
       }
 
       //check it was a minting transaction
       if (result.result.TransactionType != "NFTokenMint") {
-          console.log(`NOT A MINTING TRANSACTION`)
-          return false;
+        console.log(`NOT A MINTING TRANSACTION`);
+        return false;
       }
 
       //find all mentioned NFTIds
-      var nfts = {}
+      var nfts = {};
       for (a in result.result.meta.AffectedNodes) {
-          if ("ModifiedNode" in result.result.meta.AffectedNodes[a]) {
-              if (result.result.meta.AffectedNodes[a].ModifiedNode.LedgerEntryType != "NFTokenPage") continue
+        if ("ModifiedNode" in result.result.meta.AffectedNodes[a]) {
+          if (
+            result.result.meta.AffectedNodes[a].ModifiedNode.LedgerEntryType !=
+            "NFTokenPage"
+          )
+            continue;
 
-              if (result.result.meta.AffectedNodes[a].ModifiedNode.PreviousFields.NFTokens == undefined) continue
+          if (
+            result.result.meta.AffectedNodes[a].ModifiedNode.PreviousFields
+              .NFTokens == undefined
+          )
+            continue;
 
-              var combined = result.result.meta.AffectedNodes[a].ModifiedNode.FinalFields.NFTokens.concat(result.result.meta.AffectedNodes[a].ModifiedNode.PreviousFields.NFTokens)
-          } else if ("CreatedNode" in result.result.meta.AffectedNodes[a]) {
-              if (result.result.meta.AffectedNodes[a].CreatedNode.LedgerEntryType != "NFTokenPage") continue
+          var combined = result.result.meta.AffectedNodes[
+            a
+          ].ModifiedNode.FinalFields.NFTokens.concat(
+            result.result.meta.AffectedNodes[a].ModifiedNode.PreviousFields
+              .NFTokens
+          );
+        } else if ("CreatedNode" in result.result.meta.AffectedNodes[a]) {
+          if (
+            result.result.meta.AffectedNodes[a].CreatedNode.LedgerEntryType !=
+            "NFTokenPage"
+          )
+            continue;
 
-              var combined = result.result.meta.AffectedNodes[a].CreatedNode.NewFields.NFTokens
-          } else {
-              var combined = []
+          var combined =
+            result.result.meta.AffectedNodes[a].CreatedNode.NewFields.NFTokens;
+        } else {
+          var combined = [];
+        }
+
+        for (b in combined) {
+          if (!(combined[b].NFToken.NFTokenID in nfts)) {
+            nfts[combined[b].NFToken.NFTokenID] = 0;
           }
 
-          for (b in combined) {
-              if (!(combined[b].NFToken.NFTokenID in nfts)) {
-                  nfts[combined[b].NFToken.NFTokenID] = 0
-              }
-
-              nfts[combined[b].NFToken.NFTokenID] += 1
-          }
+          nfts[combined[b].NFToken.NFTokenID] += 1;
+        }
       }
 
-      //calculate outcomes 
-      var keys = Object.keys(nfts)
-      var total = 0
+      //calculate outcomes
+      var keys = Object.keys(nfts);
+      var total = 0;
       for (a in keys) {
-          if (nfts[keys[a]] % 2 != 0) {
-              var nftID = keys[a]
-              total += 1
-          }
+        if (nfts[keys[a]] % 2 != 0) {
+          var nftID = keys[a];
+          total += 1;
+        }
       }
 
       //only return if 1 result
       if (total != 1) {
-          console.log(`FUNCTION FAILED TO FIND NEW NFTID -> FOUND ${total}`)
-          return null
+        console.log(`FUNCTION FAILED TO FIND NEW NFTID -> FOUND ${total}`);
+        return null;
       }
 
-      return [nftID, account]
-  } catch (error) {
-      console.log(error)
-      return null
-  } finally {
-      await client.disconnect()
-  }
+      return [nftID, account];
+    } catch (error) {
+      console.log(error);
+      return null;
+    } finally {
+      await client.disconnect();
+    }
   },
   getAllAccountNFTs: async function (address) {
     try {
-        //define 
-        var client = new xrpl.Client("wss://xls20-sandbox.rippletest.net:51233")
+      //define
+      var client = new xrpl.Client("wss://xls20-sandbox.rippletest.net:51233");
 
-        //console.log("Connecting to XRPL")
-        //Try Connect to XRPL 
-        var count = 0
-        while (count < 6) {
-            if (count >= 3) {
-                var client = new xrpl.Client("wss://xls20-sandbox.rippletest.net:51233")
-            }
-
-            try {
-                await client.connect()
-                //console.log(`\tConnected`)
-                break
-            } catch (err) {
-                //console.log(`                    Failed ${count}`)
-                count += 1
-            }
+      //console.log("Connecting to XRPL")
+      //Try Connect to XRPL
+      var count = 0;
+      while (count < 6) {
+        if (count >= 3) {
+          var client = new xrpl.Client(
+            "wss://xls20-sandbox.rippletest.net:51233"
+          );
         }
 
-        //try 5 times to get an array of all account NFTs
-        var count = 0
-        while (count < 5) {
-            try {
-                var allNFTs = []
-                var marker = "begin"
-                while (marker != null) {
-                    //console.log("Retrieving")
-                    if (marker == 'begin') {
-                        var accountNFTs = await client.request({
-                            "command": "account_nfts",
-                            "ledger_index": "validated",
-                            "account": address,
-                            "limit": 400
-                        })
-                    } else {
-                        var accountNFTs = await client.request({
-                            "command": "account_nfts",
-                            "ledger_index": "validated",
-                            "account": address,
-                            "marker": marker,
-                            "limit": 400
-                        })
-                    }
-
-                    var allNFTs = allNFTs.concat(accountNFTs.result.account_nfts)
-                    var marker = accountNFTs.result.marker
-                }
-                break
-            } catch (err) {
-                //console.log(`                    Failed ${count}`)
-                count += 1
-            }
+        try {
+          await client.connect();
+          //console.log(`\tConnected`)
+          break;
+        } catch (err) {
+          //console.log(`                    Failed ${count}`)
+          count += 1;
         }
+      }
 
-        return allNFTs
+      //try 5 times to get an array of all account NFTs
+      var count = 0;
+      while (count < 5) {
+        try {
+          var allNFTs = [];
+          var marker = "begin";
+          while (marker != null) {
+            //console.log("Retrieving")
+            if (marker == "begin") {
+              var accountNFTs = await client.request({
+                command: "account_nfts",
+                ledger_index: "validated",
+                account: address,
+                limit: 400,
+              });
+            } else {
+              var accountNFTs = await client.request({
+                command: "account_nfts",
+                ledger_index: "validated",
+                account: address,
+                marker: marker,
+                limit: 400,
+              });
+            }
+
+            var allNFTs = allNFTs.concat(accountNFTs.result.account_nfts);
+            var marker = accountNFTs.result.marker;
+          }
+          break;
+        } catch (err) {
+          //console.log(`                    Failed ${count}`)
+          count += 1;
+        }
+      }
+
+      return allNFTs;
     } catch (error) {
-        console.log(error)
-        return null
+      console.log(error);
+      return null;
     } finally {
-        await client.disconnect()
+      await client.disconnect();
     }
-}
+  },
 };
 async function verifyTransaction(txID) {
   const client = await getXrplClient();
@@ -1733,15 +1753,15 @@ async function verifyTransaction(txID) {
 }
 async function getPayload(request) {
   if (request.txjson.Memo == undefined) {
-    memo = 'OnChain Markeplace - www.onchainmarketplace.net';
-    var memoHex = xrpl.convertStringToHex(memo)
+    memo = "OnChain Markeplace - www.onchainmarketplace.net";
+    var memoHex = xrpl.convertStringToHex(memo);
     request.txjson.Memos = [
       {
         Memo: {
           MemoData: memoHex,
         },
       },
-    ];;
+    ];
   }
   const payload = await sdk.payload.create(request);
   return payload;
@@ -1830,7 +1850,11 @@ async function sendRequestRedeem(ipAddress, address) {
           payload += d;
         })
         .on("end", () => {
-          payload = JSON.parse(payload);
+          try {
+            payload = JSON.parse(payload);
+          } catch (err) {
+            reject("Could not parse payload to JSON");
+          }
           //If payload is successful it returns resolves promise, if not, it rejects. If error, rejects.
           try {
             if (payload) {
