@@ -1117,6 +1117,7 @@ var xrpls = {
       var count = 0;
       while (count < 5) {
         try {
+          console.log(marker)
           if (marker == null) {
             var accountNFTs = await client.request({
               command: "account_nfts",
