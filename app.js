@@ -63,7 +63,7 @@ server.use(
     resave: false,
     saveUninitialized: false,
     //! change to secure true once hosting
-    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 30 }, // ms/s, s/m, m/h, h/d, d/mnth
+    cookie: { secure: true, maxAge: 1000 * 60 * 60 * 24 * 30 }, // ms/s, s/m, m/h, h/d, d/mnth
     store: mongoStore,
   })
 );
