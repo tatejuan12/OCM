@@ -486,6 +486,33 @@ var subscriptions = {
       console.error("There was an error with the payload: \n" + error);
     }
   },
+  bulkListNftSubscription: async function (payload, res) {
+    try {
+      var subscription = false;
+      var promise = new Promise(function (resolve) {
+        subscription = sdk.payload.subscribe(payload, (event) => {
+          if (event.data.signed) {
+            resolve(event.data.txid);
+          } else if (event.data.signed == false) {
+            resolve(false);
+          }
+        });
+      });
+
+      var txID = await promise;
+
+      var verify = await verifyTransaction(txID);
+      if (verify === true) {
+        console.log("signed");
+        return "signed";
+      } else {
+        res.status(401).send(false);
+        return false;
+      }
+    } catch (error) {
+      console.error("There was an error with the payload: \n" + error);
+    }
+  },
   xummTransInfo: async function (payload, res) {
     var subscription = false;
     var promise = new Promise(function (resolve) {
@@ -662,7 +689,8 @@ var xrpls = {
       if (nftURI.startsWith("ipfs://")) {
         var httpURI = nftURI.replace(
           "ipfs://",
-          "https://ipfs.onchainwhales.net/ipfs/"
+          "https://cloudflare-ipfs.com/ipfs/"
+          //"https://ipfs.onchainwhales.net/ipfs/"
         );
       } else {
         var httpURI = nftURI;
@@ -701,13 +729,14 @@ var xrpls = {
         };
         return data;
       } else {
+
         if ("image" in uriMetadata) {
           var imagePointer = uriMetadata.image;
 
           if (imagePointer.startsWith("ipfs://")) {
             var httpImage = imagePointer.replace(
               "ipfs://",
-              "https://ipfs.onchainwhales.net/ipfs/"
+              "https://cloudflare-ipfs.com/ipfs/"
             );
           } else {
             var httpImage = imagePointer;
@@ -718,7 +747,7 @@ var xrpls = {
           if (imagePointer.startsWith("ipfs://")) {
             var httpImage = imagePointer.replace(
               "ipfs://",
-              "https://ipfs.onchainwhales.net/ipfs/"
+              "https://cloudflare-ipfs.com/ipfs/"
             );
           } else {
             var httpImage = imagePointer;
@@ -1117,7 +1146,6 @@ var xrpls = {
       var count = 0;
       while (count < 5) {
         try {
-          console.log(marker)
           if (marker == null) {
             var accountNFTs = await client.request({
               command: "account_nfts",

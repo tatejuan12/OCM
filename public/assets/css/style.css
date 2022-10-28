@@ -25143,3 +25143,60 @@ Collection nav
   flex-direction: row;
   cursor: pointer;
 }
+.modal-body .bulk-nft-wrap.skeleton{
+  animation: skeleton-loading 1s linear infinite alternate;
+  height: 40px;
+  border-radius: 0.75rem;
+}
+@keyframes skeleton-loading {
+  0% {
+    background-color: hsl(200, 20%, 80%);
+  }
+  100% {
+    background-color: hsl(200, 20%, 95%);
+  }
+}
+.modal-body .bulk-nft-wrap{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.modal-body .bulk-nft-wrap input {
+  opacity: 100;
+  max-width: 20px;
+  position: relative;
+}
+.modal-body .token-id{
+  overflow-x: auto;
+}
+.modal-body .token-id a{
+  color: #fff;
+  font-size: 10px;
+}
+.active-light-mode .modal-body .token-id a{
+  color: #000;
+  font-size: 10px;
+}
+.modal-footer input{
+  background-color: var(--color-lightest);
+}
+.modal-footer .bulk-modal-footer{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.modal-footer .xrp-calculator{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+.modal-footer .xrp-calculator input{
+  max-width: 100px;
+  border-radius: 4px;
+}
+.modal-footer .xrp-calculator label:nth-child(2){
+  font-weight: bold;
+}

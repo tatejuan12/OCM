@@ -139,16 +139,48 @@
   </div>
   <div class="modal fade"  id="bulkListModal" tabindex="-1" aria-labelledby="bulkListModal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
-      <div class="modal-content">
+      <div class="modal-content" id="bulkListModalContent">
         <div class="modal-header">
           <h5 class="modal-title" id="staticBackdropLabel">Bulk List</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-          Hello World
+        <div class="modal-body" id="bulkModalBody">
+          <div class="bulk-nft-container">
+            <div class="bulk-nft-wrap skeleton" id="bulkNftWrap">
+              <div class="token-id">
+                <a href="" target="_blank" id="tokenId"></a>
+              </div>
+            </div>
+            <div class="bulk-nft-wrap skeleton" id="bulkNftWrap">
+              <div class="token-id">
+                <a href="" target="_blank" id="tokenId"></a>
+              </div>
+            </div>
+            <div class="bulk-nft-wrap skeleton" id="bulkNftWrap">
+              <div class="token-id">
+                <a href="" target="_blank" id="tokenId"></a>
+              </div>
+            </div>
+            <div class="bulk-nft-wrap skeleton" id="bulkNftWrap">
+              <div class="token-id">
+                <a href="" target="_blank" id="tokenId"></a>
+              </div>
+            </div>
+            <div class="bulk-nft-wrap skeleton" id="bulkNftWrap">
+              <div class="token-id">
+                <a href="" target="_blank" id="tokenId"></a>
+              </div>
+            </div>
+          </div>                
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Understood</button>
+          <div class="bulk-modal-footer">
+            <div class="xrp-calculator">
+              <label for="bulkTotalXrp">Total = </label>
+              <input type="number" id="bulkTotalXrp" value="" disabled>
+              <label for="bulkTotalXrp"> XRP</label>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -189,20 +221,82 @@
   <!-- main JS -->
   <script src="assets/js/main.js"></script>
   <script>
-    // $('#bulkButton').on('click', function () {
-    //   $.get(`<#%=url%>/bulk-list-account-unlisted-nfts`, function (data) {
-    //   })
-    // });
-    $('#moreListedNftsLoad').on('click', function(){
-      var markerIteration = 0;
-      var marker = '<%=marker%>';
+    var markerIterationUnlisted = 0;
+    var markerUnlisted = '<%=marker%>';
+    var markerIteration = 0;
+    var marker = '<%=marker%>';
+    var isMarker = '<%=isMarker%>';
+    var bulkListQuery = false;
+    var arrayBool = false;
+    $('#bulkButton').on('click', function () {
+      $('#bulkListModal').modal('toggle')
+      if (bulkListQuery != true) {
+      $.get(`<%=url%>/bulk-list-account-unlisted-nfts`, function (returnData) {
+        $('#bulkListModalContent').html(returnData);
+        bulkListQuery = true;
+      })}
+    });
+    $('#bulkListModalContent').on('click', '#modalListButtonBulk', function () {
+      var nfts = [];
+      var returnUrl = window.location.href;
+      if (arrayBool == false) {
+        for (var i = 0; i < $('.bulk-nft-container #bulkNftWrap').length; i++) {
+          if ($(`input.bulk-checkbox:eq(${i})`).is(':checked')) {
+            var value = $(`.bulk-checkbox:eq(${i})`).val().split(',')
+            nfts.push({
+              'NFTokenID': value[0],
+              'Issuer': value[1]
+            })
+          }
+        }
+        console.log(nfts)
+        arrayBool = true;
+        const formData = new FormData();
+        formData.append('nfts', JSON.stringify(nfts));
+        formData.append('returnUrl', returnUrl)
+        $.ajax({
+          type: "POST",
+          url: "/list-bulk-array",
+          processData: false,
+          contentType: false,
+          enctype: "multipart/form-data",
+          data: formData,
+          success: function (result) {
+            console.log(result)
+            window.location.href = result.payload.next.always;
+            formData.append('payload', JSON.stringify(result.payload))
+            $.ajax({
+              type: "POST",
+              url: "/list-bulk-subscription",
+              processData: false,
+              contentType: false,
+              enctype: "multipart/form-data",
+              data: formData,
+              success: function (result) {
+                console.log("all good")
+              },
+              error: function (result) {
+                console.log('something is broken lol, you suck at coding ahahahaha')
+              }
+            })
+            //setTimeout(location.reload(), 2000)
+          },
+          error: function () {
+            console.log('error')
+          }
+        })
+      }
+    })
+    $('#bulkListModalContent').on('change', 'input', function () {
+	    $('#bulkTotalXrp').val($('.bulk-nft-container #bulkNftWrap .bulk-checkbox:checked').length * 0.98)
+    })
+    $('#moreListedNftsLoad').on('click', function  (){
       document.getElementById('moreListedNftsLoad').classList.add('loading')
       document.getElementById('moreListedNftsLoad').disabled = true;
         $.get(
           `<%=url%>/get-additional-listed-nfts?wallet=<%=user.wallet%>&marker=${marker}&markerIteration=${markerIteration}`,
           function(data) {
             markerIteration++;
-            var updateNfts = [];
             $("#exploreSection").append(data[0])
             marker = data[1]
             const cards = document.getElementById("exploreSection").querySelectorAll(".col-5");
@@ -214,7 +308,6 @@
           }
         )
     })
-  var isMarker = '<%=isMarker%>'
   $("#unlisted-nfts").load("<%=url%>/get-account-unlisted-nfts?wallet=<%=user.wallet%>",
     function() {
       const cards = document.getElementById("pane-unlisted-nfts").querySelectorAll(".col-5");
@@ -232,8 +325,6 @@
           </div>
       `)}
     })
-  var markerIterationUnlisted = 0;
-  var markerUnlisted = '<%=marker%>';
   function loadMoreNfts(elem) {
     $(elem).addClass('loading');
     $(elem).prop('disabled', true);
@@ -241,7 +332,6 @@
       function(returnData) {
         markerUnlisted = returnData[1]
         markerIterationUnlisted++;
-        var updateNfts = [];
         $("#exploreSectionUnlisted").append(returnData[0])
         markerUnlisted = returnData[1]
         const cardsUnlisted = document.getElementById("pane-unlisted-nfts").querySelectorAll(".col-5");

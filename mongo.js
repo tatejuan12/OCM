@@ -167,6 +167,23 @@ var methods = {
       await client.close();
     }
   },
+  checkBulkQueue: async function (id, client) {
+    var result;
+    if (!client) return;
+    try {
+      const db = client.db("NFTokens");
+      let collection = db.collection("Queued-Listings");
+      let query = {
+        NFTokenID: id,
+      };
+      let res = await collection.findOne(query);
+      return res;
+    } catch (err) {
+      console.log("Database error" + err);
+    } finally {
+      // await client.close();
+    }
+  },
   getNft: async function (id) {
     var result;
     const client = await getClient();
@@ -187,6 +204,27 @@ var methods = {
       console.log("Database error" + err);
     } finally {
       await client.close();
+    }
+  },
+  getBulkNft: async function (id, client)  {
+    var result;
+    if (!client) return;
+    try {
+      const db = client.db("NFTokens");
+
+      let collection = db.collection("Eligible-Listings");
+
+      let query = {
+        tokenID: id,
+      };
+
+      let res = await collection.findOne(query);
+
+      return res;
+    } catch (err) {
+      console.log("Database error" + err);
+    } finally {
+      //await client.close();
     }
   },
   getOwnerNfts: async function (owner, nfts) {
@@ -794,7 +832,7 @@ var methods = {
       let collection = db.collection("Queued-Listings");
 
       let res = await collection.bulkWrite(bulkArray, {ordered: false});
-      return;
+      return 'success';
     } catch (err) {
       console.log("Database error: " + err);
     } finally {
@@ -1014,6 +1052,16 @@ var methods = {
     } finally {
         await client.close()
     }
+  },
+  connectToMongo: async function () {
+    var client = await mongoClient
+      .connect(process.env.MONGO_URI, {
+        useNewUrlParser: true,
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    return client;
   },
 };
 

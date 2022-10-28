@@ -993,6 +993,42 @@ server.post("/list-nft-subscription-collection", async (req, res, next) => {
     );
   }
 });
+server.post("/list-bulk-array", upload.any(), speedLimiter, async (req, res, next) => {
+  const dataBody = req.body;
+  const nfts = JSON.parse(dataBody.nfts)
+  const price = nfts.length * 0.98;
+  const payload = await xumm.payloads.mintNftPayload(
+    process.env.XRPL_ISSUER_PAYMENT_ADDRESS,
+    req.session.wallet,
+    req.session.user_token,
+    price,
+    req.useragent.isMobile,
+    dataBody.returnUrl
+  );
+  const response = {
+    payload: payload
+  };
+  if (payload) {
+    res.send(response).status(200);
+  } else {
+    res.status(400)
+  }
+})
+server.post("/list-bulk-subscription", upload.any(), speedLimiter, async (req,res,next) => {
+  const dataBody = req.body;
+  const nftArray = JSON.parse(dataBody.nfts)
+  const payload = JSON.parse(dataBody.payload)
+  const result = await xumm.subscriptions.bulkListNftSubscription(payload,res);
+  var permanent = false;
+  var wallet = req.session.wallet;
+  if (result) {
+    mongoClient.query.bulkNFTList(
+      nftArray,
+      wallet,
+      permanent
+    )
+  }
+})
 server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
   var wallet;
   var unlistedNfts = [];
@@ -1181,18 +1217,19 @@ server.get(
   speedLimiter,
   async (req, res) => {
     var wallet = req.session.wallet;
+    var returnData = [];
     const nfts = await xumm.xrpl.getAllAccountNFTs(wallet);
-
     //find out what ones are listed
+    const clientMongo = await mongoClient.query.connectToMongo();
     var checkListingPromises = [];
     for (a in nfts) {
       var checkNftStatusPromise = new Promise(function (resolve, reject) {
-        var returnedNft = mongoClient.query.getNft(nfts[a].NFTokenID);
+        var returnedNft = mongoClient.query.getBulkNft(nfts[a].NFTokenID, clientMongo);
         resolve(returnedNft);
       });
 
       var queuedStatusPromise = new Promise(function (resolve, reject) {
-        var queuedStatus = mongoClient.query.checkQueue(nfts[a].NFTokenID);
+        var queuedStatus = mongoClient.query.checkBulkQueue(nfts[a].NFTokenID, clientMongo);
         resolve(queuedStatus);
       });
 
@@ -1201,7 +1238,7 @@ server.get(
     }
 
     var listingStatusResults = await Promise.all(checkListingPromises); //wait to get listing status on returned NFTS
-
+    await clientMongo.close();
     //get all unlisted && not-queued
     var unlistedNfts = [];
     for (var i = 0; i < nfts.length; i++) {
@@ -1212,35 +1249,41 @@ server.get(
         unlistedNfts.push(nfts[i]);
     }
 
-    //IF IMAGES IS TOO SLOW
-    //COMMENT OUT FROM HERE!!!
+    // //IF IMAGES IS TOO SLOW
+    // //COMMENT OUT FROM HERE!!!
 
-    //get unlisted NFT promises
-    var unlistedNftDetailsPromises = [];
-    for (var i = 0; i < unlistedNfts.length; i++) {
-      var nftDataPromise = new Promise(function (resolve, reject) {
-        var nftData = xumm.xrpl.getNftImage(unlistedNfts[i].URI);
-        resolve(nftData);
-      });
+    // //get unlisted NFT promises
+    // var unlistedNftDetailsPromises = [];
+    // for (var i = 0; i < unlistedNfts.length; i++) {
+    //   var nftDataPromise = new Promise(function (resolve, reject) {
+    //       var nftData = xumm.xrpl.getNftImage(unlistedNfts[i].URI);
+    //       resolve(nftData);
+    //   });
 
-      unlistedNftDetailsPromises.push(nftDataPromise);
-    }
+    //   unlistedNftDetailsPromises.push(nftDataPromise);
+    // }
 
-    var listingStatusResults = await Promise.all(unlistedNftDetailsPromises); //wait for promises to resolve
+    // var listingStatusResults = await Promise.all(unlistedNftDetailsPromises); //wait for promises to resolve
 
-    //transform data
-    for (var i = 0; i < unlistedNfts.length; i++) {
-      unlistedNfts[i].data = listingStatusResults[i];
-    }
+    // //transform data
+    // for (var i = 0; i < unlistedNfts.length; i++) {
+    //   unlistedNfts[i].data = listingStatusResults[i];
+    // }
 
-    //IF IMAGES IS TOO SLOW
-    //COMMENT OUT TO HERE!!!
+    // //IF IMAGES IS TOO SLOW
+    // //COMMENT OUT TO HERE!!!
 
     //DO WHAT YOU NEED FROM HERE
-    console.log(unlistedNfts);
-    return unlistedNfts;
-  }
-);
+    res.render('views/models/bulk-list-modal.ejs', {
+      nft: unlistedNfts,
+    },
+    async function (err, html) {
+      if (err) throw "Couldn't get NFTS\n" + err;
+      returnData.push(html);
+    }
+    )
+    res.send(returnData)
+});
 server.get("/get-additional-listed-nfts", speedLimiter, async (req, res) => {
   var wallet = req.query.wallet;
   var marker = req.query.marker;
