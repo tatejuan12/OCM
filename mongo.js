@@ -244,7 +244,7 @@ var methods = {
         let query = {
           $or: [{ tokenID: { $in: tokenIds } }],
         };
-        const cursor = await collection.find(query);
+        const cursor = collection.find(query);
         return await cursor.toArray();
       } catch (err) {
         console.log("Database error" + err);
