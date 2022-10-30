@@ -56,14 +56,14 @@ server.set("view engine", "ejs"); // Setting rendering agent to ejs
 server.use(helmet({ contentSecurityPolicy: false }));
 server.set("views", path.join(__dirname, "/public")); // Makes views for rendering the public dir
 server.use(express.static(__dirname + "/public", { dotfiles: "allow" })); // Essential so JS and CSS is acccessible by requests
-//server.use(logger({ path: __dirname + "/logs/logs.log" })); // Logs data, every connection will log browser info and request url
+server.use(logger({ path: __dirname + "/logs/logs.log" })); // Logs data, every connection will log browser info and request url
 server.use(
   session({
     secret: "some secret",
     resave: false,
     saveUninitialized: false,
     //! change to secure true once hosting
-    cookie: { secure: true, maxAge: 1000 * 60 * 60 * 24 * 30 }, // ms/s, s/m, m/h, h/d, d/mnth
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 30 }, // ms/s, s/m, m/h, h/d, d/mnth
     store: mongoStore,
   })
 );
@@ -1022,7 +1022,7 @@ server.post("/list-bulk-subscription", upload.any(), speedLimiter, async (req,re
   var permanent = false;
   var wallet = req.session.wallet;
   if (result) {
-    mongoClient.query.bulkNFTList(
+    await mongoClient.query.bulkNFTList(
       nftArray,
       wallet,
       permanent

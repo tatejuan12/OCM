@@ -1752,7 +1752,7 @@ var xrpls = {
 };
 async function verifyTransaction(txID) {
   const client = await getXrplClient();
-  console.log("checking transaction" + txID);
+  console.log("checking transaction: " + txID);
   try {
     try {
       var result = await client.request({
