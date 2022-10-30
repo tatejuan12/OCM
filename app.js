@@ -467,11 +467,12 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
     const nft = mongoClient.query.getNft(nftId);
     resolve(nft);
   });
+  const promises = await Promise.all([nftPromise]);
   nftsPromise = new Promise(function (resolve, reject) {
-    const nfts = mongoClient.query.getNfts(5);
+    const nfts = mongoClient.query.relatedNfts(promises[0].issuer, 5);
     resolve(nfts);
   });
-  const promises = await Promise.all([nftPromise, nftsPromise]);
+  const promiseNfts = await Promise.all([nftsPromise])
   if (promises[0] !== null) {
     if (promises[0].uriMetadata.collection.name !== null) {
       var nftCollection = promises[0].uriMetadata.collection.name
@@ -500,7 +501,7 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
         wallet: wallet,
         isOwner: isOwner,
         nft: promises[0],
-        nfts: promises[1],
+        nfts: promiseNfts[0],
         collection_logo: collection_logo,
       });
     } else next();
@@ -683,6 +684,7 @@ server.post("/redeem-nft-subscription", speedLimiter, async (req, res) => {
   const payload = await xumm.subscriptions.redeemNftSubscription(req, res);
   //console.log(payload)
   if (payload) {
+    
     //send information on NFT to DB
   }
   // console.log(payload);

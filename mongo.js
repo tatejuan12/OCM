@@ -279,6 +279,37 @@ var methods = {
       }
     } else return [];
   },
+  relatedNfts: async function (issuer, nftsToReturn) {
+    const client = await getClient();
+    try {
+      const db = client.db("NFTokens");
+      let collection = db.collection("Eligible-Listings");
+      var query = [
+        {
+          $match: {"issuer": issuer}            
+        },
+        { $sample: {size: nftsToReturn}}
+    ]
+      var aggregate = await (collection.aggregate(query)).toArray();
+
+      if(aggregate.length < nftsToReturn){
+        var missingNFTs = nftsToReturn - aggregate.length
+
+        var query = [
+            { $sample: {size: missingNFTs}}
+        ]
+
+        var aggregate = (await (collection.aggregate(query)).toArray()).concat(aggregate);
+      }
+
+      return aggregate;
+
+    } catch (err) {
+      console.log("Database error" + err);
+    } finally {
+      await client.close();
+    }
+  },
   getNfts: async function (NFTSPERPAGE, page, filters) {
     const client = await getClient();
     if (!client) return;
