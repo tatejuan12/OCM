@@ -299,7 +299,7 @@ var methods = {
             { $sample: {size: missingNFTs}}
         ]
 
-        var aggregate = (await (collection.aggregate(query)).toArray()).concat(aggregate);
+        var aggregate = aggregate.concat((await (collection.aggregate(query)).toArray()));
       }
 
       return aggregate;
