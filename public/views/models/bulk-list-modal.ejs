@@ -1,0 +1,29 @@
+<div class="modal-header">
+	<h5 class="modal-title" id="staticBackdropLabel">Bulk List</h5>
+	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body" id="bulkModalBody">
+	<div class="bulk-nft-container">
+		<% nft.forEach(function (res) {%>
+		<div class="bulk-nft-wrap" id="bulkNftWrap">
+			<!-- <div class="nft-image">
+				<img src="<#%=res.data.http_image%>" style="max-width: 46px;" alt="">
+			</div> -->
+			<div class="token-id">
+				<a href="https://bithomp.com/explorer/<%=res.NFTokenID%>" target="_blank" id="tokenId"><%=res.NFTokenID%></a>
+			</div>
+				<input class="bulk-checkbox" type="checkbox" name="bulkCheckbox" value="<%=res.NFTokenID%>,<%=res.Issuer%>" checked>
+		</div>
+		<%})%>
+	</div>                
+</div>
+<div class="modal-footer">
+	<div class="bulk-modal-footer">
+		<div class="xrp-calculator">
+			<label for="bulkTotalXrp">Total = </label>
+			<input type="number" id="bulkTotalXrp" value="<%=nft.length * 0.98%>" disabled>
+			<label for="bulkTotalXrp"> XRP</label>
+		</div>
+		<a class="btn btn-primary" id="modalListButtonBulk">List</a>
+	</div>
+</div>
