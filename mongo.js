@@ -279,31 +279,34 @@ var methods = {
       }
     } else return [];
   },
-  relatedNfts: async function (issuer, nftsToReturn) {
+  relatedNfts: async function (issuer, nftsToReturn, nftID) {
     const client = await getClient();
     try {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
       var query = [
         {
-          $match: {"issuer": issuer}            
+          $match: { $and: [ {"issuer": issuer}, {"tokenID": {$ne: nftID}} ] }
         },
         { $sample: {size: nftsToReturn}}
     ]
       var aggregate = await (collection.aggregate(query)).toArray();
-
+  
       if(aggregate.length < nftsToReturn){
         var missingNFTs = nftsToReturn - aggregate.length
-
+  
         var query = [
+          {
+            $match: {"tokenID": {$ne: nftID}}
+          },
             { $sample: {size: missingNFTs}}
         ]
-
+  
         var aggregate = aggregate.concat((await (collection.aggregate(query)).toArray()));
       }
-
+  
       return aggregate;
-
+  
     } catch (err) {
       console.log("Database error" + err);
     } finally {
