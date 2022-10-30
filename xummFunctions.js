@@ -1851,6 +1851,7 @@ async function sendRequestRedeem(ipAddress, address) {
         })
         .on("end", () => {
           try {
+            console.log(payload);
             payload = JSON.parse(payload);
           } catch (err) {
             reject("Could not parse payload to JSON");
