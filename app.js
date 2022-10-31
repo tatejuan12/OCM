@@ -10,6 +10,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
+const cookieParser = require("cookie-parser");
 const logger = require("express-logger");
 const { TxData } = require("xrpl-txdata");
 const useragent = require("express-useragent");
@@ -57,17 +58,17 @@ server.use(helmet({ contentSecurityPolicy: false }));
 server.set("views", path.join(__dirname, "/public")); // Makes views for rendering the public dir
 server.use(express.static(__dirname + "/public", { dotfiles: "allow" })); // Essential so JS and CSS is acccessible by requests
 //server.use(logger({ path: __dirname + "/logs/logs.log" })); // Logs data, every connection will log browser info and request url
+server.use(cookieParser());
 server.use(
   session({
-    secret: "some secret",
+    secret: process.env.COOKIES_PASSPHRASE,
     resave: false,
     saveUninitialized: false,
     //! change to secure true once hosting
-    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 30 }, // ms/s, s/m, m/h, h/d, d/mnth
     store: mongoStore,
   })
 );
-const csrfProtection = csurf({});
+const csrfProtection = csurf({ cookie: { secure: true } });
 server.use(useragent.express()); // For browser data, like if it is mobile or not
 server.use(
   minifyHtml({
@@ -676,13 +677,9 @@ server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
   );
   try {
     if (payload instanceof Error) throw payload;
-    if (payload != undefined) {
-      console.log('payload returned')
-      res.status(200).send(payload);
-    } else {
-      res.status(500).send('no payload returned from API')
-    }
+    res.status(200).send(payload);
   } catch (err) {
+    console.log(err.toString());
     res.status(500).send(err.toString());
   }
 });
@@ -691,13 +688,19 @@ server.post("/redeem-nft-subscription", speedLimiter, async (req, res) => {
   const result = await xumm.subscriptions.watchSubscripion(dataBody[0]);
   //const payload = await xumm.subscriptions.redeemNftSubscription(req, res);
   if (result[0] == "signed") {
-    var walletFromPayload = result[1]
+    var walletFromPayload = result[1];
     var NFTokenID = dataBody[1];
     var wallet = walletFromPayload;
     var permanent = false;
     var issuer = undefined;
     var sessionWallet = wallet;
-    await mongoClient.query.recentlyRedeemed(NFTokenID, wallet, permanent, issuer, sessionWallet)
+    await mongoClient.query.recentlyRedeemed(
+      NFTokenID,
+      wallet,
+      permanent,
+      issuer,
+      sessionWallet
+    );
   }
 });
 server.post("/increment-like", speedLimiter, async (req, res) => {
