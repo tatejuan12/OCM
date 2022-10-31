@@ -954,10 +954,14 @@ function NFTokenCancelOffer(index) {
   });
 }
 function getRedeem(redeemElement, loadingElement, ipAddress) {
+  if (ipAddress == 'false') {
+    alert('please select an option')
+    return;
+  }
+  $(redeemElement).addClass('loading');
+  $(redeemElement).prop('disabled', true);
   ipAddress = JSON.parse(ipAddress).ip;
   if (ipAddress) {
-    redeemElement.classList.add("hidden");
-    loadingElement.classList.remove("hidden");
     $.ajax({
       type: "POST",
       url: "/redeem-nft-payload",
@@ -978,6 +982,8 @@ function getRedeem(redeemElement, loadingElement, ipAddress) {
         setTimeout(location.reload(), 1000);
       },
     });
+    $(redeemElement).removeClass('loading');
+    $(redeemElement).prop('disabled', false);
   }
 }
 function buyOrderClicked(redeemElement, loadingElement) {
@@ -1139,7 +1145,7 @@ function getCurrencyBalance() {
   var currentWindow;
   try {
     $("#walletBalance").load(
-      `/get-token-balance?issuer=XRP&hex=$XRP&token=XRP`
+      `/get-token-balance?issuer=XRP&hex=XRP&token=XRP`
     );
   } catch (err) {
     console.error("Couldn't parse balance");

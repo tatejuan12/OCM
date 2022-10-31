@@ -69,9 +69,21 @@
 
             </span>
           </div>
-          <%if (login) {%><button class="btn2" id="redeem" onclick="getRedeem(this, this.nextElementSibling, document.getElementById('redeem-menu').value);">SWAP</button> <%} else {%> <button class="btn2" id="redeem" disabled><span>SWAP</span></button><%}%>
+          <!-- <%#if (login) {%><button class="btn2" id="redeem" onclick="getRedeem(this, this.nextElementSibling, document.getElementById('redeem-menu').value);">SWAP</button> <%#} else {%> <button class="btn2" id="redeem" disabled><span>SWAP</span></button><%#}%> -->
           <!-- bellow div will give you a spinning loader anywhere on the website -->
-          <div class="loader hidden"></div>
+          <%if (login) {%>
+            <button class="special-btn" id="redeem" onclick="getRedeem(this, this.nextElementSibling, document.getElementById('redeem-menu').value);">
+              <i class="icon i-redeem"></i>
+              <span class="button-text">Redeem</span>
+              <span style="margin: 0;" class="button-loader"></span>
+            </button>
+          <%} else {%>
+              <button disabled class="special-btn" id="redeem" >
+                <i class="icon i-redeem"></i>
+                <span class="button-text">Redeem</span>
+                <span style="margin: 0;" class="button-loader"></span>
+              </button>
+          <%}%>
         </div>
       </div>
     </div>
