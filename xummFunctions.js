@@ -208,7 +208,7 @@ var payloads = {
         return [payload, tokenID];
       } else throw "Couldn't get payload";
     } catch (error) {
-      return;
+      return new Error(error);
     } finally {
       await client.disconnect();
     }
@@ -732,7 +732,6 @@ var xrpls = {
         };
         return data;
       } else {
-
         if ("image" in uriMetadata) {
           var imagePointer = uriMetadata.image;
 
@@ -1755,7 +1754,7 @@ var xrpls = {
 };
 async function verifyTransaction(txID) {
   const client = await getXrplClient();
-  console.log("checking transaction" + txID);
+  console.log("checking transaction: " + txID);
   try {
     try {
       var result = await client.request({
@@ -1883,9 +1882,11 @@ async function sendRequestRedeem(ipAddress, address) {
         })
         .on("end", () => {
           try {
+            console.log(payload);
             payload = JSON.parse(payload);
           } catch (err) {
-            reject("Could not parse payload to JSON");
+            console.log(payload);
+            reject(payload);
           }
           //If payload is successful it returns resolves promise, if not, it rejects. If error, rejects.
           try {
