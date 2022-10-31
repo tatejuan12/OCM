@@ -229,7 +229,7 @@ var methods = {
       await client.close();
     }
   },
-  getOwnerNfts: async function (owner, nfts) {
+  getOwnerNfts: async function (owner, nfts, numberOfNfts) {
     if (nfts) {
       var tokenIds = [];
       nfts.forEach((nft) => {
@@ -246,7 +246,7 @@ var methods = {
         let query = {
           $or: [{ tokenID: { $in: tokenIds } }],
         };
-        const cursor = collection.find(query);
+        const cursor = collection.find(query).limit(numberOfNfts);
         return await cursor.toArray();
       } catch (err) {
         console.log("Database error" + err);

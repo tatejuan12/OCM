@@ -142,8 +142,11 @@ server.get("/profile", speedLimiter, async (req, res) => {
     }
 
     defaultLocals(req, res);
-    var isVerified = await mongoClient.query.verified(wallet);
     const profile_pic = digitalOcean.functions.getProfileLink(wallet);
+    verificationPromise = new Promise(function (resolve, reject) {
+      var isVerified = mongoClient.query.verified(wallet);
+      resolve(isVerified)
+    })
     nftsPromise = new Promise(function (resolve, reject) {
       const nfts = xumm.xrpl.getAccountsNfts(wallet, NFTSPERPAGE);
       resolve(nfts);
@@ -165,20 +168,26 @@ server.get("/profile", speedLimiter, async (req, res) => {
       userPromise,
       offersPromise,
       likedNftsPromise,
+      verificationPromise,
     ]);
 
     const isOwner = promises[1].wallet == req.session.wallet ? true : false;
     var marker = promises[0][1];
     var isMarker = promises[0][1] == undefined ? false : true;
-    const ownerNfts = await mongoClient.query.getOwnerNfts(
-      wallet,
-      promises[0][0]
-    );
+    listedNftsPromise = new Promise(function (resolve, reject) {
+      const ownerNfts =  mongoClient.query.getOwnerNfts(
+        wallet,
+        promises[0][0],
+        NFTSPERPAGE
+      );
+      resolve(ownerNfts)
+    })
+    const listedPromise = await listedNftsPromise;
     res.render("views/profile", {
-      isVerified: isVerified,
+      isVerified: promises[4],
       isOwner: isOwner,
       marker: marker,
-      nfts: ownerNfts,
+      nfts: listedPromise,
       user: promises[1],
       profile_pic: profile_pic,
       buyOffers: promises[2][1],
