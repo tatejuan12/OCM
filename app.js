@@ -63,7 +63,7 @@ server.use(
     resave: false,
     saveUninitialized: false,
     //! change to secure true once hosting
-    cookie: { secure: true, maxAge: 1000 * 60 * 60 * 24 * 30 }, // ms/s, s/m, m/h, h/d, d/mnth
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 * 30 }, // ms/s, s/m, m/h, h/d, d/mnth
     store: mongoStore,
   })
 );
@@ -663,31 +663,36 @@ server.post("/XUMM-sign-subscription", speedLimiter, async (req, res) => {
   const result = await xumm.subscriptions.watchSubscripion(req, res);
 });
 server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
-  const payload = await xumm.payloads.redeemNftPayload(
-    req.session.wallet,
-    req.useragent.isMobile,
-    req.body.return_url,
-    req.body.ipAddress
-  );
   try {
-    res.status(200).send(payload[0]);
-    const result = await xumm.subscriptions.watchSubscripion(payload[0]);
+    const payload = await xumm.payloads.redeemNftPayload(
+      req.session.wallet,
+      req.useragent.isMobile,
+      req.body.return_url,
+      req.body.ipAddress
+    );
+    if (payload != undefined) {
+      console.log('payload returned')
+      res.status(200).send(payload);
+    } else {
+      res.status(500).send('no payload returned from API')
+    }
   } catch (err) {
     res.sendStatus(500);
   }
-  // if (result == "signed") {
-  //   mongoClient.query.recentlyRedeemed()
-  // }
 });
 server.post("/redeem-nft-subscription", speedLimiter, async (req, res) => {
-  const payload = await xumm.subscriptions.redeemNftSubscription(req, res);
-  //console.log(payload)
-  if (payload) {
-    //send information on NFT to DB
+  var dataBody = JSON.parse(req.body.payload);
+  const result = await xumm.subscriptions.watchSubscripion(dataBody[0]);
+  //const payload = await xumm.subscriptions.redeemNftSubscription(req, res);
+  if (result[0] == "signed") {
+    var walletFromPayload = result[1]
+    var NFTokenID = dataBody[1];
+    var wallet = walletFromPayload;
+    var permanent = false;
+    var issuer = undefined;
+    var sessionWallet = wallet;
+    await mongoClient.query.recentlyRedeemed(NFTokenID, wallet, permanent, issuer, sessionWallet)
   }
-  // console.log(payload);
-  // const result = await xumm.subscriptions.watchSubscripion(payload);
-  // console.log(result);
 });
 server.post("/increment-like", speedLimiter, async (req, res) => {
   var success;

@@ -414,6 +414,30 @@ var subscriptions = {
       console.error("There was an error with the payload: \n" + error);
     }
   },
+  payloadSigner: async function (payload) {
+    try {
+      var subscription = false;
+      console.log('checking payload')
+      var promise = new Promise(function (resolve, reject) {
+        subscription = sdk.payload.subscribe(payload, (event) => {
+          if (event.data.signed) {
+            console.log('trans was signed promise is running')
+            sdk.payload.get(event.data.payload_uuidv4).then((data) => {
+              console.log(data)
+              var wallet = data.response.account;
+              resolve(wallet);
+            });
+          } else if (event.data.signed == false) {
+            console.log('false redeem payload not signed')
+            reject(false);
+          }
+        });
+      });
+      return await promise;
+    } catch (err) {
+      console.log('error checking payload for wallet: ' + err)
+    } 
+  },
   watchSubscripion: async function (payload) {
     var subscription = false;
     var promise = new Promise(function (resolve, reject) {
@@ -421,7 +445,9 @@ var subscriptions = {
         if (event.data.signed) {
           sdk.payload.get(event.data.payload_uuidv4).then((data) => {
             // res.status(200).send(true);
-            resolve("signed");
+            console.log(data)
+            var wallet = data.response.signer;
+            resolve(["signed", wallet]);
           });
         } else if (event.data.signed == false) {
           // res.status(401).send(false);
@@ -434,29 +460,6 @@ var subscriptions = {
       return await promise;
     } catch (error) {
       return false;
-    }
-  },
-  redeemNftSubscription: async function (req, res) {
-    var subscription = false;
-    try {
-      subscription = await sdk.payload.subscribe(req.body, (event) => {
-        if (event.data.signed) {
-          console.log("User signed in: " + event.data.payload_uuidv4);
-          sdk.payload.get(event.data.payload_uuidv4).then((data) => {
-            req.session.login = true;
-            req.session.wallet = data.response.account;
-            req.session.user_token = data.application.issued_user_token;
-            res.status(200).send(true);
-            event.resolve;
-            return true;
-          });
-        } else if (event.data.signed == false) {
-          res.status(401).send(false);
-          return false;
-        }
-      });
-    } catch (error) {
-      console.error("There was an error with the payload: \n" + error);
     }
   },
   listNftSubscription: async function (req, res) {

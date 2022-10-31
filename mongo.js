@@ -1063,6 +1063,34 @@ var methods = {
       });
     return client;
   },
+  recentlyRedeemed: async function (NFTokenID, wallet, permanent, issuer, sessionWallet) {
+    var client = await getClient()
+    if (!client) return;
+    var payholder = sessionWallet;
+    try{
+      const db = client.db("NFTokens")
+      let collection = db.collection("Queued-Listings")
+      const exists = await listQueryExistsChecker(NFTokenID);
+      if (!exists) {
+        let query = {
+          NFTokenID: NFTokenID,
+          knownHolder: wallet,
+          dateAdded: new Date(),
+          issuer: issuer,
+          duration: {
+            permanent: permanent,
+            paidHolder: payholder,
+          },
+        };
+        let res = await collection.insertOne(query);
+        return;
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+        await client.close()
+    }
+  },
 };
 
 async function alreadyLiked(collection, id, wallet) {

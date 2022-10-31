@@ -805,7 +805,6 @@ function xummSignin() {
     url: "/sign-in-payload",
     data: { return_url: window.location.href },
     success: function (result) {
-      console.log(result);
       $('#qrModal').modal('toggle');
       $('#qrCodeImage').attr('src', result.refs.qr_png)
       $('#xummLink').attr('href', result.next.always)
@@ -962,8 +961,20 @@ function getRedeem(redeemElement, loadingElement, ipAddress) {
       url: "/redeem-nft-payload",
       data: { return_url: window.location.href, ipAddress: ipAddress },
       success: function (result) {
-        window.location.href = result.next.always;
+        var information = JSON.stringify(result)
+        $.ajax({
+          type: "POST",
+          url: "/redeem-nft-subscription",
+          data: {
+            payload: information
+          }
+        })
+        window.location.href = result[0].next.always;
+
       },
+      error: function (result) {
+        customAlert.alert(result)
+      }
     });
   }
 }
