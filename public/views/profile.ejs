@@ -24,7 +24,8 @@
 
   <!-- Style css -->
   <link rel="stylesheet" href="assets/css/style.css">
-  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script></head>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+</head>
 
 <body class="template-color-1">
   <!-- Preloader -->
@@ -53,16 +54,16 @@
         <div class="col-lg-12">
           <div class="author-wrapper">
             <div class="author-inner">
-              <div class="user-thumbnail">                
-                <img style="margin-right: 14px;" src="<%=profile_pic%>" alt="user profile image" onerror="this.src='https://www.ui-avatars.com/api/?background=random&length=3&font-size=0.33&uppercase=false&size=200&name=<%=user.wallet%>'" >
+              <div class="user-thumbnail">
+                <img style="margin-right: 14px;" src="<%=profile_pic%>" alt="user profile image" onerror="this.src='https://www.ui-avatars.com/api/?background=random&length=3&font-size=0.33&uppercase=false&size=200&name=<%=user.wallet%>'">
                 <a href="edit-profile" style="margin-left: -26px;margin-top:19px;z-index: 1;"><i style="margin-left: -32px;" class="icon i-edit"></i></a>
               </div>
               <div class="rn-author-info-content">
                 <%if (user.project == undefined) {%>
-                  <h4 class="title"><%=user.wallet%></h4>
+                <h4 class="title"><%=user.wallet%></h4>
                 <%} else {%>
-                  <h4 class="title"><%=user.project%></h4>
-                  <p class="wallet-copy"><a onclick="navigator.clipboard.writeText(`<%=user.wallet%>`)"><%=user.wallet%></a><i class="icon i-copy"></i></p>
+                <h4 class="title"><%=user.project%></h4>
+                <p class="wallet-copy"><a onclick="navigator.clipboard.writeText(`<%=user.wallet%>`)"><%=user.wallet%></a><i class="icon i-copy"></i></p>
                 <%}%>
               </div>
             </div>
@@ -85,21 +86,21 @@
                 <button class="nav-link" id="nav-liked-tab" data-bs-toggle="tab" data-bs-target="#pane-liked-nfts" type="button" role="tab" aria-controls="nav-liked" aria-selected="false">Liked</button>
                 <button class="nav-link" id="nav-offers-tab" data-bs-toggle="tab" data-bs-target="#pane-offers" type="button" role="tab" aria-controls="nav-accountOffers" aria-selected="false">Account Offers</button>
                 <%if (isVerified) {%>
-                <button class="nav-link dropdown" id="nav-offers-tab"data-bs-toggle="dropdown" type="button" role="tab" aria-controls="" aria-expanded="false">Verified Tools</button>
+                <button class="nav-link dropdown" id="nav-offers-tab" data-bs-toggle="dropdown" type="button" role="tab" aria-controls="" aria-expanded="false">Verified Tools</button>
                 <ul class="dropdown-menu">
                   <li><a href="create-collection" class="dropdown-item">Create Collection</a></li>
                 </ul>
                 <%}%>
                 <%}%>
               </div>
-            </nav>
+              </nav>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div id="pane-listed-nfts" class="tab-pane fade active show" aria-labelledby="nav-listed-tab" role="tabpanel">
-        <%- include ("models/nft-rows.ejs", {nfts:nfts}) %>
-        <%if (isMarker) {%>
+        <div id="pane-listed-nfts" class="tab-pane fade active show" aria-labelledby="nav-listed-tab" role="tabpanel">
+          <%- include ("models/nft-rows.ejs", {nfts:nfts}) %>
+          <%if (isMarker) {%>
           <div class="load-more-div">
             <button class="special-btn" id="moreListedNftsLoad">
               <i class="icon i-flashlight"></i>
@@ -107,34 +108,34 @@
               <span class="button-loader"></span>
             </button>
           </div>
-        <%}%> 
+          <%}%> 
       </div>
       <% if (isOwner) {%>
-        <div id="pane-unlisted-nfts" class="tab-pane fade" aria-labelledby="nav-unlisted-tab" role="tabpanel">
-          <div class="d-flex flex-row-reverse bd-highlight">
-            <button class="btn btn-primary mb-3" id="bulkButton">
-              List All
-            </button>
+          <div id="pane-unlisted-nfts" class="tab-pane fade" aria-labelledby="nav-unlisted-tab" role="tabpanel">
+            <div class="d-flex flex-row-reverse bd-highlight">
+              <button class="btn btn-primary mb-3" id="bulkButton">
+                List All
+              </button>
+            </div>
+            <div class="unlisted-wrap" id="unlisted-nfts">
+              <lottie-player src="assets/js/lottie/network.json" background="transparent" speed="1" style="margin:auto;width: 80px; height: 80px;" loop autoplay></lottie-player>
+              <span class="loader-disclaimer">Querying the XRPL, please be patient</span>
+            </div>
           </div>
-          <div class="unlisted-wrap" id="unlisted-nfts">
-            <lottie-player src="assets/js/lottie/network.json" background="transparent"  speed="1"  style="margin:auto;width: 80px; height: 80px;" loop autoplay></lottie-player>            
-            <span class="loader-disclaimer">Querying the XRPL, please be patient</span>
+          <div id="pane-liked-nfts" class="tab-pane fade" aria-labelledby="nav-liked-tab" role="tabpanel">
+            <%- include ("models/nft-rows.ejs", {nfts: likedNfts}) %>
           </div>
-        </div>
-        <div id="pane-liked-nfts" class="tab-pane fade" aria-labelledby="nav-liked-tab" role="tabpanel">
-          <%- include ("models/nft-rows.ejs", {nfts: likedNfts}) %>
-        </div>
-        <div id="pane-offers" class="tab-pane fade" aria-labelledby="nav-offers-tab" role="tabpanel">
-          <div class="offers-container-wrap">
-            <% buyOffers.forEach(function(res){%>
+          <div id="pane-offers" class="tab-pane fade" aria-labelledby="nav-offers-tab" role="tabpanel">
+            <div class="offers-container-wrap">
+              <% buyOffers.forEach(function(res){%>
               <%- include('models/account-offers.ejs', {offer:res})%>
               <%}); %>
               <% sellOffers.forEach(function(res){%>
-                <%- include('models/account-offers.ejs', {offer:res})%>
-              <%}); %> 
-          </div> 
-        </div>
-      <%}%>
+              <%- include('models/account-offers.ejs', {offer:res})%>
+              <%}); %>
+            </div>
+          </div>
+          <%}%>
     </div>
   </div>
   <div class="modal fade"  id="bulkListModal" tabindex="-1" aria-labelledby="bulkListModal" aria-hidden="true">
@@ -187,133 +188,132 @@
   </div>
   <!-- Modal require -->
   <%- include('sections/popup-modal.ejs') -%>
-  <%- include('sections/footer.ejs') -%>
-  <!-- Start Top To Bottom Area  -->
-  <div class="rn-progress-parent">
-    <svg class="rn-back-circle svg-inner" width="100%" height="100%" viewBox="-1 -1 102 102">
-      <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
-    </svg>
-  </div>
-  <!-- End Top To Bottom Area  -->
-  <!-- JS ============================================ -->
-  <script src="assets/js/vendor/jquery.js"></script>
-  <script src="assets/js/vendor/jquery.nice-select.min.js"></script>
-  <script src="assets/js/vendor/jquery-ui.js"></script>
-  <script src="assets/js/vendor/modernizer.min.js"></script>
-  <script src="assets/js/vendor/feather.min.js"></script>
-  <script src="assets/js/vendor/slick.min.js"></script>
-  <script src="assets/js/vendor/bootstrap.min.js"></script>
-  <script src="assets/js/vendor/sal.min.js"></script>
-  <script src="assets/js/vendor/waypoint.js"></script>
-  <script src="assets/js/vendor/wow.js"></script>
-  <script src="assets/js/vendor/particles.js"></script>
-  <script src="assets/js/vendor/jquery.style.swicher.js"></script>
-  <script src="assets/js/vendor/js.cookie.js"></script>
-  <script src="assets/js/vendor/count-down.js"></script>
-  <script src="assets/js/vendor/counter-up.js"></script>
-  <script src="assets/js/vendor/isotop.js"></script>
-  <script src="assets/js/vendor/imageloaded.js"></script>
-  <script src="assets/js/vendor/backtoTop.js"></script>
-  <script src="assets/js/vendor/scrolltrigger.js"></script>
-  <script src="assets/js/vendor/jquery.custom-file-input.js"></script>
-  <script src="assets/js/vendor/savePopup.js"></script>
-  <script src="assets/js/vendor/jquery.endless-scroll.js"></script>
-  <!-- main JS -->
-  <script src="assets/js/main.js"></script>
-  <script>
-    var markerIterationUnlisted = 0;
-    var markerUnlisted = '<%=marker%>';
-    var markerIteration = 0;
-    var marker = '<%=marker%>';
-    var isMarker = '<%=isMarker%>';
-    var bulkListQuery = false;
-    var arrayBool = false;
-    $('#bulkButton').on('click', function () {
-      $('#bulkListModal').modal('toggle')
-      if (bulkListQuery != true) {
-      $.get(`<%=url%>/bulk-list-account-unlisted-nfts`, function (returnData) {
-        $('#bulkListModalContent').html(returnData);
-        bulkListQuery = true;
-      })}
-    });
-    $('#bulkListModalContent').on('click', '#modalListButtonBulk', function () {
-      var nfts = [];
-      var returnUrl = window.location.href;
-      if (arrayBool == false) {
-        for (var i = 0; i < $('.bulk-nft-container #bulkNftWrap').length; i++) {
-          if ($(`input.bulk-checkbox:eq(${i})`).is(':checked')) {
-            var value = $(`.bulk-checkbox:eq(${i})`).val().split(',')
-            nfts.push({
-              'NFTokenID': value[0],
-              'Issuer': value[1]
-            })
-          }
-        }
-        console.log(nfts)
-        arrayBool = true;
-        const formData = new FormData();
-        formData.append('nfts', JSON.stringify(nfts));
-        formData.append('returnUrl', returnUrl)
-        $.ajax({
-          type: "POST",
-          url: "/list-bulk-array",
-          processData: false,
-          contentType: false,
-          enctype: "multipart/form-data",
-          data: formData,
-          success: function (result) {
-            console.log(result)
-            window.location.href = result.payload.next.always;
-            formData.append('payload', JSON.stringify(result.payload))
-            $.ajax({
-              type: "POST",
-              url: "/list-bulk-subscription",
-              processData: false,
-              contentType: false,
-              enctype: "multipart/form-data",
-              data: formData,
-              success: function (result) {
-              },
-              error: function (result) {
+          <%- include('sections/footer.ejs') -%>
+          <!-- Start Top To Bottom Area  -->
+          <div class="rn-progress-parent">
+            <svg class="rn-back-circle svg-inner" width="100%" height="100%" viewBox="-1 -1 102 102">
+              <path d="M50,1 a49,49 0 0,1 0,98 a49,49 0 0,1 0,-98" />
+            </svg>
+          </div>
+          <!-- End Top To Bottom Area  -->
+          <!-- JS ============================================ -->
+          <script src="assets/js/vendor/jquery.js"></script>
+          <script src="assets/js/vendor/jquery.nice-select.min.js"></script>
+          <script src="assets/js/vendor/jquery-ui.js"></script>
+          <script src="assets/js/vendor/modernizer.min.js"></script>
+          <script src="assets/js/vendor/feather.min.js"></script>
+          <script src="assets/js/vendor/slick.min.js"></script>
+          <script src="assets/js/vendor/bootstrap.min.js"></script>
+          <script src="assets/js/vendor/sal.min.js"></script>
+          <script src="assets/js/vendor/waypoint.js"></script>
+          <script src="assets/js/vendor/wow.js"></script>
+          <script src="assets/js/vendor/particles.js"></script>
+          <script src="assets/js/vendor/jquery.style.swicher.js"></script>
+          <script src="assets/js/vendor/js.cookie.js"></script>
+          <script src="assets/js/vendor/count-down.js"></script>
+          <script src="assets/js/vendor/counter-up.js"></script>
+          <script src="assets/js/vendor/isotop.js"></script>
+          <script src="assets/js/vendor/imageloaded.js"></script>
+          <script src="assets/js/vendor/backtoTop.js"></script>
+          <script src="assets/js/vendor/scrolltrigger.js"></script>
+          <script src="assets/js/vendor/jquery.custom-file-input.js"></script>
+          <script src="assets/js/vendor/savePopup.js"></script>
+          <script src="assets/js/vendor/jquery.endless-scroll.js"></script>
+          <!-- main JS -->
+          <script src="assets/js/main.js"></script>
+          <script>
+            var markerIterationUnlisted = 0;
+            var markerUnlisted = '<%=marker%>';
+            var markerIteration = 0;
+            var marker = 0;
+            var isMarker = '<%=isMarker%>';
+            var bulkListQuery = false;
+            var arrayBool = false;
+            $('#bulkButton').on('click', function() {
+              $('#bulkListModal').modal('toggle')
+              if (bulkListQuery != true) {
+                $.get(`<%=url%>/bulk-list-account-unlisted-nfts`, function(returnData) {
+                  $('#bulkListModalContent').html(returnData);
+                  bulkListQuery = true;
+                })
+              }
+            });
+            $('#bulkListModalContent').on('click', '#modalListButtonBulk', function() {
+              var nfts = [];
+              var returnUrl = window.location.href;
+              if (arrayBool == false) {
+                for (var i = 0; i < $('.bulk-nft-container #bulkNftWrap').length; i++) {
+                  if ($(`input.bulk-checkbox:eq(${i})`).is(':checked')) {
+                    var value = $(`.bulk-checkbox:eq(${i})`).val().split(',')
+                    nfts.push({
+                      'NFTokenID': value[0],
+                      'Issuer': value[1]
+                    })
+                  }
+                }
+                console.log(nfts)
+                arrayBool = true;
+                const formData = new FormData();
+                formData.append('nfts', JSON.stringify(nfts));
+                formData.append('returnUrl', returnUrl)
+                $.ajax({
+                  type: "POST",
+                  url: "/list-bulk-array",
+                  processData: false,
+                  contentType: false,
+                  enctype: "multipart/form-data",
+                  data: formData,
+                  success: function(result) {
+                    console.log(result)
+                    window.location.href = result.payload.next.always;
+                    formData.append('payload', JSON.stringify(result.payload))
+                    $.ajax({
+                      type: "POST",
+                      url: "/list-bulk-subscription",
+                      processData: false,
+                      contentType: false,
+                      enctype: "multipart/form-data",
+                      data: formData,
+                      success: function(result) {},
+                      error: function(result) {}
+                    })
+                    //setTimeout(location.reload(), 2000)
+                  },
+                  error: function() {
+                    console.log('error')
+                  }
+                })
               }
             })
-            //setTimeout(location.reload(), 2000)
-          },
-          error: function () {
-            console.log('error')
-          }
-        })
-      }
-    })
-    $('#bulkListModalContent').on('change', 'input', function () {
-	    $('#bulkTotalXrp').val($('.bulk-nft-container #bulkNftWrap .bulk-checkbox:checked').length * 0.98)
-    })
-    $('#moreListedNftsLoad').on('click', function  (){
-      document.getElementById('moreListedNftsLoad').classList.add('loading')
-      document.getElementById('moreListedNftsLoad').disabled = true;
-        $.get(
-          `<%=url%>/get-additional-listed-nfts?wallet=<%=user.wallet%>&marker=${marker}&markerIteration=${markerIteration}`,
-          function(data) {
-            markerIteration++;
-            $("#exploreSection").append(data[0])
-            marker = data[1]
-            const cards = document.getElementById("exploreSection").querySelectorAll(".col-5");
-            cards.forEach(element => {
-              element.classList.add("sal-animate")
-            });
-            document.getElementById('moreListedNftsLoad').classList.remove('loading')
-            document.getElementById('moreListedNftsLoad').disabled = false;
-          }
-        )
-    })
-  $("#unlisted-nfts").load("<%=url%>/get-account-unlisted-nfts?wallet=<%=user.wallet%>",
-    function() {
-      const cards = document.getElementById("pane-unlisted-nfts").querySelectorAll(".col-5");
-      cards.forEach(element => {
-        element.classList.add("sal-animate")
-      });
-      if (isMarker) {
-      $('#pane-unlisted-nfts').append(`
+            $('#bulkListModalContent').on('change', 'input', function() {
+              $('#bulkTotalXrp').val($('.bulk-nft-container #bulkNftWrap .bulk-checkbox:checked').length * 0.98)
+            })
+            $('#moreListedNftsLoad').on('click', function() {
+              document.getElementById('moreListedNftsLoad').classList.add('loading')
+              document.getElementById('moreListedNftsLoad').disabled = true;
+              $.get(
+                `<%=url%>/get-additional-listed-nfts?wallet=<%=user.wallet%>&marker=${marker}&markerIteration=${markerIteration}`,
+                function(data) {
+                  markerIteration++;
+                  $("#exploreSection").append(data[0])
+                  marker = data[1]
+                  const cards = document.getElementById("exploreSection").querySelectorAll(".col-5");
+                  cards.forEach(element => {
+                    element.classList.add("sal-animate")
+                  });
+                  document.getElementById('moreListedNftsLoad').classList.remove('loading')
+                  document.getElementById('moreListedNftsLoad').disabled = false;
+                }
+              )
+            })
+            $("#unlisted-nfts").load("<%=url%>/get-account-unlisted-nfts?wallet=<%=user.wallet%>",
+              function() {
+                const cards = document.getElementById("pane-unlisted-nfts").querySelectorAll(".col-5");
+                cards.forEach(element => {
+                  element.classList.add("sal-animate")
+                });
+                if (isMarker) {
+                  $('#pane-unlisted-nfts').append(`
       <div class="load-more-div">
             <button class="special-btn" id="moreUnlistedNftsLoad" onclick="loadMoreNfts(this)">
               <i class="icon i-flashlight"></i>
@@ -321,29 +321,31 @@
               <span class="button-loader"></span>
             </button>
           </div>
-      `)}
-    })
-  function loadMoreNfts(elem) {
-    $(elem).addClass('loading');
-    $(elem).prop('disabled', true);
-    $.get(`<%=url%>/get-additional-unlisted-nfts?wallet=<%=user.wallet%>&marker=${markerUnlisted}&markerIteration=${markerIterationUnlisted}`,
-      function(returnData) {
-        markerUnlisted = returnData[1]
-        markerIterationUnlisted++;
-        $("#exploreSectionUnlisted").append(returnData[0])
-        markerUnlisted = returnData[1]
-        const cardsUnlisted = document.getElementById("pane-unlisted-nfts").querySelectorAll(".col-5");
-        cardsUnlisted.forEach(element => {
-          if (!$(element).hasClass("sal-animate")){
-            element.classList.add("sal-animate");
-          }
-        });
-        $(elem).removeClass('loading');
-        $(elem).prop('disabled', false);
-      }
-    )
-  }
-  </script>
+      `)
+                }
+              })
+
+            function loadMoreNfts(elem) {
+              $(elem).addClass('loading');
+              $(elem).prop('disabled', true);
+              $.get(`<%=url%>/get-additional-unlisted-nfts?wallet=<%=user.wallet%>&marker=${markerUnlisted}&markerIteration=${markerIterationUnlisted}`,
+                function(returnData) {
+                  markerUnlisted = returnData[1]
+                  markerIterationUnlisted++;
+                  $("#exploreSectionUnlisted").append(returnData[0])
+                  markerUnlisted = returnData[1]
+                  const cardsUnlisted = document.getElementById("pane-unlisted-nfts").querySelectorAll(".col-5");
+                  cardsUnlisted.forEach(element => {
+                    if (!$(element).hasClass("sal-animate")) {
+                      element.classList.add("sal-animate");
+                    }
+                  });
+                  $(elem).removeClass('loading');
+                  $(elem).prop('disabled', false);
+                }
+              )
+            }
+          </script>
 </body>
 
 </html>

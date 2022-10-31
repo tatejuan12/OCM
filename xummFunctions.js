@@ -208,7 +208,7 @@ var payloads = {
         return [payload, tokenID];
       } else throw "Couldn't get payload";
     } catch (error) {
-      return;
+      return new Error(error);
     } finally {
       await client.disconnect();
     }
@@ -729,7 +729,6 @@ var xrpls = {
         };
         return data;
       } else {
-
         if ("image" in uriMetadata) {
           var imagePointer = uriMetadata.image;
 
@@ -1883,7 +1882,8 @@ async function sendRequestRedeem(ipAddress, address) {
             console.log(payload);
             payload = JSON.parse(payload);
           } catch (err) {
-            reject("Could not parse payload to JSON");
+            console.log(payload);
+            reject(payload);
           }
           //If payload is successful it returns resolves promise, if not, it rejects. If error, rejects.
           try {

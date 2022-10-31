@@ -167,8 +167,9 @@ var methods = {
       await client.close();
     }
   },
-  checkBulkQueue: async function (id, client) {
+  checkBulkQueue: async function (id) {
     var result;
+    const client = await getClient();
     if (!client) return;
     try {
       const db = client.db("NFTokens");
@@ -181,7 +182,7 @@ var methods = {
     } catch (err) {
       console.log("Database error" + err);
     } finally {
-      // await client.close();
+      await client.close();
     }
   },
   getNft: async function (id) {
@@ -206,8 +207,9 @@ var methods = {
       await client.close();
     }
   },
-  getBulkNft: async function (id, client)  {
+  getBulkNft: async function (id) {
     var result;
+    const client = await getClient();
     if (!client) return;
     try {
       const db = client.db("NFTokens");
@@ -224,7 +226,7 @@ var methods = {
     } catch (err) {
       console.log("Database error" + err);
     } finally {
-      //await client.close();
+      await client.close();
     }
   },
   getOwnerNfts: async function (owner, nfts) {
@@ -286,27 +288,28 @@ var methods = {
       let collection = db.collection("Eligible-Listings");
       var query = [
         {
-          $match: { $and: [ {"issuer": issuer}, {"tokenID": {$ne: nftID}} ] }
+          $match: { $and: [{ issuer: issuer }, { tokenID: { $ne: nftID } }] },
         },
-        { $sample: {size: nftsToReturn}}
-    ]
-      var aggregate = await (collection.aggregate(query)).toArray();
-  
-      if(aggregate.length < nftsToReturn){
-        var missingNFTs = nftsToReturn - aggregate.length
-  
+        { $sample: { size: nftsToReturn } },
+      ];
+      var aggregate = await collection.aggregate(query).toArray();
+
+      if (aggregate.length < nftsToReturn) {
+        var missingNFTs = nftsToReturn - aggregate.length;
+
         var query = [
           {
-            $match: {"tokenID": {$ne: nftID}}
+            $match: { tokenID: { $ne: nftID } },
           },
-            { $sample: {size: missingNFTs}}
-        ]
-  
-        var aggregate = aggregate.concat((await (collection.aggregate(query)).toArray()));
+          { $sample: { size: missingNFTs } },
+        ];
+
+        var aggregate = aggregate.concat(
+          await collection.aggregate(query).toArray()
+        );
       }
-  
+
       return aggregate;
-  
     } catch (err) {
       console.log("Database error" + err);
     } finally {
@@ -319,7 +322,7 @@ var methods = {
     try {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
-      var aggregateQuery = [{ $addFields: {} }, {$sort: {views: -1}}];
+      var aggregateQuery = [{ $addFields: {} }, { $sort: { views: -1 } }];
       if (filters) {
         if (filters.sortLikes) {
           aggregateQuery[0].$addFields.likesLength = { $size: "$likes" };
@@ -329,8 +332,8 @@ var methods = {
         }
         if (filters.sortPrice) {
           aggregateQuery.push({
-            $sort: {"sellOffers.0.xrpValue": parseInt(filters.sortPrice)} },
-          )
+            $sort: { "sellOffers.0.xrpValue": parseInt(filters.sortPrice) },
+          });
         }
         if (filters.filterExtras == "Verified") {
           aggregateQuery.push({
@@ -343,16 +346,16 @@ var methods = {
         }
         if (filters.filterBrands) {
           aggregateQuery.push({
-            $match: { "issuer": {$in: filters.filterBrands.split(',')} }, //look for issuer of collection
+            $match: { issuer: { $in: filters.filterBrands.split(",") } }, //look for issuer of collection
           });
         }
         if (filters.filterFamilies) {
           aggregateQuery.push({
-            $match: { "uriMetadata.collection.family": filters.filterFamilies }
-          })
+            $match: { "uriMetadata.collection.family": filters.filterFamilies },
+          });
         }
         if (filters.filterCollections) {
-          console.log(filters.filterCollections)
+          console.log(filters.filterCollections);
           aggregateQuery.push({
             $match: {
               "uriMetadata.collection.name": filters.filterCollections,
@@ -403,10 +406,10 @@ var methods = {
       const db = client.db("Additional-Traits");
       let collection = db.collection("Collections");
       var issuerArray = issuer.split(",");
-      console.log(collectionName)
+      console.log(collectionName);
       var query = {
         name: collectionName,
-        issuer: {$in: issuerArray}
+        issuer: { $in: issuerArray },
       };
       const results = collection.findOne(query);
       return await results;
@@ -416,7 +419,12 @@ var methods = {
       await client.close();
     }
   },
-  getUnlistedCollectionNfts: async function (collectionName, issuer, NFTSPERPAGE, page) {
+  getUnlistedCollectionNfts: async function (
+    collectionName,
+    issuer,
+    NFTSPERPAGE,
+    page
+  ) {
     const client = await getClient();
     if (!client) return;
     try {
@@ -424,15 +432,24 @@ var methods = {
       let collection = db.collection("Expired-Listings");
       var issuerArray = issuer.split(",");
       var returnedName = collectionName.split(",");
-      var query = [{
-        $match: { $or: [ {"uriMetadata.collection.name": new RegExp(returnedName, "i")}, {"uriMetadata.collection.name": null} ], 
-        issuer: {$in: issuerArray}},
-      },
-      {
-        $sort: {"uriMetadata.name": 1}
-      }];
+      var query = [
+        {
+          $match: {
+            $or: [
+              { "uriMetadata.collection.name": new RegExp(returnedName, "i") },
+              { "uriMetadata.collection.name": null },
+            ],
+            issuer: { $in: issuerArray },
+          },
+        },
+        {
+          $sort: { "uriMetadata.name": 1 },
+        },
+      ];
       const aggregate = collection
-        .aggregate(query,{collation: { locale: "en_US", numericOrdering: true }})
+        .aggregate(query, {
+          collation: { locale: "en_US", numericOrdering: true },
+        })
         .skip(NFTSPERPAGE * page)
         .limit(NFTSPERPAGE);
       return await aggregate.toArray();
@@ -455,17 +472,26 @@ var methods = {
       let collection = db.collection("Eligible-Listings");
       var returnedName = collectionName.replace(/_/g, " ");
       var issuerArray = issuer.split(",");
-      var query = [{
-        $match: { $or: [ {"uriMetadata.collection.name": new RegExp(returnedName, "i")}, {"uriMetadata.collection.name": null} ],
-        issuer: {$in: issuerArray}},
-      },
-      {
-        $sort: {"uriMetadata.name": 1}
-      }];
+      var query = [
+        {
+          $match: {
+            $or: [
+              { "uriMetadata.collection.name": new RegExp(returnedName, "i") },
+              { "uriMetadata.collection.name": null },
+            ],
+            issuer: { $in: issuerArray },
+          },
+        },
+        {
+          $sort: { "uriMetadata.name": 1 },
+        },
+      ];
       const aggregate = collection
-      .aggregate(query,{collation: { locale: "en_US", numericOrdering: true }})
-      .skip(NFTSPERPAGE * page)
-      .limit(NFTSPERPAGE);
+        .aggregate(query, {
+          collation: { locale: "en_US", numericOrdering: true },
+        })
+        .skip(NFTSPERPAGE * page)
+        .limit(NFTSPERPAGE);
       return await aggregate.toArray();
     } catch (err) {
       console.log("Database error" + err);
@@ -602,8 +628,11 @@ var methods = {
       let collection = db.collection("Eligible-Listings");
       var returnedName = collectionName.replace("_", " ");
       let query = {
-        $or: [ {"uriMetadata.collection.name": new RegExp(returnedName, "i")}, {"uriMetadata.collection.name": null} ],
-        issuer: {$in: issuer}
+        $or: [
+          { "uriMetadata.collection.name": new RegExp(returnedName, "i") },
+          { "uriMetadata.collection.name": null },
+        ],
+        issuer: { $in: issuer },
       };
       const result = await collection.count(query);
       return result;
@@ -621,8 +650,11 @@ var methods = {
       let collection = db.collection("Expired-Listings");
       var returnedName = collectionName.replace("_", " ");
       let query = {
-        $or: [ {"uriMetadata.collection.name": new RegExp(returnedName, "i")}, {"uriMetadata.collection.name": null} ],
-        issuer: {$in: issuer}
+        $or: [
+          { "uriMetadata.collection.name": new RegExp(returnedName, "i") },
+          { "uriMetadata.collection.name": null },
+        ],
+        issuer: { $in: issuer },
       };
       const result = await collection.count(query);
       return result;
@@ -798,7 +830,13 @@ var methods = {
       await client.close();
     }
   },
-  addNftToQueried: async function (NFTokenID, wallet, permanent, issuer, sessionWallet) {
+  addNftToQueried: async function (
+    NFTokenID,
+    wallet,
+    permanent,
+    issuer,
+    sessionWallet
+  ) {
     var checker = false;
     const client = await getClient();
     var payholder = sessionWallet;
@@ -836,14 +874,14 @@ var methods = {
     var payholder = wallet;
     if (!client) return;
     try {
-        var bulkArray = [];
-        for (a in nftArray) {
+      var bulkArray = [];
+      for (a in nftArray) {
         var data = {
           updateOne: {
-            "filter": {
-              NFTokenID: nftArray[a].NFTokenID
+            filter: {
+              NFTokenID: nftArray[a].NFTokenID,
             },
-            "update": {
+            update: {
               $setOnInsert: {
                 NFTokenID: nftArray[a].NFTokenID,
                 knownHolder: wallet,
@@ -851,22 +889,22 @@ var methods = {
                 issuer: nftArray[a].Issuer,
                 duration: {
                   permanent: permanent,
-                  paidHolder: payholder
+                  paidHolder: payholder,
                 },
-              }
+              },
             },
-            "upsert": true
-          }
-        }
-        bulkArray.push(data)
+            upsert: true,
+          },
+        };
+        bulkArray.push(data);
       }
 
       const db = client.db("NFTokens");
 
       let collection = db.collection("Queued-Listings");
 
-      let res = await collection.bulkWrite(bulkArray, {ordered: false});
-      return 'success';
+      let res = await collection.bulkWrite(bulkArray, { ordered: false });
+      return "success";
     } catch (err) {
       console.log("Database error: " + err);
     } finally {
@@ -933,8 +971,11 @@ var methods = {
         "sellOffers.0.xrpValue": {
           $gt: 0,
         },
-        $or: [ {"uriMetadata.collection.name": new RegExp(returnedName, "i")}, {"uriMetadata.collection.name": null} ],
-        issuer: {$in: issuer}
+        $or: [
+          { "uriMetadata.collection.name": new RegExp(returnedName, "i") },
+          { "uriMetadata.collection.name": null },
+        ],
+        issuer: { $in: issuer },
       };
       let query02 = {
         projection: {
@@ -955,28 +996,30 @@ var methods = {
       await client.close();
     }
   },
-  getRandomCollectionImages: async function (
-    collectionName,
-    issuer
-  ) {
+  getRandomCollectionImages: async function (collectionName, issuer) {
     const client = await getClient();
     if (!client) return;
     try {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
-      var returnedName = collectionName.replace(/_/g, ' ')
+      var returnedName = collectionName.replace(/_/g, " ");
       var query = [
         {
-          $match: {issuer: {$in: issuer}}            
+          $match: { issuer: { $in: issuer } },
         },
         {
-          $match: { $or: [ {"uriMetadata.collection.name": new RegExp(returnedName, 'i')}, {"uriMetadata.collection.name": null} ]  },
+          $match: {
+            $or: [
+              { "uriMetadata.collection.name": new RegExp(returnedName, "i") },
+              { "uriMetadata.collection.name": null },
+            ],
+          },
         },
-        { $sample: {size: 3}},
-        { $project: { "pinkynail": 1 }},
-        { $unset: "_id" }
-    ]
-      const aggregate = await (collection.aggregate(query)).toArray();
+        { $sample: { size: 3 } },
+        { $project: { pinkynail: 1 } },
+        { $unset: "_id" },
+      ];
+      const aggregate = await collection.aggregate(query).toArray();
       return aggregate;
     } catch (err) {
       console.log("Database error" + err);
@@ -988,86 +1031,90 @@ var methods = {
     var client = await getClient();
     if (!client) return;
     try {
-      const db = client.db('NFTokens');
-      let collection = db.collection('Eligible-Listings')
+      const db = client.db("NFTokens");
+      let collection = db.collection("Eligible-Listings");
 
-      var searchOptions = await collection.aggregate(
-        [
-            {
-                $match: {
-                    "verified.status": true
-                    }
+      var searchOptions = await collection
+        .aggregate([
+          {
+            $match: {
+              "verified.status": true,
             },
-            {
+          },
+          {
             $group: {
-                _id: "$verified.projectName",
-                familyFilters: {
-                    $addToSet: "$uriMetadata.collection.family"
-                },
-                issuers: {
-                    $addToSet: "$issuer"
-                },
-                nameFilters: {
-                    $addToSet: "$uriMetadata.collection.name"
-                }
-            }
-        }]
-    ).toArray()
+              _id: "$verified.projectName",
+              familyFilters: {
+                $addToSet: "$uriMetadata.collection.family",
+              },
+              issuers: {
+                $addToSet: "$issuer",
+              },
+              nameFilters: {
+                $addToSet: "$uriMetadata.collection.name",
+              },
+            },
+          },
+        ])
+        .toArray();
 
-        return searchOptions;
+      return searchOptions;
     } catch (error) {
-        console.log(error)
-        return null
+      console.log(error);
+      return null;
     } finally {
-        await client.close()
+      await client.close();
     }
   },
   listingStats: async function () {
     var client = await getClient();
     if (!client) return;
     try {
-      const db = client.db('NFTokens');
-      let collection = db.collection('Eligible-Listings');
+      const db = client.db("NFTokens");
+      let collection = db.collection("Eligible-Listings");
 
-      var output = await collection.aggregate([{
-          $group: {
+      var output = await collection
+        .aggregate([
+          {
+            $group: {
               _id: {},
               listed: {
-                  $sum: 1
+                $sum: 1,
               },
-              issuers: { $addToSet: "$issuer"},
-              holders: { $addToSet: "$currentOwner"},
+              issuers: { $addToSet: "$issuer" },
+              holders: { $addToSet: "$currentOwner" },
               listings: {
-                  $addToSet: {
-                      $cond: {
-                          if: { $gt: [ "$listingDate", Date.now() - 86400000] },
-                          then: "$listingDate",
-                          else: null
-                      }
-                  }
-              }
-          }
-      },
-      {
-          $project: {
+                $addToSet: {
+                  $cond: {
+                    if: { $gt: ["$listingDate", Date.now() - 86400000] },
+                    then: "$listingDate",
+                    else: null,
+                  },
+                },
+              },
+            },
+          },
+          {
+            $project: {
               listed: 1,
               uniqueIssuers: { $size: "$issuers" },
               uniqueHolders: { $size: "$holders" },
-              listings24hrs: { $size: "$listings" }
-          }   
-      },
-      {
-          $unset: ["_id"]
-      }
-    ]).toArray()
+              listings24hrs: { $size: "$listings" },
+            },
+          },
+          {
+            $unset: ["_id"],
+          },
+        ])
+        .toArray();
 
-    return output[0]
-  } catch (error) {
-      console.log(error)
-      return null
-  } finally {
-      await client.close()
-  }
+      return output[0];
+    } catch (error) {
+      console.log(error);
+      return null;
+    } finally {
+      await client.close();
+    }
   },
   verified: async function (wallet) {
     var client = await getClient();
@@ -1076,15 +1123,15 @@ var methods = {
       const db = client.db("Additional-Traits");
       let collection = db.collection("Verified-Issuers");
       let query = {
-        issuingAccounts: wallet
-      }
-      const aggregate = await (collection.find(query).limit(1)).toArray();
-      const res = aggregate.length>0;
+        issuingAccounts: wallet,
+      };
+      const aggregate = await collection.find(query).limit(1).toArray();
+      const res = aggregate.length > 0;
       return res;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     } finally {
-        await client.close()
+      await client.close();
     }
   },
   connectToMongo: async function () {
