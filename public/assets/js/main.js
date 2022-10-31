@@ -805,22 +805,24 @@ function xummSignin() {
     url: "/sign-in-payload",
     data: { return_url: window.location.href },
     success: function (result) {
-      $('#qrModal').modal('toggle');
-      $('#qrCodeImage').attr('src', result.refs.qr_png)
-      $('#xummLink').attr('href', result.next.always)
+      $("#qrModal").modal("toggle");
+      $("#qrCodeImage").attr("src", result.refs.qr_png);
+      $("#xummLink").attr("href", result.next.always);
 
       $.ajax({
         type: "POST",
         url: "/sign-in-subscription",
         data: result,
         success: function (resulty) {
-          $('#qrModal').modal('toggle');
-          $('#rbt-site-header').html('<a href="/logout" id="logout" class="btn btn-primary-alta btn-small">Log out</a>');
+          $("#qrModal").modal("toggle");
+          $("#rbt-site-header").html(
+            '<a href="/logout" id="logout" class="btn btn-primary-alta btn-small">Log out</a>'
+          );
           window.location.href = "/profile";
         },
         error: function (resulty) {
           console.warn("Sign in expired, failed or was cancelled.");
-          $('#qrModal').modal('toggle');
+          $("#qrModal").modal("toggle");
         },
       });
     },
@@ -839,21 +841,21 @@ function setBuyOfferBid(NFToken) {
       flags: 0,
     },
     success: function (result) {
-      $('#placebidModal').modal('toggle')
-      $('#qrModal').modal('toggle');
-      $('#qrCodeImage').attr('src', result.refs.qr_png)
-      $('#xummLink').attr('href', result.next.always);
+      $("#placebidModal").modal("toggle");
+      $("#qrModal").modal("toggle");
+      $("#qrCodeImage").attr("src", result.refs.qr_png);
+      $("#xummLink").attr("href", result.next.always);
       $.ajax({
         type: "POST",
         url: "/XUMM-sign-subscription",
         data: result,
         success: function (resulty) {
-          console.log(resulty)
-          $('#qrModal').modal('toggle');
+          console.log(resulty);
+          $("#qrModal").modal("toggle");
         },
         error: function (resulty) {
           console.warn("Sign in expired, failed or was cancelled.");
-          $('#qrModal').modal('toggle');
+          $("#qrModal").modal("toggle");
         },
       });
     },
@@ -864,11 +866,11 @@ function setSellOfferBid(NFToken) {
   const destination = document.getElementById("destination").value;
   const expiry = document.getElementById("expiry-time").value;
   if (expiry != 0) {
-    var expiryEpoch = ((new Date(expiry).getTime()) / 1000) - 946684800;
+    var expiryEpoch = new Date(expiry).getTime() / 1000 - 946684800;
   } else {
-    var expiryEpoch = 0
+    var expiryEpoch = 0;
   }
-  console.log(expiryEpoch)
+  console.log(expiryEpoch);
   $.ajax({
     type: "POST",
     url: "/nftoken-create-offer",
@@ -961,20 +963,20 @@ function getRedeem(redeemElement, loadingElement, ipAddress) {
       url: "/redeem-nft-payload",
       data: { return_url: window.location.href, ipAddress: ipAddress },
       success: function (result) {
-        var information = JSON.stringify(result)
+        window.location.href = result[0].next.always;
+        var information = JSON.stringify(result);
         $.ajax({
           type: "POST",
           url: "/redeem-nft-subscription",
           data: {
-            payload: information
-          }
-        })
-        window.location.href = result[0].next.always;
-
+            payload: information,
+          },
+        });
       },
       error: function (result) {
-        customAlert.alert(result)
-      }
+        customAlert.alert(result.responseText);
+        setTimeout(location.reload(), 1000);
+      },
     });
   }
 }
@@ -1145,48 +1147,64 @@ function getCurrencyBalance() {
 }
 //collection form submit button disabler
 $(function () {
-  $('#subCollection').attr('disabled', true);
-  $('#collectionForm').change(function () {
-      if ($('#name').val() != '' && $('#brand').val() != '' && $('#url').val() != '' && $('#issuer').val() != '') {
-          $('#subCollection').attr('disabled', false);
-      } else {
-          $('#subCollection').attr('disabled', true);
-      }
+  $("#subCollection").attr("disabled", true);
+  $("#collectionForm").change(function () {
+    if (
+      $("#name").val() != "" &&
+      $("#brand").val() != "" &&
+      $("#url").val() != "" &&
+      $("#issuer").val() != ""
+    ) {
+      $("#subCollection").attr("disabled", false);
+    } else {
+      $("#subCollection").attr("disabled", true);
+    }
   });
 });
 //Mint Form button Disabler
 $(function () {
-  $('#startMint').attr('onclick', 'allFields()');
-  $('#mintForm-01').change(function () {
-    if ($('#name').val() != '' && $('#description').val() != '' && $('#collection-family') != '' && $('#collection-name') != '' && $('#createinputfile').val() != '') {
-      $('#startMint').attr('onclick', 'submitMintingInformation()');
+  $("#startMint").attr("onclick", "allFields()");
+  $("#mintForm-01").change(function () {
+    if (
+      $("#name").val() != "" &&
+      $("#description").val() != "" &&
+      $("#collection-family") != "" &&
+      $("#collection-name") != "" &&
+      $("#createinputfile").val() != ""
+    ) {
+      $("#startMint").attr("onclick", "submitMintingInformation()");
     } else {
-      $('#startMint').attr('onclick', 'allFields()');
+      $("#startMint").attr("onclick", "allFields()");
     }
-  })
-})
+  });
+});
 //Complete all fileds alert
-function allFields () {
-  alert('Please Complete Required Fields')
+function allFields() {
+  alert("Please Complete Required Fields");
 }
 function populateListNft(data) {
-  $('#tokenID').val(data.NFTokenID);
-  $('#issuer').val(data.issuer);
-  $('#taxon').val(data.taxon);
-  $('#assetName').text(data.name)
-  $('#currentHolder').val(data.currentHolder); 
-  $('#link').attr('href', `https://bithomp.com/explorer/${data.NFTokenID}`)
-  var imageExt = new Set(['jpg', 'jpeg', 'png', 'gif']); var vidExt = new Set(['mp4', 'mov', 'avi', 'webm', 'mpg', 'wmv']);
-   if (imageExt.has(data.image.substring(data.image.lastIndexOf('.') + 1))) {
-      $('#listImage').html(`<img src="${data.image} " alt="Nft_Profile" draggable="false" loading="lazy">`);
-   } else if (vidExt.has(data.image.substring(data.image.lastIndexOf('.') + 1))) {
-      $('#listImage').html(`<video controls>
+  $("#tokenID").val(data.NFTokenID);
+  $("#issuer").val(data.issuer);
+  $("#taxon").val(data.taxon);
+  $("#assetName").text(data.name);
+  $("#currentHolder").val(data.currentHolder);
+  $("#link").attr("href", `https://bithomp.com/explorer/${data.NFTokenID}`);
+  var imageExt = new Set(["jpg", "jpeg", "png", "gif"]);
+  var vidExt = new Set(["mp4", "mov", "avi", "webm", "mpg", "wmv"]);
+  if (imageExt.has(data.image.substring(data.image.lastIndexOf(".") + 1))) {
+    $("#listImage").html(
+      `<img src="${data.image} " alt="Nft_Profile" draggable="false" loading="lazy">`
+    );
+  } else if (
+    vidExt.has(data.image.substring(data.image.lastIndexOf(".") + 1))
+  ) {
+    $("#listImage").html(`<video controls>
         <source src="${data.image}" type="video/mp4">
         <source src="${data.image}" type="video/webm">
         <source src="${data.image}" type="video/ogg">
       </video>`);
-   } else {
-      $('#listImage').html(`<image src="${data.image}">`);
-  };
-  $('#exampleModalCenter').modal('toggle');
+  } else {
+    $("#listImage").html(`<image src="${data.image}">`);
+  }
+  $("#exampleModalCenter").modal("toggle");
 }
