@@ -59,7 +59,7 @@
               <select name="redeem-menu" id="redeem-menu" onchange="setLoaderBalance();(getCurrencyBalance(this.value))">
                 <option value=false selected disabled>Select Project</option>
                 <%tokens.forEach(function(res){%>
-                <%if (res.hidden == false) {%>
+                <%if (res.launch >= Date.now()) {%>
                   <option value='{"ip":"<%=res.ip%>","issuer": "<%=res.issuer%>", "hex": "<%=res.hex%>", "token": "<%=res.token%>"} '><%=res.token%></option>
                 <%}%>
                 <%});%>

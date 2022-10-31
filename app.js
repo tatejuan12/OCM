@@ -523,10 +523,10 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
     res.render("views/no-product");
   }
 });
-server.get("/mint", speedLimiter, (req, res) => {
-  defaultLocals(req, res);
-  res.render("views/mint");
-});
+// server.get("/mint", speedLimiter, (req, res) => {
+//   defaultLocals(req, res);
+//   res.render("views/mint");
+// });
 server.get("/search", speedLimiter, async (req, res) => {
   defaultLocals(req, res);
   const searchResults = await mongoClient.query.getSearchResultsJSON(
