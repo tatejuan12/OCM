@@ -1685,29 +1685,7 @@ var xrpls = {
   },
   getAllAccountNFTs: async function (address) {
     try {
-      //define
-      var client = new xrpl.Client("wss://xls20-sandbox.rippletest.net:51233");
-
-      //console.log("Connecting to XRPL")
-      //Try Connect to XRPL
-      var count = 0;
-      while (count < 6) {
-        if (count >= 3) {
-          var client = new xrpl.Client(
-            "wss://xls20-sandbox.rippletest.net:51233"
-          );
-        }
-
-        try {
-          await client.connect();
-          //console.log(`\tConnected`)
-          break;
-        } catch (err) {
-          //console.log(`                    Failed ${count}`)
-          count += 1;
-        }
-      }
-
+      const client = await getXrplClient();
       //try 5 times to get an array of all account NFTs
       var count = 0;
       while (count < 5) {
@@ -1819,14 +1797,14 @@ async function getXrplClientMain() {
 }
 async function getXrplClient() {
   //define
-  var client = new xrpl.Client("wss://xls20-sandbox.rippletest.net:51233");
+  var client = new xrpl.Client("wss://xrplcluster.com/");
 
   //console.log("Connecting to XRPL")
   //Try Connect to XRPL
   var count = 0;
   while (count < 6) {
     if (count >= 3) {
-      var client = new xrpl.Client("wss://xls20-sandbox.rippletest.net:51233");
+      var client = new xrpl.Client("wss://s2.ripple.com/");
     }
 
     try {
