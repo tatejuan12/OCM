@@ -56,7 +56,7 @@ server.set("view engine", "ejs"); // Setting rendering agent to ejs
 server.use(helmet({ contentSecurityPolicy: false }));
 server.set("views", path.join(__dirname, "/public")); // Makes views for rendering the public dir
 server.use(express.static(__dirname + "/public", { dotfiles: "allow" })); // Essential so JS and CSS is acccessible by requests
-server.use(logger({ path: __dirname + "/logs/logs.log" })); // Logs data, every connection will log browser info and request url
+//server.use(logger({ path: __dirname + "/logs/logs.log" })); // Logs data, every connection will log browser info and request url
 server.use(
   session({
     secret: "some secret",
@@ -668,13 +668,14 @@ server.post("/XUMM-sign-subscription", speedLimiter, async (req, res) => {
   const result = await xumm.subscriptions.watchSubscripion(req, res);
 });
 server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
+  const payload = await xumm.payloads.redeemNftPayload(
+    req.session.wallet,
+    req.useragent.isMobile,
+    req.body.return_url,
+    req.body.ipAddress
+  );
   try {
-    const payload = await xumm.payloads.redeemNftPayload(
-      req.session.wallet,
-      req.useragent.isMobile,
-      req.body.return_url,
-      req.body.ipAddress
-    );
+    if (payload instanceof Error) throw payload;
     if (payload != undefined) {
       console.log('payload returned')
       res.status(200).send(payload);
