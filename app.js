@@ -438,6 +438,7 @@ server.get("/minting-help", speedLimiter, (req, res) => {
 server.get("/redeem", speedLimiter, async (req, res) => {
   if (req.session.login) {
     defaultLocals(req, res);
+    const dateNow = Date.now();
     const getAssets = await mongoClient.query.redeemAssets();
     const ocwBalance = await xumm.xrpl.getOcwBalance(
       req.session.wallet,
@@ -448,11 +449,13 @@ server.get("/redeem", speedLimiter, async (req, res) => {
           ocwBalance: ocwBalance[0],
           obtainableNfts: ocwBalance[1],
           tokens: getAssets,
+          currTime: dateNow
         })
       : res.render("views/redeem", {
           ocwBalance: 0,
           obtainableNfts: 0,
           tokens: getAssets,
+          currTime: dateNow
         });
   } else res.status(401).redirect("/");
 });
