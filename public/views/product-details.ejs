@@ -298,11 +298,12 @@
                   <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
                     <h6>Purchase History</h6>
                     <div class="nft-sale-history-section">
+                      <%const formatter = Intl.NumberFormat('en', {notation:'compact'});%>
                       <% nft.sellHistory.forEach(function(res){%>
                       <div class="nft-sale-history-wrap">
                         <div class="nft-sale-history-content">
-                          <h5><%=res.price + " " + res.token%></h5>
-                          <p style="margin-top: -5px;"><%=res.xrpValue%> XRP</p>
+                          <h5><%=formatter.format(res.price) + " " + res.token%></h5>
+                          <p style="margin-top: -5px;"><%=formatter.format(res.xrpValue)%> XRP</p>
                           <span><%=res.account ? res.account : "couldn't find an account"%></span>
                         </div>
                         <div class="nft-sale-history-content">
@@ -415,9 +416,6 @@
         }}
       })
       currNft = '<%=nft.tokenID%>';
-      $(function () {
-        $('#sell-offer-container').tooltip()
-      })
     </script>
 
 </body>

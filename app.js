@@ -90,6 +90,7 @@ const authorizedIps = [];
 const authorizedAccounts = [
   "rsDKpLW4qeWpgB3g1CsVFbSPSf44CTFxF8",
   "rHoFRf8NXrDC1VBWw3CL5Z4oQAm1mL5H2h",
+  "rGNw4iFGRNyRnyMmWVw1jjGbk91jgL33DR"
 ];
 //! ---------------------Custom middleware--------------------------------//
 server.use((req, res, next) => {
@@ -435,28 +436,28 @@ server.get("/minting-help", speedLimiter, (req, res) => {
   defaultLocals(req, res);
   res.render("views/minting-help");
 });
-server.get("/redeem", speedLimiter, async (req, res) => {
-  if (req.session.login) {
-    defaultLocals(req, res);
-    const dateNow = Date.now();
-    const getAssets = await mongoClient.query.redeemAssets();
-    const ocwBalance = await xumm.xrpl.getOcwBalance(
-      req.session.wallet,
-      req.useragent.isMobile
-    );
-    ocwBalance
-      ? res.render("views/redeem", {
-          ocwBalance: ocwBalance[0],
-          obtainableNfts: ocwBalance[1],
-          tokens: getAssets,
-          currTime: dateNow
-        })
-      : res.render("views/redeem", {
-          ocwBalance: 0,
-          obtainableNfts: 0,
-          tokens: getAssets,
-          currTime: dateNow
-        });
+server.get("/redeem", speedLimiter,async (req, res) => {
+  defaultLocals(req,res);
+    if (req.session.login) {
+      const dateNow = Date.now();
+      const getAssets = await mongoClient.query.redeemAssets();
+      const ocwBalance = await xumm.xrpl.getOcwBalance(
+        req.session.wallet,
+        req.useragent.isMobile
+      );
+      ocwBalance
+        ? res.render("views/redeem", {
+            ocwBalance: ocwBalance[0],
+            obtainableNfts: ocwBalance[1],
+            tokens: getAssets,
+            currTime: dateNow
+          })
+        : res.render("views/redeem", {
+            ocwBalance: 0,
+            obtainableNfts: 0,
+            tokens: getAssets,
+            currTime: dateNow
+          });  
   } else res.status(401).redirect("/");
 });
 server.get("/edit-profile", speedLimiter, async (req, res) => {

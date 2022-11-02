@@ -966,7 +966,7 @@ function getRedeem(redeemElement, loadingElement, ipAddress) {
       type: "POST",
       url: "/redeem-nft-payload",
       data: { return_url: window.location.href, ipAddress: ipAddress },
-      success: function (result) {
+      success: function (result) {   
         window.location.href = result[0].next.always;
         var information = JSON.stringify(result);
         $.ajax({
@@ -982,8 +982,6 @@ function getRedeem(redeemElement, loadingElement, ipAddress) {
         setTimeout(location.reload(), 1000);
       },
     });
-    $(redeemElement).removeClass('loading');
-    $(redeemElement).prop('disabled', false);
   }
 }
 function buyOrderClicked(redeemElement, loadingElement) {
