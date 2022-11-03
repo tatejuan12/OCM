@@ -84,7 +84,7 @@
                   <div class="rn-pd-thumbnail">
                     <%var imageExt = new Set(['image/jpg', 'image/jpeg', 'image/png', 'image/gif']); var vidExt = new Set(['video/mp4', 'video/mov', 'video/avi', 'video/webm', 'video/mpg', 'video/wmv']);%>
                     <% if (imageExt.has(nft.fileType)) { %>
-                      <img src="<%=nft.httpsImage%> " alt="Nft_Profile">
+                      <img src="<%=nft.httpsImage%> " alt="Nft_Profile" loading="lazy">
                     <!-- JPG/JPEG/PNG/GIF -->
                     <% } else if (vidExt.has(nft.fileType)) { %>
                       <video controls autoplay loop>
@@ -93,7 +93,7 @@
                         <source src="<%=nft.httpsImage%>" type="video/ogg">
                       </video>
                     <% } else {%>
-                      <img src="<%=nft.httpsImage%>" alt="NFT image">
+                      <img src="<%=nft.httpsImage%>" alt="NFT image" loading="lazy">
                     <%};%>
                   </div>
                 </div>

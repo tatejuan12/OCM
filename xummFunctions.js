@@ -664,119 +664,130 @@ var xrpls = {
       await client.disconnect();
     }
   },
-  getNftImage: async function (nftURI, retryCount = 0) {
+  getNftImage: async function(nftURI, retryCount = 0) {
     var json = {};
+  
+    var httpsIPFSGateway = "https://cloudflare-ipfs.com/ipfs/"
+  
     async function httpAPI(url, retryCount = 0) {
-      return new Promise((resolve, reject) => {
-        https.get(url, (res) => {
-          let body = "";
-          res.on("data", (d) => {
-            body += d;
-          });
-          res.on("end", () => {
-            if (res.statusCode == 200) {
-              try {
-                json = JSON.parse(body);
-                // console.log(body);
-              } catch (error) {
-                resolve(body);
-              }
-              resolve(json);
-            } else {
-              reject(new Error("Could not contact server to get NFT info"));
-            }
-          });
+        return new Promise((resolve, reject) => {
+            https.get(url, (res) => {
+                let body = "";
+                res.on("data", (d) => {
+                    body += d;
+                });
+                res.on("end", () => {
+                    if (res.statusCode == 200) {
+                        try {
+                            json = JSON.parse(body);
+                            // console.log(body);
+                        } catch (error) {
+                            resolve(body);
+                        }
+                        resolve(json);
+                    } else {
+                        reject(new Error("Could not contact server to get NFT info"));
+                    }
+                });
+            });
         });
-      });
     }
-    try {
-      var nftURI = xrpl.convertHexToString(nftURI);
-
-      if (nftURI.startsWith("ipfs://")) {
-        var httpURI = nftURI.replace(
-          "ipfs://",
-          "https://cloudflare-ipfs.com/ipfs/"
-          //"https://ipfs.onchainwhales.net/ipfs/"
-        );
-      } else {
-        var httpURI = nftURI;
-      }
-
-      //get metadata
-      try {
-        var uriMetadata = await httpAPI(httpURI);
-      } catch (error) {
-        var data = {
-          name: "Un-named NFT",
-          description: "",
-          image: "assets/images/icons/link-error.png",
-          edition: 0,
-          date: 0,
-          external_url: "",
-          attributes: [],
-          http_image: "assets/images/icons/link-error.png",
-          http_uri: "assets/images/icons/link-error.png",
-        };
-        return data;
-      }
-
-      //find image
-      if (uriMetadata.constructor != Object) {
-        var data = {
-          name: "Un-named NFT",
-          description: "",
-          image: httpURI,
-          edition: 0,
-          date: 0,
-          external_url: "",
-          attributes: [],
-          http_image: httpURI,
-          http_uri: httpURI,
-        };
-        return data;
-      } else {
-        if ("image" in uriMetadata) {
-          var imagePointer = uriMetadata.image;
-
-          if (imagePointer.startsWith("ipfs://")) {
-            var httpImage = imagePointer.replace(
-              "ipfs://",
-              "https://cloudflare-ipfs.com/ipfs/"
-            );
-          } else {
-            var httpImage = imagePointer;
-          }
-        } else if ("video" in uriMetadata) {
-          var imagePointer = uriMetadata.video;
-
-          if (imagePointer.startsWith("ipfs://")) {
-            var httpImage = imagePointer.replace(
-              "ipfs://",
-              "https://cloudflare-ipfs.com/ipfs/"
-            );
-          } else {
-            var httpImage = imagePointer;
-          }
+  
+    function resolveIPFS(ipfsLink, gateway) {
+  
+        if (ipfsLink.startsWith("ipfs://ipfs/")) {
+            var httpsURI = ipfsLink.replace("ipfs://ipfs/", gateway)
+        } else if (ipfsLink.startsWith("ipfs://")) {
+            var httpsURI = ipfsLink.replace("ipfs://", gateway)
+        } else if (ipfsLink.startsWith("http")) {
+            var httpsURI = ipfsLink
         } else {
-          var httpImage = "assets/images/icons/link-error.png";
+            var httpsURI = `${gateway}${ipfsLink}`
         }
-      }
-      json["http_image"] = httpImage;
-      json["http_uri"] = httpURI;
-      return json;
+        return httpsURI
+    }
+  
+    try {
+        var nftURI = xrpl.convertHexToString(nftURI);
+  
+        var httpURI = resolveIPFS(nftURI, httpsIPFSGateway)
+  
+        //get metadata
+        var count = 0
+        while (count < 3) {
+            try {
+                var uriMetadata = await httpAPI(httpURI);
+                break
+            } catch (error) {
+                count++
+            }
+        }
+  
+        if (count >= 3) {
+            var data = {
+                name: "Un-named NFT",
+                description: "",
+                image: "assets/images/icons/link-error.png",
+                edition: 0,
+                date: 0,
+                external_url: "",
+                attributes: [],
+                http_image: "assets/images/icons/link-error.png",
+                http_uri: "assets/images/icons/link-error.png",
+            };
+            return data;
+        }
+  
+  
+        //find image
+        if (uriMetadata.constructor != Object) {
+            var data = {
+                name: "Un-named NFT",
+                description: "",
+                image: httpURI,
+                edition: 0,
+                date: 0,
+                external_url: "",
+                attributes: [],
+                http_image: httpURI,
+                http_uri: httpURI,
+            };
+            return data;
+        } else {
+            if ("image" in uriMetadata) {
+                uriMetadata.image = uriMetadata.image
+            } else if ("animation" in uriMetadata) {
+                uriMetadata.image = uriMetadata.animation
+            } else if ("video" in uriMetadata) {
+                uriMetadata.image = uriMetadata.video
+            } else if ("image_url" in uriMetadata) {
+                uriMetadata.image = uriMetadata["image_url"]
+            } else if ("animation_url" in uriMetadata) {
+                uriMetadata.image = uriMetadata["animation_url"]
+            } else if ("video_url" in uriMetadata) {
+                uriMetadata.image = uriMetadata["video_url"]
+            } else {
+              uriMetadata.image = "https://onchainmarketplace.net/assets/images/icons/link-error.png"; //THIS NEEDS TO BE HTTPS
+            }
+            var httpImage = resolveIPFS(uriMetadata.image, httpsIPFSGateway)
+        }
+  
+        json["http_image"] = httpImage;
+        json["http_uri"] = httpURI;
+        return json;
     } catch (error) {
-      var data = {
-        name: "Un-named NFT",
-        description: "",
-        image: "assets/images/icons/link-error.png",
-        edition: 0,
-        date: 0,
-        external_url: "",
-        attributes: [],
-        http_image: "assets/images/icons/link-error.png",
-        http_uri: "assets/images/icons/link-error.png",
-      };
-      return data;
+        var data = {
+            name: "Un-named NFT",
+            description: "",
+            image: "assets/images/icons/link-error.png",
+            edition: 0,
+            date: 0,
+            external_url: "",
+            attributes: [],
+            http_image: "assets/images/icons/link-error.png",
+            http_uri: "assets/images/icons/link-error.png",
+        };
+        return data;
     }
   },
   getnftOffers: async function (tokenId) {

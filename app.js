@@ -1132,11 +1132,8 @@ server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
           unlistedNftsToReturn[i].issuer = unlistedNfts[i].Issuer;
           unlistedNftsToReturn[i].currentHolder = wallet;
           unlistedNftsToReturn[i].NFTokenID = unlistedNfts[i].NFTokenID;
-          unlistedNftsToReturn[i].fileType = unlistedNftsToReturn[
-            i
-          ].http_image.substring(
-            unlistedNftsToReturn[i].http_image.lastIndexOf(".") + 1
-          );
+          unlistedNftsToReturn[i].fileType = unlistedNftsToReturn[i].http_image
+          .substring(unlistedNftsToReturn[i].http_image.lastIndexOf(".") + 1);
         } else {
           unlistedNftsToReturn[i] = {
             name: "Broken NFT",
