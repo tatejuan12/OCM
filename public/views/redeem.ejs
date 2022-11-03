@@ -60,7 +60,7 @@
                 <option value=false selected disabled>Select Project</option>
                 <%tokens.forEach(function(res){%>
                   <%if (res.launch <= currTime && res.hidden == false) {%>
-                    <option value='{"ip":"<%=res.ip%>","issuer": "<%=res.issuer%>", "hex": "<%=res.hex%>", "token": "<%=res.token%>"} '><%=res.token%></option>
+                    <option value='{"token": "<%=res.token%>"} '><%=res.token%></option>
                   <%}%>
                 <%});%>
               </select>

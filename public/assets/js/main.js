@@ -954,8 +954,8 @@ function NFTokenCancelOffer(index) {
   });
 }
 var redeeming = false;
-function getRedeem(redeemElement, loadingElement, ipAddress) {
-  if (ipAddress == 'false') {
+function getRedeem(redeemElement, loadingElement, token) {
+  if (token == 'false') {
     alert('please select an option')
     return;
   }
@@ -963,12 +963,12 @@ function getRedeem(redeemElement, loadingElement, ipAddress) {
     redeeming = true;
     $(redeemElement).addClass('loading');
     $(redeemElement).prop('disabled', true);
-    ipAddress = JSON.parse(ipAddress).ip;
-    if (ipAddress) {
+    token = JSON.parse(token).token;
+    if (token) {
       $.ajax({
         type: "POST",
         url: "/redeem-nft-payload",
-        data: { return_url: window.location.href, ipAddress: ipAddress },
+        data: { return_url: window.location.href, token: token },
         success: function (result) {   
           window.location.href = result[0].next.always;
           var information = JSON.stringify(result);

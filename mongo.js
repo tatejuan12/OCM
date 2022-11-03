@@ -1187,14 +1187,14 @@ var methods = {
       await client.close()
     }
   },
-  findRedemptionAccountByIP: async function (ipAddress) {
+  findRedemptionAccountByToken: async function (token) {
     const client = await getClient();
     if (!client) return;
     try{
       const db = client.db('Redeem')
       let collection = db.collection('Assets')
       query = {
-        ip: ipAddress
+        token: token
       }
       let res = await collection.find(query).toArray()
       return res;

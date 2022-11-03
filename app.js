@@ -688,8 +688,9 @@ server.post("/XUMM-sign-subscription", speedLimiter, async (req, res) => {
   const result = await xumm.subscriptions.watchSubscripion(req, res);
 });
 server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
-  const apiInfo = await mongoClient.query.findRedemptionAccountByIP(req.body.ipAddress);
+  const apiInfo = await mongoClient.query.findRedemptionAccountByToken(req.body.token);
   const clientAddy = apiInfo[0].account;
+  const ipAddress = apiInfo[0].ip
   issuer = 'XRP'
   tokenHex= 'XRP'
   const balance = await xumm.xrpl.getTokenBalance(clientAddy, issuer, tokenHex)
@@ -698,7 +699,7 @@ server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
       req.session.wallet,
       req.useragent.isMobile,
       req.body.return_url,
-      req.body.ipAddress
+      ipAddress
     );
     try {
       if (payload instanceof Error) throw payload;
