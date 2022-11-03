@@ -1170,6 +1170,23 @@ var methods = {
         await client.close()
     }
   },
+  queuedItemsCount: async function (address) {
+    const client = await getClient()
+    if (!client) return;
+    try {
+      const db = client.db('NFTokens');
+      let collection = db.collection('Queued-Listings');
+      let query = {
+        knownHolder: address,
+      };
+      let res = await collection.count(query);
+      return res;
+    } catch (err) {
+
+    } finally {
+      client.close()
+    }
+  },
 };
 
 async function alreadyLiked(collection, id, wallet) {

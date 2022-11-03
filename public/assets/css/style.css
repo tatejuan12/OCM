@@ -60,7 +60,7 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
 :root {
   /*00a3ff primary OCM color*/
-  --color-primary: #FF7518;
+  --color-primary: #00a3ff;
   --color-primary-alta: #212e48;
   --color-gray: #f6f6f6;
   --color-gray-2: #f5f8fa;
@@ -25199,4 +25199,19 @@ Collection nav
 }
 .modal-footer .xrp-calculator label:nth-child(2){
   font-weight: bold;
+}
+.active-light-mode .small-hover-tab-modal {
+  background-color: var(--color-primary);
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+.small-hover-tab-modal {
+  z-index: 100;
+  position: fixed;
+  top: 10%;
+  right: 1%;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  padding: 2px 8px;
+  border-radius: 8px;
 }

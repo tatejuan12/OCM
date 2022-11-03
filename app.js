@@ -165,12 +165,17 @@ server.get("/profile", speedLimiter, async (req, res) => {
       const nfts = mongoClient.query.getAccountLikedNfts(wallet);
       resolve(nfts);
     });
+    queueCountPromise = new Promise(function (resolve,reject) {
+      const queueCount = mongoClient.query.queuedItemsCount(wallet);
+      resolve(queueCount);
+    })
     const promises = await Promise.all([
       nftsPromise,
       userPromise,
       offersPromise,
       likedNftsPromise,
       verificationPromise,
+      queueCountPromise
     ]);
 
     const isOwner = promises[1].wallet == req.session.wallet ? true : false;
@@ -198,6 +203,7 @@ server.get("/profile", speedLimiter, async (req, res) => {
       page: page,
       queries: req.query,
       isMarker: isMarker,
+      queueCount: promises[5]
     });
   } else {
     parametersToSet.push({ key: "page", value: 0 });

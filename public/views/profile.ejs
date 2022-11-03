@@ -138,6 +138,16 @@
           <%}%>
     </div>
   </div>
+  <%if (queueCount > 0) {%>
+  <div class="small-hover-tab-modal" alt="total Items in listing Queue">
+    <p style="color: var(--color-white);">
+      Items in Queue:
+      <span>
+        <%=queueCount%>
+      </span>
+    </p>
+  </div>
+  <%}%>
   <div class="modal fade"  id="bulkListModal" tabindex="-1" aria-labelledby="bulkListModal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content" id="bulkListModalContent">
