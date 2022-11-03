@@ -167,9 +167,8 @@ var methods = {
       await client.close();
     }
   },
-  checkBulkQueue: async function (id) {
+  checkBulkQueue: async function (id, client) {
     var result;
-    const client = await getClient();
     if (!client) return;
     try {
       const db = client.db("NFTokens");
@@ -182,7 +181,7 @@ var methods = {
     } catch (err) {
       console.log("Database error" + err);
     } finally {
-      await client.close();
+      //await client.close();
     }
   },
   getNft: async function (id) {
@@ -207,9 +206,8 @@ var methods = {
       await client.close();
     }
   },
-  getBulkNft: async function (id) {
+  getBulkNft: async function (id, client) {
     var result;
-    const client = await getClient();
     if (!client) return;
     try {
       const db = client.db("NFTokens");
@@ -226,7 +224,7 @@ var methods = {
     } catch (err) {
       console.log("Database error" + err);
     } finally {
-      await client.close();
+      //await client.close();
     }
   },
   getOwnerNfts: async function (owner, nfts, numberOfNfts) {

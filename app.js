@@ -699,8 +699,10 @@ server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
 server.post("/redeem-nft-subscription", speedLimiter, async (req, res) => {
   var dataBody = JSON.parse(req.body.payload);
   const result = await xumm.subscriptions.watchSubscripion(dataBody[0]);
+  console.log(result)
   //const payload = await xumm.subscriptions.redeemNftSubscription(req, res);
   if (result[0] == "signed") {
+    console.log('sending off redemption NFT info')
     var walletFromPayload = result[1];
     var NFTokenID = dataBody[1];
     var wallet = walletFromPayload;
@@ -1262,15 +1264,16 @@ server.get(
     var returnData = [];
     const nfts = await xumm.xrpl.getAllAccountNFTs(wallet);
     //find out what ones are listed
+    const clientMongo = await mongoClient.query.connectToMongo();
     var checkListingPromises = [];
     for (a in nfts) {
       var checkNftStatusPromise = new Promise(function (resolve, reject) {
-        var returnedNft = mongoClient.query.getBulkNft(nfts[a].NFTokenID);
+        var returnedNft = mongoClient.query.getBulkNft(nfts[a].NFTokenID, clientMongo);
         resolve(returnedNft);
       });
 
       var queuedStatusPromise = new Promise(function (resolve, reject) {
-        var queuedStatus = mongoClient.query.checkBulkQueue(nfts[a].NFTokenID);
+        var queuedStatus = mongoClient.query.checkBulkQueue(nfts[a].NFTokenID, clientMongo);
         resolve(queuedStatus);
       });
 

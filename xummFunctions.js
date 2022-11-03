@@ -457,10 +457,10 @@ var subscriptions = {
     });
 
     var txID = await promise;
-    var verify = await verifyTransaction(txID[0]);
-    if (verify === true) {
-      txID[0] = "signed"
-      return txID;
+    var verify = await verifyTransactionAndAccount(txID[0]);
+    if (verify[0] === true) {
+      verify[0] = "signed"
+      return verify;
     } else {
       return false;
     }
@@ -1723,7 +1723,6 @@ var xrpls = {
           count += 1;
         }
       }
-      console.log(allNFTs)
       return allNFTs;
     } catch (error) {
       console.log(error);
@@ -1756,6 +1755,38 @@ async function verifyTransaction(txID) {
     }
 
     return executed;
+  } catch (error) {
+    console.log(error);
+    return null;
+  } finally {
+    await client.disconnect();
+  }
+}
+async function verifyTransactionAndAccount(txID) {
+  const client = await getXrplClient();
+  console.log("checking transaction: " + txID);
+  try {
+    try {
+      var result = await client.request({
+        command: "tx",
+        transaction: txID,
+      });
+
+      var account = result.result.Account
+
+      if (result.result.meta.TransactionResult == "tesSUCCESS") {
+        var executed = true;
+        console.log("txid verified true");
+      } else {
+        var executed = false;
+        console.log("txid verified false");
+      }
+    } catch (error) {
+      var executed = false;
+      console.log("error validating");
+    }
+
+    return [ executed, account ];
   } catch (error) {
     console.log(error);
     return null;
