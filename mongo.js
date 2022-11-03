@@ -1182,11 +1182,28 @@ var methods = {
       let res = await collection.count(query);
       return res;
     } catch (err) {
-
+      console.log('queuedItemsCount: '+err)
     } finally {
-      client.close()
+      await client.close()
     }
   },
+  findRedemptionAccountByIP: async function (ipAddress) {
+    const client = await getClient();
+    if (!client) return;
+    try{
+      const db = client.db('Redeem')
+      let collection = db.collection('Assets')
+      query = {
+        ip: ipAddress
+      }
+      let res = await collection.find(query).toArray()
+      return res;
+    } catch(err){
+      console.log('findRedemptionAccountByIP: '+err)
+    }finally{
+      await client.close()
+    }
+  }
 };
 
 async function alreadyLiked(collection, id, wallet) {

@@ -688,18 +688,27 @@ server.post("/XUMM-sign-subscription", speedLimiter, async (req, res) => {
   const result = await xumm.subscriptions.watchSubscripion(req, res);
 });
 server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
-  const payload = await xumm.payloads.redeemNftPayload(
-    req.session.wallet,
-    req.useragent.isMobile,
-    req.body.return_url,
-    req.body.ipAddress
-  );
-  try {
-    if (payload instanceof Error) throw payload;
-    res.status(200).send(payload);
-  } catch (err) {
-    console.log(err.toString());
-    res.status(500).send(err.toString());
+  const apiInfo = await mongoClient.query.findRedemptionAccountByIP(req.body.ipAddress);
+  const clientAddy = apiInfo[0].account;
+  issuer = 'XRP'
+  tokenHex= 'XRP'
+  const balance = await xumm.xrpl.getTokenBalance(clientAddy, issuer, tokenHex)
+  if (balance >= 2) {
+    const payload = await xumm.payloads.redeemNftPayload(
+      req.session.wallet,
+      req.useragent.isMobile,
+      req.body.return_url,
+      req.body.ipAddress
+    );
+    try {
+      if (payload instanceof Error) throw payload;
+      res.status(200).send(payload);
+    } catch (err) {
+      console.log(err.toString());
+      res.status(500).send(err.toString());
+    }
+  } else {
+    res.status(400).send('Not enough reserve in offer account')
   }
 });
 server.post("/redeem-nft-subscription", speedLimiter, async (req, res) => {

@@ -953,36 +953,42 @@ function NFTokenCancelOffer(index) {
     },
   });
 }
+var redeeming = false;
 function getRedeem(redeemElement, loadingElement, ipAddress) {
   if (ipAddress == 'false') {
     alert('please select an option')
     return;
   }
-  $(redeemElement).addClass('loading');
-  $(redeemElement).prop('disabled', true);
-  ipAddress = JSON.parse(ipAddress).ip;
-  if (ipAddress) {
-    $.ajax({
-      type: "POST",
-      url: "/redeem-nft-payload",
-      data: { return_url: window.location.href, ipAddress: ipAddress },
-      success: function (result) {   
-        window.location.href = result[0].next.always;
-        var information = JSON.stringify(result);
-        $.ajax({
-          type: "POST",
-          url: "/redeem-nft-subscription",
-          data: {
-            payload: information,
-          },
-        });
-      },
-      error: function (result) {
-        customAlert.alert(result.responseText);
-        setTimeout(location.reload(), 1000);
-      },
-    });
-  }
+  if (redeeming == false) {
+    redeeming = true;
+    $(redeemElement).addClass('loading');
+    $(redeemElement).prop('disabled', true);
+    ipAddress = JSON.parse(ipAddress).ip;
+    if (ipAddress) {
+      $.ajax({
+        type: "POST",
+        url: "/redeem-nft-payload",
+        data: { return_url: window.location.href, ipAddress: ipAddress },
+        success: function (result) {   
+          window.location.href = result[0].next.always;
+          var information = JSON.stringify(result);
+          $.ajax({
+            type: "POST",
+            url: "/redeem-nft-subscription",
+            data: {
+              payload: information,
+            },
+          });
+          redeeming = false;
+        },
+        error: function (result) {
+          redeeming = false
+          customAlert.alert(result.responseText);
+          setTimeout(location.reload(), 1000);
+        },
+      });
+    }
+    } 
 }
 function buyOrderClicked(redeemElement, loadingElement) {
   redeemElement.classList.add("hidden");
