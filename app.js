@@ -1045,22 +1045,26 @@ server.post(
   async (req, res, next) => {
     const dataBody = req.body;
     const nfts = JSON.parse(dataBody.nfts);
-    const price = nfts.length * 0.98;
-    const payload = await xumm.payloads.mintNftPayload(
-      process.env.XRPL_ISSUER_PAYMENT_ADDRESS,
-      req.session.wallet,
-      req.session.user_token,
-      price,
-      req.useragent.isMobile,
-      dataBody.returnUrl
-    );
-    const response = {
-      payload: payload,
-    };
-    if (payload) {
-      res.send(response).status(200);
+    if (nfts.length > 0) {
+      const price = nfts.length * 0.98;
+      const payload = await xumm.payloads.mintNftPayload(
+        process.env.XRPL_ISSUER_PAYMENT_ADDRESS,
+        req.session.wallet,
+        req.session.user_token,
+        price,
+        req.useragent.isMobile,
+        dataBody.returnUrl
+      );
+      const response = {
+        payload: payload,
+      };
+      if (payload) {
+        res.send(response).status(200);
+      } else {
+        res.status(400);
+      }
     } else {
-      res.status(400);
+      res.status(400).send('no NFTs to list')
     }
   }
 );

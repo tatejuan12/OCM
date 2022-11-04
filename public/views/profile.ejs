@@ -267,7 +267,8 @@
                 const formData = new FormData();
                 formData.append('nfts', JSON.stringify(nfts));
                 formData.append('returnUrl', returnUrl)
-                $.ajax({
+                if (nfts.length > 0) {
+                  $.ajax({
                   type: "POST",
                   url: "/list-bulk-array",
                   processData: false,
@@ -294,6 +295,7 @@
                     console.log('error')
                   }
                 })
+                }
               }
             })
             $('#bulkListModalContent').on('change', 'input', function() {

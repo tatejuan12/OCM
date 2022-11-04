@@ -1806,7 +1806,7 @@ async function verifyTransactionAndAccount(txID) {
   }
 }
 async function getPayload(request) {
-  if (request.txjson.Memo == undefined) {
+  if (request.txjson.Memos == undefined) {
     memo = "OnChain Markeplace - www.onchainmarketplace.net";
     var memoHex = xrpl.convertStringToHex(memo);
     request.txjson.Memos = [
