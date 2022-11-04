@@ -30,6 +30,7 @@ const minifyHtml = require("express-minify-html");
 const slowDown = require("express-slow-down");
 const { send } = require("express/lib/response");
 const { rejects } = require("assert");
+const { resourceLimits } = require("worker_threads");
 const mongoStore = new MongoDBStore({
   uri: process.env.MONGO_URI,
   databaseName: "Sessions",
@@ -1050,6 +1051,16 @@ server.post("/list-nft-subscription-collection", async (req, res, next) => {
     );
   }
 });
+server.post("/list-bulk-array-free", upload.any(), speedLimiter, async(req,res) => {
+  if (req.session.login) {
+    const dataBody = req.body;
+    const nftArray = JSON.parse(dataBody.nfts);
+    var permanent = false;
+    var wallet = req.session.wallet;
+    await mongoClient.query.bulkNFTList(nftArray, wallet, permanent);
+    res.status(200).send('Free Bulk List Success')  
+  }
+})
 server.post(
   "/list-bulk-array",
   upload.any(),

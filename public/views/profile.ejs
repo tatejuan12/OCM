@@ -269,26 +269,13 @@
                 formData.append('returnUrl', returnUrl)
                 $.ajax({
                   type: "POST",
-                  url: "/list-bulk-array",
+                  url: "/list-bulk-array-free",
                   processData: false,
                   contentType: false,
                   enctype: "multipart/form-data",
                   data: formData,
                   success: function(result) {
-                    console.log(result)
-                    window.location.href = result.payload.next.always;
-                    formData.append('payload', JSON.stringify(result.payload))
-                    $.ajax({
-                      type: "POST",
-                      url: "/list-bulk-subscription",
-                      processData: false,
-                      contentType: false,
-                      enctype: "multipart/form-data",
-                      data: formData,
-                      success: function(result) {},
-                      error: function(result) {}
-                    })
-                    //setTimeout(location.reload(), 2000)
+                    location.reload()
                   },
                   error: function() {
                     console.log('error')
