@@ -624,6 +624,9 @@ var {
 .i-eye{
   background-image: url(../images/icons/Favorites-light/icons8-eye-48.png);
 }
+.i-paper-plane{
+  background-image: url(../images/icons/Favorites-light/icons8-paper-plane-48.png);
+}
 /*---------------------------
 	List Style 
 ---------------------------*/
@@ -25214,4 +25217,125 @@ Collection nav
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   padding: 2px 8px;
   border-radius: 8px;
+}
+.active-light-mode .special-list-btn{
+  background-color: var(--color-white);
+}
+.special-list-btn{
+  background-color: var(--background-color-4);  
+  border-radius: 35px;
+  font-weight: bold;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.25s ease;
+  width: 210px;
+  position: relative;
+  height: 60px;
+  overflow: hidden;
+}
+.special-list-btn:not(.loading):hover {
+  box-shadow: 0px 2px 15px 0px #b7b9bd57;
+}
+.special-list-btn:not(.loading):hover i {
+  transform: translate(7px);
+}
+.special-list-btn i{
+  position: absolute;
+  left: 20px;
+  pointer-events: none;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+.active-light-mode .button-text{
+  color: #000;
+}
+.special-list-btn .button-text{
+  width:130px;
+  display: block;
+  position: absolute;
+  left:60px;
+  pointer-events: none;
+  transition: all 0.25s ease;
+}
+.button-loader{
+  position:absolute;
+  width:60px;
+  height:60px;
+  z-index:100;
+  border-radius: 50%;
+  top: 0;
+  left:0px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.25s ease;
+}
+.active-light-mode .button-loader:after{
+  border-left: 3px solid #000;
+}
+.active-light-mode .button-loader:before{
+  border-left: 3px solid #000;
+}
+.button-loader:after{
+  content:'';
+  width:44px;
+  height:44px;
+  border-radius: 50%;
+  border:3px solid transparent;
+  border-left: 3px solid #fff;
+  animation:loading infinite 0.8s ease 0.05s;
+  position:absolute;
+}
+.button-loader:before{
+  content:'';
+  width:44px;
+  height:44px;
+  border-radius: 50%;
+  border:3px solid transparent;
+  border-left: 3px solid #fff;
+  animation:loading infinite 0.8s linear;
+  position:absolute;
+  opacity: 0.6;
+}
+.special-list-btn.loading{
+  width:60px;
+}
+.special-list-btn.loading i{
+  padding-bottom: 4px;
+  padding-left:3px;
+  animation: flying infinite 1s linear;
+}
+.special-list-btn.loading .text{
+  transform:translate(-140px);
+}
+.special-list-btn.loading .button-loader{
+  opacity: 1;
+}
+@keyframes loading{
+  0%{
+    transform:rotate(0deg);
+  }
+  100%{
+    transform:rotate(360deg);
+  }
+}
+@keyframes flying{
+  0%{
+    transform: rotate(3deg)translateY(5px);
+  }
+  50%{
+    transform: rotate(-3deg)translateY(-5px);
+  }
+  100%{
+    transform: rotate(0)translateY(0);
+  }
 }

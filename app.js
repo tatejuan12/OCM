@@ -973,6 +973,18 @@ server.post("/report-nft", upload.any(), speedLimiter, async (req, res) => {
   );
   result ? res.status(200).send("Modified") : res.status(500).send("Failed");
 });
+server.post("/list-free", async (req,res) => {
+  if (req.session.login) {
+    var permanent = false;
+    await mongoClient.query.addNftToQueried(
+      req.body.NFTokenID,
+      req.session.wallet,
+      permanent,
+      req.body.issuer
+    );
+    res.status(200).send('NFT successfully listed')
+  }
+})
 server.post("/list-nft-payload", async (req, res, next) => {
   if (req.session.login) {
     const payload = await xumm.payloads.listNftPayload(

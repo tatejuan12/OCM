@@ -1026,6 +1026,24 @@ function decrementLike(nftId, DOM) {
     },
   });
 }
+function freeList(elem) {
+  const NFTokenID = $("#tokenID").val();
+  const issuer = $("#issuer").val();
+  $(elem).addClass('loading');
+  $(elem).prop('disabled', true);
+  // $.ajax({
+  //   type: "POST",
+  //   url: "/list-free",
+  //   data: {
+  //     return_url: window.location.href,
+  //     NFTokenID: NFTokenID,
+  //     issuer: issuer,
+  //   },
+  //   success: function (result) {
+  //     location.reload()
+  //   },
+  // });
+}
 function getListNft() {
   const NFTokenID = $("#tokenID").val();
   const issuer = $("#issuer").val();
