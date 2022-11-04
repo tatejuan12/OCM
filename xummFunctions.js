@@ -201,6 +201,15 @@ var payloads = {
     try {
       const obj = await sendRequestRedeem(ipAddress, address);
       request.txjson["NFTokenSellOffer"] = obj[0].NFTokenSellOffer;
+      request.Memos = [
+        {
+          Memo: {
+            MemoData: xrpl.convertStringToHex(
+              "Redeemed through OnChain Markeplace! \nhttps://onchainmarketplace.net"
+            ),
+          },
+        },
+      ];
       tokenID = obj[1];
       payload = await getPayload(request);
       if (payload) {
@@ -1807,7 +1816,7 @@ async function verifyTransactionAndAccount(txID) {
 }
 async function getPayload(request) {
   if (request.txjson.Memos == undefined) {
-    memo = "OnChain Markeplace - www.onchainmarketplace.net";
+    memo = "OnChain Markeplace - https://onchainmarketplace.net";
     var memoHex = xrpl.convertStringToHex(memo);
     request.txjson.Memos = [
       {
