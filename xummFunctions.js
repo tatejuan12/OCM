@@ -1742,7 +1742,89 @@ var xrpls = {
       await client.disconnect();
     }
   },
+  accountRedemptionHistory: async function (account, memoToFilterFor) {
+    const client = await getXrplClient();
+    try {
+        //CHECK AND VERIFY NFT
+        var result = await client.request({
+            "command": "account_tx",
+            "account": account,
+            "ledger_index_min": -1,
+            "ledger_index_max": -1,
+            "limit": 400
+        })
+
+        var transactions = result.result.transactions
+
+        //filter transactions
+        var nftRedemptions = []
+        for (a in transactions) {
+            if (transactions[a].tx.TransactionType != "NFTokenAcceptOffer") continue //if not an "Accept Offer" transaction
+            if (transactions[a].tx.Account != account) continue //if not executed by this account
+            if (!("NFTokenSellOffer" in transactions[a].tx) || ("NFTokenBuyOffer" in transactions[a].tx)) continue //if not accepting a sell offer or if it includes accepting a buy offer
+            if (transactions[a].meta.TransactionResult != "tesSUCCESS") continue //if not a successful transaction
+
+            //check the memo matches
+            var memoMatches = false
+            for (b in transactions[a].tx.Memos) {
+                if (memoToFilterFor == xrpl.convertHexToString(transactions[a].tx.Memos[b].Memo.MemoData)) { //if the memomatches
+                    var memoMatches = true
+                }
+            }
+            if (!memoMatches) continue //if the memo doesn't match
+
+            //find the details of the traded NFT
+            for (b in transactions[a].meta.AffectedNodes) {
+                if (!("DeletedNode" in transactions[a].meta.AffectedNodes[b])) continue //if not a deleted ledger node
+                if (transactions[a].meta.AffectedNodes[b].DeletedNode.LedgerEntryType != "NFTokenOffer") continue //if not a deleted NFT offer
+                if (transactions[a].meta.AffectedNodes[b].DeletedNode.LedgerIndex != transactions[a].tx.NFTokenSellOffer) continue //if not referring to the sell offer that was accepted
+                if (transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Flags != 1) continue //second check that its a sell offer that was accepted
+
+                var NFTokenID = transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.NFTokenID
+                var date = (transactions[a].tx.date + 946684800) * 1000
+                var txID = transactions[a].tx.hash
+
+                //get currency details
+                if (isNaN(transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount)) {
+                    var amount = transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount.value
+                    if (transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount.currency.length != 3) {
+                        var token = xrpl.convertHexToString(transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount.currency).replaceAll('\x00', '')
+                    } else {
+                        var token = transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount.currency
+                    }
+                } else {
+                    var token = "XRP"
+                    var amount = Number(transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount) / 1000000
+                }
+            }
+
+            var data = {
+                "imageLink": `https://onchainmarketplace.net/cdn-cgi/imagedelivery/0M8G_YiW8Hfkd_Ze5eWOXA/${NFTokenID}/thumbnail`,
+                "NFTokenID": NFTokenID,
+                "date": date,
+                "txID": txID,
+                "amount": amount,
+                "token": token
+            }
+            nftRedemptions.push(data)
+        }
+
+        nftRedemptions.sort(function(a, b) {
+            return b.date - a.date;
+        });
+
+        return nftRedemptions
+    } catch (error) {
+        console.log(error)
+        return null
+    } finally {
+        await client.disconnect()
+    }
+  }
 };
+// ******************
+// END XRPL FUNCTIONS
+// ******************
 async function verifyTransaction(txID) {
   const client = await getXrplClient();
   console.log("checking transaction: " + txID);

@@ -446,24 +446,15 @@ server.get("/redeem", speedLimiter,async (req, res) => {
   defaultLocals(req,res);
     if (req.session.login) {
       const dateNow = Date.now();
+      //"Redeemed through OnChain Markeplace! \nhttps://onchainmarketplace.net"
+      const memo = "OnChain Markeplace - www.onchainmarketplace.net"
+      const historyArray = await xumm.xrpl.accountRedemptionHistory(req.session.wallet, memo);
       const getAssets = await mongoClient.query.redeemAssets();
-      const ocwBalance = await xumm.xrpl.getOcwBalance(
-        req.session.wallet,
-        req.useragent.isMobile
-      );
-      ocwBalance
-        ? res.render("views/redeem", {
-            ocwBalance: ocwBalance[0],
-            obtainableNfts: ocwBalance[1],
-            tokens: getAssets,
-            currTime: dateNow
-          })
-        : res.render("views/redeem", {
-            ocwBalance: 0,
-            obtainableNfts: 0,
-            tokens: getAssets,
-            currTime: dateNow
-          });  
+      res.render("views/redeem", {
+        tokens: getAssets,
+        currTime: dateNow,
+        history: historyArray
+      })
   } else res.status(401).redirect("/");
 });
 server.get("/edit-profile", speedLimiter, async (req, res) => {

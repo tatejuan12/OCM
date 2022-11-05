@@ -24075,8 +24075,89 @@ body.active-light-mode {
   border-radius: 24px;
   padding: 8px;
 }
-.box .boxContent {
+.redeemContainer .boxContent {
   width: 100%;
+}
+.redeemContainer .redeem-history-container{
+  max-width: 90%;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 400px;
+  overflow: auto;
+}
+.redeemContainer .redeem-history-container::-webkit-scrollbar{
+  width: 5px;
+}
+.redeemContainer .redeem-history-container::-webkit-scrollbar-track{
+  background-color: transparent;
+}
+.redeemContainer .redeem-history-container::-webkit-scrollbar-thumb{
+  background-color: rgb(173, 173, 173);
+  border-radius: 8px;
+}
+.redeemContainer .redeem-history-container::-webkit-scrollbar-thumb:hover{
+  background-color: rgb(134, 134, 134);
+}
+.redeemContainer .redeem-history{
+  max-width: 90%;
+  width: 680px;
+  margin: 5px 0;
+}
+.redeem-history .card{
+  max-width: 100%;
+  overflow: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 8px;
+  border-radius: 12px;
+  background-color: var(--color-gray);
+  border: none;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+.redeem-history .card .content {
+ max-width: 100%;
+ display: flex;
+ flex-direction: column;
+ justify-content: space-between;
+}
+.redeem-history .card .info{
+  display: flex;
+  flex-direction: row;
+}
+.redeem-history .card .info p{
+  margin: 0;
+}
+.redeem-history .card .info .trans-link a{
+  color: var(--color-info);
+}
+.redeem-history .card .info:nth-child(2) p{
+  font-size: 11px;
+}
+.redeem-history .card .info:nth-child(1){
+  justify-content: end;
+}
+.redeem-history .card .info:nth-child(3){
+  justify-content: space-between;
+}
+.card img{
+  min-width: 100px;
+  min-height: 100px;
+  max-width: 100px;
+  max-height: 100px;
+  margin-right: 20px;
+}
+@media only screen and (max-width: 768px) {
+  .redeem-history .card .content{
+    max-width: 60%;
+    overflow: hidden;
+  }
+  .redeem-history .card .content .info p {
+    font-size: 11px;
+  }
 }
 .box span {
   margin: 5px 0;
@@ -24115,10 +24196,10 @@ body.active-light-mode {
 }
 .redeemContainer {
   display: flex;
+  flex-direction: column;
   justify-content: space-around;
   align-items: center;
   text-align: center;
-  height: 80vh;
 }
 .box {
   position: relative;
