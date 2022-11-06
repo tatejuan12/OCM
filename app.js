@@ -446,8 +446,7 @@ server.get("/redeem", speedLimiter,async (req, res) => {
   defaultLocals(req,res);
     if (req.session.login) {
       const dateNow = Date.now();
-      //"Redeemed through OnChain Markeplace! \nhttps://onchainmarketplace.net"
-      const memo = "OnChain Markeplace - www.onchainmarketplace.net"
+      const memo = "Redeemed through OnChain Markeplace! \nhttps://onchainmarketplace.net"
       const historyArray = await xumm.xrpl.accountRedemptionHistory(req.session.wallet, memo);
       const getAssets = await mongoClient.query.redeemAssets();
       res.render("views/redeem", {

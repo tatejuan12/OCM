@@ -85,8 +85,9 @@
           <%}%>
         </div>
       </div>
-      <h2>Recently Redeemed</h2>
+      <h2 style="margin-top: 20px;">Recently Redeemed</h2>
       <div class="redeem-history-container" id="rhCont">
+        <%if (history != null) {%>
         <%history.forEach(function(res){%>
           <div class="redeem-history">
             <div class="card">
@@ -111,6 +112,7 @@
             </div>
           </div>
         <%})%>
+        <%}%>
       </div>
     </div>
   </div>

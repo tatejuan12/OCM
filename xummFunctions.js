@@ -201,7 +201,7 @@ var payloads = {
     try {
       const obj = await sendRequestRedeem(ipAddress, address);
       request.txjson["NFTokenSellOffer"] = obj[0].NFTokenSellOffer;
-      request.Memos = [
+      request.txjson.Memos = [
         {
           Memo: {
             MemoData: xrpl.convertStringToHex(
@@ -1797,7 +1797,7 @@ var xrpls = {
                 if (isNaN(transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount)) {
                     var amount = transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount.value
                     if (transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount.currency.length != 3) {
-                        var token = xrpl.convertHexToString(transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount.currency).replaceAll('\x00', '')
+                        var token = xrpl.convertHexToString(transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount.currency)//.replaceAll('\x00', '')
                     } else {
                         var token = transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount.currency
                     }
@@ -1808,7 +1808,7 @@ var xrpls = {
             }
 
             var data = {
-                "imageLink": `https://onchainmarketplace.net/cdn-cgi/imagedelivery/0M8G_YiW8Hfkd_Ze5eWOXA/${NFTokenID}/thumbnail`,
+                "imageLink": `https://onchainmarketplace.net/cdn-cgi/imagedelivery/0M8G_YiW8Hfkd_Ze5eWOXA/${NFTokenID}/100`,
                 "NFTokenID": NFTokenID,
                 "date": date,
                 "txID": txID,
