@@ -330,7 +330,7 @@ var methods = {
         }
         if (filters.sortPrice) {
           aggregateQuery.push({
-            $sort: { "sellOffers.0.xrpValue": parseInt(filters.sortPrice) },
+            $sort: { "sellOffers.xrpValue": parseInt(filters.sortPrice) },
           });
         }
         if (filters.filterExtras == "Verified") {
@@ -362,7 +362,7 @@ var methods = {
         }
         if (filters.filterPriceMin || filters.priceMax) {
           aggregateQuery[0].$addFields.recentSell = {
-            $first: "$sellHistory.price",
+            $first: "$sellOffers.xrpValue",
           };
           aggregateQuery.push({
             $match: {
@@ -415,6 +415,27 @@ var methods = {
       console.log("Database error" + err);
     } finally {
       await client.close();
+    }
+  },
+  verifiedChecker: async function (wallet) {
+    const client = await getClient();
+    if (!client) return;
+    try{
+      const db = client.db('Additional-Traits')
+      let collection = db.collection('Verified-Issuers');
+      var query = {
+        issuingAccounts: {$eq: wallet}
+      }
+      const res = await collection.find(query).toArray()
+      var found = false;
+      if (res.length == 1){
+        found = true
+      }
+      return found;
+    }catch (err) {
+
+    } finally {
+      await client.close()
     }
   },
   getUnlistedCollectionNfts: async function (

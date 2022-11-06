@@ -421,9 +421,16 @@ server.get("/collections", speedLimiter, async (req, res) => {
     collections: collections,
   });
 });
-server.get("/create-collection", speedLimiter, (req, res) => {
+server.get("/create-collection", speedLimiter, async (req, res) => {
   defaultLocals(req, res);
-  res.render("views/create-collection");
+  if (req.session.login) {
+    const checkAccount = await mongoClient.query.verifiedChecker(req.session.wallet)
+    if (checkAccount) {
+      res.render("views/create-collection");
+    } else {
+      res.render("views/404")
+    }
+  } else res.status(401).redirect("/");
 });
 server.get("/logout", speedLimiter, (req, res) => {
   req.session.destroy();
