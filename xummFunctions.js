@@ -763,21 +763,21 @@ var xrpls = {
             };
             return data;
         } else {
-            if ("image" in uriMetadata) {
-                uriMetadata.image = uriMetadata.image
-            } else if ("animation" in uriMetadata) {
-                uriMetadata.image = uriMetadata.animation
-            } else if ("video" in uriMetadata) {
-                uriMetadata.image = uriMetadata.video
-            } else if ("image_url" in uriMetadata) {
-                uriMetadata.image = uriMetadata["image_url"]
-            } else if ("animation_url" in uriMetadata) {
-                uriMetadata.image = uriMetadata["animation_url"]
-            } else if ("video_url" in uriMetadata) {
-                uriMetadata.image = uriMetadata["video_url"]
-            } else {
-              uriMetadata.image = "https://onchainmarketplace.net/assets/images/icons/link-error.png"; //THIS NEEDS TO BE HTTPS
-            }
+            if ("image" in uriMetadata && uriMetadata.image != "") {
+              uriMetadata.image = uriMetadata.image
+          } else if ("animation" in uriMetadata && uriMetadata.animation != "") {
+              uriMetadata.image = uriMetadata.animation
+          } else if ("video" in uriMetadata && uriMetadata.video != "") {
+              uriMetadata.image = uriMetadata.video
+          } else if ("image_url" in uriMetadata && uriMetadata["image_url"] != "") {
+              uriMetadata.image = uriMetadata["image_url"]
+          } else if ("animation_url" in uriMetadata && uriMetadata["animation_url"] != "") {
+              uriMetadata.image = uriMetadata["animation_url"]
+          } else if ("video_url" in uriMetadata && uriMetadata["video_url"] != "") {
+              uriMetadata.image = uriMetadata["video_url"]
+          } else {
+            uriMetadata.image = "https://onchainmarketplace.net/assets/images/icons/link-error.png"; //THIS NEEDS TO BE HTTPS
+          }
             var httpImage = resolveIPFS(uriMetadata.image, httpsIPFSGateway)
         }
   
