@@ -15,7 +15,7 @@
         <!-- JPG/JPEG/PNG/GIF -->
         <% } else if (vidExt.has(nft.fileType)) { %>
           <%if (nft.httpsImage.startsWith("https://customer-ce8gmdxp8czqnbz4.cloudflarestream.com/")){%>
-            <video id="<%=nft.tokenID%>" controls></video>
+            <video id="<%=nft.tokenID%>" controls muted></video>
             <script>
               if (Hls.isSupported()) {
                 const video = document.getElementById('<%=nft.tokenID%>');
