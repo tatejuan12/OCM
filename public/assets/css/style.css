@@ -17856,9 +17856,38 @@ NFT product styles
   font-size: 16px;
   margin-top: 10px;
 }
+.product-style-one .prices-nft-card .latest-bid{
+  margin: 0;
+}
+.product-style-one .prices-nft-card{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 4px 8px;
+  border-radius: 5px;
+  background-color: #00000010;
+  margin-top: 10px;
+}
+.product-style-one .prices-nft-card .price{
+  display: flex;
+  flex-direction: column;
+}
+.product-style-one .prices-nft-card .price span:nth-child(2){
+  margin-top: 8px;
+  color: var(--color-primary);
+
+}
+@media only screen and (max-width: 767px) {
+  .product-style-one .prices-nft-card .price.bids{
+    display: none;
+  }
+  .product-style-one .prices-nft-card .price span:nth-child(2){
+    margin-top: 4px;
+  }
+}
 .product-style-one .bid-react-area {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-top: 10px;
 }
 .product-style-one .bid-react-area .last-bid {
