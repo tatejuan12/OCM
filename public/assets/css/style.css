@@ -17794,7 +17794,7 @@ NFT product styles
   max-height: 300px;
 }
 .product-style-one.with-placeBid .card-thumbnail video {
-  max-width: 300px;
+  max-width: 250px;
 }
 .product-style-one.with-placeBid .card-thumbnail a.btn,
 .product-style-one.with-placeBid .card-thumbnail span.btn {
@@ -18857,6 +18857,7 @@ NFT product styles mobile layout
   width: -webkit-fill-available;
 }
 .product-tab-wrapper .rn-pd-content .rn-pd-thumbnail video {
+  max-width: 420px;
   border-radius: 7px;
   object-fit: cover;
   width: -webkit-fill-available;

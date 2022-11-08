@@ -14,11 +14,31 @@
           <img src="<%= nft.thumbnail%>" alt="Nft_Profile" draggable="false" loading="lazy">
         <!-- JPG/JPEG/PNG/GIF -->
         <% } else if (vidExt.has(nft.fileType)) { %>
-          <video autoplay loop>
-            <source src="<%= nft.httpsImage%>" type="video/mp4">
-            <source src="<%= nft.httpsImage%>" type="video/webm">
-            <source src="<%= nft.httpsImage%>" type="video/ogg">
-          </video>
+          <%if (nft.httpsImage.startsWith("https://customer-ce8gmdxp8czqnbz4.cloudflarestream.com/")){%>
+            <video id="<%=nft.tokenID%>" controls></video>
+            <script>
+              if (Hls.isSupported()) {
+                const video = document.getElementById('<%=nft.tokenID%>');
+                const hls = new Hls();
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MEDIA_ATTACHED, () => {
+                  hls.loadSource(
+                    '<%=nft.httpsImage%>'
+                  );
+                });
+                video.play();
+              }
+        
+            </script>
+          <%} else {%>
+            <video controls autoplay loop>
+              <source src="<%=nft.httpsImage%>" type="video/mp4">
+              <source src="<%=nft.httpsImage%>" type="video/webm">
+              <source src="<%=nft.httpsImage%>" type="video/ogg">
+              <source src="<%=nft.httpsImage%>" type="video/avc">
+              <source src="<%=nft.httpsImage%>" type="video/mov">
+            </video>
+           <%}%>
         <% } else {%>
           <img src="<%= nft.httpsImage%> " alt="unlisted NFT image" draggable="false" loading="lazy">
         <%};%>
