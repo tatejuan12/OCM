@@ -539,9 +539,52 @@ server.get("/search", speedLimiter, async (req, res) => {
   const searchResults = await mongoClient.query.getSearchResultsJSON(
     req.query.q
   );
+  var promisesArray = []
+  var collections = searchResults.collections
+  for (var i = 0; i < collections.length; i++) {
+    var collectionsImagesPromise = new Promise(function (resolve, reject) {
+      var randomImages = mongoClient.query.getRandomCollectionImages(
+        collections[i].name,
+        collections[i].issuer
+      );
+      resolve(randomImages);
+    });
+    var collectionsTotalItemsListedPromise = new Promise(function (
+      resolve,
+      reject
+    ) {
+      var totalItemsListed = mongoClient.query.totalCollectionItems(
+        collections[i].name,
+        collections[i].issuer
+      );
+      resolve(totalItemsListed);
+    });
+    var collectionsTotalItemsUnlistedPromise = new Promise(function (
+      resolve,
+      reject
+    ) {
+      var totalItemsUnlisted = mongoClient.query.unlistedCollectionItems(
+        collections[i].name,
+        collections[i].issuer
+      );
+      resolve(totalItemsUnlisted);
+    });
+    promisesArray.push(collectionsImagesPromise);
+    promisesArray.push(collectionsTotalItemsListedPromise);
+    promisesArray.push(collectionsTotalItemsUnlistedPromise);
+  }
+  var collectionResults = await Promise.all(promisesArray);
+  for (var i = 0; i < collections.length; i++) {
+    collections[i].sampleImages = collectionResults[Number(i) * 3];
+    collections[i].numberOfNFTs =
+      Number(collectionResults[Number(i) * 3 + 1]) +
+      Number(collectionResults[Number(i) * 3 + 2]); //add the listed and unlisted values together
+  }
+  collections = appendColletionsImagesUrls(collections);
   const searchedItem = req.query.q;
   res.render("views/search", {
     res: searchResults,
+    collection: collections,
     searchedItem: searchedItem,
   });
 });

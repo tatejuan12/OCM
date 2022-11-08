@@ -24434,6 +24434,9 @@ body.active-light-mode {
 .search-row .product-style-one .card-thumbnail a img {
   width: 200px;
 }
+.search-row .collection-grid .collection-card-main{
+  width: 100%;
+}
 .logoGrid img:hover {
   transform: scale(1.05);
 }

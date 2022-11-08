@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="assets/css/vendor/nice-select.css">
   <link rel="stylesheet" href="assets/css/plugins/feature.css">
   <link rel="stylesheet" href="assets/css/plugins/jquery-ui.min.css">
+  <script src="//cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <!-- Style css -->
   <link rel="stylesheet" href="assets/css/style.css">
 
@@ -66,7 +67,7 @@
         <% if (res.collections.length > 0) {%>
         <div class="search-row">
           <h2 class="title mb--0" data-sal-delay="150" data-sal="slide-up" data-sal-duration="800">Collections</h2>
-          <%- include ("models/collection-rows.ejs", {collections:res.collections}) %>
+          <%- include ("models/collection-rows.ejs", {collections:collection }) %>
         </div>
         <%}%>
         <% if (res.users.length > 0) {%>

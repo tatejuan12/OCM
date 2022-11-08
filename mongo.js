@@ -1,3 +1,4 @@
+const { watchFile } = require("fs");
 const { MongoDBNamespace, GridFSBucketReadStream } = require("mongodb");
 const { resolve } = require("path");
 const { resourceLimits } = require("worker_threads");
@@ -738,7 +739,7 @@ var methods = {
 
       let nftDetailsCol = dbNfts.collection("Eligible-Listings");
       let usersCol = dbAccounts.collection("Elegible-Accounts");
-      let verifiedCol = dbCollections.collection("Verified-Issuers");
+      let verifiedCol = dbCollections.collection("Collections");
       let queryNftDetails = [
         {
           $search: {
@@ -773,7 +774,7 @@ var methods = {
               query: searchQuery,
               path: {
                 wildcard: "*",
-              },
+              }
             },
           },
         },
@@ -789,9 +790,7 @@ var methods = {
         resolve(result);
       });
       promiseVerified = new Promise(function (resolve, reject) {
-        const verifiedCursor = verifiedCol
-          .aggregate(queryVerifiedCol)
-          .limit(10);
+        const verifiedCursor = verifiedCol.aggregate(queryVerifiedCol).limit(10);
         const result = verifiedCursor.toArray();
         resolve(result);
       });
