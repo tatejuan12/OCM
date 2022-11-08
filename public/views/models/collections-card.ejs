@@ -17,7 +17,7 @@
               <img src="<%=collection.logo_url%>" alt="Nft_Profile">
           </div>
           <div class="collection-deg">
-              <h6 class="title nus"><%=collection.name %></h6>
+              <h6 class="title"><%=collection.displayName %></h6>
               <%const formatter = Intl.NumberFormat('en', {notation: 'compact'});%>
               <span class="items"><%= formatter.format(collection.numberOfNFTs) %> Items</span>
           </div>

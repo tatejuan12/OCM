@@ -61,7 +61,7 @@ var methods = {
       await client.close();
     }
   },
-  createCollection: async function (name, brand, url, issuer, description) {
+  createCollection: async function (displayName, family, name, brand, url, issuer, description) {
     const client = await getClient();
     if (!client) return;
     try {
@@ -71,6 +71,8 @@ var methods = {
       var issuerArray = issuer.split(",");
 
       let query = {};
+      if (displayName) query.displayName = displayName;
+      if (family) query.family = family;
       if (name) query.name = name;
       if (brand) query.brand = brand;
       if (url) query.url = url;
