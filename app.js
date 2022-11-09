@@ -422,9 +422,16 @@ server.get("/collections", speedLimiter, async (req, res) => {
     collections: collections,
   });
 });
-server.get("/create-collection", speedLimiter, (req, res) => {
+server.get("/create-collection", speedLimiter, async (req, res) => {
   defaultLocals(req, res);
-  res.render("views/create-collection");
+  if (req.session.login) {
+    const checkAccount = await mongoClient.query.verifiedChecker(req.session.wallet)
+    if (checkAccount) {
+      res.render("views/create-collection");
+    } else {
+      res.render("views/404")
+    }
+  } else res.status(401).redirect("/");
 });
 server.get("/logout", speedLimiter, (req, res) => {
   req.session.destroy();
@@ -447,24 +454,14 @@ server.get("/redeem", speedLimiter,async (req, res) => {
   defaultLocals(req,res);
     if (req.session.login) {
       const dateNow = Date.now();
+      const memo = "Redeemed through OnChain Markeplace! \nhttps://onchainmarketplace.net"
+      const historyArray = await xumm.xrpl.accountRedemptionHistory(req.session.wallet, memo);
       const getAssets = await mongoClient.query.redeemAssets();
-      const ocwBalance = await xumm.xrpl.getOcwBalance(
-        req.session.wallet,
-        req.useragent.isMobile
-      );
-      ocwBalance
-        ? res.render("views/redeem", {
-            ocwBalance: ocwBalance[0],
-            obtainableNfts: ocwBalance[1],
-            tokens: getAssets,
-            currTime: dateNow
-          })
-        : res.render("views/redeem", {
-            ocwBalance: 0,
-            obtainableNfts: 0,
-            tokens: getAssets,
-            currTime: dateNow
-          });  
+      res.render("views/redeem", {
+        tokens: getAssets,
+        currTime: dateNow,
+        history: historyArray
+      })
   } else res.status(401).redirect("/");
 });
 server.get("/edit-profile", speedLimiter, async (req, res) => {
@@ -543,9 +540,52 @@ server.get("/search", speedLimiter, async (req, res) => {
   const searchResults = await mongoClient.query.getSearchResultsJSON(
     req.query.q
   );
+  var promisesArray = []
+  var collections = searchResults.collections
+  for (var i = 0; i < collections.length; i++) {
+    var collectionsImagesPromise = new Promise(function (resolve, reject) {
+      var randomImages = mongoClient.query.getRandomCollectionImages(
+        collections[i].name,
+        collections[i].issuer
+      );
+      resolve(randomImages);
+    });
+    var collectionsTotalItemsListedPromise = new Promise(function (
+      resolve,
+      reject
+    ) {
+      var totalItemsListed = mongoClient.query.totalCollectionItems(
+        collections[i].name,
+        collections[i].issuer
+      );
+      resolve(totalItemsListed);
+    });
+    var collectionsTotalItemsUnlistedPromise = new Promise(function (
+      resolve,
+      reject
+    ) {
+      var totalItemsUnlisted = mongoClient.query.unlistedCollectionItems(
+        collections[i].name,
+        collections[i].issuer
+      );
+      resolve(totalItemsUnlisted);
+    });
+    promisesArray.push(collectionsImagesPromise);
+    promisesArray.push(collectionsTotalItemsListedPromise);
+    promisesArray.push(collectionsTotalItemsUnlistedPromise);
+  }
+  var collectionResults = await Promise.all(promisesArray);
+  for (var i = 0; i < collections.length; i++) {
+    collections[i].sampleImages = collectionResults[Number(i) * 3];
+    collections[i].numberOfNFTs =
+      Number(collectionResults[Number(i) * 3 + 1]) +
+      Number(collectionResults[Number(i) * 3 + 2]); //add the listed and unlisted values together
+  }
+  collections = appendColletionsImagesUrls(collections);
   const searchedItem = req.query.q;
   res.render("views/search", {
     res: searchResults,
+    collection: collections,
     searchedItem: searchedItem,
   });
 });
@@ -768,30 +808,33 @@ server.post(
     const formDataBody = req.body;
     const formDataFiles = req.files;
     var result = false;
-    if (formDataFiles) {
-      if (formDataFiles["collection-logo"]) {
-        if (
-          (result = await digitalOcean.functions.uploadCollectionLogo(
-            req,
-            formDataFiles["collection-logo"][0]
-          ))
-        )
-          result = true;
-        console.log("uploaded logo");
-      }
-      if (formDataFiles["cover-img"]) {
-        if (
-          (result = await digitalOcean.functions.uploadCollectionBanner(
-            req,
-            formDataFiles["cover-img"][0]
-          ))
-        )
-          result = true;
-        console.log("uploaded banner");
-      }
-    }
+    // if (formDataFiles) {
+    //   if (formDataFiles["collection-logo"]) {
+    //     if (
+    //       (result = await digitalOcean.functions.uploadCollectionLogo(
+    //         req,
+    //         formDataFiles["collection-logo"][0]
+    //       ))
+    //     )
+    //       result = true;
+    //     console.log("uploaded logo");
+    //   }
+    //   if (formDataFiles["cover-img"]) {
+    //     if (
+    //       (result = await digitalOcean.functions.uploadCollectionBanner(
+    //         req,
+    //         formDataFiles["cover-img"][0]
+    //       ))
+    //     )
+    //       result = true;
+    //     console.log("uploaded banner");
+    //   }
+    // }
+    console.log(formDataBody)
     if (
       await mongoClient.query.createCollection(
+        formDataBody["displayName"],
+        formDataBody["family"],
         formDataBody["name"],
         formDataBody["brand"],
         formDataBody["url"],
@@ -1068,22 +1111,26 @@ server.post(
   async (req, res, next) => {
     const dataBody = req.body;
     const nfts = JSON.parse(dataBody.nfts);
-    const price = nfts.length * 0.98;
-    const payload = await xumm.payloads.mintNftPayload(
-      process.env.XRPL_ISSUER_PAYMENT_ADDRESS,
-      req.session.wallet,
-      req.session.user_token,
-      price,
-      req.useragent.isMobile,
-      dataBody.returnUrl
-    );
-    const response = {
-      payload: payload,
-    };
-    if (payload) {
-      res.send(response).status(200);
+    if (nfts.length > 0) {
+      const price = nfts.length * 0.98;
+      const payload = await xumm.payloads.mintNftPayload(
+        process.env.XRPL_ISSUER_PAYMENT_ADDRESS,
+        req.session.wallet,
+        req.session.user_token,
+        price,
+        req.useragent.isMobile,
+        dataBody.returnUrl
+      );
+      const response = {
+        payload: payload,
+      };
+      if (payload) {
+        res.send(response).status(200);
+      } else {
+        res.status(400);
+      }
     } else {
-      res.status(400);
+      res.status(400).send('no NFTs to list')
     }
   }
 );

@@ -1,3 +1,4 @@
+const { watchFile } = require("fs");
 const { MongoDBNamespace, GridFSBucketReadStream } = require("mongodb");
 const { resolve } = require("path");
 const { resourceLimits } = require("worker_threads");
@@ -60,7 +61,7 @@ var methods = {
       await client.close();
     }
   },
-  createCollection: async function (name, brand, url, issuer, description) {
+  createCollection: async function (displayName, family, name, brand, url, issuer, description) {
     const client = await getClient();
     if (!client) return;
     try {
@@ -70,6 +71,8 @@ var methods = {
       var issuerArray = issuer.split(",");
 
       let query = {};
+      if (displayName) query.displayName = displayName;
+      if (family) query.family = family;
       if (name) query.name = name;
       if (brand) query.brand = brand;
       if (url) query.url = url;
@@ -330,7 +333,7 @@ var methods = {
         }
         if (filters.sortPrice) {
           aggregateQuery.push({
-            $sort: { "sellOffers.0.xrpValue": parseInt(filters.sortPrice) },
+            $sort: { "sellOffers.xrpValue": parseInt(filters.sortPrice) },
           });
         }
         if (filters.filterExtras == "Verified") {
@@ -362,7 +365,7 @@ var methods = {
         }
         if (filters.filterPriceMin || filters.priceMax) {
           aggregateQuery[0].$addFields.recentSell = {
-            $first: "$sellHistory.price",
+            $first: "$sellOffers.xrpValue",
           };
           aggregateQuery.push({
             $match: {
@@ -415,6 +418,27 @@ var methods = {
       console.log("Database error" + err);
     } finally {
       await client.close();
+    }
+  },
+  verifiedChecker: async function (wallet) {
+    const client = await getClient();
+    if (!client) return;
+    try{
+      const db = client.db('Additional-Traits')
+      let collection = db.collection('Verified-Issuers');
+      var query = {
+        issuingAccounts: {$eq: wallet}
+      }
+      const res = await collection.find(query).toArray()
+      var found = false;
+      if (res.length == 1){
+        found = true
+      }
+      return found;
+    }catch (err) {
+
+    } finally {
+      await client.close()
     }
   },
   getUnlistedCollectionNfts: async function (
@@ -717,7 +741,7 @@ var methods = {
 
       let nftDetailsCol = dbNfts.collection("Eligible-Listings");
       let usersCol = dbAccounts.collection("Elegible-Accounts");
-      let verifiedCol = dbCollections.collection("Verified-Issuers");
+      let verifiedCol = dbCollections.collection("Collections");
       let queryNftDetails = [
         {
           $search: {
@@ -752,7 +776,7 @@ var methods = {
               query: searchQuery,
               path: {
                 wildcard: "*",
-              },
+              }
             },
           },
         },
@@ -768,9 +792,7 @@ var methods = {
         resolve(result);
       });
       promiseVerified = new Promise(function (resolve, reject) {
-        const verifiedCursor = verifiedCol
-          .aggregate(queryVerifiedCol)
-          .limit(10);
+        const verifiedCursor = verifiedCol.aggregate(queryVerifiedCol).limit(10);
         const result = verifiedCursor.toArray();
         resolve(result);
       });

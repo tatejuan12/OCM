@@ -1178,6 +1178,8 @@ $(function () {
   $("#subCollection").attr("disabled", true);
   $("#collectionForm").change(function () {
     if (
+      $('#displayName').val() != "" &&
+      $('#family').val() != "" &&
       $("#name").val() != "" &&
       $("#brand").val() != "" &&
       $("#url").val() != "" &&

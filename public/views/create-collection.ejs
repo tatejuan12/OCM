@@ -107,6 +107,22 @@
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="collection-single-wized">
+                                <label for="displayName" class="title required">Display Name</label>
+                                <div class="create-collection-input">
+                                    <input id="displayName" class="displayName" type="text" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="collection-single-wized">
+                                <label for="family" class="title required">Collection Family</label>
+                                <div class="create-collection-input">
+                                    <input id="family" class="family" type="text" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="collection-single-wized">
                                 <label for="name" class="title required">Collection Name</label>
                                 <div class="create-collection-input">
                                     <input id="name" class="name" type="text" required>
@@ -275,6 +291,8 @@
   <script>
   function submitUpdateProfileForm() {
     const formData = new FormData();
+    formData.append("displayName", document.getElementById("displayName").value);
+    formData.append("family", document.getElementById("family").value);
     formData.append("name", document.getElementById("name").value.replace(" ", "_"));
     formData.append("brand", document.getElementById("brand").value);
     formData.append("link", document.getElementById("url").value);

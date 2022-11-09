@@ -1,4 +1,4 @@
-<div data-sal="slide-up" data-sal-delay="200" data-sal-duration="800" class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-12">
+<div data-sal="slide-up" data-sal-delay="200" data-sal-duration="800" class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-12 collection-card-main">
   <a href="collection?name=<%=collection.name%>&issuer=<%=collection.issuer%>&page=0" class="rn-collection-inner-one">
       <div class="collection-wrapper">
           <div class="collection-big-thumbnail">
@@ -17,7 +17,7 @@
               <img src="<%=collection.logo_url%>" alt="Nft_Profile">
           </div>
           <div class="collection-deg">
-              <h6 class="title nus"><%=collection.name %></h6>
+              <h6 class="title"><%=collection.displayName %></h6>
               <%const formatter = Intl.NumberFormat('en', {notation: 'compact'});%>
               <span class="items"><%= formatter.format(collection.numberOfNFTs) %> Items</span>
           </div>

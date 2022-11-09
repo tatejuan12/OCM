@@ -53,7 +53,6 @@
         <div class="boxContent">
           <h1>Swap</h1>
           <p>Swap your IOU token for an NFToken</p>
-          <img draggable="false" src="assets/images/activity/qmark600.png" id="yourNFT">
           <div class="redeemDropDown">
             <span>
               <select name="redeem-menu" id="redeem-menu" onchange="setLoaderBalance();(getCurrencyBalance(this.value))">
@@ -85,6 +84,35 @@
               </button>
           <%}%>
         </div>
+      </div>
+      <h2 style="margin-top: 20px;">Recently Redeemed</h2>
+      <div class="redeem-history-container" id="rhCont">
+        <%if (history != null) {%>
+        <%history.forEach(function(res){%>
+          <div class="redeem-history">
+            <div class="card">
+              <a href="/product-details?id=<%=res.NFTokenID%>" id="redeemHistoryImage">
+                <img class="redeem-image" src="<%=res.imageLink%>" alt="">
+              </a>
+              <div class="content">
+                <div class="info">
+                  <%const date = new Date(res.date)%>
+                  <p><%=date.toLocaleDateString('en-AU')%></p>
+                </div>
+                <div class="info">
+                  <a href="/product-details?id=<%=res.NFTokenID%>">
+                    <p class="token-id" style="overflow-wrap: break-word;"><%=res.NFTokenID%></p>
+                  </a>
+                </div>
+                <div class="info">
+                  <p class="redeem-value"><%=res.amount%> <%=res.token%></p>
+                  <p class="trans-link"><a href="https://bithomp.com/explorer/<%=res.txID%>" target="_blank">View on Bithomp</a></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        <%})%>
+        <%}%>
       </div>
     </div>
   </div>
