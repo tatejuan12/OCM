@@ -144,9 +144,6 @@
               </div>
             </div>
             <span class="bid">Highest Bid: <span class="price"><%- nft.buyOffers[0] ? nft.buyOffers[0].xrpValue + " XRP": "No bids"%></span></span>
-            <h6 class="title-name">
-              <%=nft.uriMetadata.collection.family%>
-            </h6>
             <div class="catagory-collection">
 
               <div class="collection">
@@ -164,6 +161,7 @@
                     </div>
                     <div class="top-seller-content">
                       <a href="collection?name=<%=nft.uriMetadata.collection.name.toLowerCase().replace(' ', '_')%>&issuer=<%=nft.issuer%>&page=0">
+                        <h4 style="margin-bottom: 0;"><%=nft.uriMetadata.collection.family%></h4>
                         <h6 class="name"><%=nft.uriMetadata.collection.name%></h6>
                       </a>
                     </div>

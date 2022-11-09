@@ -379,7 +379,7 @@ server.get("/collections", speedLimiter, async (req, res) => {
   for (var i = 0; i < collections.length; i++) {
     var collectionsImagesPromise = new Promise(function (resolve, reject) {
       var randomImages = mongoClient.query.getRandomCollectionImages(
-        collections[i].name,
+        collections[i].family,
         collections[i].issuer
       );
       resolve(randomImages);
@@ -389,7 +389,7 @@ server.get("/collections", speedLimiter, async (req, res) => {
       reject
     ) {
       var totalItemsListed = mongoClient.query.totalCollectionItems(
-        collections[i].name,
+        collections[i].family,
         collections[i].issuer
       );
       resolve(totalItemsListed);
@@ -399,7 +399,7 @@ server.get("/collections", speedLimiter, async (req, res) => {
       reject
     ) {
       var totalItemsUnlisted = mongoClient.query.unlistedCollectionItems(
-        collections[i].name,
+        collections[i].family,
         collections[i].issuer
       );
       resolve(totalItemsUnlisted);
@@ -496,7 +496,7 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
   const promiseNfts = await Promise.all([nftsPromise]);
   if (promises[0] !== null) {
     if (promises[0].uriMetadata.collection.name !== null) {
-      var nftCollection = promises[0].uriMetadata.collection.name
+      var nftCollection = promises[0].uriMetadata.collection.family
         .toLowerCase()
         .replace(" ", "_");
     } else {

@@ -651,8 +651,8 @@ var methods = {
       var returnedName = collectionName.replace("_", " ");
       let query = {
         $or: [
-          { "uriMetadata.collection.name": new RegExp(returnedName, "i") },
-          { "uriMetadata.collection.name": null },
+          { "uriMetadata.collection.family": new RegExp(returnedName, "i") },
+          { "uriMetadata.collection.family": null },
         ],
         issuer: { $in: issuer },
       };
@@ -673,8 +673,8 @@ var methods = {
       var returnedName = collectionName.replace("_", " ");
       let query = {
         $or: [
-          { "uriMetadata.collection.name": new RegExp(returnedName, "i") },
-          { "uriMetadata.collection.name": null },
+          { "uriMetadata.collection.family": new RegExp(returnedName, "i") },
+          { "uriMetadata.collection.family": null },
         ],
         issuer: { $in: issuer },
       };
@@ -1030,8 +1030,8 @@ var methods = {
         {
           $match: {
             $or: [
-              { "uriMetadata.collection.name": new RegExp(returnedName, "i") },
-              { "uriMetadata.collection.name": null },
+              { "uriMetadata.collection.family": new RegExp(returnedName, "i") },
+              { "uriMetadata.collection.family": null },
             ],
           },
         },
