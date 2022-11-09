@@ -1,5 +1,6 @@
 <%- include('../functions.ejs')%>
 <% owner = nft.currentOwner == wallet ? true : false %>
+<%const formatter = Intl.NumberFormat('en', {notation: 'compact'});%>
 
 <!-- start single product -->
 <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12 nft-card-wrap w-100">
@@ -14,11 +15,36 @@
           <img src="<%= nft.thumbnail%>" alt="Nft_Profile" draggable="false" loading="lazy">
         <!-- JPG/JPEG/PNG/GIF -->
         <% } else if (vidExt.has(nft.fileType)) { %>
-          <video autoplay loop>
-            <source src="<%= nft.httpsImage%>" type="video/mp4">
-            <source src="<%= nft.httpsImage%>" type="video/webm">
-            <source src="<%= nft.httpsImage%>" type="video/ogg">
-          </video>
+          <%if (nft.httpsImage.startsWith("https://customer-ce8gmdxp8czqnbz4.cloudflarestream.com/")){%>
+            <video id="<%=nft.tokenID%>" muted></video>
+            <script>
+              if (Hls.isSupported()) {
+                const video = document.getElementById('<%=nft.tokenID%>');
+                const hls = new Hls();
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MEDIA_ATTACHED, () => {
+                  hls.loadSource(
+                    '<%=nft.httpsImage%>'
+                  );
+                });
+              }
+              document.getElementById('<%=nft.tokenID%>').addEventListener('mouseover', function() {
+                this.play();
+              })
+              document.getElementById('<%=nft.tokenID%>').addEventListener('mouseleave', function() {
+                this.currentTime = 0;
+                this.pause();
+              })
+            </script>
+          <%} else {%>
+            <video controls autoplay loop>
+              <source src="<%=nft.httpsImage%>" type="video/mp4">
+              <source src="<%=nft.httpsImage%>" type="video/webm">
+              <source src="<%=nft.httpsImage%>" type="video/ogg">
+              <source src="<%=nft.httpsImage%>" type="video/avc">
+              <source src="<%=nft.httpsImage%>" type="video/mov">
+            </video>
+           <%}%>
         <% } else {%>
           <img src="<%= nft.httpsImage%> " alt="unlisted NFT image" draggable="false" loading="lazy">
         <%};%>
@@ -71,10 +97,17 @@
       </div>
     </div>
     <a href="product-details?id=<%=nft.tokenID%>"><span class="product-name"><%= nft.uriMetadata.name %></span></a>
-    <span class="latest-bid">Highest bid:</span>
+    <div class="prices-nft-card">
+      <div class="price">
+        <span class="latest-bid">Price:</span>
+        <span><%- nft.sellOffers[0] ? formatter.format(nft.sellOffers[0].xrpValue) + " XRP": "Not for sale"%></span>
+      </div>
+      <div class="price bids">
+        <span class="latest-bid">Highest Bid:</span>
+        <span><%- nft.buyOffers[0] ? formatter.format(nft.buyOffers[0].xrpValue) + " XRP": "No bids yet"%></span>
+      </div>
+    </div>
     <div class="bid-react-area">
-      <%const formatter = Intl.NumberFormat('en', {notation: 'compact'});%>
-      <div class="last-bid"><%- nft.buyOffers[0] ? formatter.format(nft.buyOffers[0].xrpValue) + " XRP": "No bids"%></div>
       <div class="react-area <% if (login && nftLiked()) __append('liked')%>" <%if(login) {%>onclick="likeHandler('<%=nft.tokenID%>', this)" <%}%>>
         <svg viewBox="0 0 17 16" fill="none" width="16" height="16" class="sc-bdnxRM sc-hKFxyN kBvkOu">
           <path d="M8.2112 14L12.1056 9.69231L14.1853 7.39185C15.2497 6.21455 15.3683 4.46116 14.4723 3.15121V3.15121C13.3207 1.46757 10.9637 1.15351 9.41139 2.47685L8.2112 3.5L6.95566 2.42966C5.40738 1.10976 3.06841 1.3603 1.83482 2.97819V2.97819C0.777858 4.36443 0.885104 6.31329 2.08779 7.57518L8.2112 14Z" stroke="currentColor" stroke-width="2"></path>
