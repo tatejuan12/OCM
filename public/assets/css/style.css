@@ -620,9 +620,11 @@ var {
 .active-light-mode .i-eye{
   background-image: url(../images/icons/Favorites/icons8-eye-48.png);
 }
-
 .i-eye{
   background-image: url(../images/icons/Favorites-light/icons8-eye-48.png);
+}
+.active-light-mode .i-paper-plane{
+  background-image: url(../images/icons/Favorites/icons8-paper-plane-48.png);
 }
 .i-paper-plane{
   background-image: url(../images/icons/Favorites-light/icons8-paper-plane-48.png);
