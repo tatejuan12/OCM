@@ -544,7 +544,7 @@ server.get("/search", speedLimiter, async (req, res) => {
   for (var i = 0; i < collections.length; i++) {
     var collectionsImagesPromise = new Promise(function (resolve, reject) {
       var randomImages = mongoClient.query.getRandomCollectionImages(
-        collections[i].name,
+        collections[i].family,
         collections[i].issuer
       );
       resolve(randomImages);
@@ -554,7 +554,7 @@ server.get("/search", speedLimiter, async (req, res) => {
       reject
     ) {
       var totalItemsListed = mongoClient.query.totalCollectionItems(
-        collections[i].name,
+        collections[i].family,
         collections[i].issuer
       );
       resolve(totalItemsListed);
@@ -564,7 +564,7 @@ server.get("/search", speedLimiter, async (req, res) => {
       reject
     ) {
       var totalItemsUnlisted = mongoClient.query.unlistedCollectionItems(
-        collections[i].name,
+        collections[i].family,
         collections[i].issuer
       );
       resolve(totalItemsUnlisted);
@@ -1583,10 +1583,10 @@ function getPayload(request) {
 function appendColletionsImagesUrls(collections) {
   collections.forEach((collection) => {
     const collection_logo = digitalOcean.functions.getCollectionLogoLink(
-      collection.name.replace(/\s/g, "_").toLowerCase()
+      collection.family.replace(/\s/g, "_").toLowerCase()
     );
     const collection_banner = digitalOcean.functions.getCollectionBannerLink(
-      collection.name.replace(/\s/g, "_").toLowerCase()
+      collection.family.replace(/\s/g, "_").toLowerCase()
     );
     collection["banner_url"] = collection_banner;
     collection["logo_url"] = collection_logo;
