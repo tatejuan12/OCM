@@ -802,28 +802,28 @@ server.post(
     const formDataBody = req.body;
     const formDataFiles = req.files;
     var result = false;
-    // if (formDataFiles) {
-    //   if (formDataFiles["collection-logo"]) {
-    //     if (
-    //       (result = await digitalOcean.functions.uploadCollectionLogo(
-    //         req,
-    //         formDataFiles["collection-logo"][0]
-    //       ))
-    //     )
-    //       result = true;
-    //     console.log("uploaded logo");
-    //   }
-    //   if (formDataFiles["cover-img"]) {
-    //     if (
-    //       (result = await digitalOcean.functions.uploadCollectionBanner(
-    //         req,
-    //         formDataFiles["cover-img"][0]
-    //       ))
-    //     )
-    //       result = true;
-    //     console.log("uploaded banner");
-    //   }
-    // }
+    if (formDataFiles) {
+      if (formDataFiles["collection-logo"]) {
+        if (
+          (result = await digitalOcean.functions.uploadCollectionLogo(
+            req,
+            formDataFiles["collection-logo"][0]
+          ))
+        )
+          result = true;
+        console.log("uploaded logo");
+      }
+      if (formDataFiles["cover-img"]) {
+        if (
+          (result = await digitalOcean.functions.uploadCollectionBanner(
+            req,
+            formDataFiles["cover-img"][0]
+          ))
+        )
+          result = true;
+        console.log("uploaded banner");
+      }
+    }
     console.log(formDataBody)
     if (
       await mongoClient.query.createCollection(
