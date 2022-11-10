@@ -921,6 +921,7 @@ var xrpls = {
   
         var allFilteredOffers = [];
         for (a in allOffers) {
+          if((Number(allOffers[a].expiration) + 946684800) * 1000 < Date.now()) continue
           var index = allOffers[a].nft_offer_index;
           var destination = allOffers[a].destination;
   
