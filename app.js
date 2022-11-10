@@ -237,7 +237,7 @@ server.get("/explore", speedLimiter, async (req, res) => {
     });
     promiseVerifiedIssuers = new Promise(function (resolve, reject) {
       resolve(mongoClient.query.getVerifiedIssuers());
-    });
+    });//remove when server occupancy is low
     const promises = await Promise.all([promiseNfts, promiseVerifiedIssuers]);
     const filterOptions = await mongoClient.query.filterOptions();
     res.render("views/explore", {
@@ -733,23 +733,18 @@ server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
   const ipAddress = apiInfo[0].ip
   issuer = 'XRP'
   tokenHex= 'XRP'
-  const balance = await xumm.xrpl.getTokenBalance(clientAddy, issuer, tokenHex)
-  if (balance >= 2) {
-    const payload = await xumm.payloads.redeemNftPayload(
-      req.session.wallet,
-      req.useragent.isMobile,
-      req.body.return_url,
-      ipAddress
-    );
-    try {
-      if (payload instanceof Error) throw payload;
-      res.status(200).send(payload);
-    } catch (err) {
-      console.log(err.toString());
-      res.status(500).send(err.toString());
-    }
-  } else {
-    res.status(400).send('Not enough reserve in offer account')
+  const payload = await xumm.payloads.redeemNftPayload(
+    req.session.wallet,
+    req.useragent.isMobile,
+    req.body.return_url,
+    ipAddress
+  );
+  try {
+    if (payload instanceof Error) throw payload;
+    res.status(200).send(payload);
+  } catch (err) {
+    console.log(err.toString());
+    res.status(500).send(err.toString());
   }
 });
 server.post("/redeem-nft-subscription", speedLimiter, async (req, res) => {
@@ -1588,10 +1583,10 @@ function getPayload(request) {
 function appendColletionsImagesUrls(collections) {
   collections.forEach((collection) => {
     const collection_logo = digitalOcean.functions.getCollectionLogoLink(
-      collection.name
+      collection.name.replace(/\s/g, "_").toLowerCase()
     );
     const collection_banner = digitalOcean.functions.getCollectionBannerLink(
-      collection.name
+      collection.name.replace(/\s/g, "_").toLowerCase()
     );
     collection["banner_url"] = collection_banner;
     collection["logo_url"] = collection_logo;
