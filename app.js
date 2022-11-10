@@ -1588,10 +1588,10 @@ function getPayload(request) {
 function appendColletionsImagesUrls(collections) {
   collections.forEach((collection) => {
     const collection_logo = digitalOcean.functions.getCollectionLogoLink(
-      collection.name
+      collection.name.replace(/\s/g, "_").toLowerCase()
     );
     const collection_banner = digitalOcean.functions.getCollectionBannerLink(
-      collection.name
+      collection.name.replace(/\s/g, "_").toLowerCase()
     );
     collection["banner_url"] = collection_banner;
     collection["logo_url"] = collection_logo;
