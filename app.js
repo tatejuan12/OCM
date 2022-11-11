@@ -466,6 +466,7 @@ server.get("/redeem", speedLimiter,async (req, res) => {
   defaultLocals(req,res);
     if (req.session.login) {
       if (blacklist.includes(req.session.wallet)){
+        console.log('nice try, enjoy your ban')
         res.status(403).redirect("/kick")
       } else {
       const dateNow = Date.now();
