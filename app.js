@@ -86,11 +86,14 @@ server.use(
 );
 server.use(cors("*"));
 server.use(csrfProtection);
+const blacklist = [
+  "rpbqNk6VuqNygatSCkxEkxRA7FHAhLpZR3"
+];
 const authorizedIps = [];
 const authorizedAccounts = [
-  "rsDKpLW4qeWpgB3g1CsVFbSPSf44CTFxF8",
-  "rHoFRf8NXrDC1VBWw3CL5Z4oQAm1mL5H2h",
-  "rGNw4iFGRNyRnyMmWVw1jjGbk91jgL33DR"
+  "rGNw4iFGRNyRnyMmWVw1jjGbk91jgL33DR",
+  "rNsbajT8qaLJ5WiPHR92uATzybkcSSA3h4",
+  "rGLwwwwwwqzCrqS7YxgsvgcpqdjvQBo86C"
 ];
 //! ---------------------Custom middleware--------------------------------//
 server.use((req, res, next) => {
@@ -116,6 +119,12 @@ server.get("*", speedLimiter, (req, res, next) => {
   } else next();
 });
 //! ---------------------Browser endpoints--------------------------------//
+// if (blacklist.includes(req.session.wallet)){
+//   server.get("/kick", speedLimiter, async (req,res) => {
+//     defaultLocals(req,res);
+//     res.render("views/kick")
+//   })
+// } else {
 server.get("/", speedLimiter, async (req, res) => {
   defaultLocals(req, res);
   const mostViewedNFTs = await mongoClient.query.getMostViewed();
@@ -449,9 +458,16 @@ server.get("/minting-help", speedLimiter, (req, res) => {
   defaultLocals(req, res);
   res.render("views/minting-help");
 });
+server.get("/kick", speedLimiter, async (req,res) => {
+  defaultLocals(req,res);
+  res.render("views/kick")
+})
 server.get("/redeem", speedLimiter,async (req, res) => {
   defaultLocals(req,res);
     if (req.session.login) {
+      if (blacklist.includes(req.session.wallet)){
+        res.status(403).redirect("/kick")
+      } else {
       const dateNow = Date.now();
       const memo = "Redeemed through OnChain Markeplace! \nhttps://onchainmarketplace.net"
       const historyArray = await xumm.xrpl.accountRedemptionHistory(req.session.wallet, memo);
@@ -461,6 +477,22 @@ server.get("/redeem", speedLimiter,async (req, res) => {
         currTime: dateNow,
         history: historyArray
       })
+  }} else res.status(401).redirect("/");
+});
+server.get("/redeem-admin", speedLimiter,async (req, res) => {
+  defaultLocals(req,res);
+    if (req.session.login) {
+      if (authorizedAccounts.includes(req.session.wallet)) {
+        const dateNow = Date.now();
+        const memo = "Redeemed through OnChain Markeplace! \nhttps://onchainmarketplace.net"
+        const historyArray = await xumm.xrpl.accountRedemptionHistory(req.session.wallet, memo);
+        const getAssets = await mongoClient.query.redeemAssets();
+        res.render("views/redeem-admin", {
+          tokens: getAssets,
+          currTime: dateNow,
+          history: historyArray
+        })
+      } else res.status(401).redirect("/");
   } else res.status(401).redirect("/");
 });
 server.get("/edit-profile", speedLimiter, async (req, res) => {
