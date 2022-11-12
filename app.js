@@ -761,17 +761,17 @@ server.post("/XUMM-sign-subscription", speedLimiter, async (req, res) => {
   const result = await xumm.subscriptions.watchSubscripion(req, res);
 });
 server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
-  const apiInfo = await mongoClient.query.findRedemptionAccountByToken(req.body.token);
+  const apiInfo = await mongoClient.query.findRedemptionAccountByProject(req.body.project);
   const clientAddy = apiInfo[0].account;
   const ipAddress = apiInfo[0].ip;
   const acctAge = await xumm.xrpl.checkAccountActivation(req.session.wallet, 1)
   if (!acctAge) {
-    res.status(403).send('Error #1004')
+    res.status(403).send('Error #1004')//account too young
     return;
   } else {
   const accountBal = await xumm.xrpl.getTokenBalance(req.session.wallet, apiInfo[0].issuer, apiInfo[0].hex)
   if (accountBal < apiInfo[0].minimum || accountBal == undefined) {
-    res.status(403).send('Error #1003')
+    res.status(403).send('Error #1003')//insuf funds
     return;
   } else {
   const payload = await xumm.payloads.redeemNftPayload(
@@ -1556,6 +1556,7 @@ server.get(
   }
 );
 server.get("/get-token-balance", speedLimiter, async (req, res) => {
+  const formatter = Intl.NumberFormat('en', {notation: 'compact'});
   const hex = req.query.hex;
   const issuer = req.query.issuer;
   const token = req.query.token;
@@ -1566,7 +1567,11 @@ server.get("/get-token-balance", speedLimiter, async (req, res) => {
   );
   balance = parseFloat(balance);
   if (isNaN(balance)) balance = 0;
-  balance = balance.toFixed(2);
+  if (balance.length > 3){
+    balance = formatter.format(balance)
+  } else {
+    balance = balance.toFixed(2);
+  }
   res.send(balance + " " + token);
 });
 

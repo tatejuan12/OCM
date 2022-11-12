@@ -59,26 +59,27 @@
                 <option value=false selected disabled>Select Project</option>
                 <%tokens.forEach(function(res){%>
                   <%if (res.launch <= currTime && res.hidden == false) {%>
-                    <option value='{"issuer": "<%=res.issuer%>", "hex": "<%=res.hex%>", "token": "<%=res.token%>", "minimum": "<%=res.minimum%>"} '><%=res.token%></option>
+                    <option value='{"issuer": "<%=res.issuer%>", "hex": "<%=res.hex%>", "token": "<%=res.token%>", "minimum": "<%=res.minimum%>", "project": "<%=res.project%>"} '><%=res.project%></option>
                   <%}%>
                 <%});%>
               </select>
             </span>
+            <span id="itemPrice">
+            </span>
             <span id="currency-balance">
-
             </span>
           </div>
           <!-- <%#if (login) {%><button class="btn2" id="redeem" onclick="getRedeem(this, this.nextElementSibling, document.getElementById('redeem-menu').value);">SWAP</button> <%#} else {%> <button class="btn2" id="redeem" disabled><span>SWAP</span></button><%#}%> -->
           <!-- bellow div will give you a spinning loader anywhere on the website -->
           <%if (login) {%>
             <button class="special-btn" id="redeem" onclick="getRedeem(this, this.nextElementSibling, document.getElementById('redeem-menu').value);">
-              <i class="icon i-redeem"></i>
+              <i class="icon i-redeem" style="z-index: 0;"></i>
               <span class="button-text">Redeem</span>
               <span style="margin: 0;" class="button-loader"></span>
             </button>
           <%} else {%>
               <button disabled class="special-btn" id="redeem" >
-                <i class="icon i-redeem"></i>
+                <i class="icon i-redeem" style="z-index: 0;"></i>
                 <span class="button-text">Redeem</span>
                 <span style="margin: 0;" class="button-loader"></span>
               </button>
@@ -163,8 +164,8 @@
 
             function getCurrencyBalance(data) {
               try {
-
                 data = JSON.parse(data);
+                $("#itemPrice").html(`Price: ${data.minimum} ${data.token}`)
                 $("#currency-balance").load(`<%=url%>/get-token-balance?issuer=${data.issuer}&hex=${data.hex}&token=${data.token}`);
               } catch (err) {
                 console.error("Couldn't parse balance");

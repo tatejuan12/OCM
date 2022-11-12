@@ -24193,6 +24193,9 @@ body.active-light-mode {
   .redeem-history .card .content .info p {
     font-size: 11px;
   }
+  .box span{
+    font-size: 12px;
+  }
 }
 .box span {
   margin: 5px 0;

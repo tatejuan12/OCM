@@ -1209,14 +1209,14 @@ var methods = {
       await client.close()
     }
   },
-  findRedemptionAccountByToken: async function (token) {
+  findRedemptionAccountByProject: async function (project) {
     const client = await getClient();
     if (!client) return;
     try{
       const db = client.db('Redeem')
       let collection = db.collection('Assets')
       query = {
-        token: new RegExp(token, "i")
+        project: new RegExp(project, "i")
       }
       let res = await collection.find(query).toArray()
       return res;
