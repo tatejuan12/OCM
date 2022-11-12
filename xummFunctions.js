@@ -1584,6 +1584,56 @@ var xrpls = {
       await client.disconnect();
     }
   },
+  checkAccountActivation: async function (account, daysSinceActivation) {
+
+      try {
+          //define 
+          var client = await getXrplClient()
+
+          //REQUEST TRANSACTIONS
+          var result = await client.request({
+              "command": "account_tx",
+              "account": account,
+              "ledger_index_min": -1,
+              "ledger_index_max": -1,
+              "limit": 1,
+              "forward": true
+          })
+
+          //CHECK ACCOUNT IS ACTIVATED
+          if (result.result.transactions.length == 0) {
+              console.log(`Account NOT ACTIVATED -> ${account}`)
+              return false
+          }
+
+          //SORT THEM TO ENSURE THE OLDEST IS FIRST (RIPPLED DOESN'T GUARANTEE ONLY RETURNING 1 TRANSACTION)
+          result.result.transactions.sort(function(a, b) {
+              return a.tx.date - b.tx.date;
+          });
+
+          //CHECK ACTIVATION DATE
+          var activationDate = (result.result.transactions[0].tx.date + 946684800) * 1000
+
+          if (activationDate + (daysSinceActivation * 86400000) < Date.now()) { //IF ACTIVATION DATE WAS LONGER AGO THAN DEFINED PERIOD
+              var validAccount = true
+          } else {
+              console.log(`Account Only Activated ${((Date.now() - activationDate)/86400000).toFixed(2)} Days Ago -> ${account}`)
+              var validAccount = false
+          }
+
+          //true == Account is valid, and was activated longer ago than the defined period
+          //true == ACCOUNT CAN CONTINUE AND IS VALID
+
+          //false == Account is either not activated, or was recently activated
+          //false == ACCOUNT CAN NOT CONTINUE AND IS INVALID
+          return validAccount
+      } catch (error) {
+          console.log(error)
+          return false
+      } finally {
+          await client.disconnect()
+      }
+  },
   verifyTransaction: async function (txID) {
     const client = await getXrplClientMain();
     try {

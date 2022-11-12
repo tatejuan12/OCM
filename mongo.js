@@ -1216,7 +1216,7 @@ var methods = {
       const db = client.db('Redeem')
       let collection = db.collection('Assets')
       query = {
-        token: token
+        token: new RegExp(token, "i")
       }
       let res = await collection.find(query).toArray()
       return res;

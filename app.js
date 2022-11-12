@@ -763,9 +763,17 @@ server.post("/XUMM-sign-subscription", speedLimiter, async (req, res) => {
 server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
   const apiInfo = await mongoClient.query.findRedemptionAccountByToken(req.body.token);
   const clientAddy = apiInfo[0].account;
-  const ipAddress = apiInfo[0].ip
-  issuer = 'XRP'
-  tokenHex= 'XRP'
+  const ipAddress = apiInfo[0].ip;
+  const acctAge = await xumm.xrpl.checkAccountActivation(req.session.wallet, 1)
+  if (!acctAge) {
+    res.status(403).send('Error #1004')
+    return;
+  } else {
+  const accountBal = await xumm.xrpl.getTokenBalance(req.session.wallet, apiInfo[0].issuer, apiInfo[0].hex)
+  if (accountBal < apiInfo[0].minimum || accountBal == undefined) {
+    res.status(403).send('Error #1003')
+    return;
+  } else {
   const payload = await xumm.payloads.redeemNftPayload(
     req.session.wallet,
     req.useragent.isMobile,
@@ -779,6 +787,7 @@ server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
     console.log(err.toString());
     res.status(500).send(err.toString());
   }
+  }}
 });
 server.post("/redeem-nft-subscription", speedLimiter, async (req, res) => {
   var dataBody = JSON.parse(req.body.payload);
