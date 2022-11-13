@@ -159,7 +159,7 @@
 
             if (($(".row.g-5").offset().top + $(".row.g-5").height() - $(window).height()) < $(this).scrollTop()) {
               $(window).data('getReady', false);
-              $.get(`<%=url%>/get-additional-collection-nfts?name=<%=collectionDetails.name%>&issuer=<%=collectionDetails.issuer%>&marker=${marker}&markerIteration=${iteration}`,
+              $.get(`<%=url%>/get-additional-collection-nfts?family=<%=collectionDetails.family%>&issuer=<%=collectionDetails.issuer%>&marker=${marker}&markerIteration=${iteration}`,
                 function(data) {
                   iteration++;
                   var updateNfts = [];

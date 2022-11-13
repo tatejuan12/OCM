@@ -277,13 +277,13 @@ server.get("/collection", speedLimiter, async (req, res) => {
   const wallet = req.session.wallet;
 
   if (!isNaN(page)) {
-    const collectionName = req.query.name;
+    const collectionFamily = req.query.family;
     const issuer = req.query.issuer;
     var promisesArray = [];
 
     nftsPromise = new Promise(function (resolve, reject) {
       const nfts = mongoClient.query.getNftsByCollection(
-        collectionName,
+        collectionFamily,
         issuer,
         NFTSPERPAGE,
         page
@@ -292,7 +292,7 @@ server.get("/collection", speedLimiter, async (req, res) => {
     });
     unlistedNftsPromise = new Promise(function (resolve, reject) {
       const unlistedNfts = mongoClient.query.getUnlistedCollectionNfts(
-        collectionName,
+        collectionFamily,
         issuer,
         NFTSPERPAGE,
         page
@@ -301,41 +301,42 @@ server.get("/collection", speedLimiter, async (req, res) => {
     });
     collectionDetailsPromise = new Promise(function (resolve, reject) {
       const collectionDetails = mongoClient.query.getNftsCollection(
-        collectionName,
+        collectionFamily,
         issuer
       );
       resolve(collectionDetails);
     });
     floorPricePromise = new Promise(function (resolve, reject) {
       const floorPrice = mongoClient.query.getCollectionFloorPrice(
-        collectionName,
+        collectionFamily,
         issuer.split(",")
       );
       resolve(floorPrice);
     });
     listedItemsPromise = new Promise(function (resolve, reject) {
       const listedItems = mongoClient.query.totalCollectionItems(
-        collectionName,
+        collectionFamily,
         issuer.split(",")
       );
       resolve(listedItems);
     });
     unlistedItemsPromise = new Promise(function (resolve, reject) {
       const unlistedItems = mongoClient.query.unlistedCollectionItems(
-        collectionName,
+        collectionFamily,
         issuer.split(",")
       );
       resolve(unlistedItems);
     });
+    //put into promise
     promisesArray.push(nftsPromise);
     promisesArray.push(unlistedNftsPromise);
     promisesArray.push(collectionDetailsPromise);
     promisesArray.push(floorPricePromise);
     promisesArray.push(listedItemsPromise);
     promisesArray.push(unlistedItemsPromise);
-
+    //get results from all the above promises
     var collectionResults = await Promise.all(promisesArray);
-
+    //assign promises to Variables
     var nfts = collectionResults[0];
     var unlistedNfts = collectionResults[1];
     var collectionStuff = collectionResults[2];
@@ -344,7 +345,7 @@ server.get("/collection", speedLimiter, async (req, res) => {
     var unlistedItems = collectionResults[5];
 
     if (wallet !== collectionStuff.issuer) {
-      mongoClient.query.incrementViewCollection(collectionName);
+      mongoClient.query.incrementViewCollection(collectionFamily);
     }
     const collection_logo = digitalOcean.functions.getCollectionLogoLink(
       collectionStuff.name
@@ -495,10 +496,11 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
   });
   const promiseNfts = await Promise.all([nftsPromise]);
   if (promises[0] !== null) {
-    if (promises[0].uriMetadata.collection.name !== null) {
+    if (promises[0].uriMetadata.collection.family !== null) {
       var nftCollection = promises[0].uriMetadata.collection.family
         .toLowerCase()
         .replace(" ", "_");
+      console.log(nftCollection)
     } else {
       var nftCollection = "no collection";
     }
@@ -1425,14 +1427,14 @@ server.get(
   async (req, res, next) => {
     var wallet = req.session.wallet;
     var login = req.session.login;
-    var collectionName = req.query.name;
+    var collectionFamily = req.query.family;
     const issuer = req.query.issuer;
     var marker = req.query.marker;
     var iteration = req.query.markerIteration;
     var returnData = [];
     if (marker && iteration) {
       const nfts = await mongoClient.query.getNftsByCollection(
-        collectionName,
+        collectionFamily,
         issuer,
         NFTSPERPAGE,
         iteration
