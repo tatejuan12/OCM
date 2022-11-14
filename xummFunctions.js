@@ -179,7 +179,13 @@ var payloads = {
     const payload = await getPayload(request);
     return payload;
   },
-  redeemNftPayload: async function (address, mobile, return_url, ipAddress, UUID) {
+  redeemNftPayload: async function (
+    address,
+    mobile,
+    return_url,
+    ipAddress,
+    UUID
+  ) {
     var request = {
       options: {
         submit: true,
@@ -425,26 +431,26 @@ var subscriptions = {
   payloadSigner: async function (payload) {
     try {
       var subscription = false;
-      console.log('checking payload')
+      console.log("checking payload");
       var promise = new Promise(function (resolve, reject) {
         subscription = sdk.payload.subscribe(payload, (event) => {
           if (event.data.signed) {
-            console.log('trans was signed promise is running')
+            console.log("trans was signed promise is running");
             sdk.payload.get(event.data.payload_uuidv4).then((data) => {
-              console.log(data)
+              console.log(data);
               var wallet = data.response.account;
               resolve(wallet);
             });
           } else if (event.data.signed == false) {
-            console.log('false redeem payload not signed')
+            console.log("false redeem payload not signed");
             reject(false);
           }
         });
       });
       return await promise;
     } catch (err) {
-      console.log('error checking payload for wallet: ' + err)
-    } 
+      console.log("error checking payload for wallet: " + err);
+    }
   },
   watchSubscripion: async function (payload) {
     var subscription = false;
@@ -468,7 +474,7 @@ var subscriptions = {
     var txID = await promise;
     var verify = await verifyTransactionAndAccount(txID[0]);
     if (verify[0] === true) {
-      verify[0] = "signed"
+      verify[0] = "signed";
       return verify;
     } else {
       return false;
@@ -673,130 +679,138 @@ var xrpls = {
       await client.disconnect();
     }
   },
-  getNftImage: async function(nftURI, retryCount = 0) {
+  getNftImage: async function (nftURI, retryCount = 0) {
     var json = {};
-  
-    var httpsIPFSGateway = "https://cloudflare-ipfs.com/ipfs/"
-  
+
+    var httpsIPFSGateway = "https://cloudflare-ipfs.com/ipfs/";
+
     async function httpAPI(url, retryCount = 0) {
-        return new Promise((resolve, reject) => {
-            https.get(url, (res) => {
-                let body = "";
-                res.on("data", (d) => {
-                    body += d;
-                });
-                res.on("end", () => {
-                    if (res.statusCode == 200) {
-                        try {
-                            json = JSON.parse(body);
-                            // console.log(body);
-                        } catch (error) {
-                            resolve(body);
-                        }
-                        resolve(json);
-                    } else {
-                        reject(new Error("Could not contact server to get NFT info"));
-                    }
-                });
-            });
-        });
-    }
-  
-    function resolveIPFS(ipfsLink, gateway) {
-  
-        if (ipfsLink.startsWith("ipfs://ipfs/")) {
-            var httpsURI = ipfsLink.replace("ipfs://ipfs/", gateway)
-        } else if (ipfsLink.startsWith("ipfs://")) {
-            var httpsURI = ipfsLink.replace("ipfs://", gateway)
-        } else if (ipfsLink.startsWith("http")) {
-            var httpsURI = ipfsLink
-        } else {
-            var httpsURI = `${gateway}${ipfsLink}`
-        }
-        return httpsURI
-    }
-  
-    try {
-        var nftURI = xrpl.convertHexToString(nftURI);
-  
-        var httpURI = resolveIPFS(nftURI, httpsIPFSGateway)
-  
-        //get metadata
-        var count = 0
-        while (count < 3) {
-            try {
-                var uriMetadata = await httpAPI(httpURI);
-                break
-            } catch (error) {
-                count++
+      return new Promise((resolve, reject) => {
+        https.get(url, (res) => {
+          let body = "";
+          res.on("data", (d) => {
+            body += d;
+          });
+          res.on("end", () => {
+            if (res.statusCode == 200) {
+              try {
+                json = JSON.parse(body);
+                // console.log(body);
+              } catch (error) {
+                resolve(body);
+              }
+              resolve(json);
+            } else {
+              reject(new Error("Could not contact server to get NFT info"));
             }
+          });
+        });
+      });
+    }
+
+    function resolveIPFS(ipfsLink, gateway) {
+      if (ipfsLink.startsWith("ipfs://ipfs/")) {
+        var httpsURI = ipfsLink.replace("ipfs://ipfs/", gateway);
+      } else if (ipfsLink.startsWith("ipfs://")) {
+        var httpsURI = ipfsLink.replace("ipfs://", gateway);
+      } else if (ipfsLink.startsWith("http")) {
+        var httpsURI = ipfsLink;
+      } else {
+        var httpsURI = `${gateway}${ipfsLink}`;
+      }
+      return httpsURI;
+    }
+
+    try {
+      var nftURI = xrpl.convertHexToString(nftURI);
+
+      var httpURI = resolveIPFS(nftURI, httpsIPFSGateway);
+
+      //get metadata
+      var count = 0;
+      while (count < 3) {
+        try {
+          var uriMetadata = await httpAPI(httpURI);
+          break;
+        } catch (error) {
+          count++;
         }
-  
-        if (count >= 3) {
-            var data = {
-                name: "Un-named NFT",
-                description: "",
-                image: "assets/images/icons/link-error.png",
-                edition: 0,
-                date: 0,
-                external_url: "",
-                attributes: [],
-                http_image: "assets/images/icons/link-error.png",
-                http_uri: "assets/images/icons/link-error.png",
-            };
-            return data;
-        }
-  
-  
-        //find image
-        if (uriMetadata.constructor != Object) {
-            var data = {
-                name: "Un-named NFT",
-                description: "",
-                image: httpURI,
-                edition: 0,
-                date: 0,
-                external_url: "",
-                attributes: [],
-                http_image: httpURI,
-                http_uri: httpURI,
-            };
-            return data;
-        } else {
-            if ("image" in uriMetadata && uriMetadata.image != "") {
-              uriMetadata.image = uriMetadata.image
-          } else if ("animation" in uriMetadata && uriMetadata.animation != "") {
-              uriMetadata.image = uriMetadata.animation
-          } else if ("video" in uriMetadata && uriMetadata.video != "") {
-              uriMetadata.image = uriMetadata.video
-          } else if ("image_url" in uriMetadata && uriMetadata["image_url"] != "") {
-              uriMetadata.image = uriMetadata["image_url"]
-          } else if ("animation_url" in uriMetadata && uriMetadata["animation_url"] != "") {
-              uriMetadata.image = uriMetadata["animation_url"]
-          } else if ("video_url" in uriMetadata && uriMetadata["video_url"] != "") {
-              uriMetadata.image = uriMetadata["video_url"]
-          } else {
-            uriMetadata.image = "https://onchainmarketplace.net/assets/images/icons/link-error.png"; //THIS NEEDS TO BE HTTPS
-          }
-            var httpImage = resolveIPFS(uriMetadata.image, httpsIPFSGateway)
-        }
-  
-        json["http_image"] = httpImage;
-        json["http_uri"] = httpURI;
-        return json;
-    } catch (error) {
+      }
+
+      if (count >= 3) {
         var data = {
-            name: "Un-named NFT",
-            description: "",
-            image: "assets/images/icons/link-error.png",
-            edition: 0,
-            date: 0,
-            external_url: "",
-            attributes: [],
-            http_image: "assets/images/icons/link-error.png",
-            http_uri: "assets/images/icons/link-error.png",
+          name: "Un-named NFT",
+          description: "",
+          image: "assets/images/icons/link-error.png",
+          edition: 0,
+          date: 0,
+          external_url: "",
+          attributes: [],
+          http_image: "assets/images/icons/link-error.png",
+          http_uri: "assets/images/icons/link-error.png",
         };
         return data;
+      }
+
+      //find image
+      if (uriMetadata.constructor != Object) {
+        var data = {
+          name: "Un-named NFT",
+          description: "",
+          image: httpURI,
+          edition: 0,
+          date: 0,
+          external_url: "",
+          attributes: [],
+          http_image: httpURI,
+          http_uri: httpURI,
+        };
+        return data;
+      } else {
+        if ("image" in uriMetadata && uriMetadata.image != "") {
+          uriMetadata.image = uriMetadata.image;
+        } else if ("animation" in uriMetadata && uriMetadata.animation != "") {
+          uriMetadata.image = uriMetadata.animation;
+        } else if ("video" in uriMetadata && uriMetadata.video != "") {
+          uriMetadata.image = uriMetadata.video;
+        } else if (
+          "image_url" in uriMetadata &&
+          uriMetadata["image_url"] != ""
+        ) {
+          uriMetadata.image = uriMetadata["image_url"];
+        } else if (
+          "animation_url" in uriMetadata &&
+          uriMetadata["animation_url"] != ""
+        ) {
+          uriMetadata.image = uriMetadata["animation_url"];
+        } else if (
+          "video_url" in uriMetadata &&
+          uriMetadata["video_url"] != ""
+        ) {
+          uriMetadata.image = uriMetadata["video_url"];
+        } else {
+          uriMetadata.image =
+            "https://onchainmarketplace.net/assets/images/icons/link-error.png"; //THIS NEEDS TO BE HTTPS
+        }
+        var httpImage = resolveIPFS(uriMetadata.image, httpsIPFSGateway);
+      }
+
+      json["http_image"] = httpImage;
+      json["http_uri"] = httpURI;
+      return json;
+    } catch (error) {
+      var data = {
+        name: "Un-named NFT",
+        description: "",
+        image: "assets/images/icons/link-error.png",
+        edition: 0,
+        date: 0,
+        external_url: "",
+        attributes: [],
+        http_image: "assets/images/icons/link-error.png",
+        http_uri: "assets/images/icons/link-error.png",
+      };
+      return data;
     }
   },
   getnftOffers: async function (tokenId) {
@@ -811,9 +825,9 @@ var xrpls = {
       ) {
         var totalTokens = Math.abs(Number(totalTokens));
         var drops = 0;
-  
+
         await new Promise((resolve) => setTimeout(resolve, 300));
-  
+
         var orders = await client.request({
           command: "book_offers",
           ledger_index: ledgerindex,
@@ -826,12 +840,12 @@ var xrpls = {
           },
           limit: 400,
         });
-  
+
         var markerme = orders.result.marker;
-  
+
         for (c in orders.result.offers) {
           if (totalTokens == 0) break;
-  
+
           if (totalTokens >= orders.result.offers[c].TakerPays.value) {
             drops += Number(orders.result.offers[c].TakerGets);
             totalTokens -= Number(orders.result.offers[c].TakerPays.value);
@@ -842,10 +856,10 @@ var xrpls = {
             totalTokens -= totalTokens;
           }
         }
-  
+
         while (markerme != null && totalTokens > 0) {
           await new Promise((resolve) => setTimeout(resolve, 300));
-  
+
           var orders = await client.request({
             command: "book_offers",
             ledger_index: ledgerindex,
@@ -859,12 +873,12 @@ var xrpls = {
             limit: 400,
             marker: markerme,
           });
-  
+
           var markerme = orders.result.marker;
-  
+
           for (d in orders.result.offers) {
             if (totalTokens == 0) break;
-  
+
             if (totalTokens >= orders.result.offers[d].TakerPays.value) {
               drops += Number(orders.result.offers[d].TakerGets);
               totalTokens -= Number(orders.result.offers[d].TakerPays.value);
@@ -876,22 +890,22 @@ var xrpls = {
             }
           }
         }
-  
+
         var totalXRP = drops / 1000000;
-  
+
         return totalXRP;
       };
-  
+
       var listOfOffers = [];
       var methodTypes = ["nft_sell_offers", "nft_buy_offers"];
-  
+
       for (z in methodTypes) {
         if (methodTypes[z] == "nft_sell_offers") {
           var type = "SELL";
         } else {
           var type = "BUY";
         }
-  
+
         var allOffers = [];
         var marker = "begin";
         while (marker != null) {
@@ -918,13 +932,14 @@ var xrpls = {
             var marker = null;
           }
         }
-  
+
         var allFilteredOffers = [];
         for (a in allOffers) {
-          if((Number(allOffers[a].expiration) + 946684800) * 1000 < Date.now()) continue
+          if ((Number(allOffers[a].expiration) + 946684800) * 1000 < Date.now())
+            continue;
           var index = allOffers[a].nft_offer_index;
           var destination = allOffers[a].destination;
-  
+
           if (isNaN(allOffers[a].amount)) {
             var price = allOffers[a].amount.value;
             if (allOffers[a].amount.currency.length > 3) {
@@ -934,7 +949,7 @@ var xrpls = {
             } else {
               var token = allOffers[a].amount.currency;
             }
-  
+
             var xrpValue = await tokenXRPValue(
               client,
               "validated",
@@ -947,7 +962,7 @@ var xrpls = {
             var token = "XRP";
             var xrpValue = price;
           }
-  
+
           var data = {
             price: price,
             token: token,
@@ -958,14 +973,14 @@ var xrpls = {
             type: type,
             account: allOffers[a].owner,
           };
-  
+
           allFilteredOffers.push(data);
         }
-  
+
         allFilteredOffers.sort(function (a, b) {
           return b.xrpValue - a.xrpValue;
         });
-  
+
         listOfOffers.push(allFilteredOffers);
       }
       return listOfOffers;
@@ -1585,54 +1600,60 @@ var xrpls = {
     }
   },
   checkAccountActivation: async function (account, daysSinceActivation) {
+    try {
+      //define
+      var client = await getXrplClient();
 
-      try {
-          //define 
-          var client = await getXrplClient()
+      //REQUEST TRANSACTIONS
+      var result = await client.request({
+        command: "account_tx",
+        account: account,
+        ledger_index_min: -1,
+        ledger_index_max: -1,
+        limit: 1,
+        forward: true,
+      });
 
-          //REQUEST TRANSACTIONS
-          var result = await client.request({
-              "command": "account_tx",
-              "account": account,
-              "ledger_index_min": -1,
-              "ledger_index_max": -1,
-              "limit": 1,
-              "forward": true
-          })
-
-          //CHECK ACCOUNT IS ACTIVATED
-          if (result.result.transactions.length == 0) {
-              console.log(`Account NOT ACTIVATED -> ${account}`)
-              return false
-          }
-
-          //SORT THEM TO ENSURE THE OLDEST IS FIRST (RIPPLED DOESN'T GUARANTEE ONLY RETURNING 1 TRANSACTION)
-          result.result.transactions.sort(function(a, b) {
-              return a.tx.date - b.tx.date;
-          });
-
-          //CHECK ACTIVATION DATE
-          var activationDate = (result.result.transactions[0].tx.date + 946684800) * 1000
-
-          if (activationDate + (daysSinceActivation * 86400000) < Date.now()) { //IF ACTIVATION DATE WAS LONGER AGO THAN DEFINED PERIOD
-              var validAccount = true
-          } else {
-              console.log(`Account Only Activated ${((Date.now() - activationDate)/86400000).toFixed(2)} Days Ago -> ${account}`)
-              var validAccount = false
-          }
-
-          //true == Account is valid, and was activated longer ago than the defined period
-          //true == ACCOUNT CAN CONTINUE AND IS VALID
-
-          //false == Account is either not activated, or was recently activated
-          //false == ACCOUNT CAN NOT CONTINUE AND IS INVALID
-          return validAccount
-      } catch (error) {
-          console.log(error)
-          return false
-      } finally {
-          await client.disconnect()
+      //CHECK ACCOUNT IS ACTIVATED
+      if (result.result.transactions.length == 0) {
+        console.log(`Account NOT ACTIVATED -> ${account}`);
+        return false;
       }
+
+      //SORT THEM TO ENSURE THE OLDEST IS FIRST (RIPPLED DOESN'T GUARANTEE ONLY RETURNING 1 TRANSACTION)
+      result.result.transactions.sort(function (a, b) {
+        return a.tx.date - b.tx.date;
+      });
+
+      //CHECK ACTIVATION DATE
+      var activationDate =
+        (result.result.transactions[0].tx.date + 946684800) * 1000;
+
+      if (activationDate + daysSinceActivation * 86400000 < Date.now()) {
+        //IF ACTIVATION DATE WAS LONGER AGO THAN DEFINED PERIOD
+        var validAccount = true;
+      } else {
+        console.log(
+          `Account Only Activated ${(
+            (Date.now() - activationDate) /
+            86400000
+          ).toFixed(2)} Days Ago -> ${account}`
+        );
+        var validAccount = false;
+      }
+
+      //true == Account is valid, and was activated longer ago than the defined period
+      //true == ACCOUNT CAN CONTINUE AND IS VALID
+
+      //false == Account is either not activated, or was recently activated
+      //false == ACCOUNT CAN NOT CONTINUE AND IS INVALID
+      return validAccount;
+    } catch (error) {
+      console.log(error);
+      return false;
+    } finally {
+      await client.disconnect();
+    }
   },
   verifyTransaction: async function (txID) {
     const client = await getXrplClientMain();
@@ -1805,90 +1826,133 @@ var xrpls = {
   accountRedemptionHistory: async function (account, memoToFilterFor) {
     const client = await getXrplClient();
     try {
-        //CHECK AND VERIFY NFT
-        var result = await client.request({
-            "command": "account_tx",
-            "account": account,
-            "ledger_index_min": -1,
-            "ledger_index_max": -1,
-            "limit": 400
-        })
+      //CHECK AND VERIFY NFT
+      var result = await client.request({
+        command: "account_tx",
+        account: account,
+        ledger_index_min: -1,
+        ledger_index_max: -1,
+        limit: 400,
+      });
 
-        var transactions = result.result.transactions
+      var transactions = result.result.transactions;
 
-        //filter transactions
-        var nftRedemptions = []
-        for (a in transactions) {
-            if (transactions[a].tx.TransactionType != "NFTokenAcceptOffer") continue //if not an "Accept Offer" transaction
-            if (transactions[a].tx.Account != account) continue //if not executed by this account
-            if (!("NFTokenSellOffer" in transactions[a].tx) || ("NFTokenBuyOffer" in transactions[a].tx)) continue //if not accepting a sell offer or if it includes accepting a buy offer
-            if (transactions[a].meta.TransactionResult != "tesSUCCESS") continue //if not a successful transaction
+      //filter transactions
+      var nftRedemptions = [];
+      for (a in transactions) {
+        if (transactions[a].tx.TransactionType != "NFTokenAcceptOffer")
+          continue; //if not an "Accept Offer" transaction
+        if (transactions[a].tx.Account != account) continue; //if not executed by this account
+        if (
+          !("NFTokenSellOffer" in transactions[a].tx) ||
+          "NFTokenBuyOffer" in transactions[a].tx
+        )
+          continue; //if not accepting a sell offer or if it includes accepting a buy offer
+        if (transactions[a].meta.TransactionResult != "tesSUCCESS") continue; //if not a successful transaction
 
-            //check the memo matches
-            var memoMatches = false
-            for (b in transactions[a].tx.Memos) {
-                if (memoToFilterFor == xrpl.convertHexToString(transactions[a].tx.Memos[b].Memo.MemoData)) { //if the memomatches
-                    var memoMatches = true
-                }
+        //check the memo matches
+        var memoMatches = false;
+        for (b in transactions[a].tx.Memos) {
+          if (
+            memoToFilterFor ==
+            xrpl.convertHexToString(transactions[a].tx.Memos[b].Memo.MemoData)
+          ) {
+            //if the memomatches
+            var memoMatches = true;
+          }
+        }
+        if (!memoMatches) continue; //if the memo doesn't match
+
+        //find the details of the traded NFT
+        for (b in transactions[a].meta.AffectedNodes) {
+          if (!("DeletedNode" in transactions[a].meta.AffectedNodes[b]))
+            continue; //if not a deleted ledger node
+          if (
+            transactions[a].meta.AffectedNodes[b].DeletedNode.LedgerEntryType !=
+            "NFTokenOffer"
+          )
+            continue; //if not a deleted NFT offer
+          if (
+            transactions[a].meta.AffectedNodes[b].DeletedNode.LedgerIndex !=
+            transactions[a].tx.NFTokenSellOffer
+          )
+            continue; //if not referring to the sell offer that was accepted
+          if (
+            transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields
+              .Flags != 1
+          )
+            continue; //second check that its a sell offer that was accepted
+
+          var NFTokenID =
+            transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields
+              .NFTokenID;
+          var date = (transactions[a].tx.date + 946684800) * 1000;
+          var txID = transactions[a].tx.hash;
+
+          //get currency details
+          if (
+            isNaN(
+              transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields
+                .Amount
+            )
+          ) {
+            var amount =
+              transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields
+                .Amount.value;
+            if (
+              transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields
+                .Amount.currency.length != 3
+            ) {
+              var token = xrpl.convertHexToString(
+                transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields
+                  .Amount.currency
+              ); //.replaceAll('\x00', '')
+            } else {
+              var token =
+                transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields
+                  .Amount.currency;
             }
-            if (!memoMatches) continue //if the memo doesn't match
-
-            //find the details of the traded NFT
-            for (b in transactions[a].meta.AffectedNodes) {
-                if (!("DeletedNode" in transactions[a].meta.AffectedNodes[b])) continue //if not a deleted ledger node
-                if (transactions[a].meta.AffectedNodes[b].DeletedNode.LedgerEntryType != "NFTokenOffer") continue //if not a deleted NFT offer
-                if (transactions[a].meta.AffectedNodes[b].DeletedNode.LedgerIndex != transactions[a].tx.NFTokenSellOffer) continue //if not referring to the sell offer that was accepted
-                if (transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Flags != 1) continue //second check that its a sell offer that was accepted
-
-                var NFTokenID = transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.NFTokenID
-                var date = (transactions[a].tx.date + 946684800) * 1000
-                var txID = transactions[a].tx.hash
-
-                //get currency details
-                if (isNaN(transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount)) {
-                    var amount = transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount.value
-                    if (transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount.currency.length != 3) {
-                        var token = xrpl.convertHexToString(transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount.currency)//.replaceAll('\x00', '')
-                    } else {
-                        var token = transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount.currency
-                    }
-                } else {
-                    var token = "XRP"
-                    var amount = Number(transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount) / 1000000
-                }
-            }
-
-            var data = {
-                "imageLink": `https://onchainmarketplace.net/cdn-cgi/imagedelivery/0M8G_YiW8Hfkd_Ze5eWOXA/${NFTokenID}/100`,
-                "NFTokenID": NFTokenID,
-                "date": date,
-                "txID": txID,
-                "amount": amount,
-                "token": token
-            }
-            nftRedemptions.push(data)
+          } else {
+            var token = "XRP";
+            var amount =
+              Number(
+                transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields
+                  .Amount
+              ) / 1000000;
+          }
         }
 
-        nftRedemptions.sort(function(a, b) {
-            return b.date - a.date;
-        });
+        var data = {
+          imageLink: `https://onchainmarketplace.net/cdn-cgi/imagedelivery/0M8G_YiW8Hfkd_Ze5eWOXA/${NFTokenID}/100`,
+          NFTokenID: NFTokenID,
+          date: date,
+          txID: txID,
+          amount: amount,
+          token: token,
+        };
+        nftRedemptions.push(data);
+      }
 
-        return nftRedemptions
+      nftRedemptions.sort(function (a, b) {
+        return b.date - a.date;
+      });
+
+      return nftRedemptions;
     } catch (error) {
-        console.log(error)
-        return null
+      console.log(error);
+      return null;
     } finally {
-        await client.disconnect()
+      await client.disconnect();
     }
   },
   encodeXummID: async function (id) {
-    var id = id.split("-").slice(1).concat(id.split("-")[0]).join("-") //rearrange ID so the first section is at the end
-    var id = id.replace(/-/g, "") //remove all "-"
-    var id = id.replace(new RegExp(id[0],"g"), id[2]) //replace all the 1st letter with the 3rd letter of the ID
-    var id = id.split("").reverse().join("") //reverse string
-    var id = xrpl.convertStringToHex(id) //convert to Hex
-    return id
-  }
+    var id = id.split("-").slice(1).concat(id.split("-")[0]).join("-"); //rearrange ID so the first section is at the end
+    var id = id.replace(/-/g, ""); //remove all "-"
+    var id = id.replace(new RegExp(id[0], "g"), id[2]); //replace all the 1st letter with the 3rd letter of the ID
+    var id = id.split("").reverse().join(""); //reverse string
+    var id = xrpl.convertStringToHex(id); //convert to Hex
+    return id;
+  },
 };
 // ******************
 // END XRPL FUNCTIONS
@@ -1933,7 +1997,7 @@ async function verifyTransactionAndAccount(txID) {
         transaction: txID,
       });
 
-      var account = result.result.Account
+      var account = result.result.Account;
 
       if (result.result.meta.TransactionResult == "tesSUCCESS") {
         var executed = true;
@@ -1947,7 +2011,7 @@ async function verifyTransactionAndAccount(txID) {
       console.log("error validating");
     }
 
-    return [ executed, account ];
+    return [executed, account];
   } catch (error) {
     console.log(error);
     return null;
@@ -2037,7 +2101,8 @@ function sigRound(value, sigdecimals) {
   return number.replace(/([0-9]+(.[0-9]+[1-9])?)(.?0+$)/, "$1");
 }
 async function sendRequestRedeem(ipAddress, address, UUID) {
-  const postData = "address="+ address;
+  console.log("UUID: " + UUID);
+  const postData = "address=" + address + "&UUID=" + UUID;
   const options = {
     hostname: ipAddress,
     method: "POST",
@@ -2055,10 +2120,10 @@ async function sendRequestRedeem(ipAddress, address, UUID) {
         })
         .on("end", () => {
           try {
-            console.log(payload);
+            console.log("here");
+            console.log(JSON.parse(payload));
             payload = JSON.parse(payload);
           } catch (err) {
-            console.log(payload);
             reject(payload);
           }
           //If payload is successful it returns resolves promise, if not, it rejects. If error, rejects.
