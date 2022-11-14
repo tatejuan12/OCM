@@ -179,7 +179,7 @@ var payloads = {
     const payload = await getPayload(request);
     return payload;
   },
-  redeemNftPayload: async function (address, mobile, return_url, ipAddress) {
+  redeemNftPayload: async function (address, mobile, return_url, ipAddress, UUID) {
     var request = {
       options: {
         submit: true,
@@ -199,7 +199,7 @@ var payloads = {
       };
     const client = await getXrplClient();
     try {
-      const obj = await sendRequestRedeem(ipAddress, address);
+      const obj = await sendRequestRedeem(ipAddress, address, UUID);
       request.txjson["NFTokenSellOffer"] = obj[0].NFTokenSellOffer;
       request.txjson.Memos = [
         {
@@ -1880,6 +1880,14 @@ var xrpls = {
     } finally {
         await client.disconnect()
     }
+  },
+  encodeXummID: async function (id) {
+    var id = id.split("-").slice(1).concat(id.split("-")[0]).join("-") //rearrange ID so the first section is at the end
+    var id = id.replace(/-/g, "") //remove all "-"
+    var id = id.replace(new RegExp(id[0],"g"), id[2]) //replace all the 1st letter with the 3rd letter of the ID
+    var id = id.split("").reverse().join("") //reverse string
+    var id = xrpl.convertStringToHex(id) //convert to Hex
+    return id
   }
 };
 // ******************
@@ -2028,8 +2036,8 @@ function sigRound(value, sigdecimals) {
 
   return number.replace(/([0-9]+(.[0-9]+[1-9])?)(.?0+$)/, "$1");
 }
-async function sendRequestRedeem(ipAddress, address) {
-  const postData = "address=" + address;
+async function sendRequestRedeem(ipAddress, address, UUID) {
+  const postData = "address="+ address;
   const options = {
     hostname: ipAddress,
     method: "POST",
