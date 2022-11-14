@@ -1527,77 +1527,87 @@ var xrpls = {
       await client.disconnect();
     }
   },
-  getTokenBalance: async function (address, issuer, tokenHex) {
-    const client = await getXrplClientMain();
-    try {
-      //try to request XRPL for balances of token, attempt up to 5 times
-      var count = 0;
-      while (count < 5) {
-        try {
-          if (
-            issuer.toLowerCase() == "xrp" &&
-            tokenHex.toLowerCase() == "xrp"
-          ) {
-            //XRP
-            var serverstate = await client.request({
-              command: "server_state",
-              ledger_index: "validated",
-            });
+  getTokenBalance: async function(address, issuer, tokenHex) {
+      const client = await getXrplClientMain();
+      try {
+          //try to request XRPL for balances of token, attempt up to 5 times
+          var count = 0;
+          while (count < 5) {
+              try {
+                  if (
+                      issuer.toLowerCase() == "xrp" &&
+                      tokenHex.toLowerCase() == "xrp"
+                  ) {
+                      //XRP
+                      var serverstate = await client.request({
+                          command: "server_state",
+                          ledger_index: "validated",
+                      });
 
-            var ownerReserve = Number(
-              serverstate.result.state.validated_ledger.reserve_inc
-            );
-            var accountReserve = Number(
-              serverstate.result.state.validated_ledger.reserve_base
-            );
+                      var ownerReserve = Number(
+                          serverstate.result.state.validated_ledger.reserve_inc
+                      );
+                      var accountReserve = Number(
+                          serverstate.result.state.validated_ledger.reserve_base
+                      );
 
-            var accountInfo = await client.request({
-              command: "account_info",
-              ledger_index: "validated",
-              account: address,
-            });
+                      var accountInfo = await client.request({
+                          command: "account_info",
+                          ledger_index: "validated",
+                          account: address,
+                      });
 
-            var accountDrops = Number(accountInfo.result.account_data.Balance);
-            var ownerCount = Number(accountInfo.result.account_data.OwnerCount);
+                      var accountDrops = Number(accountInfo.result.account_data.Balance);
+                      var ownerCount = Number(accountInfo.result.account_data.OwnerCount);
 
-            var holdings =
-              (accountDrops - ownerCount * ownerReserve - accountReserve) /
-              1000000;
-          } else {
-            //TOKEN
-            var xrplResponse = await client.request({
-              command: "account_lines",
-              account: address,
-              limit: 400,
-              peer: issuer,
-              ledger_index: "validated",
-            });
-            for (a in xrplResponse.result.lines) {
-              if (xrplResponse.result.lines[a].currency == tokenHex) {
-                if (xrplResponse.result.lines[a].account == issuer) {
-                  var holdings = xrplResponse.result.lines[a].balance;
-                }
+                      var holdings =
+                          (accountDrops - ownerCount * ownerReserve - accountReserve) /
+                          1000000;
+                  } else {
+                      //TOKEN
+                      var marker = "begin"
+                      while (marker != null && holdings == undefined) {
+                          var query = {
+                              command: "account_lines",
+                              account: address,
+                              limit: 400,
+                              ledger_index: "validated"
+                          }
+
+                          if (marker != "begin") query.marker = marker
+
+                          var xrplResponse = await client.request(query);
+
+                          var marker = xrplResponse.result.marker
+
+                          for (a in xrplResponse.result.lines) {
+                              if (xrplResponse.result.lines[a].currency == tokenHex) {
+                                  if (xrplResponse.result.lines[a].account == issuer) {
+                                      var holdings = xrplResponse.result.lines[a].balance;
+                                  }
+                              }
+                          }
+
+                      }
+                  }
+
+                  break;
+              } catch (err) {
+                  count += 1;
               }
-            }
           }
 
-          break;
-        } catch (err) {
-          count += 1;
-        }
+          if (holdings == undefined) {
+              return;
+          } else {
+              return holdings;
+          }
+      } catch (error) {
+          console.log(error);
+          return;
+      } finally {
+          await client.disconnect();
       }
-
-      if (holdings == undefined) {
-        return;
-      } else {
-        return holdings;
-      }
-    } catch (error) {
-      console.log(error);
-      return;
-    } finally {
-      await client.disconnect();
-    }
   },
   checkAccountActivation: async function (account, daysSinceActivation) {
     try {
