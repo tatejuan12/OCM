@@ -805,8 +805,8 @@ server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
         res.status(500).send(err.toString());
       }
     }
-  }
-});
+  }}
+);
 server.post("/redeem-nft-subscription", speedLimiter, async (req, res) => {
   var dataBody = JSON.parse(req.body.payload);
   const result = await xumm.subscriptions.watchSubscripion(dataBody[0]);
