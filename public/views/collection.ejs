@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="assets/css/vendor/nice-select.css">
   <link rel="stylesheet" href="assets/css/plugins/feature.css">
   <link rel="stylesheet" href="assets/css/plugins/jquery-ui.min.css">
+  <script src="//cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
   <!-- Style css -->
   <link rel="stylesheet" href="assets/css/style.css">
@@ -158,7 +159,7 @@
 
             if (($(".row.g-5").offset().top + $(".row.g-5").height() - $(window).height()) < $(this).scrollTop()) {
               $(window).data('getReady', false);
-              $.get(`<%=url%>/get-additional-collection-nfts?name=<%=collectionDetails.name%>&issuer=<%=collectionDetails.issuer%>&marker=${marker}&markerIteration=${iteration}`,
+              $.get(`<%=url%>/get-additional-collection-nfts?family=<%=collectionDetails.family%>&issuer=<%=collectionDetails.issuer%>&marker=${marker}&markerIteration=${iteration}`,
                 function(data) {
                   iteration++;
                   var updateNfts = [];

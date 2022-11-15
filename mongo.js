@@ -400,16 +400,15 @@ var methods = {
       await client.close();
     }
   },
-  getNftsCollection: async function (collectionName, issuer) {
+  getNftsCollection: async function (collectionFamily, issuer) {
     const client = await getClient();
     if (!client) return;
     try {
       const db = client.db("Additional-Traits");
       let collection = db.collection("Collections");
       var issuerArray = issuer.split(",");
-      console.log(collectionName);
       var query = {
-        name: collectionName,
+        family: new RegExp(collectionFamily, "i"),
         issuer: { $in: issuerArray },
       };
       const results = collection.findOne(query);
@@ -442,7 +441,7 @@ var methods = {
     }
   },
   getUnlistedCollectionNfts: async function (
-    collectionName,
+    collectionFamily,
     issuer,
     NFTSPERPAGE,
     page
@@ -453,13 +452,13 @@ var methods = {
       const db = client.db("NFTokens");
       let collection = db.collection("Expired-Listings");
       var issuerArray = issuer.split(",");
-      var returnedName = collectionName.split(",");
+      var returnedName = collectionFamily.split(",");
       var query = [
         {
           $match: {
             $or: [
-              { "uriMetadata.collection.name": new RegExp(returnedName, "i") },
-              { "uriMetadata.collection.name": null },
+              { "uriMetadata.collection.family": new RegExp(returnedName, "i") },
+              { "uriMetadata.collection.family": null },
             ],
             issuer: { $in: issuerArray },
           },
@@ -498,8 +497,8 @@ var methods = {
         {
           $match: {
             $or: [
-              { "uriMetadata.collection.name": new RegExp(returnedName, "i") },
-              { "uriMetadata.collection.name": null },
+              { "uriMetadata.collection.family": new RegExp(returnedName, "i") },
+              { "uriMetadata.collection.family": null },
             ],
             issuer: { $in: issuerArray },
           },
@@ -558,7 +557,7 @@ var methods = {
       await client.close();
     }
   },
-  incrementViewCollection: async function (collectionName) {
+  incrementViewCollection: async function (collectionFamily) {
     const client = await getClient();
     if (!client) return;
     try {
@@ -566,7 +565,7 @@ var methods = {
       let collection = db.collection("Collections");
       await collection.updateOne(
         {
-          name: collectionName,
+          family: collectionFamily,
         },
         {
           $inc: {
@@ -651,8 +650,8 @@ var methods = {
       var returnedName = collectionName.replace("_", " ");
       let query = {
         $or: [
-          { "uriMetadata.collection.name": new RegExp(returnedName, "i") },
-          { "uriMetadata.collection.name": null },
+          { "uriMetadata.collection.family": new RegExp(returnedName, "i") },
+          { "uriMetadata.collection.family": null },
         ],
         issuer: { $in: issuer },
       };
@@ -673,8 +672,8 @@ var methods = {
       var returnedName = collectionName.replace("_", " ");
       let query = {
         $or: [
-          { "uriMetadata.collection.name": new RegExp(returnedName, "i") },
-          { "uriMetadata.collection.name": null },
+          { "uriMetadata.collection.family": new RegExp(returnedName, "i") },
+          { "uriMetadata.collection.family": null },
         ],
         issuer: { $in: issuer },
       };
@@ -980,20 +979,20 @@ var methods = {
       await client.close();
     }
   },
-  getCollectionFloorPrice: async function (collectionName, issuer) {
+  getCollectionFloorPrice: async function (collectionFamily, issuer) {
     const client = await getClient();
     if (!client) return;
     try {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
-      var returnedName = collectionName.replace("_", " ");
+      var returnedName = collectionFamily.replace("_", " ");
       let query01 = {
         "sellOffers.0.xrpValue": {
           $gt: 0,
         },
         $or: [
-          { "uriMetadata.collection.name": new RegExp(returnedName, "i") },
-          { "uriMetadata.collection.name": null },
+          { "uriMetadata.collection.family": new RegExp(returnedName, "i") },
+          { "uriMetadata.collection.family": null },
         ],
         issuer: { $in: issuer },
       };
@@ -1030,8 +1029,8 @@ var methods = {
         {
           $match: {
             $or: [
-              { "uriMetadata.collection.name": new RegExp(returnedName, "i") },
-              { "uriMetadata.collection.name": null },
+              { "uriMetadata.collection.family": new RegExp(returnedName, "i") },
+              { "uriMetadata.collection.family": null },
             ],
           },
         },
