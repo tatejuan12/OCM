@@ -85,7 +85,8 @@
                 <% if (isOwner) {%>
                 <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#pane-unlisted-nfts" type="button" role="tab" aria-controls="nav-profile" aria-selected="true">Un-Listed</button>
                 <button class="nav-link" id="nav-liked-tab" data-bs-toggle="tab" data-bs-target="#pane-liked-nfts" type="button" role="tab" aria-controls="nav-liked" aria-selected="false">Liked</button>
-                <button class="nav-link" id="nav-offers-tab" data-bs-toggle="tab" data-bs-target="#pane-offers" type="button" role="tab" aria-controls="nav-accountOffers" aria-selected="false">Account Offers</button>
+                <button class="nav-link" id="nav-offers-tab" data-bs-toggle="tab" data-bs-target="#pane-offers" type="button" role="tab" aria-controls="nav-accountOffers" aria-selected="false">My Offers</button>
+                <button class="nav-link" id="nav-activity-tab" data-bs-toggle="tab" data-bs-target="#pane-activity" type="button" role="tab" aria-controls="nav-accountActibity" aria-selected="false">Activity</button>
                 <%if (isVerified) {%>
                 <button class="nav-link dropdown" id="nav-offers-tab" data-bs-toggle="dropdown" type="button" role="tab" aria-controls="" aria-expanded="false">Verified Tools</button>
                 <ul class="dropdown-menu">
@@ -134,6 +135,12 @@
               <% sellOffers.forEach(function(res){%>
               <%- include('models/account-offers.ejs', {offer:res})%>
               <%}); %>
+            </div>
+          </div>
+          <div id="pane-activity" class="tab-pane fade" aria-labelledby="nav-activity-tab" role="tabpanel">
+            <div class="activity-container">
+              <div class="activity-wrap">
+              </div>
             </div>
           </div>
           <%}%>

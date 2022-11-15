@@ -25459,3 +25459,12 @@ Collection nav
     transform: rotate(0) translateY(0);
   }
 }
+/* ACTIVITY */
+.activity-container{
+  display: flex;
+  justify-content: center;
+}
+.activity-container .activity-wrap{
+  width: 95%;
+  background-color: var(--color-white);
+}
