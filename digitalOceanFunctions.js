@@ -96,7 +96,7 @@ var methods = {
     var result = false;
     const param = {
       Bucket: "ocw-space/collections/logo",
-      Key: req.body.name + "_logo.png",
+      Key: req.body.family + "_logo.png",
       Body: img.buffer,
       ACL: "public-read",
     };
@@ -118,7 +118,7 @@ var methods = {
     var result = false;
     const param = {
       Bucket: "ocw-space/collections/banner",
-      Key: req.body.name + "_banner.png",
+      Key: req.body.family + "_banner.png",
       Body: img.buffer,
       ACL: "public-read",
     };

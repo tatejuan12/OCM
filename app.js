@@ -632,13 +632,6 @@ server.get("/search", speedLimiter, async (req, res) => {
     searchedItem: searchedItem,
   });
 });
-server.get("/create-collection", speedLimiter, async (req, res) => {
-  var isVerified = await mongoClient.query.verified(req.query.wallet);
-  if (isVerified) {
-    defaultLocals(req, res);
-    res.render("views/create-collection");
-  }
-});
 
 //! ---------------------OCW API--------------------------------//
 server.post("/get-profile-info", speedLimiter, async (req, res, next) => {
