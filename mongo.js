@@ -408,7 +408,7 @@ var methods = {
       let collection = db.collection("Collections");
       var issuerArray = issuer.split(",");
       var query = {
-        family: collectionFamily,
+        family: new RegExp(collectionFamily, "i"),
         issuer: { $in: issuerArray },
       };
       const results = collection.findOne(query);
