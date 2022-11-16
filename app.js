@@ -873,11 +873,12 @@ server.post(
     const formDataBody = req.body;
     const formDataFiles = req.files;
     var result = false;
+    var fileName = req.body.family.toLowerCase().replace(/\s/g, "_")
     if (formDataFiles) {
       if (formDataFiles["collection-logo"]) {
         if (
           (result = await digitalOcean.functions.uploadCollectionLogo(
-            req,
+            fileName,
             formDataFiles["collection-logo"][0]
           ))
         )
@@ -887,7 +888,7 @@ server.post(
       if (formDataFiles["cover-img"]) {
         if (
           (result = await digitalOcean.functions.uploadCollectionBanner(
-            req,
+            fileName,
             formDataFiles["cover-img"][0]
           ))
         )
@@ -1159,21 +1160,6 @@ server.post("/list-nft-subscription-collection", async (req, res, next) => {
     );
   }
 });
-server.post(
-  "/list-bulk-array-free",
-  upload.any(),
-  speedLimiter,
-  async (req, res) => {
-    if (req.session.login) {
-      const dataBody = req.body;
-      const nftArray = JSON.parse(dataBody.nfts);
-      var permanent = false;
-      var wallet = req.session.wallet;
-      await mongoClient.query.bulkNFTList(nftArray, wallet, permanent);
-      res.status(200).send("Free Bulk List Success");
-    }
-  }
-);
 server.post(
   "/list-bulk-array",
   upload.any(),
