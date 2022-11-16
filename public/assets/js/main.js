@@ -1026,27 +1026,11 @@ function decrementLike(nftId, DOM) {
     },
   });
 }
-function freeList(elem) {
+function getListNft(elem) {
   const NFTokenID = $("#tokenID").val();
   const issuer = $("#issuer").val();
   $(elem).addClass('loading');
   $(elem).prop('disabled', true);
-  $.ajax({
-    type: "POST",
-    url: "/list-free",
-    data: {
-      return_url: window.location.href,
-      NFTokenID: NFTokenID,
-      issuer: issuer,
-    },
-    success: function (result) {
-      location.reload()
-    },
-  });
-}
-function getListNft() {
-  const NFTokenID = $("#tokenID").val();
-  const issuer = $("#issuer").val();
   $.ajax({
     type: "POST",
     url: "/list-nft-payload",
@@ -1061,7 +1045,9 @@ function getListNft() {
         type: "POST",
         url: "/list-nft-subscription",
         data: result,
-
+        success: function () {
+          location.reload()
+        },
         error: function (resulty) {
           console.warn("Payment is expired, failed or was cancelled.");
         },
