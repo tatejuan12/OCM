@@ -1,3 +1,5 @@
 <% sellOffers.forEach(function(res){%> 
-<%- include('sell-offer-card.ejs', {sellOffers: res, isOwner: isOwner, NFToken: NFToken})%>
+    <%if (res.account == isOwner){%>
+    <%- include('sell-offer-card.ejs', {sellOffers: res, isOwner: isOwner, NFToken: NFToken})%>
+    <%}%>
 <%});%>
