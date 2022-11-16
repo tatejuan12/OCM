@@ -252,6 +252,8 @@
               }
             });
             $('#bulkListModalContent').on('click', '#modalListButtonBulk', function() {
+              $("#modalListButtonBulk").addClass('loading');
+              $("#modalListButtonBulk").prop('disabled', true);
               var nfts = [];
               var returnUrl = window.location.href;
               if (arrayBool == false) {
@@ -271,26 +273,13 @@
                 if (nfts.length > 0) {
                   $.ajax({
                   type: "POST",
-                  url: "/list-bulk-array",
+                  url: "/list-bulk-array-free",
                   processData: false,
                   contentType: false,
                   enctype: "multipart/form-data",
                   data: formData,
                   success: function(result) {
-                    console.log(result)
-                    window.location.href = result.payload.next.always;
-                    formData.append('payload', JSON.stringify(result.payload))
-                    $.ajax({
-                      type: "POST",
-                      url: "/list-bulk-subscription",
-                      processData: false,
-                      contentType: false,
-                      enctype: "multipart/form-data",
-                      data: formData,
-                      success: function(result) {},
-                      error: function(result) {}
-                    })
-                    //setTimeout(location.reload(), 2000)
+                    setTimeout(location.reload(),2000)
                   },
                   error: function() {
                     console.log('error')
@@ -299,9 +288,9 @@
                 }
               }
             })
-            $('#bulkListModalContent').on('change', 'input', function() {
-              $('#bulkTotalXrp').val($('.bulk-nft-container #bulkNftWrap .bulk-checkbox:checked').length * 0.98)
-            })
+            // $('#bulkListModalContent').on('change', 'input', function() {
+            //   $('#bulkTotalXrp').val($('.bulk-nft-container #bulkNftWrap .bulk-checkbox:checked').length * 0)
+            // })
             $('#moreListedNftsLoad').on('click', function() {
               document.getElementById('moreListedNftsLoad').classList.add('loading')
               document.getElementById('moreListedNftsLoad').disabled = true;

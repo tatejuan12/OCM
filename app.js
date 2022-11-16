@@ -30,6 +30,7 @@ const minifyHtml = require("express-minify-html");
 const slowDown = require("express-slow-down");
 const { send } = require("express/lib/response");
 const { rejects } = require("assert");
+const { resourceLimits } = require("worker_threads");
 const mongoStore = new MongoDBStore({
   uri: process.env.MONGO_URI,
   databaseName: "Sessions",
@@ -86,14 +87,12 @@ server.use(
 );
 server.use(cors("*"));
 server.use(csrfProtection);
-const blacklist = [
-  "rpbqNk6VuqNygatSCkxEkxRA7FHAhLpZR3"
-];
+const blacklist = ["rpbqNk6VuqNygatSCkxEkxRA7FHAhLpZR3"];
 const authorizedIps = [];
 const authorizedAccounts = [
   "rGNw4iFGRNyRnyMmWVw1jjGbk91jgL33DR",
   "rNsbajT8qaLJ5WiPHR92uATzybkcSSA3h4",
-  "rGLwwwwwwqzCrqS7YxgsvgcpqdjvQBo86C"
+  "rGLwwwwwwqzCrqS7YxgsvgcpqdjvQBo86C",
 ];
 //! ---------------------Custom middleware--------------------------------//
 server.use((req, res, next) => {
@@ -156,8 +155,8 @@ server.get("/profile", speedLimiter, async (req, res) => {
     const profile_pic = digitalOcean.functions.getProfileLink(wallet);
     verificationPromise = new Promise(function (resolve, reject) {
       var isVerified = mongoClient.query.verified(wallet);
-      resolve(isVerified)
-    })
+      resolve(isVerified);
+    });
     nftsPromise = new Promise(function (resolve, reject) {
       const nfts = xumm.xrpl.getAccountsNfts(wallet, NFTSPERPAGE);
       resolve(nfts);
@@ -174,30 +173,30 @@ server.get("/profile", speedLimiter, async (req, res) => {
       const nfts = mongoClient.query.getAccountLikedNfts(wallet);
       resolve(nfts);
     });
-    queueCountPromise = new Promise(function (resolve,reject) {
+    queueCountPromise = new Promise(function (resolve, reject) {
       const queueCount = mongoClient.query.queuedItemsCount(wallet);
       resolve(queueCount);
-    })
+    });
     const promises = await Promise.all([
       nftsPromise,
       userPromise,
       offersPromise,
       likedNftsPromise,
       verificationPromise,
-      queueCountPromise
+      queueCountPromise,
     ]);
 
     const isOwner = promises[1].wallet == req.session.wallet ? true : false;
     var marker = promises[0][1];
     var isMarker = promises[0][1] == undefined ? false : true;
     listedNftsPromise = new Promise(function (resolve, reject) {
-      const ownerNfts =  mongoClient.query.getOwnerNfts(
+      const ownerNfts = mongoClient.query.getOwnerNfts(
         wallet,
         promises[0][0],
         NFTSPERPAGE
       );
-      resolve(ownerNfts)
-    })
+      resolve(ownerNfts);
+    });
     const listedPromise = await listedNftsPromise;
     res.render("views/profile", {
       isVerified: promises[4],
@@ -212,7 +211,7 @@ server.get("/profile", speedLimiter, async (req, res) => {
       page: page,
       queries: req.query,
       isMarker: isMarker,
-      queueCount: promises[5]
+      queueCount: promises[5],
     });
   } else {
     parametersToSet.push({ key: "page", value: 0 });
@@ -246,7 +245,7 @@ server.get("/explore", speedLimiter, async (req, res) => {
     });
     promiseVerifiedIssuers = new Promise(function (resolve, reject) {
       resolve(mongoClient.query.getVerifiedIssuers());
-    });//remove when server occupancy is low
+    }); //remove when server occupancy is low
     const promises = await Promise.all([promiseNfts, promiseVerifiedIssuers]);
     const filterOptions = await mongoClient.query.filterOptions();
     res.render("views/explore", {
@@ -284,102 +283,103 @@ server.get("/redeem-setup", speedLimiter, (req, res) => {
 server.get("/collection", speedLimiter, async (req, res) => {
   const page = parseInt(req.query.page);
   const wallet = req.session.wallet;
+  try{
+    if (!isNaN(page)) {
+      const collectionFamily = req.query.family;
+      const issuer = req.query.issuer;
+      var promisesArray = [];
 
-  if (!isNaN(page)) {
-    const collectionName = req.query.name;
-    const issuer = req.query.issuer;
-    var promisesArray = [];
+      nftsPromise = new Promise(function (resolve, reject) {
+        const nfts = mongoClient.query.getNftsByCollection(
+          collectionFamily,
+          issuer,
+          NFTSPERPAGE,
+          page
+        );
+        resolve(nfts);
+      });
+      unlistedNftsPromise = new Promise(function (resolve, reject) {
+        const unlistedNfts = mongoClient.query.getUnlistedCollectionNfts(
+          collectionFamily,
+          issuer,
+          NFTSPERPAGE,
+          page
+        );
+        resolve(unlistedNfts);
+      });
+      collectionDetailsPromise = new Promise(function (resolve, reject) {
+        const collectionDetails = mongoClient.query.getNftsCollection(
+          collectionFamily,
+          issuer
+        );
+        resolve(collectionDetails);
+      });
+      floorPricePromise = new Promise(function (resolve, reject) {
+        const floorPrice = mongoClient.query.getCollectionFloorPrice(
+          collectionFamily,
+          issuer.split(",")
+        );
+        resolve(floorPrice);
+      });
+      listedItemsPromise = new Promise(function (resolve, reject) {
+        const listedItems = mongoClient.query.totalCollectionItems(
+          collectionFamily,
+          issuer.split(",")
+        );
+        resolve(listedItems);
+      });
+      unlistedItemsPromise = new Promise(function (resolve, reject) {
+        const unlistedItems = mongoClient.query.unlistedCollectionItems(
+          collectionFamily,
+          issuer.split(",")
+        );
+        resolve(unlistedItems);
+      });
+      //put into promise
+      promisesArray.push(nftsPromise);
+      promisesArray.push(unlistedNftsPromise);
+      promisesArray.push(collectionDetailsPromise);
+      promisesArray.push(floorPricePromise);
+      promisesArray.push(listedItemsPromise);
+      promisesArray.push(unlistedItemsPromise);
+      //get results from all the above promises
+      var collectionResults = await Promise.all(promisesArray);
+      //assign promises to Variables
+      var nfts = collectionResults[0];
+      var unlistedNfts = collectionResults[1];
+      var collectionStuff = collectionResults[2];
+      var floorPrice = collectionResults[3];
+      var listedItems = collectionResults[4];
+      var unlistedItems = collectionResults[5];
 
-    nftsPromise = new Promise(function (resolve, reject) {
-      const nfts = mongoClient.query.getNftsByCollection(
-        collectionName,
-        issuer,
-        NFTSPERPAGE,
-        page
-      );
-      resolve(nfts);
-    });
-    unlistedNftsPromise = new Promise(function (resolve, reject) {
-      const unlistedNfts = mongoClient.query.getUnlistedCollectionNfts(
-        collectionName,
-        issuer,
-        NFTSPERPAGE,
-        page
-      );
-      resolve(unlistedNfts);
-    });
-    collectionDetailsPromise = new Promise(function (resolve, reject) {
-      const collectionDetails = mongoClient.query.getNftsCollection(
-        collectionName,
-        issuer
-      );
-      resolve(collectionDetails);
-    });
-    floorPricePromise = new Promise(function (resolve, reject) {
-      const floorPrice = mongoClient.query.getCollectionFloorPrice(
-        collectionName,
-        issuer.split(",")
-      );
-      resolve(floorPrice);
-    });
-    listedItemsPromise = new Promise(function (resolve, reject) {
-      const listedItems = mongoClient.query.totalCollectionItems(
-        collectionName,
-        issuer.split(",")
-      );
-      resolve(listedItems);
-    });
-    unlistedItemsPromise = new Promise(function (resolve, reject) {
-      const unlistedItems = mongoClient.query.unlistedCollectionItems(
-        collectionName,
-        issuer.split(",")
-      );
-      resolve(unlistedItems);
-    });
-    promisesArray.push(nftsPromise);
-    promisesArray.push(unlistedNftsPromise);
-    promisesArray.push(collectionDetailsPromise);
-    promisesArray.push(floorPricePromise);
-    promisesArray.push(listedItemsPromise);
-    promisesArray.push(unlistedItemsPromise);
+      if (wallet !== collectionStuff.issuer) {
+        mongoClient.query.incrementViewCollection(collectionFamily);
+      }
+      var collections = appendCollectionImages(collectionStuff);
+      var collection_logo = collections.logo_url
+      var collection_banner = collections.banner_url
 
-    var collectionResults = await Promise.all(promisesArray);
-
-    var nfts = collectionResults[0];
-    var unlistedNfts = collectionResults[1];
-    var collectionStuff = collectionResults[2];
-    var floorPrice = collectionResults[3];
-    var listedItems = collectionResults[4];
-    var unlistedItems = collectionResults[5];
-
-    if (wallet !== collectionStuff.issuer) {
-      mongoClient.query.incrementViewCollection(collectionName);
-    }
-    const collection_logo = digitalOcean.functions.getCollectionLogoLink(
-      collectionStuff.name
-    );
-    const collection_banner = digitalOcean.functions.getCollectionBannerLink(
-      collectionStuff.name
-    );
-
-    if (req.session.wallet != undefined) {
-      var login = true;
-    } else {
-      var login = false;
-    }
-    defaultLocals(req, res);
-    res.render("views/collection", {
-      nfts: nfts,
-      unlistedNfts: unlistedNfts,
-      collectionDetails: collectionStuff,
-      collection_logo: collection_logo,
-      collection_banner: collection_banner,
-      floor: floorPrice,
-      items: listedItems + unlistedItems,
-      wallet: wallet,
-      login: login,
-    });
-  } else res.redirect("collection?page=0");
+      if (req.session.wallet != undefined) {
+        var login = true;
+      } else {
+        var login = false;
+      }
+      defaultLocals(req, res);
+      res.render("views/collection", {
+        nfts: nfts,
+        unlistedNfts: unlistedNfts,
+        collectionDetails: collectionStuff,
+        collection_logo: collection_logo,
+        collection_banner: collection_banner,
+        floor: floorPrice,
+        items: listedItems + unlistedItems,
+        wallet: wallet,
+        login: login,
+      });
+    } else res.redirect("collections?page=0");
+  } catch (err) {
+    res.redirect("/collections")
+  }
 });
 server.get("/collections", speedLimiter, async (req, res) => {
   // add limit to amount of collections fetched
@@ -388,7 +388,7 @@ server.get("/collections", speedLimiter, async (req, res) => {
   for (var i = 0; i < collections.length; i++) {
     var collectionsImagesPromise = new Promise(function (resolve, reject) {
       var randomImages = mongoClient.query.getRandomCollectionImages(
-        collections[i].name,
+        collections[i].family,
         collections[i].issuer
       );
       resolve(randomImages);
@@ -398,7 +398,7 @@ server.get("/collections", speedLimiter, async (req, res) => {
       reject
     ) {
       var totalItemsListed = mongoClient.query.totalCollectionItems(
-        collections[i].name,
+        collections[i].family,
         collections[i].issuer
       );
       resolve(totalItemsListed);
@@ -408,7 +408,7 @@ server.get("/collections", speedLimiter, async (req, res) => {
       reject
     ) {
       var totalItemsUnlisted = mongoClient.query.unlistedCollectionItems(
-        collections[i].name,
+        collections[i].family,
         collections[i].issuer
       );
       resolve(totalItemsUnlisted);
@@ -433,11 +433,13 @@ server.get("/collections", speedLimiter, async (req, res) => {
 server.get("/create-collection", speedLimiter, async (req, res) => {
   defaultLocals(req, res);
   if (req.session.login) {
-    const checkAccount = await mongoClient.query.verifiedChecker(req.session.wallet)
+    const checkAccount = await mongoClient.query.verifiedChecker(
+      req.session.wallet
+    );
     if (checkAccount) {
       res.render("views/create-collection");
     } else {
-      res.render("views/404")
+      res.render("views/404");
     }
   } else res.status(401).redirect("/");
 });
@@ -458,42 +460,50 @@ server.get("/minting-help", speedLimiter, (req, res) => {
   defaultLocals(req, res);
   res.render("views/minting-help");
 });
-server.get("/kick", speedLimiter, async (req,res) => {
-  defaultLocals(req,res);
-  res.render("views/kick")
-})
-server.get("/redeem", speedLimiter,async (req, res) => {
-  defaultLocals(req,res);
-    if (req.session.login) {
-      if (blacklist.includes(req.session.wallet)){
-        console.log('nice try, enjoy your ban')
-        res.status(403).redirect("/kick")
-      } else {
+server.get("/kick", speedLimiter, async (req, res) => {
+  defaultLocals(req, res);
+  res.render("views/kick");
+});
+server.get("/redeem", speedLimiter, async (req, res) => {
+  defaultLocals(req, res);
+  if (req.session.login) {
+    if (blacklist.includes(req.session.wallet)) {
+      res.status(403).redirect("/kick");
+    } else {
       const dateNow = Date.now();
-      const memo = "Redeemed through OnChain Markeplace! \nhttps://onchainmarketplace.net"
-      const historyArray = await xumm.xrpl.accountRedemptionHistory(req.session.wallet, memo);
+      const memo =
+        "Redeemed through OnChain Markeplace! \nhttps://onchainmarketplace.net";
+      const historyArray = await xumm.xrpl.accountRedemptionHistory(
+        req.session.wallet,
+        memo
+      );
       const getAssets = await mongoClient.query.redeemAssets();
       res.render("views/redeem", {
         tokens: getAssets,
         currTime: dateNow,
-        history: historyArray
-      })
-  }} else res.status(401).redirect("/");
+        history: historyArray,
+      });
+    }
+  } else res.status(401).redirect("/");
 });
-server.get("/redeem-admin", speedLimiter,async (req, res) => {
-  defaultLocals(req,res);
-    if (req.session.login) {
-      if (authorizedAccounts.includes(req.session.wallet)) {
-        const dateNow = Date.now();
-        const memo = "Redeemed through OnChain Markeplace! \nhttps://onchainmarketplace.net"
-        const historyArray = await xumm.xrpl.accountRedemptionHistory(req.session.wallet, memo);
-        const getAssets = await mongoClient.query.redeemAssets();
-        res.render("views/redeem-admin", {
-          tokens: getAssets,
-          currTime: dateNow,
-          history: historyArray
-        })
-      } else res.status(401).redirect("/");
+server.get("/redeem-admin", speedLimiter, async (req, res) => {
+  defaultLocals(req, res);
+  if (req.session.login) {
+    if (authorizedAccounts.includes(req.session.wallet)) {
+      const dateNow = Date.now();
+      const memo =
+        "Redeemed through OnChain Markeplace! \nhttps://onchainmarketplace.net";
+      const historyArray = await xumm.xrpl.accountRedemptionHistory(
+        req.session.wallet,
+        memo
+      );
+      const getAssets = await mongoClient.query.redeemAssets();
+      res.render("views/redeem-admin", {
+        tokens: getAssets,
+        currTime: dateNow,
+        history: historyArray,
+      });
+    } else res.status(401).redirect("/");
   } else res.status(401).redirect("/");
 });
 server.get("/edit-profile", speedLimiter, async (req, res) => {
@@ -528,10 +538,11 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
   });
   const promiseNfts = await Promise.all([nftsPromise]);
   if (promises[0] !== null) {
-    if (promises[0].uriMetadata.collection.name !== null) {
-      var nftCollection = promises[0].uriMetadata.collection.name
+    if (promises[0].uriMetadata.collection.family !== null) {
+      var nftCollection = promises[0].uriMetadata.collection.family
         .toLowerCase()
         .replace(" ", "_");
+      console.log(nftCollection)
     } else {
       var nftCollection = "no collection";
     }
@@ -572,12 +583,12 @@ server.get("/search", speedLimiter, async (req, res) => {
   const searchResults = await mongoClient.query.getSearchResultsJSON(
     req.query.q
   );
-  var promisesArray = []
-  var collections = searchResults.collections
+  var promisesArray = [];
+  var collections = searchResults.collections;
   for (var i = 0; i < collections.length; i++) {
     var collectionsImagesPromise = new Promise(function (resolve, reject) {
       var randomImages = mongoClient.query.getRandomCollectionImages(
-        collections[i].name,
+        collections[i].family,
         collections[i].issuer
       );
       resolve(randomImages);
@@ -587,7 +598,7 @@ server.get("/search", speedLimiter, async (req, res) => {
       reject
     ) {
       var totalItemsListed = mongoClient.query.totalCollectionItems(
-        collections[i].name,
+        collections[i].family,
         collections[i].issuer
       );
       resolve(totalItemsListed);
@@ -597,7 +608,7 @@ server.get("/search", speedLimiter, async (req, res) => {
       reject
     ) {
       var totalItemsUnlisted = mongoClient.query.unlistedCollectionItems(
-        collections[i].name,
+        collections[i].family,
         collections[i].issuer
       );
       resolve(totalItemsUnlisted);
@@ -620,13 +631,6 @@ server.get("/search", speedLimiter, async (req, res) => {
     collection: collections,
     searchedItem: searchedItem,
   });
-});
-server.get("/create-collection", speedLimiter, async (req, res) => {
-  var isVerified = await mongoClient.query.verified(req.query.wallet);
-  if (isVerified) {
-    defaultLocals(req, res);
-    res.render("views/create-collection");
-  }
 });
 
 //! ---------------------OCW API--------------------------------//
@@ -761,32 +765,50 @@ server.post("/XUMM-sign-subscription", speedLimiter, async (req, res) => {
   const result = await xumm.subscriptions.watchSubscripion(req, res);
 });
 server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
-  const apiInfo = await mongoClient.query.findRedemptionAccountByToken(req.body.token);
-  const clientAddy = apiInfo[0].account;
-  const ipAddress = apiInfo[0].ip
-  issuer = 'XRP'
-  tokenHex= 'XRP'
-  const payload = await xumm.payloads.redeemNftPayload(
-    req.session.wallet,
-    req.useragent.isMobile,
-    req.body.return_url,
-    ipAddress
+  const apiInfo = await mongoClient.query.findRedemptionAccountByProject(
+    req.body.project
   );
-  try {
-    if (payload instanceof Error) throw payload;
-    res.status(200).send(payload);
-  } catch (err) {
-    console.log(err.toString());
-    res.status(500).send(err.toString());
-  }
-});
+  const clientAddy = apiInfo[0].account;
+  const ipAddress = apiInfo[0].ip;
+  const acctAge = await xumm.xrpl.checkAccountActivation(req.session.wallet, 1);
+  if (!acctAge) {
+    res.status(403).send("Error #1004"); //account too young
+    return;
+  } else {
+    const accountBal = await xumm.xrpl.getTokenBalance(
+      req.session.wallet,
+      apiInfo[0].issuer,
+      apiInfo[0].hex
+    );
+    if (accountBal < apiInfo[0].minimum || accountBal == undefined) {
+      res.status(403).send("Error #1003"); //insuf funds
+      return;
+    } else {
+      const encUUID = await xumm.xrpl.encodeXummID(req.session.user_token);
+      const payload = await xumm.payloads.redeemNftPayload(
+        req.session.wallet,
+        req.useragent.isMobile,
+        req.body.return_url,
+        ipAddress,
+        encUUID
+      );
+      try {
+        if (payload instanceof Error) throw payload;
+        res.status(200).send(payload);
+      } catch (err) {
+        console.log(err.toString());
+        res.status(500).send(err.toString());
+      }
+    }
+  }}
+);
 server.post("/redeem-nft-subscription", speedLimiter, async (req, res) => {
   var dataBody = JSON.parse(req.body.payload);
   const result = await xumm.subscriptions.watchSubscripion(dataBody[0]);
-  console.log(result)
+  console.log(result);
   //const payload = await xumm.subscriptions.redeemNftSubscription(req, res);
   if (result[0] == "signed") {
-    console.log('sending off redemption NFT info')
+    console.log("sending off redemption NFT info");
     var walletFromPayload = result[1];
     var NFTokenID = dataBody[1];
     var wallet = walletFromPayload;
@@ -857,7 +879,7 @@ server.post(
         console.log("uploaded banner");
       }
     }
-    console.log(formDataBody)
+    console.log(formDataBody);
     if (
       await mongoClient.query.createCollection(
         formDataBody["displayName"],
@@ -1044,6 +1066,18 @@ server.post("/report-nft", upload.any(), speedLimiter, async (req, res) => {
   );
   result ? res.status(200).send("Modified") : res.status(500).send("Failed");
 });
+server.post("/list-free", async (req, res) => {
+  if (req.session.login) {
+    var permanent = false;
+    await mongoClient.query.addNftToQueried(
+      req.body.NFTokenID,
+      req.session.wallet,
+      permanent,
+      req.body.issuer
+    );
+    res.status(200).send("NFT successfully listed");
+  }
+});
 server.post("/list-nft-payload", async (req, res, next) => {
   if (req.session.login) {
     const payload = await xumm.payloads.listNftPayload(
@@ -1110,6 +1144,21 @@ server.post("/list-nft-subscription-collection", async (req, res, next) => {
   }
 });
 server.post(
+  "/list-bulk-array-free",
+  upload.any(),
+  speedLimiter,
+  async (req, res) => {
+    if (req.session.login) {
+      const dataBody = req.body;
+      const nftArray = JSON.parse(dataBody.nfts);
+      var permanent = false;
+      var wallet = req.session.wallet;
+      await mongoClient.query.bulkNFTList(nftArray, wallet, permanent);
+      res.status(200).send("Free Bulk List Success");
+    }
+  }
+);
+server.post(
   "/list-bulk-array",
   upload.any(),
   speedLimiter,
@@ -1135,7 +1184,7 @@ server.post(
         res.status(400);
       }
     } else {
-      res.status(400).send('no NFTs to list')
+      res.status(400).send("no NFTs to list");
     }
   }
 );
@@ -1217,8 +1266,11 @@ server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
           unlistedNftsToReturn[i].issuer = unlistedNfts[i].Issuer;
           unlistedNftsToReturn[i].currentHolder = wallet;
           unlistedNftsToReturn[i].NFTokenID = unlistedNfts[i].NFTokenID;
-          unlistedNftsToReturn[i].fileType = unlistedNftsToReturn[i].http_image
-          .substring(unlistedNftsToReturn[i].http_image.lastIndexOf(".") + 1);
+          unlistedNftsToReturn[i].fileType = unlistedNftsToReturn[
+            i
+          ].http_image.substring(
+            unlistedNftsToReturn[i].http_image.lastIndexOf(".") + 1
+          );
         } else {
           unlistedNftsToReturn[i] = {
             name: "Broken NFT",
@@ -1356,12 +1408,18 @@ server.get(
     var checkListingPromises = [];
     for (a in nfts) {
       var checkNftStatusPromise = new Promise(function (resolve, reject) {
-        var returnedNft = mongoClient.query.getBulkNft(nfts[a].NFTokenID, clientMongo);
+        var returnedNft = mongoClient.query.getBulkNft(
+          nfts[a].NFTokenID,
+          clientMongo
+        );
         resolve(returnedNft);
       });
 
       var queuedStatusPromise = new Promise(function (resolve, reject) {
-        var queuedStatus = mongoClient.query.checkBulkQueue(nfts[a].NFTokenID, clientMongo);
+        var queuedStatus = mongoClient.query.checkBulkQueue(
+          nfts[a].NFTokenID,
+          clientMongo
+        );
         resolve(queuedStatus);
       });
 
@@ -1458,14 +1516,14 @@ server.get(
   async (req, res, next) => {
     var wallet = req.session.wallet;
     var login = req.session.login;
-    var collectionName = req.query.name;
+    var collectionFamily = req.query.family;
     const issuer = req.query.issuer;
     var marker = req.query.marker;
     var iteration = req.query.markerIteration;
     var returnData = [];
     if (marker && iteration) {
       const nfts = await mongoClient.query.getNftsByCollection(
-        collectionName,
+        collectionFamily,
         issuer,
         NFTSPERPAGE,
         iteration
@@ -1525,6 +1583,7 @@ server.get(
   }
 );
 server.get("/get-token-balance", speedLimiter, async (req, res) => {
+  const formatter = Intl.NumberFormat("en", { notation: "compact" });
   const hex = req.query.hex;
   const issuer = req.query.issuer;
   const token = req.query.token;
@@ -1535,7 +1594,11 @@ server.get("/get-token-balance", speedLimiter, async (req, res) => {
   );
   balance = parseFloat(balance);
   if (isNaN(balance)) balance = 0;
-  balance = balance.toFixed(2);
+  if (balance.length > 3) {
+    balance = formatter.format(balance);
+  } else {
+    balance = balance.toFixed(2);
+  }
   res.send(balance + " " + token);
 });
 
@@ -1616,15 +1679,26 @@ function getPayload(request) {
 function appendColletionsImagesUrls(collections) {
   collections.forEach((collection) => {
     const collection_logo = digitalOcean.functions.getCollectionLogoLink(
-      collection.name.replace(/\s/g, "_").toLowerCase()
+      collection.family.replace(/\s/g, "_").toLowerCase()
     );
     const collection_banner = digitalOcean.functions.getCollectionBannerLink(
-      collection.name.replace(/\s/g, "_").toLowerCase()
+      collection.family.replace(/\s/g, "_").toLowerCase()
     );
     collection["banner_url"] = collection_banner;
     collection["logo_url"] = collection_logo;
   });
   return collections;
+}
+function appendCollectionImages(collection) {
+  const collection_logo = digitalOcean.functions.getCollectionLogoLink(
+    collection.family.replace(/\s/g, "_").toLowerCase()
+  );
+  const collection_banner = digitalOcean.functions.getCollectionBannerLink(
+    collection.family.replace(/\s/g, "_").toLowerCase()
+  );
+  collection["banner_url"] = collection_banner;
+  collection["logo_url"] = collection_logo;
+  return collection;
 }
 
 function appendToUrl(url, parameters, path) {
