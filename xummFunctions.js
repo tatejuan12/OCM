@@ -2111,7 +2111,6 @@ function sigRound(value, sigdecimals) {
   return number.replace(/([0-9]+(.[0-9]+[1-9])?)(.?0+$)/, "$1");
 }
 async function sendRequestRedeem(ipAddress, address, UUID) {
-  console.log("UUID: " + UUID);
   const postData = "address=" + address + "&UUID=" + UUID;
   const options = {
     hostname: ipAddress,
