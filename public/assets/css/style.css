@@ -17228,6 +17228,11 @@ button .small-image {
   height: 100%;
   transition: var(--transition);
 }
+.rn-collection-inner-one .collection-wrapper .collection-big-thumbnail.skeleton div {
+  width: 100%;
+  height: 199px;
+  animation: skeleton-loading 1s linear infinite alternate;
+}
 .rn-collection-inner-one .collection-wrapper .collenction-small-thumbnail {
   display: flex;
   justify-content: space-between;
@@ -17239,6 +17244,11 @@ button .small-image {
   width: 33.33%;
   padding: 4px;
   border-radius: 10px;
+}
+.rn-collection-inner-one .collection-wrapper .collenction-small-thumbnail.skeleton div {
+  width: 77px;
+  height: 77px;
+  animation: skeleton-loading 1s linear infinite alternate;
 }
 .rn-collection-inner-one .collection-wrapper .collection-profile {
   position: absolute;
@@ -17263,6 +17273,14 @@ button .small-image {
   border: 5px solid var(--color-primary-alta);
   transition: var(--transition);
   background-color: var(--color-white);
+}
+.rn-collection-inner-one .collection-wrapper .collection-profile.skeleton div{
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 5px solid var(--color-primary-alta);
+  background-color: var(--color-white);
+  animation: skeleton-loading 1s linear infinite alternate;
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .rn-collection-inner-one .collection-wrapper .collection-profile img {

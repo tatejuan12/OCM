@@ -51,7 +51,71 @@
             </span>
         </header>
         <div class="CMC-collections" id="CMCCollections">
-          <%#- include ("models/collections-grid.ejs", {collections:collections, sampleImages: collections.sampleImages}) %>                  
+          <div class="row g-5">
+            <div data-sal="slide-up" data-sal-delay="200" data-sal-duration="800" class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-12 collection-card-main">
+              <a class="rn-collection-inner-one">
+                  <div class="collection-wrapper">
+                      <div class="collection-big-thumbnail skeleton">
+                        <div></div>
+                      </div>
+                      <div class="collenction-small-thumbnail skeleton">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                      </div>
+                      <div class="collection-profile skeleton">
+                          <div></div>
+                      </div>
+                      <div class="collection-deg skeleton">
+                          <h6 class="title"></h6>
+                          <span class="items"></span>
+                      </div>
+                  </div>
+              </a>
+            </div>
+            <div data-sal="slide-up" data-sal-delay="200" data-sal-duration="800" class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-12 collection-card-main">
+              <a class="rn-collection-inner-one">
+                  <div class="collection-wrapper">
+                      <div class="collection-big-thumbnail skeleton">
+                        <div></div>
+                      </div>
+                      <div class="collenction-small-thumbnail skeleton">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                      </div>
+                      <div class="collection-profile skeleton">
+                          <div></div>
+                      </div>
+                      <div class="collection-deg skeleton">
+                          <h6 class="title"></h6>
+                          <span class="items"></span>
+                      </div>
+                  </div>
+              </a>
+            </div>
+            <div data-sal="slide-up" data-sal-delay="200" data-sal-duration="800" class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-12 collection-card-main">
+              <a class="rn-collection-inner-one">
+                  <div class="collection-wrapper">
+                      <div class="collection-big-thumbnail skeleton">
+                        <div></div>
+                      </div>
+                      <div class="collenction-small-thumbnail skeleton">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                      </div>
+                      <div class="collection-profile skeleton">
+                          <div></div>
+                      </div>
+                      <div class="collection-deg skeleton">
+                          <h6 class="title"></h6>
+                          <span class="items"></span>
+                      </div>
+                  </div>
+              </a>
+            </div>
+          </div>
         </div>
     </div>
   </div>
@@ -95,13 +159,13 @@
   <!-- main JS -->
   <script src="assets/js/main.js"></script>
   <script>
-    $.post("/get-collections", function(data) {
-      $(".CMC-collections").html(data[0]);
-      const collections = document.getElementById("CMCCollections").querySelectorAll(".col-12");
-      collections.forEach(element => {
-        element.classList.add("sal-animate")
-      });
-    })
+    // $.post("/get-collections", function(data) {
+    //   $(".CMC-collections").html(data[0]);
+    //   const collections = document.getElementById("CMCCollections").querySelectorAll(".col-12");
+    //   collections.forEach(element => {
+    //     element.classList.add("sal-animate")
+    //   });
+    // })
   </script>
 </body>
 

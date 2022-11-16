@@ -382,7 +382,7 @@ server.get("/collection", speedLimiter, async (req, res) => {
   }
 });
 server.get("/collections", speedLimiter, async (req, res) => {
-  // add limit to amount of collections fetched
+  // add limit to amount of collections fetched?
   res.render("views/collections", {
     //collections: collections,
   });
