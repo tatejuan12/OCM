@@ -383,51 +383,8 @@ server.get("/collection", speedLimiter, async (req, res) => {
 });
 server.get("/collections", speedLimiter, async (req, res) => {
   // add limit to amount of collections fetched
-  var collections = await mongoClient.query.getCollections(NFTSPERPAGE);
-  var promisesArray = [];
-  for (var i = 0; i < collections.length; i++) {
-    var collectionsImagesPromise = new Promise(function (resolve, reject) {
-      var randomImages = mongoClient.query.getRandomCollectionImages(
-        collections[i].family,
-        collections[i].issuer
-      );
-      resolve(randomImages);
-    });
-    var collectionsTotalItemsListedPromise = new Promise(function (
-      resolve,
-      reject
-    ) {
-      var totalItemsListed = mongoClient.query.totalCollectionItems(
-        collections[i].family,
-        collections[i].issuer
-      );
-      resolve(totalItemsListed);
-    });
-    var collectionsTotalItemsUnlistedPromise = new Promise(function (
-      resolve,
-      reject
-    ) {
-      var totalItemsUnlisted = mongoClient.query.unlistedCollectionItems(
-        collections[i].family,
-        collections[i].issuer
-      );
-      resolve(totalItemsUnlisted);
-    });
-    promisesArray.push(collectionsImagesPromise);
-    promisesArray.push(collectionsTotalItemsListedPromise);
-    promisesArray.push(collectionsTotalItemsUnlistedPromise);
-  }
-  var collectionResults = await Promise.all(promisesArray);
-  for (var i = 0; i < collections.length; i++) {
-    collections[i].sampleImages = collectionResults[Number(i) * 3];
-    collections[i].numberOfNFTs =
-      Number(collectionResults[Number(i) * 3 + 1]) +
-      Number(collectionResults[Number(i) * 3 + 2]); //add the listed and unlisted values together
-  }
-  collections = appendColletionsImagesUrls(collections);
-  defaultLocals(req, res);
   res.render("views/collections", {
-    collections: collections,
+    //collections: collections,
   });
 });
 server.get("/create-collection", speedLimiter, async (req, res) => {
@@ -634,6 +591,65 @@ server.get("/search", speedLimiter, async (req, res) => {
 });
 
 //! ---------------------OCW API--------------------------------//
+server.post("/get-collections", speedLimiter, async (req, res, next) => {
+  try {
+    var collections = await mongoClient.query.getCollections(NFTSPERPAGE);
+    var promisesArray = [];
+    for (var i = 0; i < collections.length; i++) {
+      var collectionsImagesPromise = new Promise(function (resolve, reject) {
+        var randomImages = mongoClient.query.getRandomCollectionImages(
+          collections[i].family,
+          collections[i].issuer
+        );
+        resolve(randomImages);
+      });
+      var collectionsTotalItemsListedPromise = new Promise(function (
+        resolve,
+        reject
+      ) {
+        var totalItemsListed = mongoClient.query.totalCollectionItems(
+          collections[i].family,
+          collections[i].issuer
+        );
+        resolve(totalItemsListed);
+      });
+      var collectionsTotalItemsUnlistedPromise = new Promise(function (
+        resolve,
+        reject
+      ) {
+        var totalItemsUnlisted = mongoClient.query.unlistedCollectionItems(
+          collections[i].family,
+          collections[i].issuer
+        );
+        resolve(totalItemsUnlisted);
+      });
+      promisesArray.push(collectionsImagesPromise);
+      promisesArray.push(collectionsTotalItemsListedPromise);
+      promisesArray.push(collectionsTotalItemsUnlistedPromise);
+    }
+    var collectionResults = await Promise.all(promisesArray);
+    for (var i = 0; i < collections.length; i++) {
+      collections[i].sampleImages = collectionResults[Number(i) * 3];
+      collections[i].numberOfNFTs =
+        Number(collectionResults[Number(i) * 3 + 1]) +
+        Number(collectionResults[Number(i) * 3 + 2]); //add the listed and unlisted values together
+    }
+    var returnHtml = [];
+    collections = appendColletionsImagesUrls(collections);
+    defaultLocals(req, res);
+    res.render("views/models/collections-grid.ejs", {
+      collections: collections,
+    },
+    function (err, html) {
+      if (err) throw "Couldn't get buy collections" + err;
+      returnHtml.push(html);
+    }
+    );
+    res.send(returnHtml)
+  } catch (err) {
+    return next(err)
+  }
+})
 server.post("/get-profile-info", speedLimiter, async (req, res, next) => {
   try {
     const nftId = req.query.id;

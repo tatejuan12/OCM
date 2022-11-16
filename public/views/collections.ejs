@@ -50,8 +50,8 @@
                 </div>
             </span>
         </header>
-        <div class="CMC-collections">
-          <%- include ("models/collections-grid.ejs", {collections:collections, sampleImages: collections.sampleImages}) %>                  
+        <div class="CMC-collections" id="CMCCollections">
+          <%#- include ("models/collections-grid.ejs", {collections:collections, sampleImages: collections.sampleImages}) %>                  
         </div>
     </div>
   </div>
@@ -94,7 +94,15 @@
   <script src="assets/js/vendor/savePopup.js"></script>
   <!-- main JS -->
   <script src="assets/js/main.js"></script>
-
+  <script>
+    $.post("/get-collections", function(data) {
+      $(".CMC-collections").html(data[0]);
+      const collections = document.getElementById("CMCCollections").querySelectorAll(".col-12");
+      collections.forEach(element => {
+        element.classList.add("sal-animate")
+      });
+    })
+  </script>
 </body>
 
 </html>
