@@ -651,8 +651,6 @@ server.post("/get-profile-info", speedLimiter, async (req, res, next) => {
     const currUser = req.session.wallet;
     const isOwner = promises[1] == req.session.wallet ? true : false;
     const profile_img = digitalOcean.functions.getProfileLink(promises[1]);
-    console.log(promises[0][0])
-    console.log(promises[1])
     res.render(
       "views/models/product-details/buy-offers-container.ejs",
       {

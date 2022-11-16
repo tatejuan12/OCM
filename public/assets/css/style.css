@@ -16878,6 +16878,7 @@ button .small-image {
   flex-direction: column;
   text-align: center;
   margin-top: 10px;
+  max-width: 500px;
 }
 .author-wrapper .author-inner .rn-author-info-content h4.title {
   font-weight: 600;
@@ -25458,4 +25459,9 @@ Collection nav
   100%{
     transform: rotate(0) translateY(0);
   }
+}
+.author-wrapper .author-inner .rn-author-info-content .social-follow svg{
+  margin-right: 10px;
+  width: 14px;
+  color: var(--color-primary);
 }
