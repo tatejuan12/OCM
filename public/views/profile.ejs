@@ -292,7 +292,6 @@
                       success: function(result) {},
                       error: function(result) {}
                     })
-                    setTimeout(location.reload(),2000)
                   },
                   error: function() {
                     console.log('error')
@@ -302,7 +301,7 @@
               }
             })
             $('#bulkListModalContent').on('change', 'input', function() {
-              $('#bulkTotalXrp').val($('.bulk-nft-container #bulkNftWrap .bulk-checkbox:checked').length * 0)
+              $('#bulkTotalXrp').val($('.bulk-nft-container #bulkNftWrap .bulk-checkbox:checked').length * 0.98)
             })
             $('#moreListedNftsLoad').on('click', function() {
               document.getElementById('moreListedNftsLoad').classList.add('loading')
