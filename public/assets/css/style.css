@@ -17311,6 +17311,14 @@ button .small-image {
   font-weight: 400;
   transition: var(--transition);
 }
+.rn-collection-inner-one .collection-wrapper .collection-deg.skeleton h6 {
+  height: 25px;
+  width: 130px;
+  margin: 0;
+  font-weight: 400;
+  transition: var(--transition);
+  animation: skeleton-loading 1s linear infinite alternate;
+}
 .rn-collection-inner-one .collection-wrapper .collection-deg h6:hover {
   color: var(--color-primary);
 }
@@ -17320,6 +17328,16 @@ button .small-image {
   border-radius: 3px;
   color: var(--color-white);
   transition: var(--transition);
+}
+.rn-collection-inner-one .collection-wrapper .collection-deg.skeleton span.items {
+  padding: 5px 8px;
+  background: var(--color-primary-alta);
+  border-radius: 3px;
+  color: var(--color-white);
+  width: 62px;
+  height: 31px;
+  transition: var(--transition);
+  animation: skeleton-loading 1s linear infinite alternate;
 }
 .rn-collection-inner-one .collection-wrapper .collection-deg span.items:hover {
   background: var(--color-primary) !important;
