@@ -11,7 +11,8 @@ const path = require("path");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const cookieParser = require("cookie-parser");
-const logger = require("express-logger");
+//const morgan = require('morgan');
+//const rfs = require('rotating-file-stream');
 const { TxData } = require("xrpl-txdata");
 const useragent = require("express-useragent");
 const verifySignature = new TxData();
@@ -41,6 +42,12 @@ const speedLimiter = slowDown({
   delayAfter: 100,
   delayMs: 500,
 });
+//const accessLogStream = rfs.createStream(Date.now() + '.log', {
+//  size: '10M',
+//  interval: '1d',
+//  path: path.join(__dirname, 'logs'),
+//  compress: 'gzip'
+//})
 const NFTSPERPAGE = 25;
 //! ---------------------Imported middleware--------------------------------//
 const server = express();
@@ -58,7 +65,7 @@ server.set("view engine", "ejs"); // Setting rendering agent to ejs
 server.use(helmet({ contentSecurityPolicy: false }));
 server.set("views", path.join(__dirname, "/public")); // Makes views for rendering the public dir
 server.use(express.static(__dirname + "/public", { dotfiles: "allow" })); // Essential so JS and CSS is acccessible by requests
-//server.use(logger({ path: __dirname + "/logs/logs.log" })); // Logs data, every connection will log browser info and request url
+//server.use(morgan('combined', { stream: accessLogStream}));
 server.use(cookieParser());
 server.use(
   session({
