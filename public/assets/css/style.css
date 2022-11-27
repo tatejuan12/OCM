@@ -25466,5 +25466,18 @@ Collection nav
 }
 .activity-container .activity-wrap{
   width: 95%;
-  background-color: var(--color-white);
+  display: flex;
+  flex-direction: row;
+}
+.activity-wrap .activity-table tr {
+  border-bottom: 1px solid var(--color-border);
+}
+.activity-wrap .activity-table tbody tr td {
+  border: none;
+  padding: 8px 0 !important;
+}
+.activity-filter{
+  border-left: 1px solid var(--color-border);
+  height: 100%;
+  width: 400px;
 }
