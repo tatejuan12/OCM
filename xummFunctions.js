@@ -1963,6 +1963,322 @@ var xrpls = {
     var id = xrpl.convertStringToHex(id); //convert to Hex
     return id;
   },
+  accountActivity: async function (address, earliestFirst, dateStartSeconds, dateEndSeconds, marker) {
+    const client = await getXrplClient();
+    try {
+      //define functions 
+      let currentLedger = async function(client, ledger_index) {
+          var ledgerindex = await client.request({
+              "command": "ledger",
+              "ledger_index": ledger_index
+          })
+      
+          var current = ledgerindex.result.ledger_index
+          var ledgertime = ledgerindex.result.ledger.close_time
+          return [current, ledgertime]
+      }
+      
+      let ledgerFromEpoch = async function(client, EpochSeconds) {
+      
+          var EpochSeconds = Number(EpochSeconds)
+          var rippletime = EpochSeconds - 946684800
+          var oldledgertime = rippletime + 7
+      
+          var LedgerToCheck = "validated"
+          var first = true
+          var all = []
+          while ((oldledgertime - rippletime) > 6) { //while there is more than a 6 second gap between the ledger found and the ledger wanted
+              var LedgerQuery = await currentLedger(client, LedgerToCheck)
+      
+              var oldledgerindex = LedgerQuery[0]
+              var oldledgertime = LedgerQuery[1]
+      
+              if (all.includes(LedgerQuery[0])) break
+      
+              if (oldledgertime >= rippletime || !first) {
+                  if (oldledgertime - rippletime < 0) {
+                      var LedgerToCheck = oldledgerindex + 1
+                      var oldledgertime = rippletime + 7
+                  } else {
+                      var LedgerToCheck = oldledgerindex - Number(((oldledgertime - rippletime) / 5).toFixed(0))
+                  }
+              } else {
+                  return -1
+              }
+              all.push(LedgerQuery[0])
+      
+              var first = false
+          }
+      
+          if (oldledgertime < rippletime) {
+              while (oldledgertime < rippletime) {
+                  oldledgerindex += 1
+                  var LedgerQuery = await currentLedger(client, oldledgerindex)
+      
+                  var oldledgerindex = LedgerQuery[0]
+                  var oldledgertime = LedgerQuery[1]
+              }
+          }
+      
+          var more = true
+          while (more) {
+              var LedgerQuery = await currentLedger(client, oldledgerindex - 1)
+      
+              var oldledgerindex = LedgerQuery[0]
+              var oldledgertime = LedgerQuery[1]
+      
+              if (oldledgertime < rippletime) {
+                  oldledgerindex += 1
+                  break
+              }
+          }
+      
+          return oldledgerindex
+      
+      }
+      
+      let convertHex = function(hexadecimal) {
+          if (hexadecimal.length == 3) {
+              return hexadecimal
+          } else {
+              return xrpl.convertHexToString(hexadecimal).replace(/\0/g, '').replace(/[^a-zA-Z0-9?!@#$%&*]/g, '')
+          }
+      }
+
+      //get ledger dates to scan from
+      if (dateStartSeconds != -1) {
+          var dateStartLedger = await ledgerFromEpoch(client, dateStartSeconds)
+      } else {
+          var dateStartLedger = dateStartSeconds
+      }
+      if (dateStartLedger < 75443458) var dateStartLedger = 75443458 //first ledger of nfts
+
+      if (dateEndSeconds != -1) {
+          var dateEndLedger = await ledgerFromEpoch(client, dateEndSeconds)
+
+          if (dateEndLedger < dateStartLedger) return [
+              [], null
+          ] //if the supplied date is before NFTs existed, don't even query
+      } else {
+          var dateEndLedger = dateEndSeconds
+      }
+
+      //try 5 times to get an array of all account NFTs
+      var count = 0
+      var transactions = []
+      while (count < 5) {
+          try {
+              var query = {
+                  "command": "account_tx",
+                  "account": address,
+                  "ledger_index_min": dateStartLedger,
+                  "ledger_index_max": dateEndLedger,
+                  "limit": 400,
+                  "forward": earliestFirst
+              }
+              if (marker != null) query.marker = marker
+
+              var response = await client.request(query)
+
+              var transactions = response.result.transactions
+              var marker = response.result.marker
+              break
+          } catch (err) {
+              console.log(err)
+              count++
+          }
+      }
+
+      //filter transactions
+      var transactionsNFT = []
+      for (a in transactions) {
+
+          if (transactions[a].tx.Account != address && transactions[a].tx.TransactionType != "NFTokenAcceptOffer") continue //remove transactions if not executed by them, or not accepting their nft/offer
+
+          if (transactions[a].tx.TransactionType == "NFTokenCancelOffer") {
+              for (b in transactions[a].meta.AffectedNodes) {
+
+                  //Check if affected node data if a DeletedNode, remove others
+                  if (!(transactions[a].meta.AffectedNodes[b].hasOwnProperty('DeletedNode'))) continue
+
+                  //checked if DeletedNode is a NFTokenOffer
+                  if (!(transactions[a].meta.AffectedNodes[b].DeletedNode.LedgerEntryType == "NFTokenOffer")) continue
+
+
+                  if (transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Flags == 1) { //if sell offer
+                      var transactionType = "Cancel Sell Offer"
+                  } else {
+                      var transactionType = "Cancel Buy Offer"
+                  }
+
+                  var NFTokenID = transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.NFTokenID
+                  var recipient = undefined
+
+                  if (isNaN(transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount)) {
+                      var amount = transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount.value
+                      var currency = convertHex(transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount.currency)
+                  } else {
+                      var amount = +transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount / 1000000
+                      var currency = "XRP"
+                  }
+
+                  var data = {
+                      date: (transactions[a].tx.date + 946684800) * 1000,
+                      txID: transactions[a].tx.hash,
+                      result: transactions[a].meta.TransactionResult,
+                      NFTokenID: NFTokenID,
+                      transactionType: transactionType,
+                      recipient: recipient,
+                      amount: amount,
+                      currency: currency
+                  }
+                  transactionsNFT.push(data)
+              }
+          } else if (transactions[a].tx.TransactionType.includes("NFToken")) {
+
+              if (transactions[a].tx.TransactionType == "NFTokenMint") {
+                  var transactionType = "Mint NFToken"
+                  var recipient = transactions[a].tx.Account
+                  var amount = 0
+                  var currency = "XRP"
+
+                  //find nft that was minted
+                  var nfts = {}
+                  for (b in transactions[a].meta.AffectedNodes) {
+                      if ("ModifiedNode" in transactions[a].meta.AffectedNodes[b]) {
+                          if (transactions[a].meta.AffectedNodes[b].ModifiedNode.LedgerEntryType != "NFTokenPage") continue
+
+                          if (transactions[a].meta.AffectedNodes[b].ModifiedNode.PreviousFields.NFTokens == undefined) continue
+
+                          var combined = transactions[a].meta.AffectedNodes[b].ModifiedNode.FinalFields.NFTokens.concat(transactions[a].meta.AffectedNodes[b].ModifiedNode.PreviousFields.NFTokens)
+                      } else if ("CreatedNode" in transactions[a].meta.AffectedNodes[b]) {
+                          if (transactions[a].meta.AffectedNodes[b].CreatedNode.LedgerEntryType != "NFTokenPage") continue
+
+                          var combined = transactions[a].meta.AffectedNodes[b].CreatedNode.NewFields.NFTokens
+                      } else {
+                          var combined = []
+                      }
+
+                      for (c in combined) {
+                          if (!(combined[c].NFToken.NFTokenID in nfts)) {
+                              nfts[combined[c].NFToken.NFTokenID] = 0
+                          }
+
+                          nfts[combined[c].NFToken.NFTokenID] += 1
+                      }
+                  }
+
+                  //calculate outcomes 
+                  var keys = Object.keys(nfts)
+                  for (b in keys) {
+                      if (nfts[keys[b]] % 2 != 0) {
+                          var NFTokenID = keys[b]
+                      }
+                  }
+              }
+
+              if (transactions[a].tx.TransactionType == "NFTokenBurn") {
+                  var transactionType = "Burn NFToken"
+                  var recipient = transactions[a].tx.Account
+                  var amount = 0
+                  var currency = "XRP"
+                  var NFTokenID = transactions[a].tx.NFTokenID
+              }
+
+              if (transactions[a].tx.TransactionType == "NFTokenCreateOffer") {
+                  var recipient = transactions[a].tx.Destination
+                  var NFTokenID = transactions[a].tx.NFTokenID
+
+                  if (isNaN(transactions[a].tx.Amount)) {
+                      var amount = transactions[a].tx.Amount.value
+                      var currency = convertHex(transactions[a].tx.Amount.currency)
+                  } else {
+                      var amount = +transactions[a].tx.Amount / 1000000
+                      var currency = "XRP"
+                  }
+
+                  if (transactions[a].tx.Flags == 1) {
+                      var transactionType = "Create Sell Offer"
+                  } else {
+                      var transactionType = "Create Buy Offer"
+                  }
+              }
+
+              if (transactions[a].tx.TransactionType == "NFTokenAcceptOffer") {
+
+                  for (b in transactions[a].meta.AffectedNodes) {
+
+                      //Check if affected node data if a DeletedNode, remove others
+                      if (!(transactions[a].meta.AffectedNodes[b].hasOwnProperty('DeletedNode'))) continue
+
+                      //checked if DeletedNode is a NFTokenOffer
+                      if (!(transactions[a].meta.AffectedNodes[b].DeletedNode.LedgerEntryType == "NFTokenOffer")) continue
+
+
+                      if (("NFTokenSellOffer" in transactions[a].tx) && ("NFTokenBuyOffer" in transactions[a].tx)) {
+                          if (transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Flags == 1) continue
+                          var transactionType = "NFToken Brokerage"
+                          var recipient = transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Owner
+                      } else {
+                          if (transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Flags == 1) { //if sell offer
+                              var transactionType = "Accept Sell Offer"
+                              var recipient = transactions[a].tx.Account
+                          } else {
+                              var transactionType = "Accept Buy Offer"
+                              var recipient = transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Owner
+                          }
+                      }
+
+                      var NFTokenID = transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.NFTokenID
+
+                      if (isNaN(transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount)) {
+                          var amount = transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount.value
+                          var currency = convertHex(transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount.currency)
+                      } else {
+                          var amount = +transactions[a].meta.AffectedNodes[b].DeletedNode.FinalFields.Amount / 1000000
+                          var currency = "XRP"
+                      }
+                  }
+
+                  if (transactions[a].tx.Memos != undefined) {
+                      var memo = convertHex(transactions[a].tx.Memos[0].Memo.MemoData)
+                      if (memo.includes("RedeemedthroughOnChainMarkeplace!")) var transactionType = "NFT Redemption"
+                  }
+              }
+
+
+              var data = {
+                  date: (transactions[a].tx.date + 946684800) * 1000,
+                  txID: transactions[a].tx.hash,
+                  result: transactions[a].meta.TransactionResult,
+                  NFTokenID: NFTokenID,
+                  transactionType: transactionType,
+                  recipient: recipient,
+                  amount: amount,
+                  currency: currency
+              }
+              transactionsNFT.push(data)
+          }
+      }
+
+      if(earliestFirst){
+          transactionsNFT.sort(function(a, b) {
+              return a.date - b.date;
+          });
+      } else {
+          transactionsNFT.sort(function(a, b) {
+              return b.date - a.date;
+          });
+      }
+
+      return [transactionsNFT, marker]
+  } catch (error) {
+      console.log(error)
+      return null
+  } finally {
+      await client.disconnect()
+  }
+  },
 };
 // ******************
 // END XRPL FUNCTIONS

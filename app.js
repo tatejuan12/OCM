@@ -11,7 +11,6 @@ const path = require("path");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const cookieParser = require("cookie-parser");
-const logger = require("express-logger");
 const { TxData } = require("xrpl-txdata");
 const useragent = require("express-useragent");
 const verifySignature = new TxData();
@@ -150,7 +149,6 @@ server.get("/profile", speedLimiter, async (req, res) => {
         wallet = req.session.wallet;
       }
     }
-
     defaultLocals(req, res);
     const profile_pic = digitalOcean.functions.getProfileLink(wallet);
     verificationPromise = new Promise(function (resolve, reject) {
@@ -686,6 +684,55 @@ server.post("/get-profile-info", speedLimiter, async (req, res, next) => {
     return next(err);
   }
 });
+server.get('/accountTransDataQuery', speedLimiter, async (req,res) => {
+  //query simplifications explained
+  //m = marker
+  //eF = earliest first
+  //dSS = Date starts in seconds
+  //dED = Date End in seconds
+  var returnData = [];
+  try {
+    const wallet = req.session.wallet;
+    var marker = null;
+    if (req.query.m >= 1) {
+      var marker = req.query.m;
+    }
+    var earliestFirst = false;
+    if (req.query.eF != false) {
+      earliestFirst = req.query.eF;
+    }
+    console.log(earliestFirst)
+    var dateStarts = -1;
+    if (req.query.dSS != -1) {
+      dateStarts = req.query.dSS;
+    }
+    var dateEnds = -1;
+    if (req.query.dED != -1) {
+      dateEnds = req.query.dED;
+    }
+    var accountTransData = await xumm.xrpl.accountActivity(wallet, earliestFirst, dateStarts, dateEnds, marker)
+    if (accountTransData[0].length < 1) {
+      returnData.push('empty')
+    } else {
+      res.render('views/models/account-activity-rows.ejs', {
+        data: accountTransData[0] 
+      },
+      async function (err, html) {
+        if (err) throw "Couldn't get Transactions\n" + err;
+        returnData.push(html);
+      }
+    );
+    }
+    if (accountTransData[1] == undefined) {
+      returnData.push("end")
+    } else {
+      returnData.push(accountTransData[1])
+    }
+    res.send(returnData);
+  } catch (err) {
+    res.status(400)
+  }
+})
 server.post("/payload", speedLimiter, async (req, res) => {
   const payload = await getPayload(req.body);
 

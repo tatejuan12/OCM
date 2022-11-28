@@ -629,6 +629,15 @@ var {
 .i-paper-plane{
   background-image: url(../images/icons/Favorites-light/icons8-paper-plane-48.png);
 }
+.i-success{
+  background-image: url(../images/icons/status-success.png);
+}
+.i-fail{
+  background-image: url(../images/icons/status-failed.png);
+}
+.i-pending{
+  background-image: url(../images/icons/status-pending.png);
+}
 /*---------------------------
 	List Style 
 ---------------------------*/
@@ -25469,15 +25478,36 @@ Collection nav
   display: flex;
   flex-direction: row;
 }
-.activity-wrap .activity-table tr {
+.activity-wrap .activity-table {
+  margin: 0 20px;
+}
+.activity-wrap .activity-table thead tr {
   border-bottom: 1px solid var(--color-border);
+}
+.active-light-mode .activity-wrap .activity-table thead tr {
+  border-bottom: 1px solid var(--color-border-white);
+}
+.activity-wrap .activity-table tbody tr:hover {
+  background-color: #00000010;
 }
 .activity-wrap .activity-table tbody tr td {
   border: none;
   padding: 8px 0 !important;
 }
+.activity-wrap .activity-table tbody tr td a {
+  color: var(--color-body);
+  text-decoration: none;
+}
+.active-light-mode .activity-filter{
+  border-left: 1px solid var(--color-border-white);
+}
 .activity-filter{
   border-left: 1px solid var(--color-border);
   height: 100%;
   width: 400px;
+}
+.activity-filter-options{
+  padding: 20px;
+  position: sticky;
+  top: 10%;
 }
