@@ -11,6 +11,8 @@ const path = require("path");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const cookieParser = require("cookie-parser");
+//const morgan = require('morgan');
+//const rfs = require('rotating-file-stream');
 const { TxData } = require("xrpl-txdata");
 const useragent = require("express-useragent");
 const verifySignature = new TxData();
@@ -40,6 +42,12 @@ const speedLimiter = slowDown({
   delayAfter: 100,
   delayMs: 500,
 });
+// const accessLogStream = rfs.createStream(Date.now() + '.log', {
+//   size: '10M',
+//   interval: '1d',
+//   path: path.join(__dirname, 'logs'),
+//   compress: 'gzip'
+// })
 const NFTSPERPAGE = 25;
 //! ---------------------Imported middleware--------------------------------//
 const server = express();
@@ -57,7 +65,7 @@ server.set("view engine", "ejs"); // Setting rendering agent to ejs
 server.use(helmet({ contentSecurityPolicy: false }));
 server.set("views", path.join(__dirname, "/public")); // Makes views for rendering the public dir
 server.use(express.static(__dirname + "/public", { dotfiles: "allow" })); // Essential so JS and CSS is acccessible by requests
-//server.use(logger({ path: __dirname + "/logs/logs.log" })); // Logs data, every connection will log browser info and request url
+//server.use(morgan('combined', { stream: accessLogStream}));
 server.use(cookieParser());
 server.use(
   session({
@@ -526,6 +534,7 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
     resolve(nft);
   });
   const promises = await Promise.all([nftPromise]);
+  if (promises[0] !== null) {
   nftsPromise = new Promise(function (resolve, reject) {
     const nfts = mongoClient.query.relatedNfts(
       promises[0].issuer,
@@ -535,7 +544,6 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
     resolve(nfts);
   });
   const promiseNfts = await Promise.all([nftsPromise]);
-  if (promises[0] !== null) {
     if (promises[0].uriMetadata.collection.family !== null) {
       var nftCollection = promises[0].uriMetadata.collection.family
         .toLowerCase()
@@ -904,11 +912,12 @@ server.post(
     const formDataBody = req.body;
     const formDataFiles = req.files;
     var result = false;
+    var fileName = req.body.family.toLowerCase().replace(/\s/g, "_")
     if (formDataFiles) {
       if (formDataFiles["collection-logo"]) {
         if (
           (result = await digitalOcean.functions.uploadCollectionLogo(
-            req,
+            fileName,
             formDataFiles["collection-logo"][0]
           ))
         )
@@ -918,7 +927,7 @@ server.post(
       if (formDataFiles["cover-img"]) {
         if (
           (result = await digitalOcean.functions.uploadCollectionBanner(
-            req,
+            fileName,
             formDataFiles["cover-img"][0]
           ))
         )
@@ -1190,21 +1199,6 @@ server.post("/list-nft-subscription-collection", async (req, res, next) => {
     );
   }
 });
-server.post(
-  "/list-bulk-array-free",
-  upload.any(),
-  speedLimiter,
-  async (req, res) => {
-    if (req.session.login) {
-      const dataBody = req.body;
-      const nftArray = JSON.parse(dataBody.nfts);
-      var permanent = false;
-      var wallet = req.session.wallet;
-      await mongoClient.query.bulkNFTList(nftArray, wallet, permanent);
-      res.status(200).send("Free Bulk List Success");
-    }
-  }
-);
 server.post(
   "/list-bulk-array",
   upload.any(),

@@ -92,11 +92,11 @@ var methods = {
 
     return result;
   },
-  uploadCollectionLogo: async function (req, img) {
+  uploadCollectionLogo: async function (fileName, img) {
     var result = false;
     const param = {
       Bucket: "ocw-space/collections/logo",
-      Key: req.body.family + "_logo.png",
+      Key: fileName + "_logo.png",
       Body: img.buffer,
       ACL: "public-read",
     };
@@ -114,11 +114,11 @@ var methods = {
 
     return result;
   },
-  uploadCollectionBanner: async function (req, img) {
+  uploadCollectionBanner: async function (fileName, img) {
     var result = false;
     const param = {
       Bucket: "ocw-space/collections/banner",
-      Key: req.body.family + "_banner.png",
+      Key: fileName + "_banner.png",
       Body: img.buffer,
       ACL: "public-read",
     };

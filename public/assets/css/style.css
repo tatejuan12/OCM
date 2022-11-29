@@ -16887,6 +16887,7 @@ button .small-image {
   flex-direction: column;
   text-align: center;
   margin-top: 10px;
+  max-width: 500px;
 }
 .author-wrapper .author-inner .rn-author-info-content h4.title {
   font-weight: 600;
@@ -25510,4 +25511,9 @@ Collection nav
   padding: 20px;
   position: sticky;
   top: 10%;
+}
+.author-wrapper .author-inner .rn-author-info-content .social-follow svg{
+  margin-right: 10px;
+  width: 14px;
+  color: var(--color-primary);
 }

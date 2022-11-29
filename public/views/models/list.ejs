@@ -21,7 +21,7 @@
                     <label for="issuer">Issuer</label>
                     <input type="text" id="issuer" disabled>
                     <label for="surrentHolder" hidden>Current Holder</label>
-                    <input type="text" id="surrentHolder" disabled hidden>
+                    <input type="text" id="currentHolder" disabled hidden>
                     <label for="taxon">Taxon</label>
                     <input type="text" id="taxon" disabled>
                     <a id="link" target="_blank">View on Bithomp</a>
@@ -32,7 +32,7 @@
           </div>
         </div>
         <div class="modal-footer" style="border: none;">
-          <button class="special-list-btn" onclick="freeList(this)" id="freeListBtn">
+          <button class="special-list-btn" onclick="getListNft(this)">
             <i class="icon i-paper-plane"></i>
             <span class="button-text">list</span>
             <span style="margin: 0;" class="button-loader"></span>

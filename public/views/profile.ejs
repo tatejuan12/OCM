@@ -303,13 +303,25 @@
                 if (nfts.length > 0) {
                   $.ajax({
                   type: "POST",
-                  url: "/list-bulk-array-free",
+                  url: "/list-bulk-array",
                   processData: false,
                   contentType: false,
                   enctype: "multipart/form-data",
                   data: formData,
                   success: function(result) {
-                    setTimeout(location.reload(),2000)
+                    console.log(result)
+                    window.location.href = result.payload.next.always;
+                    formData.append('payload', JSON.stringify(result.payload))
+                    $.ajax({
+                      type: "POST",
+                      url: "/list-bulk-subscription",
+                      processData: false,
+                      contentType: false,
+                      enctype: "multipart/form-data",
+                      data: formData,
+                      success: function(result) {},
+                      error: function(result) {}
+                    })
                   },
                   error: function() {
                     console.log('error')
@@ -318,9 +330,9 @@
                 }
               }
             })
-            // $('#bulkListModalContent').on('change', 'input', function() {
-            //   $('#bulkTotalXrp').val($('.bulk-nft-container #bulkNftWrap .bulk-checkbox:checked').length * 0)
-            // })
+            $('#bulkListModalContent').on('change', 'input', function() {
+              $('#bulkTotalXrp').val($('.bulk-nft-container #bulkNftWrap .bulk-checkbox:checked').length * 0.98)
+            })
             $('#moreListedNftsLoad').on('click', function() {
               document.getElementById('moreListedNftsLoad').classList.add('loading')
               document.getElementById('moreListedNftsLoad').disabled = true;
