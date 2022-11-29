@@ -535,6 +535,7 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
     resolve(nft);
   });
   const promises = await Promise.all([nftPromise]);
+  if (promises[0] !== null) {
   nftsPromise = new Promise(function (resolve, reject) {
     const nfts = mongoClient.query.relatedNfts(
       promises[0].issuer,
@@ -544,7 +545,6 @@ server.get("/product-details", speedLimiter, async (req, res, next) => {
     resolve(nfts);
   });
   const promiseNfts = await Promise.all([nftsPromise]);
-  if (promises[0] !== null) {
     if (promises[0].uriMetadata.collection.family !== null) {
       var nftCollection = promises[0].uriMetadata.collection.family
         .toLowerCase()
