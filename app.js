@@ -722,9 +722,7 @@ server.get('/accountTransDataQuery', speedLimiter, async (req,res) => {
     if (req.query.dED != '-1') {
       dateEnds = parseInt(req.query.dED);
     }
-    console.log(wallet, earliestFirst, dateStarts, dateEnds, marker)
     var accountTransData = await xumm.xrpl.accountActivity(wallet, earliestFirst, dateStarts, dateEnds, marker)
-    console.log(accountTransData)
     if (accountTransData[0].length < 1) {
       returnData.push('empty')
     } else {
