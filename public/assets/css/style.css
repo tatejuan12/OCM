@@ -638,6 +638,36 @@ var {
 .i-pending{
   background-image: url(../images/icons/status-pending.png);
 }
+.i-broker{
+  background-image: url(../images/icons/activity/Broker\ Icon.webp);
+}
+.i-burn{
+  background-image: url(../images/icons/activity/Burn\ Icon.webp);
+}
+.i-buy{
+  background-image: url(../images/icons/activity/Buy\ Icon.webp);
+}
+.i-sell{
+  background-image: url(../images/icons/activity/Sell\ Icon.webp);
+}
+.i-buy-offer{
+  background-image: url(../images/icons/activity/Buy\ Offer\ Icon.webp);
+}
+.i-sell-offer{
+  background-image: url(../images/icons/activity/Sell\ Offer\ Icon.webp);
+}
+.i-cancel-buy{
+  background-image: url(../images/icons/activity/Cancel\ Buy\ Icon.webp);
+}
+.i-cancel-sell{
+  background-image: url(../images/icons/activity/Cancel\ Sell\ Icon.webp);
+}
+.i-mint-activity{
+  background-image: url(../images/icons/activity/Mint\ Icon.webp);
+}
+.i-redeem-activity{
+  background-image: url(../images/icons/activity/Redeem\ Icon.webp);
+}
 /*---------------------------
 	List Style 
 ---------------------------*/
@@ -25511,6 +25541,16 @@ Collection nav
   padding: 20px;
   position: sticky;
   top: 10%;
+  display: flex;
+  flex-direction: column;
+}
+.activity-filter-options label{
+  font-weight: 600;
+  margin-top: 10px;
+}
+.activity-filter-options button{
+  margin: 15px 0 0 0;
+  width: 115px;
 }
 .author-wrapper .author-inner .rn-author-info-content .social-follow svg{
   margin-right: 10px;

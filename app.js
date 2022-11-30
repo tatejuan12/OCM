@@ -700,25 +700,31 @@ server.get('/accountTransDataQuery', speedLimiter, async (req,res) => {
   //dED = Date End in seconds
   var returnData = [];
   try {
+    let query = req.query;
+    if (query.dSS > query.dED) {
+      res.status(400).send('ERROR: start date is before end date')
+      return;
+    }
     const wallet = req.session.wallet;
     var marker = null;
-    if (req.query.m >= 1) {
-      var marker = req.query.m;
+    if (req.query.m != 'null') {
+      var marker = JSON.parse(req.query.m);
     }
     var earliestFirst = false;
-    if (req.query.eF != false) {
-      earliestFirst = req.query.eF;
+    if (req.query.eF != 'false') {
+      earliestFirst = true;
     }
-    console.log(earliestFirst)
     var dateStarts = -1;
-    if (req.query.dSS != -1) {
-      dateStarts = req.query.dSS;
+    if (req.query.dSS != '-1') {
+      dateStarts = parseInt(req.query.dSS);
     }
     var dateEnds = -1;
-    if (req.query.dED != -1) {
-      dateEnds = req.query.dED;
+    if (req.query.dED != '-1') {
+      dateEnds = parseInt(req.query.dED);
     }
+    console.log(wallet, earliestFirst, dateStarts, dateEnds, marker)
     var accountTransData = await xumm.xrpl.accountActivity(wallet, earliestFirst, dateStarts, dateEnds, marker)
+    console.log(accountTransData)
     if (accountTransData[0].length < 1) {
       returnData.push('empty')
     } else {
@@ -813,7 +819,7 @@ server.post("/sign-in-payload", speedLimiter, async (req, res) => {
 server.post("/sign-in-subscription", speedLimiter, async (req, res) => {
   const result = await xumm.subscriptions.signInSubscription(req, res);
   if (result) {
-    mongoClient.query.initiateUser(req.session.wallet);
+    await mongoClient.query.initiateUser(req.session.wallet);
   }
 });
 server.post("/XUMM-sign-subscription", speedLimiter, async (req, res) => {

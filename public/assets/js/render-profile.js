@@ -1,45 +1,128 @@
-var aTDQString = `${url}/accountTransDataQuery?m=null&eF=true&dSS=-1&dED=-1`;
+var querying = false;
 var aTDQMarker = null;
+var aTDQString = `${url}/accountTransDataQuery?m=${aTDQMarker}&eF=false&dSS=-1&dED=-1`;
 $(document).ready(function () {
-	console.log(aTDQString)
+	$('#loadMoreActivity').attr("disabled", true);
+	querying = true;
 	$.get(aTDQString, function (returnData) {
 			$('#acctActivTable').html(returnData[0])
 			aTDQMarker = returnData[1];
-			console.log(aTDQMarker)
+			querying = false;
+			$('#loadMoreActivity').attr("disabled", false);
+	}).fail(function(result) {
+		customAlert.alert(result.responseText)
 	});
 });
-$(window).data('getReady', true).scroll(function(e) {
-	if ($(window).data('getReady') == false) return;
-	if (($(".row.g-5").offset().top + $(".row.g-5").height()*0.85 - $(window).height()) < $(this).scrollTop()) {
-		$(window).data('getReady', false);
-
-		$.get(aTDQString+urlFilterConstructor(),
-			function(data) {
-				if (data == 'empty'){
-					$('#acctActivTable').html('No more transaction history');
-				} else {
-					iteration++;
-					$("#acctActivTable").append(data);
-					$(window).data('getReady', true);
-				}
-			}
-		)
-	}
-})
-function transactionFilters() {
-	let data = {
-		start: new Date($('#transStart').val()).getTime(),
-		end: new Date($('#transEnd').val()).getTime()
-	}
-	if (data.start > data.end) {
+$('#filterDater').on('click', function () {
+	let epochS = new Date($('#transStart').val()).getTime() / 1000;
+	let epochE = new Date($('#transEnd').val()).getTime() / 1000;
+	if (isNaN(epochS) || isNaN(epochE)) {
+		alert('please pick a start and end time')
+		return;
+	} else if (epochS > epochE) {
 		alert('Start date must be before end date.')
 		return;
+	} else {
+		$('#filterDater').attr('disabled', true)
+		$('#loadMoreActivity').attr("disabled", true);
+		$('#acctActivTable').empty()
+		const url = new URL(aTDQString)
+		const params1 = url.searchParams;
+		params1.set('dSS', epochS); 
+		params1.set('dED', epochE);
+		url.search = params1.toString();
+		const nURL = url.toString();
+		if (!querying) {
+			querying = true;
+			$.get(nURL, function (returnData) {
+				$('#acctActivTable').html(returnData[0])
+				aTDQMarker = returnData[1];
+				querying = false;
+				if (returnData[1] != 'end') {
+					$('#filterDater').attr('disabled', false)
+					$('#loadMoreActivity').prop("hidden", false);
+					$('#loadMoreActivity').attr("disabled", false);
+				} else {
+					$('#filterDater').attr('disabled', false)
+					$('#loadMoreActivity').prop("hidden", true);
+				}
+			}).fail(function(result) {
+				customAlert.alert(result.responseText)
+			});
+		}
 	}
-
-}
-$('#filterDater').on('click', function () {
-
 })
+$('#loadMoreActivity').on('click', function(e) {
+	if (aTDQMarker != 'end') {
+			$(this).addClass('loading');
+  			$(this).prop('disabled', true);
+			aTDQMarker = JSON.stringify(aTDQMarker)
+			aTDQString = `${url}/accountTransDataQuery?m=${aTDQMarker}&eF=false&dSS=-1&dED=-1`
+			let S = $('#transStart').val();
+			let E = $('#transEnd').val();
+			if (S == '' && E == '') {
+				if (!querying) {
+					querying = true;
+					console.log(aTDQString)		
+					$.get(aTDQString, function (returnData) {
+							$('#acctActivTable').append(returnData[0]);
+							aTDQMarker = returnData[1];
+							querying = false;
+							$(window).data('getReady', true);
+							if (returnData[1] != 'end') {
+								$('#loadMoreActivity').prop("hidden", false);
+								$('#loadMoreActivity').removeClass('loading');
+								$('#loadMoreActivity').prop('disabled', false);
+							} else {
+								$('#loadMoreActivity').prop("hidden", true);
+							}
+						}
+					).fail(function(result) {
+						customAlert.alert(result.responseText)
+					})
+				}
+			} else {
+				let epochS = new Date($('#transStart').val()).getTime() / 1000;
+				let epochE = new Date($('#transEnd').val()).getTime() / 1000;
+				if (isNaN(epochS) || isNaN(epochE)) {
+					alert('please pick a start and end time')
+					return;
+				} else if (epochS > epochE) {
+					alert('Start date must be before end date.')
+					return;
+				} else {
+					const url = new URL(aTDQString)
+					const params1 = url.searchParams;
+					params1.set('dSS', epochS);
+					params1.set('dED', epochE);
+					url.search = params1.toString();
+					const nURL = url.toString();
+					console.log(nURL)
+					if (!querying) {
+						querying = true;			
+					$.get(nURL, function (returnData) {
+						if (returnData == 'empty') {
+							$('#acctActivTable').append('No more transaction history');
+						} else {
+							$('#acctActivTable').append(returnData[0])
+							aTDQMarker = returnData[1];
+							querying = false;
+							$(window).data('getReady', true);
+							if (returnData[1] != 'end') {
+								$('#loadMoreActivity').prop("hidden", false);
+								$('#loadMoreActivity').removeClass('loading');
+								$('#loadMoreActivity').prop('disabled', false);
+							} else {
+								$('#loadMoreActivity').prop("hidden", true);
+							}
+						}
+					}).fail(function(result) {
+						customAlert.alert(result.responseText)
+					});}
+				}
+			}
+		}
+	})
 function sortTable(n) {
 	var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
 	table = document.getElementById("activityTable");
@@ -99,4 +182,7 @@ function sortTableNumeric(n) {
       switching = true;
     }
   }
+}
+function copy(text) {
+	navigator.clipboard.writeText(text)
 }
