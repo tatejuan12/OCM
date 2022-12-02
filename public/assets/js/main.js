@@ -859,6 +859,11 @@ function setBuyOfferBid(NFToken) {
         },
       });
     },
+    error: function (result) {
+
+      //$("#placebidModal").modal("hide");
+      alert(result.responseText);
+    }
   });
 }
 function setSellOfferBid(NFToken) {

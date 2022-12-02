@@ -18,7 +18,7 @@ const useragent = require("express-useragent");
 const verifySignature = new TxData();
 const cors = require("cors");
 const digitalOcean = require("./digitalOceanFunctions");
-const discord = require('./discord')
+//const discord = require('./discord')
 //Imports the mongo queries and code
 const mongoClient = require("./mongo");
 //Imports xumm code with queries and checks
@@ -33,7 +33,7 @@ const slowDown = require("express-slow-down");
 const { send } = require("express/lib/response");
 const { rejects } = require("assert");
 const { resourceLimits } = require("worker_threads");
-const { finished } = require("stream/promises");
+//const { finished } = require("stream/promises");
 const mongoStore = new MongoDBStore({
   uri: process.env.MONGO_URI,
   databaseName: "Sessions",
@@ -96,7 +96,7 @@ server.use(
 );
 server.use(cors("*"));
 server.use(csrfProtection);
-const blacklist = ["rpbqNk6VuqNygatSCkxEkxRA7FHAhLpZR3"];
+const blacklist = [];
 const authorizedIps = [];
 const authorizedAccounts = [
   "rGNw4iFGRNyRnyMmWVw1jjGbk91jgL33DR",
@@ -646,7 +646,7 @@ server.post("/get-profile-info", speedLimiter, async (req, res, next) => {
   try {
     const nftId = req.query.id;
     offersPromise = new Promise(function (resolve, reject) {
-      const offers = xumm.xrpl.getnftOffers(nftId);
+      const offers = xumm.xrpl.getnftOffers(nftId, true);
       resolve(offers);
     });
     ownerPromise = new Promise(function (resolve, reject) {
@@ -753,23 +753,29 @@ server.post("/payload", speedLimiter, async (req, res) => {
   res.send(payload);
 });
 server.post("/nftoken-create-offer", speedLimiter, async (req, res) => {
+  const enoughBal = await xumm.xrpl.getTokenBalance(req.session.wallet, 'xrp', 'xrp');
   const NFToken = req.body.NFToken;
   const value = req.body.value;
-  const destination = req.body.destination;
-  const expiry = req.body.expiry;
-  const flags = req.body.flags;
-  var parseExp = parseInt(expiry);
-  const payload = await xumm.payloads.NFTokenCreateOffer(
-    NFToken,
-    value,
-    destination,
-    parseExp,
-    req.useragent.isMobile,
-    req.body.return_url,
-    flags
-  );
-  console.log(payload);
-  res.status(200).send(payload);
+  if (enoughBal >= value) {
+    const destination = req.body.destination;
+    const expiry = req.body.expiry;
+    const flags = req.body.flags;
+    var parseExp = parseInt(expiry);
+    const payload = await xumm.payloads.NFTokenCreateOffer(
+      NFToken,
+      value,
+      destination,
+      parseExp,
+      req.useragent.isMobile,
+      req.body.return_url,
+      flags
+    );
+    console.log(payload);
+    res.status(200).send(payload);
+  } else {
+    console.log('not enough account balance')
+    res.status(400).send('not enough account balance');
+  }
 });
 server.post("/subscription-transaction", speedLimiter, async (req, res) => {
   xumm.subscriptions.transactionSubscription(req, res);
@@ -836,7 +842,7 @@ server.post("/sign-in-subscription", speedLimiter, async (req, res) => {
     if (!complete) {
       var errorTxt = 'Fatal Error ln:827\nInitiating client to MDB\n  ERROR: '+ error+'\n  User: ' +req.session.wallet;
       console.log(errorTxt);
-      await discord.message.alertDiscord(errorTxt);
+      // await discord.message.alertDiscord(errorTxt);
     }
   }
 });
@@ -917,7 +923,7 @@ server.post("/redeem-nft-subscription", speedLimiter, async (req, res) => {
     if (!complete) {
       var errorTxt = 'Fatal Error ln:883\nPosting redemption listing to MDB\n  ERROR: '+ error+'\n  TokenID: '+ NFTokenID+'\n  User: ' +wallet;
       console.log(errorTxt);
-      await discord.message.alertDiscord(errorTxt);
+      // await discord.message.alertDiscord(errorTxt);
     }
   }
 });
@@ -1222,7 +1228,7 @@ server.post("/list-nft-subscription", async (req, res, next) => {
     if (!complete) {
       var errorTxt = 'Fatal Error ln:1174\nPosting listing to MDB\n  ERROR: '+ error+'\n  TokenID: '+ req.body.NFTokenID+'\n  User: ' +req.session.wallet;
       console.log(errorTxt);
-      await discord.message.alertDiscord(errorTxt);
+      // await discord.message.alertDiscord(errorTxt);
     }
   }
 });
@@ -1255,7 +1261,7 @@ server.post("/list-nft-subscription-collection", async (req, res, next) => {
     if (!complete) {
       var errorTxt = 'Fatal Error ln:1209\nPosting collection listing to MDB\n  ERROR: '+ error+'\n  TokenID: '+ req.body.NFTokenID+'\n  User: ' +req.session.wallet;
       console.log(errorTxt);
-      await discord.message.alertDiscord(errorTxt);
+      // await discord.message.alertDiscord(errorTxt);
     }
   }
 });
@@ -1319,7 +1325,7 @@ server.post("/list-bulk-subscription",
       if (!complete) {
         var errorTxt = 'Fatal Error ln:1266\nPosting listing array to MDB\n  ERROR: '+ error+'\n  TokenID: '+ req.body.NFTokenID+'\n  User: ' +req.session.wallet;
         console.log(errorTxt);
-        await discord.message.alertDiscord(errorTxt);
+        // await discord.message.alertDiscord(errorTxt);
       }
     }
   }
