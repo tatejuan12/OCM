@@ -831,40 +831,45 @@ function xummSignin() {
 function setBuyOfferBid(NFToken) {
   console.log(document.getElementById("value").value);
   const value = document.getElementById("value").value;
-  $.ajax({
-    type: "POST",
-    url: "/nftoken-create-offer",
-    data: {
-      NFToken: NFToken,
-      value: value,
-      return_url: window.location.href,
-      flags: 0,
-    },
-    success: function (result) {
-      $("#placebidModal").modal("toggle");
-      $("#qrModal").modal("toggle");
-      $("#qrCodeImage").attr("src", result.refs.qr_png);
-      $("#xummLink").attr("href", result.next.always);
-      $.ajax({
-        type: "POST",
-        url: "/XUMM-sign-subscription",
-        data: result,
-        success: function (resulty) {
-          console.log(resulty);
-          $("#qrModal").modal("toggle");
-        },
-        error: function (resulty) {
-          console.warn("Sign in expired, failed or was cancelled.");
-          $("#qrModal").modal("toggle");
-        },
-      });
-    },
-    error: function (result) {
-
-      //$("#placebidModal").modal("hide");
-      alert(result.responseText);
-    }
-  });
+  const acctBal = $('#walletBalance').text()
+  if (acctBal >= value) {
+    $.ajax({
+      type: "POST",
+      url: "/nftoken-create-offer",
+      data: {
+        NFToken: NFToken,
+        value: value,
+        return_url: window.location.href,
+        flags: 0,
+      },
+      success: function (result) {
+        $("#placebidModal").modal("toggle");
+        $("#qrModal").modal("toggle");
+        $("#qrCodeImage").attr("src", result.refs.qr_png);
+        $("#xummLink").attr("href", result.next.always);
+        $.ajax({
+          type: "POST",
+          url: "/XUMM-sign-subscription",
+          data: result,
+          success: function (resulty) {
+            console.log(resulty);
+            $("#qrModal").modal("toggle");
+          },
+          error: function (resulty) {
+            console.warn("Sign in expired, failed or was cancelled.");
+            $("#qrModal").modal("toggle");
+          },
+        });
+      },
+      error: function (result) {
+  
+        //$("#placebidModal").modal("hide");
+        alert(result.responseText);
+      }
+    });
+  } else {
+    alert('Insufficient funds')
+  }
 }
 function setSellOfferBid(NFToken) {
   const value = document.getElementById("value").value;
