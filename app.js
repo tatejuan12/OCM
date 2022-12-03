@@ -842,6 +842,7 @@ server.post("/sign-in-subscription", speedLimiter, async (req, res) => {
     if (!complete) {
       var errorTxt = 'Fatal Error ln:827\nInitiating client to MDB\n  ERROR: '+ error+'\n  User: ' +req.session.wallet;
       console.log(errorTxt);
+      fs.appendFileSync('logs/sign-in-sub-errors.log', '\r\n' + error, function (err) {console.log(err)})
       // await discord.message.alertDiscord(errorTxt);
     }
   }
@@ -923,6 +924,7 @@ server.post("/redeem-nft-subscription", speedLimiter, async (req, res) => {
     if (!complete) {
       var errorTxt = 'Fatal Error ln:883\nPosting redemption listing to MDB\n  ERROR: '+ error+'\n  TokenID: '+ NFTokenID+'\n  User: ' +wallet;
       console.log(errorTxt);
+      fs.appendFileSync('logs/redeem-nft-sub-errors.log', '\r\n' + error, function (err) {console.log(err)})
       // await discord.message.alertDiscord(errorTxt);
     }
   }
@@ -1228,6 +1230,7 @@ server.post("/list-nft-subscription", async (req, res, next) => {
     if (!complete) {
       var errorTxt = 'Fatal Error ln:1174\nPosting listing to MDB\n  ERROR: '+ error+'\n  TokenID: '+ req.body.NFTokenID+'\n  User: ' +req.session.wallet;
       console.log(errorTxt);
+      fs.appendFileSync('logs/list-nft-sub-errors.log', '\r\n' + error, function (err) {console.log(err)})
       // await discord.message.alertDiscord(errorTxt);
     }
   }
@@ -1261,6 +1264,7 @@ server.post("/list-nft-subscription-collection", async (req, res, next) => {
     if (!complete) {
       var errorTxt = 'Fatal Error ln:1209\nPosting collection listing to MDB\n  ERROR: '+ error+'\n  TokenID: '+ req.body.NFTokenID+'\n  User: ' +req.session.wallet;
       console.log(errorTxt);
+      fs.appendFileSync('logs/slist-nft-collection-sub-errors.log', '\r\n' + error, function (err) {console.log(err)})
       // await discord.message.alertDiscord(errorTxt);
     }
   }
@@ -1325,6 +1329,7 @@ server.post("/list-bulk-subscription",
       if (!complete) {
         var errorTxt = 'Fatal Error ln:1266\nPosting listing array to MDB\n  ERROR: '+ error+'\n  TokenID: '+ req.body.NFTokenID+'\n  User: ' +req.session.wallet;
         console.log(errorTxt);
+        fs.appendFileSync('logs/list-bulk-sub-errors.log', '\r\n' + error, function (err) {console.log(err)})
         // await discord.message.alertDiscord(errorTxt);
       }
     }
