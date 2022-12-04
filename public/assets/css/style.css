@@ -130,6 +130,9 @@
 * {
   box-sizing: border-box;
 }
+@font-face {
+  font-display: swap;
+}
 
 html {
   margin: 0;
@@ -628,6 +631,45 @@ var {
 }
 .i-paper-plane{
   background-image: url(../images/icons/Favorites-light/icons8-paper-plane-48.png);
+}
+.i-success{
+  background-image: url(../images/icons/status-success.png);
+}
+.i-fail{
+  background-image: url(../images/icons/status-failed.png);
+}
+.i-pending{
+  background-image: url(../images/icons/status-pending.png);
+}
+.i-broker{
+  background-image: url(../images/icons/activity/Broker\ Icon.webp);
+}
+.i-burn{
+  background-image: url(../images/icons/activity/Burn\ Icon.webp);
+}
+.i-buy{
+  background-image: url(../images/icons/activity/Buy\ Icon.webp);
+}
+.i-sell{
+  background-image: url(../images/icons/activity/Sell\ Icon.webp);
+}
+.i-buy-offer{
+  background-image: url(../images/icons/activity/Buy\ Offer\ Icon.webp);
+}
+.i-sell-offer{
+  background-image: url(../images/icons/activity/Sell\ Offer\ Icon.webp);
+}
+.i-cancel-buy{
+  background-image: url(../images/icons/activity/Cancel\ Buy\ Icon.webp);
+}
+.i-cancel-sell{
+  background-image: url(../images/icons/activity/Cancel\ Sell\ Icon.webp);
+}
+.i-mint-activity{
+  background-image: url(../images/icons/activity/Mint\ Icon.webp);
+}
+.i-redeem-activity{
+  background-image: url(../images/icons/activity/Redeem\ Icon.webp);
 }
 /*---------------------------
 	List Style 
@@ -25495,6 +25537,59 @@ Collection nav
   100%{
     transform: rotate(0) translateY(0);
   }
+}
+/* ACTIVITY */
+.activity-container{
+  display: flex;
+  justify-content: center;
+}
+.activity-container .activity-wrap{
+  width: 95%;
+  display: flex;
+  flex-direction: row;
+}
+.activity-wrap .activity-table {
+  margin: 0 20px;
+}
+.activity-wrap .activity-table thead tr {
+  border-bottom: 1px solid var(--color-border);
+}
+.active-light-mode .activity-wrap .activity-table thead tr {
+  border-bottom: 1px solid var(--color-border-white);
+}
+.activity-wrap .activity-table tbody tr:hover {
+  background-color: #00000010;
+}
+.activity-wrap .activity-table tbody tr td {
+  border: none;
+  padding: 8px 0 !important;
+}
+.activity-wrap .activity-table tbody tr td a {
+  color: var(--color-body);
+  text-decoration: none;
+}
+.active-light-mode .activity-filter{
+  border-left: 1px solid var(--color-border-white);
+}
+.activity-filter{
+  border-left: 1px solid var(--color-border);
+  height: 100%;
+  width: 400px;
+}
+.activity-filter-options{
+  padding: 20px;
+  position: sticky;
+  top: 10%;
+  display: flex;
+  flex-direction: column;
+}
+.activity-filter-options label{
+  font-weight: 600;
+  margin-top: 10px;
+}
+.activity-filter-options button{
+  margin: 15px 0 0 0;
+  width: 115px;
 }
 .author-wrapper .author-inner .rn-author-info-content .social-follow svg{
   margin-right: 10px;

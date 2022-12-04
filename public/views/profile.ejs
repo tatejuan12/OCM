@@ -57,7 +57,7 @@
             <div class="author-inner">
               <div class="user-thumbnail">
                 <img style="margin-right: 14px;" src="<%=profile_pic%>" alt="user profile image" onerror="this.src='https://www.ui-avatars.com/api/?background=random&length=3&font-size=0.33&uppercase=false&size=200&name=<%=user.wallet%>'">
-                <a href="edit-profile" style="margin-left: -26px;margin-top:19px;z-index: 1;"><i style="margin-left: -32px;" class="icon i-edit"></i></a>
+                <%if (isOwner) {%><a href="edit-profile" style="margin-left: -26px;margin-top:19px;z-index: 1;"><i style="margin-left: -32px;" class="icon i-edit"></i></a><%}%>
               </div>
               <div class="rn-author-info-content">
                 <%if (user.project == undefined) {%>
@@ -73,7 +73,6 @@
       </div>
     </div>
   </div>
-
   <div class="rn-authore-profile-area">
     <div class="container">
       <div class="row">
@@ -83,15 +82,16 @@
               <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#pane-listed-nfts" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Listed</button>
                 <% if (isOwner) {%>
-                <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#pane-unlisted-nfts" type="button" role="tab" aria-controls="nav-profile" aria-selected="true">Un-Listed</button>
-                <button class="nav-link" id="nav-liked-tab" data-bs-toggle="tab" data-bs-target="#pane-liked-nfts" type="button" role="tab" aria-controls="nav-liked" aria-selected="false">Liked</button>
-                <button class="nav-link" id="nav-offers-tab" data-bs-toggle="tab" data-bs-target="#pane-offers" type="button" role="tab" aria-controls="nav-accountOffers" aria-selected="false">Account Offers</button>
-                <%if (isVerified) {%>
-                <button class="nav-link dropdown" id="nav-offers-tab" data-bs-toggle="dropdown" type="button" role="tab" aria-controls="" aria-expanded="false">Verified Tools</button>
-                <ul class="dropdown-menu">
-                  <li><a href="create-collection" class="dropdown-item">Create Collection</a></li>
-                </ul>
-                <%}%>
+                  <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#pane-unlisted-nfts" type="button" role="tab" aria-controls="nav-profile" aria-selected="true">Un-Listed</button>
+                  <button class="nav-link" id="nav-liked-tab" data-bs-toggle="tab" data-bs-target="#pane-liked-nfts" type="button" role="tab" aria-controls="nav-liked" aria-selected="false">Liked</button>
+                  <button class="nav-link" id="nav-offers-tab" data-bs-toggle="tab" data-bs-target="#pane-offers" type="button" role="tab" aria-controls="nav-accountOffers" aria-selected="false">My Offers</button>
+                  <button class="nav-link" id="nav-activity-tab" data-bs-toggle="tab" data-bs-target="#pane-activity" type="button" role="tab" aria-controls="nav-accountActibity" aria-selected="false">Activity</button>
+                  <%if (isVerified) {%>
+                    <button class="nav-link dropdown" id="nav-offers-tab" data-bs-toggle="dropdown" type="button" role="tab" aria-controls="" aria-expanded="false">Verified Tools</button>
+                    <ul class="dropdown-menu">
+                      <li><a href="create-collection" class="dropdown-item">Create Collection</a></li>
+                    </ul>
+                  <%}%>
                 <%}%>
               </div>
               </nav>
@@ -135,6 +135,47 @@
               <%- include('models/account-offers.ejs', {offer:res})%>
               <%}); %>
             </div>
+          </div>
+          <div id="pane-activity" class="tab-pane fade" aria-labelledby="nav-activity-tab" role="tabpanel">
+            <div class="activity-container">
+              <%if (!mobile) {%>
+                <div class="activity-wrap">
+                  <table id="activityTable" class="activity-table">
+                    <thead>
+                      <tr>
+                        <th id="transDate" style="cursor: pointer;" onclick="sortTable(0)">Date</th>
+                        <th>Status & ID</th>
+                        <th style="cursor: pointer;" onclick="sortTable(3)">Transaction Type</th>
+                        <th>Recipient</th>
+                        <th style="cursor: pointer;" onclick="sortTableNumeric(5)">Amount</th>
+                        <th>Currency</th>
+                      </tr>
+                    </thead>
+                    <tbody id="acctActivTable">
+                    </tbody>
+                  </table>
+                  <div class="activity-filter">
+                    <div class="activity-filter-options">
+                      <label for="transStart">Start Date</label>
+                      <input type="date" id="transStart">
+                      <label for="transEnd">End Date</label>
+                      <input type="date" id="transEnd">
+                      <button id="filterDater" class="btn btn-primary">Find</button>
+                    </div>
+                  </div>
+                </div>
+                
+              <%} else {%>
+                <p>Use a desktop to view transaction history.</p>
+              <%}%>
+            </div>
+            <%if (!mobile) {%>
+              <button class="special-list-btn mt-3" id="loadMoreActivity">
+                <i class="icon i-flashlight"></i>
+                <span class="button-text">Load More</span>
+                <span style="margin: 0;" class="button-loader"></span>
+              </button>
+            <%}%>
           </div>
           <%}%>
     </div>
@@ -242,6 +283,7 @@
             var isMarker = '<%=isMarker%>';
             var bulkListQuery = false;
             var arrayBool = false;
+            let url = <%- JSON.stringify(url)%>
             $('#bulkButton').on('click', function() {
               $('#bulkListModal').modal('toggle')
               if (bulkListQuery != true) {
@@ -360,7 +402,11 @@
                 }
               )
             }
+
           </script>
+          <%if (!mobile) {%>
+            <script src="assets/js/render-profile.js"></script>
+          <%}%>
 </body>
 
 </html>

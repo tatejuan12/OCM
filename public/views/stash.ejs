@@ -552,3 +552,31 @@
         </div>
         <!-- New items End -->
     
+
+
+
+
+
+        <!-- <tr>
+                      <td id="activityDate">
+                        <strong>
+                            <%=new Date(acctTransData[0][0].date).toLocaleDateString()%>
+                        </strong>
+                        <br>
+                        <%=new Date(acctTransData[0][0].date).toLocaleTimeString()%>
+                      </td>
+                      <td>
+                        <a target="_blank" href="https://bithomp.com/explorer/<%=acctTransData[0][0].txID%>" style="display: flex;">
+                          <%if (acctTransData[0][0].result == 'tesSUCCESS'){%>
+                          <i class="icon i-success" style="margin-right: 10px;"></i>
+                          <%}else{%>
+                            <i class="icon i-fail" style="margin-right: 10px;"></i>
+                          <%}%>
+                          ...<%=acctTransData[0][0].txID.slice(-5)%>
+                        </a>
+                      </td>
+                      <td><%=acctTransData[0][0].transactionType%></td>
+                      <td><%=acctTransData[0][10].recipient ? acctTransData[0][10].recipient.slice(0, 4)+'...'+acctTransData[0][10].recipient.slice(-4) : 'undefined'%></td>
+                      <td><%=formatter.format(acctTransData[0][0].amount)%></td>
+                      <td><%=acctTransData[0][0].currency%></td>
+                    </tr> -->
