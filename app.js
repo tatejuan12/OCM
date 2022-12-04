@@ -44,6 +44,15 @@ const speedLimiter = slowDown({
   delayAfter: 100,
   delayMs: 500,
 });
+let setCache = function (req, res, next) {
+  const period = 60*5;
+  if (req.method == 'GET') {
+    res.set('Cache-control', `public, max-age=${period}`)
+  } else {
+    res.set('Cache-control', `no-store`)
+  }
+  next();
+}
 // const accessLogStream = rfs.createStream(Date.now() + '.log', {
 //   size: '10M',
 //   interval: '1d',
@@ -55,6 +64,7 @@ const NFTSPERPAGE = 25;
 const server = express();
 
 server.use(compression());
+server.use(setCache);
 server.use(bodyParser.json({ limit: "10mb" })); // for parsing serverlication/json
 server.use(
   bodyParser.urlencoded({
