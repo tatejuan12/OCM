@@ -130,6 +130,9 @@
 * {
   box-sizing: border-box;
 }
+@font-face {
+  font-display: swap;
+}
 
 html {
   margin: 0;

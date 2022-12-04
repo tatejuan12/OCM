@@ -282,10 +282,6 @@ server.get("/about", speedLimiter, (req, res) => {
   defaultLocals(req, res);
   res.render("views/about");
 });
-server.get("/verified", speedLimiter, (req, res) => {
-  defaultLocals(req, res);
-  res.render("views/verified");
-});
 server.get("/partners", speedLimiter, (req, res) => {
   defaultLocals(req, res);
   res.render("views/partners");
