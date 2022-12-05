@@ -559,6 +559,7 @@ server.get("/search", speedLimiter, async (req, res) => {
   }
   collections = appendColletionsImagesUrls(collections);
   const searchedItem = req.query.q;
+  await mongoClient.query.searchSaver(req.query.q);
   res.render("views/search", {
     res: searchResults,
     collection: collections,

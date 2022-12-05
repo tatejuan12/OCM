@@ -1224,6 +1224,31 @@ var methods = {
     }finally{
       await client.close()
     }
+  },
+  searchSaver: async function (query) {
+    const client = await getClient();
+    if (!client) return;
+    try {
+      const db = client.db('Data')
+      const queryDocument = await db.collection('Searches').findOne({ query });
+      if (queryDocument) {
+        // If the query already exists, increment the view count
+        await db.collection('Searches').updateOne(
+          { query },
+          { $inc: { views: 1 } }
+        );
+      } else {
+        // If the query does not exist, insert a new document with a view count of 1
+        await db.collection('Searches').insertOne({
+          query: query,
+          views: 1
+        });
+      }
+    } catch (err) {
+      console.log('searchSaver: '+err);
+    } finally {
+      await client.close();
+    }
   }
 };
 
