@@ -831,7 +831,8 @@ function xummSignin() {
 function setBuyOfferBid(NFToken) {
   console.log(document.getElementById("value").value);
   const value = document.getElementById("value").value;
-  const acctBal = $('#walletBalance').text()
+  const acctBal = parseFloat($('#walletBalance').text());
+  console.log(value, acctBal)
   if (acctBal >= value) {
     $.ajax({
       type: "POST",

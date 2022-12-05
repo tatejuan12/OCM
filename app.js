@@ -885,7 +885,12 @@ server.post("/sign-in-subscription", speedLimiter, async (req, res) => {
   }
 });
 server.post("/XUMM-sign-subscription", speedLimiter, async (req, res) => {
-  const result = await xumm.subscriptions.watchSubscripion(req, res);
+  const result = await xumm.subscriptions.watchSubscripion(req.body);
+  if (result == 'signed') {
+    res.status(200).send('signed');
+  } else {
+    res.status(400).send('payload not signed');
+  }
 });
 server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
   const apiInfo = await mongoClient.query.findRedemptionAccountByProject(
@@ -1022,17 +1027,17 @@ server.post("/create-collection",
       }
     }
     console.log(formDataBody);
-    if (
-      await mongoClient.query.createCollection(
-        formDataBody["displayName"],
-        formDataBody["family"],
-        formDataBody["name"],
-        formDataBody["brand"],
-        formDataBody["url"],
-        formDataBody["issuer"],
-        formDataBody["description"]
-      )
-    )
+    // if (
+    //   await mongoClient.query.createCollection(
+    //     formDataBody["displayName"],
+    //     formDataBody["family"],
+    //     formDataBody["name"],
+    //     formDataBody["brand"],
+    //     formDataBody["url"],
+    //     formDataBody["issuer"],
+    //     formDataBody["description"]
+    //   )
+    // )
       console.log("done");
     result = true;
     result ? res.status(200).send("Modified") : res.status(500).send("Failed");
