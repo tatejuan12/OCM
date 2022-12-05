@@ -96,7 +96,7 @@ var methods = {
     var result = false;
     const param = {
       Bucket: "ocw-space/collections/logo",
-      Key: fileName + "_logo.png",
+      Key: fileName + "_logo.webp",
       Body: img.buffer,
       ACL: "public-read",
     };
@@ -118,7 +118,7 @@ var methods = {
     var result = false;
     const param = {
       Bucket: "ocw-space/collections/banner",
-      Key: fileName + "_banner.png",
+      Key: fileName + "_banner.webp",
       Body: img.buffer,
       ACL: "public-read",
     };
@@ -175,21 +175,21 @@ var methods = {
     return (
       "https://ocw-space.sgp1.digitaloceanspaces.com/collections/banner/" +
       collectionName +
-      "_banner.png"
+      "_banner.webp"
     );
   },
   getCollectionLogoLink: function (collectionName) {
     return (
       "https://ocw-space.sgp1.digitaloceanspaces.com/collections/logo/" +
       collectionName +
-      "_logo.png"
+      "_logo.webp"
     );
   },
   getProductCollectionLogoLink: function (nftCollection) {
     return (
       "https://ocw-space.sgp1.digitaloceanspaces.com/collections/logo/" +
       nftCollection +
-      "_logo.png"
+      "_logo.webp"
     );
   },
 };

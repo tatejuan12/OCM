@@ -74,7 +74,7 @@
                         <div class="button-area">
                             <div class="brows-file-wrapper">
                                 <!-- actual upload which is hidden -->
-                                <input name="fatima" id="fatima" type="file">
+                                <input name="fatima" id="fatima" type="file" accept=".png,.jpg,.webp">
                                 <!-- our custom upload button -->
 
                             </div>
@@ -94,7 +94,7 @@
                         <div class="button-area">
                             <div class="brows-file-wrapper">
                                 <!-- actual upload which is hidden -->
-                                <input name="nipa" id="nipa" type="file">
+                                <input name="nipa" id="nipa" type="file" accept=".png,.jpg,.webp">
                                 <!-- our custom upload button -->
                             </div>
                         </div>
@@ -300,6 +300,7 @@
     formData.append("description", document.getElementById("description").value);
     formData.append("collection-logo", document.getElementById("fatima").files[0]);
     formData.append("cover-img", document.getElementById("nipa").files[0]);
+    console.log(document.getElementById("fatima").files[0])
     $.ajax({
       type: "POST",
       url: "/create-collection",
