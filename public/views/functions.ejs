@@ -1,9 +1,13 @@
 <%
 nftLiked = function() {
-    var checker = false;
-    nft.likes.forEach(function(like){
-    if (like == wallet) checker = true;
-}); 
-return checker;
+    try {
+        var checker = false;
+        nft.likes.forEach(function(like){
+        if (like == wallet) checker = true;
+        }); 
+        return checker;
+    } catch (error) {
+        return checker;
+    }
 }
 %>

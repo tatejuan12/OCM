@@ -237,46 +237,10 @@ server.get("/profile", speedLimiter, async (req, res) => {
     res.redirect(appendToUrl(req.query, parametersToSet, req.path));
   }
 });
+//explore page for OCM
 server.get("/explore", speedLimiter, async (req, res) => {
-  defaultLocals(req, res);
-  var nfts;
-  const page = parseInt(req.query.page);
-  var parametersToSet = [];
-
-  const filter = {
-    sortLikes: req.query.sortLikes,
-    sortPrice: req.query.sortPrice,
-    filterExtras: req.query.filterExtras,
-    filterBrands: req.query.filterBrands,
-    filterFamilies: req.query.filterFamilies,
-    filterCollections: req.query.filterCollections,
-    filterPriceMin: req.query.filterPriceMin,
-    filterPriceMax: req.query.filterPriceMax,
-  };
-  if (parseInt(filter.filterPriceMin) > parseInt(filter.filterPriceMax)) {
-    filter.filterPriceMax = undefined;
-    filter.filterPriceMin = undefined;
-  }
-  if (!isNaN(page)) {
-    promiseNfts = new Promise(function (resolve, reject) {
-      resolve(mongoClient.query.getNfts(NFTSPERPAGE, page, filter));
-    });
-    promiseVerifiedIssuers = new Promise(function (resolve, reject) {
-      resolve(mongoClient.query.getVerifiedIssuers());
-    }); //remove when server occupancy is low
-    const promises = await Promise.all([promiseNfts, promiseVerifiedIssuers]);
-    const filterOptions = await mongoClient.query.filterOptions();
-    res.render("views/explore", {
-      nfts: promises[0],
-      page: page,
-      verifiedIssuers: promises[1],
-      queries: req.query,
-      filterOptions: filterOptions,
-    });
-  } else {
-    parametersToSet.push({ key: "page", value: "0" });
-    res.redirect(appendToUrl(req.query, parametersToSet, req.path));
-  }
+  //renders the explore page as viewable HTML for the DOM
+  res.render('views/explore');
 });
 server.get("/about", speedLimiter, (req, res) => {
   defaultLocals(req, res);
@@ -396,10 +360,8 @@ server.get("/collection", speedLimiter, async (req, res) => {
   }
 });
 server.get("/collections", speedLimiter, async (req, res) => {
-  // add limit to amount of collections fetched?
-  res.render("views/collections", {
-    //collections: collections,
-  });
+  defaultLocals(req, res);
+  res.render("views/collections");
 });
 server.get("/create-collection", speedLimiter, async (req, res) => {
   defaultLocals(req, res);
@@ -605,6 +567,7 @@ server.get("/search", speedLimiter, async (req, res) => {
 });
 
 //! ---------------------OCW API--------------------------------//
+//"/get-colections" gets all the collections from monogoDB after page load on the users end to create a "faster" experience. no wait for render by using post queries after initial HTML is rendered.
 server.post("/get-collections", speedLimiter, async (req, res, next) => {
   try {
     var collections = await mongoClient.query.getCollections(NFTSPERPAGE);
@@ -663,7 +626,58 @@ server.post("/get-collections", speedLimiter, async (req, res, next) => {
   } catch (err) {
     return next(err)
   }
-})
+});
+//"/explore-inoc" gets the initial NFTs for the explore page. Explore is rendered lightly with minimal added renders to speed up user viewable data. once loaded, site send a request to this query and then returned data gets inputted into #exploreNFTs on the HTMl.
+server.post("/explore-inoc", speedLimiter, async (req, res, next) => {
+  defaultLocals(req,res)
+  var nfts;
+  const page = parseInt(req.query.page);
+  var parametersToSet = [];
+
+  const filter = {
+    sortLikes: req.query.sortLikes,
+    sortPrice: req.query.sortPrice,
+    filterExtras: req.query.filterExtras,
+    filterBrands: req.query.filterBrands,
+    filterFamilies: req.query.filterFamilies,
+    filterCollections: req.query.filterCollections,
+    filterPriceMin: req.query.filterPriceMin,
+    filterPriceMax: req.query.filterPriceMax,
+  };
+  if (parseInt(filter.filterPriceMin) > parseInt(filter.filterPriceMax)) {
+    filter.filterPriceMax = undefined;
+    filter.filterPriceMin = undefined;
+  }
+  promiseNfts = new Promise(function (resolve, reject) {
+    resolve(mongoClient.query.getNfts(NFTSPERPAGE, 0, filter));
+  });
+  promiseVerifiedIssuers = new Promise(function (resolve, reject) {
+    resolve(mongoClient.query.getVerifiedIssuers());
+  }); //remove when server occupancy is low
+  const promises = await Promise.all([promiseNfts, promiseVerifiedIssuers]);
+  const filterOptions = await mongoClient.query.filterOptions();
+
+  var returnHtml = [];
+  //Render NFT data into DOM readable content
+  res.render("views/models/explore-page/nft-card-inoc.ejs", {
+    nfts: promises[0],
+  },
+  function (err, html) {
+    if (err) throw "couldn't render NFTs: " + err;
+    returnHtml.push(html);
+  });
+  //Render filters to DOM readable content
+  res.render('views/models/explore-page/filter-options.ejs', {
+    filterOptions: filterOptions,
+    verifiedIssuers: promises[1],
+  },
+  function (err, html) {
+    if (err) throw "Couldn't build filters: " + err;
+    returnHtml.push(html);
+  })
+  //Send rendered DOM readable content from this query to the page to be inserted.
+  res.send(returnHtml);
+});
 server.post("/get-profile-info", speedLimiter, async (req, res, next) => {
   try {
     const nftId = req.query.id;

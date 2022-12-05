@@ -88,9 +88,6 @@
             <label class="filter-leble">Brand</label>
             <select id="filter-brands">
               <option data-display="Select Brand" class="option disabled" value='' selected disabled>Select Brand</option>
-              <% filterOptions.forEach(function(res){%>
-              <option value="<%=res.issuers%>" id="<%=res.issuers%>"><%=res._id%></option>
-              <%}); %>
             </select>
           </div>
           <div class="filter-select-option">
@@ -128,11 +125,598 @@
           </div>
           <div class="filter-select-option">
             <a class="btn btn-primary mr--10" onclick="handleFilterSort()">Apply Filter</a>
-            <a class="btn btn-secondary btn-small" href="/explore?page=0">Reset Filters</a>
+            <a class="btn btn-secondary btn-small" href="/explore">Reset Filters</a>
           </div>
         </div>
       </div>
-      <%- include ("models/nft-rows.ejs", {nfts:nfts}) %>
+      <script>
+        // used for reporting NFTs******START
+        var currNft;
+      
+        function setCurrNft(element) {
+          currNft = element.nextElementSibling.value;
+        }
+      
+        function submitNftReportForm(currNft) {
+          var formData = new FormData();
+          formData.append("message", document.getElementById("message").value);
+          formData.append("token-id", currNft);
+          $.ajax({
+            type: "POST",
+            url: "/report-nft",
+            data: formData,
+            processData: false,
+            contentType: false,
+            enctype: "multipart/form-data",
+            success: function(resulty) {
+              customAlert.alert('NFT Reported')
+            },
+            error: function(resulty) {
+              customAlert.alert('Failure Reporting NFT')
+            },
+          });
+      
+        }
+        //********************************END
+      </script>
+      <div class="row g-5" id="exploreSection">
+        <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12 nft-card-wrap">
+          <div class="product-style-one no-overlay with-placeBid skeleton">
+            <div class="card-thumbnail">
+              <a>              
+              </a>
+            </div>
+            <div class="product-share-wrapper">
+              <div class="profile-share">
+                
+              </div>
+              <div class="share-btn share-btn-activation dropdown">
+                <button class="icon" data-bs-toggle="dropdown" aria-expanded="false">
+                  <svg viewBox="0 0 14 4" fill="none" width="16" height="16" class="sc-bdnxRM sc-hKFxyN hOiKLt">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z" fill="currentColor"></path>
+                  </svg>
+                </button>
+
+                <div class="share-btn-setting dropdown-menu dropdown-menu-end">
+                
+                </div>
+              </div>
+            </div>
+            <a>
+              <span class="product-name">
+              
+              </span>
+            </a>
+            <div class="prices-nft-card">
+              
+            </div>
+            <div class="bid-react-area">
+              <div class="react-area">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12 nft-card-wrap">
+          <div class="product-style-one no-overlay with-placeBid skeleton">
+            <div class="card-thumbnail">
+              <a>              
+              </a>
+            </div>
+            <div class="product-share-wrapper">
+              <div class="profile-share">
+                
+              </div>
+              <div class="share-btn share-btn-activation dropdown">
+                <button class="icon" data-bs-toggle="dropdown" aria-expanded="false">
+                  <svg viewBox="0 0 14 4" fill="none" width="16" height="16" class="sc-bdnxRM sc-hKFxyN hOiKLt">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z" fill="currentColor"></path>
+                  </svg>
+                </button>
+
+                <div class="share-btn-setting dropdown-menu dropdown-menu-end">
+                
+                </div>
+              </div>
+            </div>
+            <a>
+              <span class="product-name">
+              
+              </span>
+            </a>
+            <div class="prices-nft-card">
+              
+            </div>
+            <div class="bid-react-area">
+              <div class="react-area">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12 nft-card-wrap">
+          <div class="product-style-one no-overlay with-placeBid skeleton">
+            <div class="card-thumbnail">
+              <a>              
+              </a>
+            </div>
+            <div class="product-share-wrapper">
+              <div class="profile-share">
+                
+              </div>
+              <div class="share-btn share-btn-activation dropdown">
+                <button class="icon" data-bs-toggle="dropdown" aria-expanded="false">
+                  <svg viewBox="0 0 14 4" fill="none" width="16" height="16" class="sc-bdnxRM sc-hKFxyN hOiKLt">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z" fill="currentColor"></path>
+                  </svg>
+                </button>
+
+                <div class="share-btn-setting dropdown-menu dropdown-menu-end">
+                
+                </div>
+              </div>
+            </div>
+            <a>
+              <span class="product-name">
+              
+              </span>
+            </a>
+            <div class="prices-nft-card">
+              
+            </div>
+            <div class="bid-react-area">
+              <div class="react-area">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12 nft-card-wrap">
+          <div class="product-style-one no-overlay with-placeBid skeleton">
+            <div class="card-thumbnail">
+              <a>              
+              </a>
+            </div>
+            <div class="product-share-wrapper">
+              <div class="profile-share">
+                
+              </div>
+              <div class="share-btn share-btn-activation dropdown">
+                <button class="icon" data-bs-toggle="dropdown" aria-expanded="false">
+                  <svg viewBox="0 0 14 4" fill="none" width="16" height="16" class="sc-bdnxRM sc-hKFxyN hOiKLt">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z" fill="currentColor"></path>
+                  </svg>
+                </button>
+
+                <div class="share-btn-setting dropdown-menu dropdown-menu-end">
+                
+                </div>
+              </div>
+            </div>
+            <a>
+              <span class="product-name">
+              
+              </span>
+            </a>
+            <div class="prices-nft-card">
+              
+            </div>
+            <div class="bid-react-area">
+              <div class="react-area">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12 nft-card-wrap">
+          <div class="product-style-one no-overlay with-placeBid skeleton">
+            <div class="card-thumbnail">
+              <a>             
+              </a>
+            </div>
+            <div class="product-share-wrapper">
+              <div class="profile-share">
+                
+              </div>
+              <div class="share-btn share-btn-activation dropdown">
+                <button class="icon" data-bs-toggle="dropdown" aria-expanded="false">
+                  <svg viewBox="0 0 14 4" fill="none" width="16" height="16" class="sc-bdnxRM sc-hKFxyN hOiKLt">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z" fill="currentColor"></path>
+                  </svg>
+                </button>
+
+                <div class="share-btn-setting dropdown-menu dropdown-menu-end">
+                
+                </div>
+              </div>
+            </div>
+            <a>
+              <span class="product-name">
+              
+              </span>
+            </a>
+            <div class="prices-nft-card">
+              
+            </div>
+            <div class="bid-react-area">
+              <div class="react-area">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12 nft-card-wrap">
+          <div class="product-style-one no-overlay with-placeBid skeleton">
+            <div class="card-thumbnail">
+              <a>              
+              </a>
+            </div>
+            <div class="product-share-wrapper">
+              <div class="profile-share">
+                
+              </div>
+              <div class="share-btn share-btn-activation dropdown">
+                <button class="icon" data-bs-toggle="dropdown" aria-expanded="false">
+                  <svg viewBox="0 0 14 4" fill="none" width="16" height="16" class="sc-bdnxRM sc-hKFxyN hOiKLt">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z" fill="currentColor"></path>
+                  </svg>
+                </button>
+
+                <div class="share-btn-setting dropdown-menu dropdown-menu-end">
+                
+                </div>
+              </div>
+            </div>
+            <a>
+              <span class="product-name">
+              
+              </span>
+            </a>
+            <div class="prices-nft-card">
+              
+            </div>
+            <div class="bid-react-area">
+              <div class="react-area">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12 nft-card-wrap">
+          <div class="product-style-one no-overlay with-placeBid skeleton">
+            <div class="card-thumbnail">
+              <a>              
+              </a>
+            </div>
+            <div class="product-share-wrapper">
+              <div class="profile-share">
+                
+              </div>
+              <div class="share-btn share-btn-activation dropdown">
+                <button class="icon" data-bs-toggle="dropdown" aria-expanded="false">
+                  <svg viewBox="0 0 14 4" fill="none" width="16" height="16" class="sc-bdnxRM sc-hKFxyN hOiKLt">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z" fill="currentColor"></path>
+                  </svg>
+                </button>
+
+                <div class="share-btn-setting dropdown-menu dropdown-menu-end">
+                
+                </div>
+              </div>
+            </div>
+            <a>
+              <span class="product-name">
+              
+              </span>
+            </a>
+            <div class="prices-nft-card">
+              
+            </div>
+            <div class="bid-react-area">
+              <div class="react-area">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12 nft-card-wrap">
+          <div class="product-style-one no-overlay with-placeBid skeleton">
+            <div class="card-thumbnail">
+              <a>              
+              </a>
+            </div>
+            <div class="product-share-wrapper">
+              <div class="profile-share">
+                
+              </div>
+              <div class="share-btn share-btn-activation dropdown">
+                <button class="icon" data-bs-toggle="dropdown" aria-expanded="false">
+                  <svg viewBox="0 0 14 4" fill="none" width="16" height="16" class="sc-bdnxRM sc-hKFxyN hOiKLt">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z" fill="currentColor"></path>
+                  </svg>
+                </button>
+
+                <div class="share-btn-setting dropdown-menu dropdown-menu-end">
+                
+                </div>
+              </div>
+            </div>
+            <a>
+              <span class="product-name">
+              
+              </span>
+            </a>
+            <div class="prices-nft-card">
+              
+            </div>
+            <div class="bid-react-area">
+              <div class="react-area">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12 nft-card-wrap">
+          <div class="product-style-one no-overlay with-placeBid skeleton">
+            <div class="card-thumbnail">
+              <a>              
+              </a>
+            </div>
+            <div class="product-share-wrapper">
+              <div class="profile-share">
+                
+              </div>
+              <div class="share-btn share-btn-activation dropdown">
+                <button class="icon" data-bs-toggle="dropdown" aria-expanded="false">
+                  <svg viewBox="0 0 14 4" fill="none" width="16" height="16" class="sc-bdnxRM sc-hKFxyN hOiKLt">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z" fill="currentColor"></path>
+                  </svg>
+                </button>
+
+                <div class="share-btn-setting dropdown-menu dropdown-menu-end">
+                
+                </div>
+              </div>
+            </div>
+            <a>
+              <span class="product-name">
+              
+              </span>
+            </a>
+            <div class="prices-nft-card">
+              
+            </div>
+            <div class="bid-react-area">
+              <div class="react-area">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12 nft-card-wrap">
+          <div class="product-style-one no-overlay with-placeBid skeleton">
+            <div class="card-thumbnail">
+              <a>             
+              </a>
+            </div>
+            <div class="product-share-wrapper">
+              <div class="profile-share">
+                
+              </div>
+              <div class="share-btn share-btn-activation dropdown">
+                <button class="icon" data-bs-toggle="dropdown" aria-expanded="false">
+                  <svg viewBox="0 0 14 4" fill="none" width="16" height="16" class="sc-bdnxRM sc-hKFxyN hOiKLt">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z" fill="currentColor"></path>
+                  </svg>
+                </button>
+
+                <div class="share-btn-setting dropdown-menu dropdown-menu-end">
+                
+                </div>
+              </div>
+            </div>
+            <a>
+              <span class="product-name">
+              
+              </span>
+            </a>
+            <div class="prices-nft-card">
+              
+            </div>
+            <div class="bid-react-area">
+              <div class="react-area">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12 nft-card-wrap">
+          <div class="product-style-one no-overlay with-placeBid skeleton">
+            <div class="card-thumbnail">
+              <a>              
+              </a>
+            </div>
+            <div class="product-share-wrapper">
+              <div class="profile-share">
+                
+              </div>
+              <div class="share-btn share-btn-activation dropdown">
+                <button class="icon" data-bs-toggle="dropdown" aria-expanded="false">
+                  <svg viewBox="0 0 14 4" fill="none" width="16" height="16" class="sc-bdnxRM sc-hKFxyN hOiKLt">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z" fill="currentColor"></path>
+                  </svg>
+                </button>
+
+                <div class="share-btn-setting dropdown-menu dropdown-menu-end">
+                
+                </div>
+              </div>
+            </div>
+            <a>
+              <span class="product-name">
+              
+              </span>
+            </a>
+            <div class="prices-nft-card">
+              
+            </div>
+            <div class="bid-react-area">
+              <div class="react-area">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12 nft-card-wrap">
+          <div class="product-style-one no-overlay with-placeBid skeleton">
+            <div class="card-thumbnail">
+              <a>              
+              </a>
+            </div>
+            <div class="product-share-wrapper">
+              <div class="profile-share">
+                
+              </div>
+              <div class="share-btn share-btn-activation dropdown">
+                <button class="icon" data-bs-toggle="dropdown" aria-expanded="false">
+                  <svg viewBox="0 0 14 4" fill="none" width="16" height="16" class="sc-bdnxRM sc-hKFxyN hOiKLt">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z" fill="currentColor"></path>
+                  </svg>
+                </button>
+
+                <div class="share-btn-setting dropdown-menu dropdown-menu-end">
+                
+                </div>
+              </div>
+            </div>
+            <a>
+              <span class="product-name">
+              
+              </span>
+            </a>
+            <div class="prices-nft-card">
+              
+            </div>
+            <div class="bid-react-area">
+              <div class="react-area">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12 nft-card-wrap">
+          <div class="product-style-one no-overlay with-placeBid skeleton">
+            <div class="card-thumbnail">
+              <a>              
+              </a>
+            </div>
+            <div class="product-share-wrapper">
+              <div class="profile-share">
+                
+              </div>
+              <div class="share-btn share-btn-activation dropdown">
+                <button class="icon" data-bs-toggle="dropdown" aria-expanded="false">
+                  <svg viewBox="0 0 14 4" fill="none" width="16" height="16" class="sc-bdnxRM sc-hKFxyN hOiKLt">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z" fill="currentColor"></path>
+                  </svg>
+                </button>
+
+                <div class="share-btn-setting dropdown-menu dropdown-menu-end">
+                
+                </div>
+              </div>
+            </div>
+            <a>
+              <span class="product-name">
+              
+              </span>
+            </a>
+            <div class="prices-nft-card">
+              
+            </div>
+            <div class="bid-react-area">
+              <div class="react-area">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12 nft-card-wrap">
+          <div class="product-style-one no-overlay with-placeBid skeleton">
+            <div class="card-thumbnail">
+              <a>              
+              </a>
+            </div>
+            <div class="product-share-wrapper">
+              <div class="profile-share">
+                
+              </div>
+              <div class="share-btn share-btn-activation dropdown">
+                <button class="icon" data-bs-toggle="dropdown" aria-expanded="false">
+                  <svg viewBox="0 0 14 4" fill="none" width="16" height="16" class="sc-bdnxRM sc-hKFxyN hOiKLt">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z" fill="currentColor"></path>
+                  </svg>
+                </button>
+
+                <div class="share-btn-setting dropdown-menu dropdown-menu-end">
+                
+                </div>
+              </div>
+            </div>
+            <a>
+              <span class="product-name">
+              
+              </span>
+            </a>
+            <div class="prices-nft-card">
+              
+            </div>
+            <div class="bid-react-area">
+              <div class="react-area">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-sal="slide-up" data-sal-delay="150" data-sal-duration="800" class="col-5 col-lg-4 col-md-6 col-sm-6 col-12 nft-card-wrap">
+          <div class="product-style-one no-overlay with-placeBid skeleton">
+            <div class="card-thumbnail">
+              <a>             
+              </a>
+            </div>
+            <div class="product-share-wrapper">
+              <div class="profile-share">
+                
+              </div>
+              <div class="share-btn share-btn-activation dropdown">
+                <button class="icon" data-bs-toggle="dropdown" aria-expanded="false">
+                  <svg viewBox="0 0 14 4" fill="none" width="16" height="16" class="sc-bdnxRM sc-hKFxyN hOiKLt">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.5 2C3.5 2.82843 2.82843 3.5 2 3.5C1.17157 3.5 0.5 2.82843 0.5 2C0.5 1.17157 1.17157 0.5 2 0.5C2.82843 0.5 3.5 1.17157 3.5 2ZM8.5 2C8.5 2.82843 7.82843 3.5 7 3.5C6.17157 3.5 5.5 2.82843 5.5 2C5.5 1.17157 6.17157 0.5 7 0.5C7.82843 0.5 8.5 1.17157 8.5 2ZM11.999 3.5C12.8274 3.5 13.499 2.82843 13.499 2C13.499 1.17157 12.8274 0.5 11.999 0.5C11.1706 0.5 10.499 1.17157 10.499 2C10.499 2.82843 11.1706 3.5 11.999 3.5Z" fill="currentColor"></path>
+                  </svg>
+                </button>
+
+                <div class="share-btn-setting dropdown-menu dropdown-menu-end">
+                
+                </div>
+              </div>
+            </div>
+            <a>
+              <span class="product-name">
+              
+              </span>
+            </a>
+            <div class="prices-nft-card">
+              
+            </div>
+            <div class="bid-react-area">
+              <div class="react-area">
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <%#- include ("models/nft-rows.ejs", {nfts:nfts}) %>
       <nav class="pagination-wrapper" aria-label="Page navigation example">
       </nav>
       <!-- <%#- include ("models/pagination.ejs" , {page:page, queries:queries}) %> -->
@@ -175,9 +759,18 @@
   <!-- main JS -->
   <script src="assets/js/main.js"></script>
   <script>
+    $(document).ready(
+      $.post("/explore-inoc", function(data) {
+        $("#exploreSection").html(data[0]);
+        $("#filter-brands").append(data[1]);
+        $('select').niceSelect('update');
+        const cardsUnlisted = document.getElementById("exploreSection").querySelectorAll(".col-5");
+          cardsUnlisted.forEach(element => {
+            element.classList.add("sal-animate")
+          });
+        })
+    ) 
     var iteration = 1;
-    var filterOptions = <%- JSON.stringify(filterOptions) %>;
-    console.log(filterOptions)
     $(window).on('load', function () {
       var url = (new URL(location.href)).searchParams;
       const s = 'selected';

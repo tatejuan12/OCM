@@ -17273,7 +17273,7 @@ button .small-image {
 .rn-collection-inner-one .collection-wrapper .collection-big-thumbnail.skeleton div {
   width: 100%;
   height: 199px;
-  animation: skeleton-loading 1s linear infinite alternate;
+  animation: skeleton-loading 0.5s linear infinite alternate;
 }
 .rn-collection-inner-one .collection-wrapper .collenction-small-thumbnail {
   display: flex;
@@ -17290,7 +17290,7 @@ button .small-image {
 .rn-collection-inner-one .collection-wrapper .collenction-small-thumbnail.skeleton div {
   width: 77px;
   height: 77px;
-  animation: skeleton-loading 1s linear infinite alternate;
+  animation: skeleton-loading 0.5s linear infinite alternate;
 }
 .rn-collection-inner-one .collection-wrapper .collection-profile {
   position: absolute;
@@ -17322,7 +17322,7 @@ button .small-image {
   border-radius: 50%;
   border: 5px solid var(--color-primary-alta);
   background-color: var(--color-white);
-  animation: skeleton-loading 1s linear infinite alternate;
+  animation: skeleton-loading 0.5s linear infinite alternate;
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .rn-collection-inner-one .collection-wrapper .collection-profile img {
@@ -17359,7 +17359,7 @@ button .small-image {
   margin: 0;
   font-weight: 400;
   transition: var(--transition);
-  animation: skeleton-loading 1s linear infinite alternate;
+  animation: skeleton-loading 0.5s linear infinite alternate;
 }
 .rn-collection-inner-one .collection-wrapper .collection-deg h6:hover {
   color: var(--color-primary);
@@ -17379,7 +17379,7 @@ button .small-image {
   width: 62px;
   height: 31px;
   transition: var(--transition);
-  animation: skeleton-loading 1s linear infinite alternate;
+  animation: skeleton-loading 0.5s linear infinite alternate;
 }
 .rn-collection-inner-one .collection-wrapper .collection-deg span.items:hover {
   background: var(--color-primary) !important;
@@ -17874,6 +17874,13 @@ NFT product styles
   display: flex;
   justify-content: center;
 }
+.product-style-one.with-placeBid.skeleton .card-thumbnail {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  height: 246px;
+  animation: skeleton-loading 0.5s linear infinite alternate;
+}
 .product-style-one.with-placeBid .card-thumbnail img {
   max-height: 300px;
 }
@@ -17932,6 +17939,19 @@ NFT product styles
   overflow: hidden;
   cursor: pointer;
 }
+.product-style-one.skeleton a .product-name {
+  display: block;
+  margin-top: 10px;
+  font-weight: 500;
+  font-size: 18px;
+  transition: 0.4s;
+  overflow: hidden;
+  cursor: pointer;
+  height: 25px;
+  animation: skeleton-loading 0.5s linear infinite alternate;
+  width: 177px;
+  border-radius: 5px;
+}
 .product-style-one a .product-name:hover {
   color: var(--color-primary) !important;
 }
@@ -17951,6 +17971,17 @@ NFT product styles
   border-radius: 5px;
   background-color: #00000010;
   margin-top: 10px;
+}
+.product-style-one.skeleton .prices-nft-card{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 4px 8px;
+  border-radius: 5px;
+  background-color: #00000010;
+  margin-top: 10px;
+  height: 40px;
+  animation: skeleton-loading 0.5s linear infinite alternate;
 }
 .product-style-one .prices-nft-card .price{
   display: flex;
@@ -17987,6 +18018,19 @@ NFT product styles
   transition: var(--transition);
   padding: 2px 8px;
   border-radius: 6px;
+}
+.product-style-one.skeleton .bid-react-area .react-area {
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  transition: var(--transition);
+  padding: 2px 8px;
+  border-radius: 6px;
+  height: 20px;
+  animation: skeleton-loading 0.5s linear infinite alternate;
+  width: 31px;
 }
 .product-style-one .bid-react-area .react-area span.number {
   font-size: 14px;
@@ -18032,6 +18076,14 @@ NFT product styles
 .product-share-wrapper .profile-share {
   display: flex;
   align-items: center;
+}
+.skeleton .product-share-wrapper .profile-share {
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  width: 126px;
+  height: 28px;
+  animation: skeleton-loading 0.5s linear infinite alternate;
 }
 .product-share-wrapper .profile-share a {
   position: relative;
@@ -25346,7 +25398,7 @@ Collection nav
   cursor: pointer;
 }
 .modal-body .bulk-nft-wrap.skeleton{
-  animation: skeleton-loading 1s linear infinite alternate;
+  animation: skeleton-loading 0.5s linear infinite alternate;
   height: 40px;
   border-radius: 0.75rem;
 }
