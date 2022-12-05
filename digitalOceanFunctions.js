@@ -72,56 +72,24 @@ var methods = {
     return result;
   },
   uploadProfile: async function (req, img) {
-    let result = false;
-  
-    // Convert and resize the image if necessary
-    const compressedImageBuffer = await sharp(img.buffer)
-      .resize(null, 200)
-      .toFormat('jpeg', {
-        quality: 50
-      })
-      .toBuffer({
-        resolveWithObject: true
-      });
-  
-    // Check if the image is larger than 100000 bytes
-    if (compressedImageBuffer.info.size > 100000) {
-      // If the image is larger, resize it again to make it smaller
-      const smallerImageBuffer = await sharp(compressedImageBuffer.data)
-        .resize(null, 100)
-        .toFormat('jpeg', {
-          quality: 50
-        })
-        .toBuffer();
-  
-      // Convert the smaller image to the WebP format
-      var webpImageBuffer = await sharp(smallerImageBuffer)
-        .webp()
-        .toBuffer();
-    } else {
-      // If the image is small enough, convert it to the WebP format
-      var webpImageBuffer = await sharp(compressedImageBuffer.data)
-        .webp()
-        .toBuffer();
-    }
-  
-    // Set up the parameters for the S3 upload
+    var result = false;
     const param = {
       Bucket: "ocw-space/profile-img",
-      Key: req.session.wallet + "_profile.webp",
-      Body: webpImageBuffer,
+      Key: req.session.wallet + "_profile.png",
+      Body: img.buffer, 
       ACL: "public-read",
     };
-  
-    // Upload the image to the S3 bucket and handle any errors
-    try {
-      await s3.upload(param);
-      result = true;
-    } catch (err) {
+    const uploadPromise = new Promise(function (resolve, reject) {
+      s3.upload(param, function (err, data) {
+        if (err) reject(err);
+        else resolve(true);
+      });
+    });
+
+    result = await uploadPromise.catch((err) => {
       console.log(err);
-      result = false;
-    }
-  
+      return false;
+    });
     return result;
   },
   uploadCollectionLogo: async function (fileName, img) {
