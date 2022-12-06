@@ -6,8 +6,8 @@ const {
   validateEscrowCancel,
 } = require("xrpl/dist/npm/models/transactions/escrowCancel");
 
-var s3 = new aws.S3({ endpoint: process.env.S3_ENDPOINT });
-aws.config.update({
+var s3 = new aws.S3({ 
+  endpoint: process.env.S3_ENDPOINT,
   accessKeyId: process.env.AWS_ACCESS_KEY,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 });
@@ -93,66 +93,46 @@ var methods = {
     return result;
   },
   uploadCollectionLogo: async function (fileName, img) {
-    let result = false;
-  
-    // Convert and resize the image if necessary
-    const compressedImageBuffer = await sharp(img.buffer)
-      .resize(null, 200)
-      .toFormat('jpeg', {
-        quality: 50
-      })
-      .toBuffer({
-        resolveWithObject: true
-      });
-      console.log(compressedImageBuffer.data)
-  
-    // Check if the image is larger than 100000 bytes
-    if (compressedImageBuffer.info.size > 100000) {
-      // If the image is larger, resize it again to make it smaller
-      const smallerImageBuffer = await sharp(compressedImageBuffer.data)
-        .resize(null, 100)
-        .toFormat('jpeg', {
-          quality: 50
-        })
-        .toBuffer();
-  
-      // Convert the smaller image to the WebP format
-      var webpImageBuffer = await sharp(smallerImageBuffer)
-        .webp()
-        .toBuffer();
-    } else {
-      // If the image is small enough, convert it to the WebP format
-      var webpImageBuffer = await sharp(compressedImageBuffer.data)
-        .webp()
-        .toBuffer();
-    }
-    console.log(compressedImageBuffer.data)
+    var result = false;
+    var compressedWebpImageBuffer = await sharp(img.buffer)
+    .resize(140, 140)
+    .webp({
+      quality: 50,
+    })
+    .toBuffer();
 
-    // Set up the parameters for the S3 upload
     const param = {
       Bucket: "ocw-space/collections/logo",
       Key: fileName + "_logo.webp",
-      Body: webpImageBuffer,
+      Body: compressedWebpImageBuffer,
       ACL: "public-read",
     };
-  
-    // Upload the image to the S3 bucket and handle any errors
-    try {
-      s3.upload(param);
-      result = true;
-    } catch (err) {
+    const uploadPromise = new Promise(function (resolve, reject) {
+      s3.upload(param, function (err, data) {
+        if (err) reject(err);
+        else resolve(true);
+      });
+    });
+
+    result = await uploadPromise.catch((err) => {
       console.log(err);
-      result = false;
-    }
-  
+      return false;
+    });
+
     return result;
   },
   uploadCollectionBanner: async function (fileName, img) {
     var result = false;
+    var compressedWebpImageBuffer = await sharp(img.buffer)
+    .webp({
+      quality: 50,
+    })
+    .toBuffer();
+
     const param = {
       Bucket: "ocw-space/collections/banner",
       Key: fileName + "_banner.webp",
-      Body: img.buffer,
+      Body: compressedWebpImageBuffer,
       ACL: "public-read",
     };
     const uploadPromise = new Promise(function (resolve, reject) {

@@ -1005,7 +1005,7 @@ server.post("/create-collection",
     var result = false;
     var fileName = req.body.family.toLowerCase().replace(/\s/g, "_")
     if (formDataFiles) {
-      if (formDataFiles["collection-logo"]) {
+      if (formDataFiles["collection-logo"][0]) {
         if (
           (result = await digitalOcean.functions.uploadCollectionLogo(
             fileName,
