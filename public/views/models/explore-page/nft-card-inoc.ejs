@@ -13,11 +13,11 @@
             <!-- CHECKING FILE EXTENSION AND REQUIRED CONTAINER -->
             <%var imageExt = new Set(['image/jpg', 'image/jpeg', 'image/png', 'image/gif']); var vidExt = new Set(['video/mp4', 'video/mov', 'video/avi', 'video/webm', 'video/mpg', 'video/wmv']);%>
             <%if (imageExt.has(nft.fileType)) { %>
-            <img src="<%= nft.thumbnail%>" alt="Nft_Profile" draggable="false" loading="lazy">
+            <img src="<%= nft.thumbnail%>" alt="XRP Ledger NFT Image" draggable="false" loading="lazy">
             <!-- JPG/JPEG/PNG/GIF -->
             <% } else if (vidExt.has(nft.fileType)) { %>
             <%if (nft.httpsImage.startsWith("https://customer-ce8gmdxp8czqnbz4.cloudflarestream.com/")){%>
-                <video id="<%=nft.tokenID%>" muted></video>
+                <video id="<%=nft.tokenID%>" alt="XRP Ledger NFT Video" muted></video>
                 <script>
                 if (Hls.isSupported()) {
                     const video = document.getElementById('<%=nft.tokenID%>');
@@ -38,7 +38,7 @@
                 })
                 </script>
             <%} else {%>
-                <video controls autoplay loop>
+                <video alt="XRP Ledger NFT Video" controls autoplay loop>
                 <source src="<%=nft.httpsImage%>" type="video/mp4">
                 <source src="<%=nft.httpsImage%>" type="video/webm">
                 <source src="<%=nft.httpsImage%>" type="video/ogg">
@@ -47,7 +47,7 @@
                 </video>
             <%}%>
             <% } else {%>
-            <img src="<%= nft.httpsImage%> " alt="unlisted NFT image" draggable="false" loading="lazy">
+            <img src="<%= nft.httpsImage%> " alt="XRP Ledger NFT Image" draggable="false" loading="lazy">
             <%};%>
 
 

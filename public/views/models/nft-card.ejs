@@ -12,11 +12,11 @@
         <!-- CHECKING FILE EXTENSION AND REQUIRED CONTAINER -->
         <%var imageExt = new Set(['image/jpg', 'image/jpeg', 'image/png', 'image/gif']); var vidExt = new Set(['video/mp4', 'video/mov', 'video/avi', 'video/webm', 'video/mpg', 'video/wmv']);%>
         <%if (imageExt.has(nft.fileType)) { %>
-          <img src="<%= nft.thumbnail%>" alt="Nft_Profile" draggable="false" loading="lazy">
+          <img src="<%= nft.thumbnail%>" alt="XRP Ledger NFT Image" draggable="false" loading="lazy">
         <!-- JPG/JPEG/PNG/GIF -->
         <% } else if (vidExt.has(nft.fileType)) { %>
           <%if (nft.httpsImage.startsWith("https://customer-ce8gmdxp8czqnbz4.cloudflarestream.com/")){%>
-            <video id="<%=nft.tokenID%>" muted></video>
+            <video id="<%=nft.tokenID%>" alt="XRP Ledger NFT Video" muted></video>
             <script>
               if (Hls.isSupported()) {
                 const video = document.getElementById('<%=nft.tokenID%>');
@@ -37,7 +37,7 @@
               })
             </script>
           <%} else {%>
-            <video controls autoplay loop>
+            <video alt="XRP Ledger NFT Video" controls autoplay loop>
               <source src="<%=nft.httpsImage%>" type="video/mp4">
               <source src="<%=nft.httpsImage%>" type="video/webm">
               <source src="<%=nft.httpsImage%>" type="video/ogg">
@@ -46,7 +46,7 @@
             </video>
            <%}%>
         <% } else {%>
-          <img src="<%= nft.httpsImage%> " alt="unlisted NFT image" draggable="false" loading="lazy">
+          <img src="<%= nft.httpsImage%> " alt="XRP Ledger NFT Image" draggable="false" loading="lazy">
         <%};%>
 
 
@@ -71,7 +71,7 @@
         <% if (nft.buyOffers[0] !== undefined) { %> 
         <% for (let i=0; i<3; i++) {%>
         <% if (nft.buyOffers[i] !== undefined) {%>
-          <a href="profile?wallet=<%=nft.buyOffers[i].account%>&page=0" class="avatar" data-tooltip="<%=nft.buyOffers[i].account%>"><img src="https://www.ui-avatars.com/api/?background=random&length=3&font-size=0.33&uppercase=false&size=200&name=<%=nft.buyOffers[i].account%>" alt="Nft_Profile"></a>
+          <a href="profile?wallet=<%=nft.buyOffers[i].account%>&page=0" class="avatar" data-tooltip="<%=nft.buyOffers[i].account%>"><img src="https://www.ui-avatars.com/api/?background=random&length=3&font-size=0.33&uppercase=false&size=200&name=<%=nft.buyOffers[i].account%>" alt="Nft profile random generated image"></a>
         <%}}%>
           <a class="more-author-text" style="margin-left:5px;"><%=nft.buyOffers.length%> Bids</a>
         <%} else {%>

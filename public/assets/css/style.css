@@ -66,7 +66,7 @@
   --color-gray-2: #f5f8fa;
   --color-subtitle: #f9004d;
   --background-color-1: #24243557;
-  --background-color-2: rgb(23, 54, 68);
+  --background-color-2: #173644;
   --background-color-3: #151521;
   --background-color-4: #242435;
   --gradient-one: linear-gradient(to right bottom, #863eff, #0297ff);
@@ -223,11 +223,12 @@ h6,
   line-height: 1.4074;
   color: var(--color-heading);
 }
-.slider-one h2.title.gradient-text{
+.slider-one h2 span.title.gradient-text{
     background: linear-gradient(90deg, rgba(97,180,58,1) 0%, rgba(175,180,64,1) 24%, rgba(29,180,253,1) 50%, rgba(205,43,55,1) 71%, rgba(252,176,69,1) 100%);    background-size: 400% 400%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: gradient 15s ease infinite;
+    font-weight: ;
 }
 @keyframes gradient {
 	0% {
