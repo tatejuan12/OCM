@@ -1027,17 +1027,17 @@ server.post("/create-collection",
       }
     }
     console.log(formDataBody);
-    // if (
-    //   await mongoClient.query.createCollection(
-    //     formDataBody["displayName"],
-    //     formDataBody["family"],
-    //     formDataBody["name"],
-    //     formDataBody["brand"],
-    //     formDataBody["url"],
-    //     formDataBody["issuer"],
-    //     formDataBody["description"]
-    //   )
-    // )
+    if (
+      await mongoClient.query.createCollection(
+        formDataBody["displayName"],
+        formDataBody["family"],
+        formDataBody["name"],
+        formDataBody["brand"],
+        formDataBody["url"],
+        formDataBody["issuer"],
+        formDataBody["description"]
+      )
+    )
       console.log("done");
     result = true;
     result ? res.status(200).send("Modified") : res.status(500).send("Failed");
