@@ -228,7 +228,7 @@ h6,
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: gradient 15s ease infinite;
-    font-weight: ;
+    font-weight: 800;
 }
 @keyframes gradient {
 	0% {
