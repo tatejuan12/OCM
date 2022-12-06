@@ -25,7 +25,18 @@ const mongoClient = require("./mongo");
 const xumm = require("./xummFunctions");
 const { log, error } = require("console");
 const multer = require("multer");
-const upload = multer({ limits: { fieldSize: "16mb" } }); //used to get multipart-formdata doesn't get. used for user data changing!
+const upload = multer({ 
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype == "image/png" || file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
+      return cb(null, true);
+    } else {
+      cb(null, false);
+    }
+  },
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 1MB
+  }
+}); //used to get multipart-formdata doesn't get. used for user data changing!
 const csurf = require("csurf");
 const helmet = require("helmet");
 const minifyHtml = require("express-minify-html");
@@ -995,52 +1006,63 @@ server.post("/decrement-like", speedLimiter, async (req, res) => {
 });
 server.post("/create-collection",
   upload.fields([
-    { name: "collection-logo", maxCount: 1 },
-    { name: "cover-img", maxCount: 1 },
-  ]),
+      { name: "collection-logo", maxCount: 1 },
+      { name: "cover-img", maxCount: 1 },
+    ]),
   speedLimiter,
   async (req, res) => {
-    const formDataBody = req.body;
-    const formDataFiles = req.files;
-    var result = false;
-    var fileName = req.body.family.toLowerCase().replace(/\s/g, "_")
-    if (formDataFiles) {
-      if (formDataFiles["collection-logo"][0]) {
-        if (
-          (result = await digitalOcean.functions.uploadCollectionLogo(
-            fileName,
-            formDataFiles["collection-logo"][0]
-          ))
-        )
-          result = true;
-        console.log("uploaded logo");
-      }
-      if (formDataFiles["cover-img"]) {
-        if (
-          (result = await digitalOcean.functions.uploadCollectionBanner(
-            fileName,
-            formDataFiles["cover-img"][0]
-          ))
-        )
-          result = true;
-        console.log("uploaded banner");
-      }
+    if (req.fileValidationError) {
+      res.status(400);
+      return res.send({
+        error: 'File size is too large or the wrong format.'
+      });
     }
-    console.log(formDataBody);
-    if (
-      await mongoClient.query.createCollection(
-        formDataBody["displayName"],
-        formDataBody["family"],
-        formDataBody["name"],
-        formDataBody["brand"],
-        formDataBody["url"],
-        formDataBody["issuer"],
-        formDataBody["description"]
+    try {
+      const formDataBody = req.body;
+      const formDataFiles = req.files;
+      var result = false;
+      var fileName = req.body.family.toLowerCase().replace(/\s/g, "_")
+      if (formDataFiles) {
+        if (formDataFiles["collection-logo"][0]) {
+          if (
+            (result = await digitalOcean.functions.uploadCollectionLogo(
+              fileName,
+              formDataFiles["collection-logo"][0]
+            ))
+          )
+            result = true;
+          console.log("uploaded logo");
+        }
+        if (formDataFiles["cover-img"]) {
+          if (
+            (result = await digitalOcean.functions.uploadCollectionBanner(
+              fileName,
+              formDataFiles["cover-img"][0]
+            ))
+          )
+            result = true;
+          console.log("uploaded banner");
+        }
+      }
+      console.log(formDataBody);
+      if (
+        await mongoClient.query.createCollection(
+          formDataBody["displayName"],
+          formDataBody["family"],
+          formDataBody["name"],
+          formDataBody["brand"],
+          formDataBody["url"],
+          formDataBody["issuer"],
+          formDataBody["description"]
+        )
       )
-    )
-      console.log("done");
-    result = true;
-    result ? res.status(200).send("Modified") : res.status(500).send("Failed");
+        console.log("done");
+      result = true;
+      result ? res.status(200).send("Modified") : res.status(500).send("Failed");        
+    } catch (err) {
+      res.status(400).send('error creating collections');
+      return;
+    }
   }
 );
 server.post("/mint-no-IPFS-payload",
