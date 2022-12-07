@@ -56,15 +56,15 @@
         </div>
         <div class="setting-option rn-icon-list d-block d-lg-none">
           <div class="icon-box search-mobile-icon">
-            <button><i class="feather-search"></i></button>
+            <button title="search button to open search input"><i class="feather-search"></i></button>
           </div>
           <form id="header-search-1" action="/search" method="GET" class="large-mobile-blog-search">
             <div class="rn-search-mobile form-group">
               <button type="submit" class="search-button"><i class="feather-search"></i></button>
-              <input type="text" name="q" placeholder="Search ...">
+              <input type="text" title="start search" name="q" placeholder="Search ...">
             </div>
           </form>
-        </div>
+        </div> 
 
         <div class="setting-option header-btn rbt-site-header" id="rbt-site-header">
           <% if (!login) { %>
@@ -76,13 +76,13 @@
 
         <div class="setting-option mobile-menu-bar d-block d-xl-none">
           <div class="hamberger">
-            <button class="hamberger-button">
+            <button class="hamberger-button" title="show menu">
               <i class="feather-menu"></i>
             </button>
           </div>
         </div>
         <div class="setting-option">
-          <a href="<%login ? __append("profile") : __append('#')%>" <%if (!login) __append("onclick=\"customAlert.alert('Connect Wallet to View Profile')\"")%> class="profile-menu-option">
+          <a aria-label="Go to profile page" href="<%login ? __append("profile") : __append('#')%>" <%if (!login) __append("onclick=\"customAlert.alert('Connect Wallet to View Profile')\"")%> class="profile-menu-option">
             <i class="icon i-account"></i>
           </a>
         </div>
