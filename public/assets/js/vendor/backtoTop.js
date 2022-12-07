@@ -1,6 +1,6 @@
 (function($) { "use strict";
 
-	$(document).ready(function(){"use strict";
+	$(function(){"use strict";
 		
 		var progressPath = document.querySelector('.rn-progress-parent path');
 		var pathLength = progressPath.getTotalLength();
@@ -16,7 +16,7 @@
 			progressPath.style.strokeDashoffset = progress;
 		}
 		updateProgress();
-		$(window).scroll(updateProgress);	
+		$(window).on('scroll', updateProgress);	
 		var offset = 50;
 		var duration = 550;
 		jQuery(window).on('scroll', function() {

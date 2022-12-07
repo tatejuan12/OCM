@@ -42,7 +42,7 @@
     backToTopInit: function () {
       // declare variable
       var scrollTop = $(".backto-top");
-      $(window).scroll(function () {
+      $(window).on('scroll', function () {
         // declare variable
         var topPos = $(this).scrollTop();
         // if user scrolls down - show scroll to top button
@@ -67,7 +67,7 @@
     },
 
     stickyHeader: function (e) {
-      $(window).scroll(function () {
+      $(window).on('scroll', function () {
         if ($(this).scrollTop() > 250) {
           $(".header--sticky").addClass("sticky");
         } else {
@@ -603,7 +603,7 @@
     },
 
     masonryActivation: function name(params) {
-      $(window).load(function () {
+      $(window).on('load', function () {
         $(".masonary-wrapper-activation").imagesLoaded(function () {
           // filter items on button click
           $(".isotop-filter").on("click", "button", function () {
@@ -721,8 +721,8 @@
     },
 
     unloadImage: function name() {
-      $("#rbtinput1").click(function (e) {
-        $("#fatima").click();
+      $("#rbtinput1").on('click', function (e) {
+        $("#fatima").on('click', );
       });
 
       function rbtPreview() {
@@ -731,14 +731,14 @@
           rbtinput1.src = URL.createObjectURL(file);
         }
       }
-      $("#fatima").change(function () {
+      $("#fatima").on('change', function () {
         rbtPreview(this);
       });
     },
 
     unloadImage2: function name() {
-      $("#rbtinput2").click(function (e) {
-        $("#nipa").click();
+      $("#rbtinput2").on('click', function (e) {
+        $("#nipa").on('click', );
       });
 
       function rbtPreview() {
@@ -747,14 +747,14 @@
           rbtinput2.src = URL.createObjectURL(file2);
         }
       }
-      $("#nipa").change(function () {
+      $("#nipa").on('change', function () {
         rbtPreview(this);
       });
     },
 
     unloadImage3: function name() {
-      $("#createfileImage").click(function (e) {
-        $("#createinputfile").click();
+      $("#createfileImage").on('click', function (e) {
+        $("#createinputfile").on('click', );
       });
       function rbtPreview() {
         const [file2] = createinputfile.files;
@@ -762,7 +762,7 @@
           createfileImage.src = URL.createObjectURL(file2);
         }
       }
-      $("#createinputfile").change(function () {
+      $("#createinputfile").on('change', function () {
         rbtPreview(this);
       });
     },
@@ -1162,17 +1162,17 @@ function submitEmail() {
 function getCurrencyBalance() {
   var currentWindow;
   try {
-    $("#walletBalance").load(
+    $("#walletBalance").on('load',
       `/get-token-balance?issuer=XRP&hex=XRP&token=XRP`
     );
   } catch (err) {
-    console.error("Couldn't parse balance");
+    console.on('error', "Couldn't parse balance");
   }
 }
 //collection form submit button disabler
 $(function () {
   $("#subCollection").attr("disabled", true);
-  $("#collectionForm").change(function () {
+  $("#collectionForm").on('change', function () {
     if (
       $('#displayName').val() != "" &&
       $('#family').val() != "" &&
@@ -1190,7 +1190,7 @@ $(function () {
 //Mint Form button Disabler
 $(function () {
   $("#startMint").attr("onclick", "allFields()");
-  $("#mintForm-01").change(function () {
+  $("#mintForm-01").on('change', function () {
     if (
       $("#name").val() != "" &&
       $("#description").val() != "" &&

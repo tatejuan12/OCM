@@ -75,7 +75,7 @@ const NFTSPERPAGE = 25;
 const server = express();
 
 server.use(compression());
-server.use(setCache);
+// server.use(setCache);
 server.use(bodyParser.json({ limit: "10mb" })); // for parsing serverlication/json
 server.use(
   bodyParser.urlencoded({

@@ -20,7 +20,7 @@
   <link rel="stylesheet" href="assets/css/vendor/nice-select.css">
   <link rel="stylesheet" href="assets/css/plugins/feature.css">
   <link rel="stylesheet" href="assets/css/plugins/jquery-ui.min.css">
-  <script src="//cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script src="//cdn.jsdelivr.net/npm/hls.js@latest" async></script>
   <!-- Style css -->
   <link rel="stylesheet" href="assets/css/style.css">
 
@@ -735,7 +735,7 @@
   </div>
   <!-- End Top To Bottom Area  -->
   <!-- JS ============================================ -->
-  <script src="assets/js/vendor/jquery.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
   <script src="assets/js/vendor/jquery.nice-select.min.js"></script>
   <script src="assets/js/vendor/jquery-ui.js"></script>
   <script src="assets/js/vendor/modernizer.min.js"></script>
@@ -808,7 +808,7 @@
       }
       $('select').niceSelect('update');
     })
-    $('#filter-brands').change(function() {
+    $('#filter-brands').on('change', function() {
       var val = $('#filter-brands').val();
       $('#filter-family').empty();
       $('#filter-collection').empty();
@@ -862,7 +862,7 @@
         url += `&filterPriceMax=${jsonFilterSort.filterPriceMax}`;
       return url;
     }
-    $(window).data('getReady', true).scroll(function(e) {
+    $(window).data('getReady', true).on('scroll', function(e) {
       if ($(window).data('getReady') == false) return;
       if (($(".row.g-5").offset().top + $(".row.g-5").height()*0.85 - $(window).height()) < $(this).scrollTop()) {
         $(window).data('getReady', false);

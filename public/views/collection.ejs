@@ -133,7 +133,9 @@
         </div>
         <!-- End Top To Bottom Area  -->
         <!-- JS ============================================ -->
-        <script src="assets/js/vendor/jquery.js"></script>
+        <!-- <script src="assets/js/vendor/jquery.js"></script> -->
+        <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+        <script src="https://code.jquery.com/jquery-migrate-3.4.0.js"></script>
         <script src="assets/js/vendor/jquery.nice-select.min.js"></script>
         <script src="assets/js/vendor/jquery-ui.js"></script>
         <script src="assets/js/vendor/modernizer.min.js"></script>
@@ -163,7 +165,7 @@
           $('#fetchCollection').on('click', function() {
 
           });
-          $(window).data('getReady', true).scroll(function(e) {
+          $(window).data('getReady', true).on('scroll', function(e) {
             if ($(window).data('getReady') == false) return;
 
             if (($(".row.g-5").offset().top + $(".row.g-5").height() - $(window).height()) < $(this).scrollTop()) {
