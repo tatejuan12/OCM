@@ -18228,7 +18228,17 @@ NFT product styles mobile layout
     font-size: 12px;
   }
   .product-style-one.with-placeBid .card-thumbnail img {
-    max-height: 170px;
+    max-height: 140px;
+  }
+  .product-style-one.with-placeBid .card-thumbnail video{
+    max-height: 140px;
+  }
+  .product-share-wrapper .profile-share{
+    margin-left: -5px;
+  }
+  .product-share-wrapper .profile-share a.more-author-text{
+    font-size: 10px;
+    padding: 0;
   }
 }
 
