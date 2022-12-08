@@ -955,7 +955,7 @@ var methods = {
     try {
       const db = client.db("Redeem");
       let collection = db.collection("Assets");
-      const res = collection.find();
+      const res = collection.find().sort({"z-index": -1});
       return await res.toArray();
     } catch (err) {
     } finally {
