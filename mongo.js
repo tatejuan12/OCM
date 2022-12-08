@@ -383,7 +383,7 @@ var methods = {
         return await aggregate.toArray();
       } else {
         const aggregate = collection
-          .find()
+          .find().sort({views: -1})
           .skip(NFTSPERPAGE * page)
           .limit(NFTSPERPAGE);
         return await aggregate.toArray();
