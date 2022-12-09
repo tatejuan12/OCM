@@ -804,7 +804,7 @@ server.post("/nftoken-create-offer", speedLimiter, async (req, res) => {
   const enoughBal = await xumm.xrpl.getTokenBalance(req.session.wallet, 'xrp', 'xrp');
   const NFToken = req.body.NFToken;
   const value = req.body.value;
-  if (enoughBal >= value) {
+  //if (enoughBal >= value) {
     const destination = req.body.destination;
     const expiry = req.body.expiry;
     const flags = req.body.flags;
@@ -820,10 +820,10 @@ server.post("/nftoken-create-offer", speedLimiter, async (req, res) => {
     );
     console.log(payload);
     res.status(200).send(payload);
-  } else {
-    console.log('not enough account balance')
-    res.status(400).send('not enough account balance');
-  }
+  // } else {
+  //   console.log('not enough account balance')
+  //   res.status(400).send('not enough account balance');
+  // }
 });
 server.post("/subscription-transaction", speedLimiter, async (req, res) => {
   xumm.subscriptions.transactionSubscription(req, res);

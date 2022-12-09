@@ -1162,7 +1162,7 @@ function submitEmail() {
 function getCurrencyBalance() {
   var currentWindow;
   try {
-    $("#walletBalance").on('load',
+    $("#walletBalance").load(
       `/get-token-balance?issuer=XRP&hex=XRP&token=XRP`
     );
   } catch (err) {
