@@ -1,6 +1,3 @@
 <% filterOptions.forEach(function(res){%>
     <option value="<%=res.issuers%>" id="<%=res.issuers%>"><%=res._id%></option>
 <%}); %>
-<script>
-    const filterOptions = <%- JSON.stringify(filterOptions) %>;
-</script>

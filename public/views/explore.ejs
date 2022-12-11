@@ -88,6 +88,9 @@
             <label class="filter-leble">Brand</label>
             <select id="filter-brands">
               <option data-display="Select Brand" class="option disabled" value='' selected disabled>Select Brand</option>
+              <% filterOptions.forEach(function(res){%>
+                <option value="<%=res.issuers%>" id="<%=res.issuers%>"><%=res._id%></option>
+              <%}); %>
             </select>
           </div>
           <div class="filter-select-option">
@@ -759,17 +762,7 @@
   <!-- main JS -->
   <script src="assets/js/main.js"></script>
   <script>
-    $(document).ready(
-      $.post("/explore-inoc", function(data) {
-        $("#exploreSection").html(data[0]);
-        $("#filter-brands").append(data[1]);
-        $('select').niceSelect('update');
-        const cardsUnlisted = document.getElementById("exploreSection").querySelectorAll(".col-5");
-          cardsUnlisted.forEach(element => {
-            element.classList.add("sal-animate")
-          });
-        })
-    ) 
+    const filterOptions = <%- JSON.stringify(filterOptions)%>;
     var iteration = 1;
     $(window).on('load', function () {
       var url = (new URL(location.href)).searchParams;
@@ -787,7 +780,7 @@
         if (sP == 1) {
           $('#priceLH').attr(s,s)
         } else if (sP == -1) {
-          $('#priceHL').arrt(s,s)
+          $('#priceHL').attr(s,s)
       	}
       }
       if (url.get('filterExtras')) {
@@ -803,7 +796,27 @@
         for (filter of filterOptions){
           if (fB == filter.issuers[0]) {
             $(`#${filter.issuers[0]}`).attr(s,s)
-          }
+            $('#filter-family').empty();
+            $('#filter-collection').empty();
+            $('#filter-family').append(`<option data-display="Select Family" value=''  disabled>Select Family</option>`);
+            $('#filter-collection').append(`<option data-display="Select Collection" value=''  disabled>Select Collection</option>`);
+            for (var fam = 0; fam < filter.familyFilters.length; fam++) {
+              var familySelect = url.get('filterFamilies');
+              if (filter.familyFilters[fam] == familySelect) {
+                $('#filter-family').append(`<option value="${filter.familyFilters[fam]}" selected>${filter.familyFilters[fam]}</option>`);
+              } else {
+                $('#filter-family').append(`<option value="${filter.familyFilters[fam]}">${filter.familyFilters[fam]}</option>`);
+              }
+            }
+            for (var col = 0; col < filter.nameFilters.length; col++) {
+              var collectionSelect = url.get('filterCollections');
+              if (filter.familyFilters[fam] == collectionSelect) {
+                $('#filter-collection').append(`<option value="${filter.nameFilters[col]}" selected>${filter.nameFilters[col]}</option>`);
+              } else {
+                $('#filter-collection').append(`<option value="${filter.nameFilters[col]}">${filter.nameFilters[col]}</option>`);
+              }
+            }
+            }
         }
       }
       $('select').niceSelect('update');
@@ -885,6 +898,17 @@
 
       }
     })
+    console.log(`<%=url%>/explore-inoc${urlFilterConstructor()}`)
+    window.addEventListener( 'load', function () {
+      $.post(`<%=url%>/explore-inoc${urlFilterConstructor()}`, function(data) {
+        $("#exploreSection").html(data[0]);
+        $('select').niceSelect('update');
+        const cardsUnlisted = document.getElementById("exploreSection").querySelectorAll(".col-5");
+          cardsUnlisted.forEach(element => {
+            element.classList.add("sal-animate")
+          });
+        })
+      }); 
   </script>
 
 </html>

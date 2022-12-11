@@ -251,7 +251,11 @@ server.get("/profile", speedLimiter, async (req, res) => {
 //explore page for OCM
 server.get("/explore", speedLimiter, async (req, res) => {
   //renders the explore page as viewable HTML for the DOM
-  res.render('views/explore');
+  const filterOptions = await mongoClient.query.filterOptions();
+
+  res.render('views/explore', {
+    filterOptions: filterOptions
+  });
 });
 server.get("/about", speedLimiter, (req, res) => {
   defaultLocals(req, res);
@@ -645,6 +649,7 @@ server.post("/explore-inoc", speedLimiter, async (req, res, next) => {
   var nfts;
   const page = parseInt(req.query.page);
   var parametersToSet = [];
+  console.log(req.query)
 
   const filter = {
     sortLikes: req.query.sortLikes,
@@ -662,12 +667,8 @@ server.post("/explore-inoc", speedLimiter, async (req, res, next) => {
   }
   promiseNfts = new Promise(function (resolve, reject) {
     resolve(mongoClient.query.getNfts(NFTSPERPAGE, 0, filter));
-  });
-  promiseVerifiedIssuers = new Promise(function (resolve, reject) {
-    resolve(mongoClient.query.getVerifiedIssuers());
   }); //remove when server occupancy is low
-  const promises = await Promise.all([promiseNfts, promiseVerifiedIssuers]);
-  const filterOptions = await mongoClient.query.filterOptions();
+  const promises = await Promise.all([promiseNfts]);
 
   var returnHtml = [];
   //Render NFT data into DOM readable content
@@ -679,14 +680,14 @@ server.post("/explore-inoc", speedLimiter, async (req, res, next) => {
     returnHtml.push(html);
   });
   //Render filters to DOM readable content
-  res.render('views/models/explore-page/filter-options.ejs', {
-    filterOptions: filterOptions,
-    verifiedIssuers: promises[1],
-  },
-  function (err, html) {
-    if (err) throw "Couldn't build filters: " + err;
-    returnHtml.push(html);
-  })
+  // res.render('views/models/explore-page/filter-options.ejs', {
+  //   filterOptions: filterOptions,
+  //   verifiedIssuers: promises[1],
+  // },
+  // function (err, html) {
+  //   if (err) throw "Couldn't build filters: " + err;
+  //   returnHtml.push(html);
+  // })
   //Send rendered DOM readable content from this query to the page to be inserted.
   res.send(returnHtml);
 });
