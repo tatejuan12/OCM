@@ -747,12 +747,33 @@ var methods = {
             index: "NFT_Search",
             text: {
               query: searchQuery,
-              path: {
-                wildcard: "*",
-              },
+              path: ['uriMetadata.name'],
             },
           },
         },
+        { $addFields: {
+          "score": {
+            "$meta": "searchScore"
+          }
+        }},
+        {
+          $addFields: {
+            searchScore: {
+              $multiply: [
+                '$score', 
+                '$views'
+              ]
+            }
+          }
+        },
+        {
+          $sort: {
+            searchScore: -1
+          },
+        },
+        {
+          $limit: 10
+        }
       ];
       let queryUsers = [
         {
@@ -760,9 +781,7 @@ var methods = {
             index: "Account_Search",
             text: {
               query: searchQuery,
-              path: {
-                wildcard: "*",
-              },
+              path: ['project'],
             },
           },
         },
@@ -773,15 +792,19 @@ var methods = {
             index: "Collections_Search",
             text: {
               query: searchQuery,
-              path: {
-                wildcard: "*",
-              }
+              path: [
+                'name',
+                'family',
+                'displayName',
+                'twitterHandle',
+                'brand'
+              ]
             },
           },
         },
       ];
       promiseNfts = new Promise(function (resolve, reject) {
-        const nftCursor = nftDetailsCol.aggregate(queryNftDetails).limit(10);
+        const nftCursor = nftDetailsCol.aggregate(queryNftDetails);
         const result = nftCursor.toArray();
         resolve(result);
       });
@@ -801,6 +824,7 @@ var methods = {
         promiseUsers,
         promiseVerified,
       ]);
+      console.log(promise[0])
       res.nfts = promise[0];
       res.users = promise[1];
       res.collections = promise[2];
