@@ -846,7 +846,7 @@ var methods = {
 
       let collection = db.collection("Collections");
 
-      let res = collection.find().limit(limit);
+      let res = collection.find().sort({views: -1}).limit(limit);
       const array = await res.toArray();
 
       return array;
