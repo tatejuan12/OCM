@@ -905,10 +905,11 @@ server.post("/XUMM-sign-subscription", speedLimiter, async (req, res) => {
   }
 });
 server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
+  console.log(req.body.project);
   const apiInfo = await mongoClient.query.findRedemptionAccountByProject(
     req.body.project
   );
-  const clientAddy = apiInfo[0].account;
+  //const clientAddy = apiInfo[0].account;
   const ipAddress = apiInfo[0].ip;
   const acctAge = await xumm.xrpl.checkAccountActivation(req.session.wallet, 1);
   if (!acctAge) {
