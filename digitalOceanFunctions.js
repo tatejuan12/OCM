@@ -73,10 +73,18 @@ var methods = {
   },
   uploadProfile: async function (req, img) {
     var result = false;
+
+    var compressedWebpImageBuffer = await sharp(img.buffer)
+    .resize(140, 140)
+    .webp({
+      quality: 50,
+    })
+    .toBuffer();
+
     const param = {
       Bucket: "ocw-space/profile-img",
-      Key: req.session.wallet + "_profile.png",
-      Body: img.buffer, 
+      Key: req.session.wallet + "_profile.webp",
+      Body: compressedWebpImageBuffer, 
       ACL: "public-read",
     };
     const uploadPromise = new Promise(function (resolve, reject) {
@@ -174,7 +182,7 @@ var methods = {
     return (
       "https://ocw-space.sgp1.digitaloceanspaces.com/profile-img/" +
       wallet +
-      "_profile.png"
+      "_profile.webp"
     );
   },
   getCover: function (wallet) {
