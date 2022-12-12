@@ -824,7 +824,6 @@ var methods = {
         promiseUsers,
         promiseVerified,
       ]);
-      console.log(promise[0])
       res.nfts = promise[0];
       res.users = promise[1];
       res.collections = promise[2];

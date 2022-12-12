@@ -909,7 +909,7 @@ server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
   const apiInfo = await mongoClient.query.findRedemptionAccountByProject(
     req.body.project
   );
-  //const clientAddy = apiInfo[0].account;
+  const clientAddy = apiInfo[0].account;
   const ipAddress = apiInfo[0].ip;
   const acctAge = await xumm.xrpl.checkAccountActivation(req.session.wallet, 1);
   if (!acctAge) {
