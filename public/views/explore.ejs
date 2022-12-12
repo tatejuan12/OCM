@@ -791,6 +791,18 @@
           $('#staykableOption').attr(s,s)
         }
       }
+      if (url.get('filterPriceMin')) {
+        var fPM = url.get('filterPriceMin')
+        if (fPM) {
+          $('#filter-price-min').val(fPM)
+        }
+      }
+      if (url.get('filterPriceMax')) {
+        var fPMx = url.get('filterPriceMax')
+        if (fPMx) {
+          $('#filter-price-max').val(fPMx)
+        }
+      }
       if (url.get('filterBrands')) {
         var fB = url.get('filterBrands')
         for (filter of filterOptions){

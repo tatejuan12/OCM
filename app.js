@@ -649,7 +649,6 @@ server.post("/explore-inoc", speedLimiter, async (req, res, next) => {
   var nfts;
   const page = parseInt(req.query.page);
   var parametersToSet = [];
-  console.log(req.query)
 
   const filter = {
     sortLikes: req.query.sortLikes,
