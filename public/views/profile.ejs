@@ -65,7 +65,14 @@
                 <%} else {%>
                 <h4 class="title"><%=user.project%></h4>
                 <p class="wallet-copy"><a onclick="navigator.clipboard.writeText(`<%=user.wallet%>`)"><%=user.wallet%></a><i class="icon i-copy"></i></p>
-                <p><%=user.bio%></p>
+                <div class="social-follow">
+                  <span><%=user.bio%></span>
+                </div>
+                <%if (user.website) {%>
+                  <a href="<%=user.website%>" target="_blank" class="social-follow">
+                    <span class="user-name"><%=user.website%></span>
+                  </a>
+                <%}%>
                 <%}%>
               </div>
             </div>

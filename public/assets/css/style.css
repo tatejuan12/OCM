@@ -25407,6 +25407,8 @@ Collection nav
   display: flex;
   flex-direction: row;
   cursor: pointer;
+  align-items: center;
+  justify-content: center;
 }
 .modal-body .bulk-nft-wrap.skeleton{
   animation: skeleton-loading 0.5s linear infinite alternate;
