@@ -332,9 +332,18 @@ var methods = {
           });
         }
         if (filters.sortPrice) {
-          aggregateQuery.push({
-            $sort: { "sellOffers.xrpValue": parseInt(filters.sortPrice) },
-          });
+          aggregateQuery.push(
+            {
+              $match: {
+                "sellOffers.xrpValue": { $gte: 1 }
+              }
+            },
+            {
+              $sort: {
+                "sellOffers.xrpValue": parseInt(filters.sortPrice)
+              }
+            }
+          );
         }
         if (filters.filterExtras == "Verified") {
           aggregateQuery.push({
