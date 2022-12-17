@@ -323,7 +323,7 @@ var methods = {
     try {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
-      var aggregateQuery = [{ $addFields: {} }, { $sort: { views: -1, "_id": -1 } }];
+      var aggregateQuery = [{ $addFields: {} }, { $sort: { views: -1, "_id": -1, "uriMetadata.name": 1, }}]; //
       if (filters) {
         if (filters.sortLikes) {
           aggregateQuery[0].$addFields.likesLength = { $size: "$likes" };
@@ -332,7 +332,7 @@ var methods = {
           });
         }
         if (filters.sortPrice) {
-          aggregateQuery.push(
+          aggregateQuery.unshift(
             {
               $match: {
                 "sellOffers.xrpValue": { $gte: 1 }
@@ -346,27 +346,27 @@ var methods = {
           );
         }
         if (filters.filterExtras == "Verified") {
-          aggregateQuery.push({
+          aggregateQuery.unshift({
             $match: { "verified.status": true },
           });
         } else if (filters.filterExtras == "Staykable") {
-          aggregateQuery.push({
+          aggregateQuery.unshift({
             $match: { "stakable.status": true },
           });
         }
         if (filters.filterBrands) {
-          aggregateQuery.push({
+          aggregateQuery.unshift({
             $match: { issuer: { $in: filters.filterBrands.split(",") } }, //look for issuer of collection
           });
         }
         if (filters.filterFamilies) {
-          aggregateQuery.push({
+          aggregateQuery.unshift({
             $match: { "uriMetadata.collection.family": filters.filterFamilies },
           });
         }
         if (filters.filterCollections) {
           console.log(filters.filterCollections);
-          aggregateQuery.push({
+          aggregateQuery.unshift({
             $match: {
               "uriMetadata.collection.name": filters.filterCollections,
             },
@@ -376,7 +376,7 @@ var methods = {
           aggregateQuery[0].$addFields.recentSell = {
             $first: "$sellOffers.xrpValue",
           };
-          aggregateQuery.push({
+          aggregateQuery.unshift({
             $match: {
               recentSell: {
                 $lte: parseInt(filters.filterPriceMax),
@@ -386,7 +386,9 @@ var methods = {
           });
         }
         const aggregate = collection
-          .aggregate(aggregateQuery)
+          .aggregate(aggregateQuery, {
+            collation: { locale: "en_US", numericOrdering: true },
+          })
           .skip(NFTSPERPAGE * page)
           .limit(NFTSPERPAGE);
         return await aggregate.toArray();

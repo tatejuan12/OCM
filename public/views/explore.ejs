@@ -910,7 +910,6 @@
 
       }
     })
-    console.log(`<%=url%>/explore-inoc${urlFilterConstructor()}`)
     window.addEventListener( 'load', function () {
       $.post(`<%=url%>/explore-inoc${urlFilterConstructor()}`, function(data) {
         $("#exploreSection").html(data[0]);
