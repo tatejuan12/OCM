@@ -33,6 +33,31 @@
       imJs.unloadImage2();
       imJs.unloadImage();
       imJs.unloadImage3();
+      imJs.cookiesConsent();
+    },
+    cookiesConsent: function () {
+      var acceptCookie = getCookie('cookieConsent');
+      console.log(acceptCookie)
+      if (acceptCookie != '1') {
+        $('#cookieBar').removeClass('hidden');
+      }
+      function getCookie(name) {
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+          const [cookieName, cookieValue] = cookie.trim().split('=');
+          if (cookieName === name) {
+            return cookieValue;
+          }
+        }
+        return ''
+      }
+      $('#cookiesApprv').on('click', function () {
+        var date = new Date();
+        date.setTime(date.getTime() + (20 * 365 * 24 * 60 * 60 * 1000));
+        var expires = "expires=" + date.toUTCString();
+        document.cookie = "cookieConsent=1; " + expires;
+        $('#cookieBar').addClass('hidden');
+      })
     },
 
     featherAtcivation: function () {
