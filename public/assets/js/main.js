@@ -1000,28 +1000,36 @@ function getRedeem(redeemElement, loadingElement, data) {
     $(redeemElement).prop('disabled', true);
     project = JSON.parse(data).project;
     if (project) {
-      $.ajax({
-        type: "POST",
-        url: "/redeem-nft-payload",
-        data: { return_url: window.location.href, project: project },
-        success: function (result) {   
-          window.location.href = result[0].next.always;
-          var information = JSON.stringify(result);
-          $.ajax({
-            type: "POST",
-            url: "/redeem-nft-subscription",
-            data: {
-              payload: information,
-            },
-          });
-          redeeming = false;
-        },
-        error: function (result) {
-          redeeming = false
-          customAlert.alert(result.responseText);
-          setTimeout(location.reload(), 1000);
-        },
-      });
+      let visitorId;
+      const fpPromise = import('https://openfpcdn.io/fingerprintjs/v3')
+              .then(FingerprintJS => FingerprintJS.load())      
+            fpPromise
+              .then(fp => fp.get())
+              .then(result => {
+                visitorId = result.visitorId;
+                $.ajax({
+                  type: "POST",
+                  url: "/redeem-nft-payload",
+                  data: { return_url: window.location.href, project: project, visitorId: visitorId},
+                  success: function (result) {   
+                    window.location.href = result[0].next.always;
+                    var information = JSON.stringify(result);
+                    $.ajax({
+                      type: "POST",
+                      url: "/redeem-nft-subscription",
+                      data: {
+                        payload: information,
+                      },
+                    });
+                    redeeming = false;
+                  },
+                  error: function (result) {
+                    redeeming = false
+                    customAlert.alert(result.responseText);
+                    setTimeout(location.reload(), 1000);
+                  },
+                });
+              });
     }
     } 
 }

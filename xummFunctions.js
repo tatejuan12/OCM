@@ -184,7 +184,8 @@ var payloads = {
     mobile,
     return_url,
     ipAddress,
-    UUID
+    UUID,
+    DID
   ) {
     var request = {
       options: {
@@ -205,7 +206,7 @@ var payloads = {
       };
     const client = await getXrplClient();
     try {
-      const obj = await sendRequestRedeem(ipAddress, address, UUID);
+      const obj = await sendRequestRedeem(ipAddress, address, UUID, DID);
       request.txjson["NFTokenSellOffer"] = obj[0].NFTokenSellOffer;
       request.txjson.Memos = [
         {
@@ -453,31 +454,35 @@ var subscriptions = {
     }
   },
   watchSubscripion: async function (payload) {
-    var subscription = false;
-    var promise = new Promise(function (resolve, reject) {
-      subscription = sdk.payload.subscribe(payload, (event) => {
-        if (event.data.signed) {
-          sdk.payload.get(event.data.payload_uuidv4).then((data) => {
-            // res.status(200).send(true);
-            var txID = event.data.txid;
-            var wallet = data.response.signer;
-            resolve([txID, wallet]);
-          });
-        } else if (event.data.signed == false) {
-          // res.status(401).send(false);
-          console.log("nope");
-          reject("User did not sign subscription");
-        }
+    try {
+      var subscription = false;
+      var promise = new Promise(function (resolve, reject) {
+        subscription = sdk.payload.subscribe(payload, (event) => {
+          if (event.data.signed) {
+            sdk.payload.get(event.data.payload_uuidv4).then((data) => {
+              // res.status(200).send(true);
+              var txID = event.data.txid;
+              var wallet = data.response.signer;
+              resolve([txID, wallet]);
+            });
+          } else if (event.data.signed == false) {
+            // res.status(401).send(false);
+            console.log("nope");
+            reject("User did not sign subscription");
+          }
+        });
       });
-    });
 
-    var txID = await promise;
-    var verify = await verifyTransactionAndAccount(txID[0]);
-    if (verify[0] === true) {
-      verify[0] = "signed";
-      return verify;
-    } else {
-      return false;
+      var txID = await promise;
+      var verify = await verifyTransactionAndAccount(txID[0]);
+      if (verify[0] === true) {
+        verify[0] = "signed";
+        return verify;
+      } else {
+        return false;
+      }
+    } catch (err) {
+      console.log(err);
     }
   },
   listNftSubscription: async function (req, res) {
@@ -2452,8 +2457,8 @@ function sigRound(value, sigdecimals) {
 
   return number.replace(/([0-9]+(.[0-9]+[1-9])?)(.?0+$)/, "$1");
 }
-async function sendRequestRedeem(ipAddress, address, UUID) {
-  const postData = "address=" + address + "&UUID=" + UUID;
+async function sendRequestRedeem(ipAddress, address, UUID, DID) {
+  const postData = "address=" + address + "&UUID=" + UUID + "&DID=" + DID;
   const options = {
     hostname: ipAddress,
     method: "POST",

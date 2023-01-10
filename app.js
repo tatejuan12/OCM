@@ -162,91 +162,96 @@ server.get("/", speedLimiter, async (req, res) => {
   });
 });
 server.get("/profile", speedLimiter, async (req, res) => {
-  var wallet;
-  const page = parseInt(req.query.page);
-  const parametersToSet = [];
-  if (req.query.wallet) {
-    parametersToSet.push({ key: "wallet", value: req.query.wallet });
-  }
-  if (!isNaN(page)) {
+  try {
+    var wallet;
+    const page = parseInt(req.query.page);
+    const parametersToSet = [];
     if (req.query.wallet) {
-      wallet = req.query.wallet;
-      parametersToSet.push({ key: "wallet", value: wallet });
-    } else {
-      if (!req.session.login) {
-        res.status(401).redirect("/");
-        return;
-      } else {
-        wallet = req.session.wallet;
-      }
+      parametersToSet.push({ key: "wallet", value: req.query.wallet });
     }
-    defaultLocals(req, res);
-    const profile_pic = digitalOcean.functions.getProfileLink(wallet);
-    verificationPromise = new Promise(function (resolve, reject) {
-      var isVerified = mongoClient.query.verified(wallet);
-      resolve(isVerified);
-    });
-    nftsPromise = new Promise(function (resolve, reject) {
-      const nfts = xumm.xrpl.getAccountsNfts(wallet, NFTSPERPAGE);
-      resolve(nfts);
-    });
-    userPromise = new Promise(function (resolve, reject) {
-      const ownerInfo = mongoClient.query.getUser(wallet);
-      resolve(ownerInfo);
-    });
-    offersPromise = new Promise(function (resolve, reject) {
-      const offers = xumm.xrpl.getAccountOffers(wallet);
-      resolve(offers);
-    });
-    likedNftsPromise = new Promise(function (resolve, reject) {
-      const nfts = mongoClient.query.getAccountLikedNfts(wallet);
-      resolve(nfts);
-    });
-    queueCountPromise = new Promise(function (resolve, reject) {
-      const queueCount = mongoClient.query.queuedItemsCount(wallet);
-      resolve(queueCount);
-    });
-    const promises = await Promise.all([
-      nftsPromise,
-      userPromise,
-      offersPromise,
-      likedNftsPromise,
-      verificationPromise,
-      queueCountPromise,
-    ]);
+    if (!isNaN(page)) {
+      if (req.query.wallet) {
+        wallet = req.query.wallet;
+        parametersToSet.push({ key: "wallet", value: wallet });
+      } else {
+        if (!req.session.login) {
+          res.status(401).redirect("/");
+          return;
+        } else {
+          wallet = req.session.wallet;
+        }
+      }
+      defaultLocals(req, res);
+      const profile_pic = digitalOcean.functions.getProfileLink(wallet);
+      verificationPromise = new Promise(function (resolve, reject) {
+        var isVerified = mongoClient.query.verified(wallet);
+        resolve(isVerified);
+      });
+      nftsPromise = new Promise(function (resolve, reject) {
+        const nfts = xumm.xrpl.getAccountsNfts(wallet, NFTSPERPAGE);
+        resolve(nfts);
+      });
+      userPromise = new Promise(function (resolve, reject) {
+        const ownerInfo = mongoClient.query.getUser(wallet);
+        resolve(ownerInfo);
+      });
+      offersPromise = new Promise(function (resolve, reject) {
+        const offers = xumm.xrpl.getAccountOffers(wallet);
+        resolve(offers);
+      });
+      likedNftsPromise = new Promise(function (resolve, reject) {
+        const nfts = mongoClient.query.getAccountLikedNfts(wallet);
+        resolve(nfts);
+      });
+      queueCountPromise = new Promise(function (resolve, reject) {
+        const queueCount = mongoClient.query.queuedItemsCount(wallet);
+        resolve(queueCount);
+      });
+      const promises = await Promise.all([
+        nftsPromise,
+        userPromise,
+        offersPromise,
+        likedNftsPromise,
+        verificationPromise,
+        queueCountPromise,
+      ]);
 
-    const isOwner = promises[1].wallet == req.session.wallet ? true : false;
-    var marker = promises[0][1];
-    var isMarker = promises[0][1] == undefined ? false : true;
-    listedNftsPromise = new Promise(function (resolve, reject) {
-      const ownerNfts = mongoClient.query.getOwnerNfts(
-        wallet,
-        promises[0][0],
-        NFTSPERPAGE
-      );
-      resolve(ownerNfts);
-    });
-    const listedPromise = await listedNftsPromise;
-    res.render("views/profile", {
-      isVerified: promises[4],
-      isOwner: isOwner,
-      marker: marker,
-      nfts: listedPromise,
-      user: promises[1],
-      profile_pic: profile_pic,
-      buyOffers: promises[2][1],
-      sellOffers: promises[2][0],
-      likedNfts: promises[3],
-      page: page,
-      queries: req.query,
-      isMarker: isMarker,
-      queueCount: promises[5],
-    });
-  } else {
-    parametersToSet.push({ key: "page", value: 0 });
-    appendToUrl(req.query, parametersToSet, req.path);
-    res.redirect(appendToUrl(req.query, parametersToSet, req.path));
+      const isOwner = promises[1].wallet == req.session.wallet ? true : false;
+      var marker = promises[0][1];
+      var isMarker = promises[0][1] == undefined ? false : true;
+      listedNftsPromise = new Promise(function (resolve, reject) {
+        const ownerNfts = mongoClient.query.getOwnerNfts(
+          wallet,
+          promises[0][0],
+          NFTSPERPAGE
+        );
+        resolve(ownerNfts);
+      });
+      const listedPromise = await listedNftsPromise;
+      res.render("views/profile", {
+        isVerified: promises[4],
+        isOwner: isOwner,
+        marker: marker,
+        nfts: listedPromise,
+        user: promises[1],
+        profile_pic: profile_pic,
+        buyOffers: promises[2][1],
+        sellOffers: promises[2][0],
+        likedNfts: promises[3],
+        page: page,
+        queries: req.query,
+        isMarker: isMarker,
+        queueCount: promises[5],
+      });
+    } else {
+      parametersToSet.push({ key: "page", value: 0 });
+      appendToUrl(req.query, parametersToSet, req.path);
+      res.redirect(appendToUrl(req.query, parametersToSet, req.path));
+    }
+  } catch (err) {
+    console.log(err);
   }
+  
 });
 //explore page for OCM
 server.get("/explore", speedLimiter, async (req, res) => {
@@ -904,7 +909,7 @@ server.post("/XUMM-sign-subscription", speedLimiter, async (req, res) => {
   }
 });
 server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
-  console.log(req.body.project);
+  console.log(req.body);
   const apiInfo = await mongoClient.query.findRedemptionAccountByProject(
     req.body.project
   );
@@ -924,13 +929,16 @@ server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
       res.status(403).send("Error #1003"); //insuf funds
       return;
     } else {
+      console.log(req.session.visitorId)
       const encUUID = await xumm.xrpl.encodeXummID(req.session.user_token);
+      const encDID = await xumm.xrpl.encodeXummID(req.body.visitorId);
       const payload = await xumm.payloads.redeemNftPayload(
         req.session.wallet,
         req.useragent.isMobile,
         req.body.return_url,
         ipAddress,
-        encUUID
+        encUUID,
+        encDID
       );
       try {
         if (payload instanceof Error) throw payload;
