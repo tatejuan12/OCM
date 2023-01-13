@@ -538,7 +538,7 @@ var methods = {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
       const query = { likes: new RegExp(`.*${wallet}.*`, "i") };
-      const result = await collection.find(query);
+      const result = await collection.find(query).limit(25);
       return await result.toArray();
     } catch (err) {
       console.log("Database error" + err);
