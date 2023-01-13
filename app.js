@@ -1605,76 +1605,81 @@ server.get("/bulk-list-account-unlisted-nfts",
     const nfts = await xumm.xrpl.getAllAccountNFTs(wallet);
     //find out what ones are listed
     const clientMongo = await mongoClient.query.connectToMongo();
-    var checkListingPromises = [];
-    for (a in nfts) {
-      var checkNftStatusPromise = new Promise(function (resolve, reject) {
-        var returnedNft = mongoClient.query.getBulkNft(
-          nfts[a].NFTokenID,
-          clientMongo
-        );
-        resolve(returnedNft);
-      });
+    try {
+      var checkListingPromises = [];
+      for (a in nfts) {
+        var checkNftStatusPromise = new Promise(function (resolve, reject) {
+          var returnedNft = mongoClient.query.getBulkNft(
+            nfts[a].NFTokenID,
+            clientMongo
+          );
+          resolve(returnedNft);
+        });
 
-      var queuedStatusPromise = new Promise(function (resolve, reject) {
-        var queuedStatus = mongoClient.query.checkBulkQueue(
-          nfts[a].NFTokenID,
-          clientMongo
-        );
-        resolve(queuedStatus);
-      });
+        var queuedStatusPromise = new Promise(function (resolve, reject) {
+          var queuedStatus = mongoClient.query.checkBulkQueue(
+            nfts[a].NFTokenID,
+            clientMongo
+          );
+          resolve(queuedStatus);
+        });
 
-      checkListingPromises.push(checkNftStatusPromise);
-      checkListingPromises.push(queuedStatusPromise);
-    }
-
-    var listingStatusResults = await Promise.all(checkListingPromises); //wait to get listing status on returned NFTS
-    await clientMongo.close();
-    //get all unlisted && not-queued
-    var unlistedNfts = [];
-    for (var i = 0; i < nfts.length; i++) {
-      if (
-        listingStatusResults[i * 2] == null &&
-        listingStatusResults[i * 2 + 1] == null
-      )
-        unlistedNfts.push(nfts[i]);
-    }
-
-    // //IF IMAGES IS TOO SLOW
-    // //COMMENT OUT FROM HERE!!!
-
-    // //get unlisted NFT promises
-    // var unlistedNftDetailsPromises = [];
-    // for (var i = 0; i < unlistedNfts.length; i++) {
-    //   var nftDataPromise = new Promise(function (resolve, reject) {
-    //       var nftData = xumm.xrpl.getNftImage(unlistedNfts[i].URI);
-    //       resolve(nftData);
-    //   });
-
-    //   unlistedNftDetailsPromises.push(nftDataPromise);
-    // }
-
-    // var listingStatusResults = await Promise.all(unlistedNftDetailsPromises); //wait for promises to resolve
-
-    // //transform data
-    // for (var i = 0; i < unlistedNfts.length; i++) {
-    //   unlistedNfts[i].data = listingStatusResults[i];
-    // }
-
-    // //IF IMAGES IS TOO SLOW
-    // //COMMENT OUT TO HERE!!!
-
-    //DO WHAT YOU NEED FROM HERE
-    res.render(
-      "views/models/bulk-list-modal.ejs",
-      {
-        nft: unlistedNfts,
-      },
-      async function (err, html) {
-        if (err) throw "Couldn't get NFTS\n" + err;
-        returnData.push(html);
+        checkListingPromises.push(checkNftStatusPromise);
+        checkListingPromises.push(queuedStatusPromise);
       }
-    );
-    res.send(returnData);
+
+      var listingStatusResults = await Promise.all(checkListingPromises); //wait to get listing status on returned NFTS
+      //get all unlisted && not-queued
+      var unlistedNfts = [];
+      for (var i = 0; i < nfts.length; i++) {
+        if (
+          listingStatusResults[i * 2] == null &&
+          listingStatusResults[i * 2 + 1] == null
+        )
+          unlistedNfts.push(nfts[i]);
+      }
+
+      // //IF IMAGES IS TOO SLOW
+      // //COMMENT OUT FROM HERE!!!
+
+      // //get unlisted NFT promises
+      // var unlistedNftDetailsPromises = [];
+      // for (var i = 0; i < unlistedNfts.length; i++) {
+      //   var nftDataPromise = new Promise(function (resolve, reject) {
+      //       var nftData = xumm.xrpl.getNftImage(unlistedNfts[i].URI);
+      //       resolve(nftData);
+      //   });
+
+      //   unlistedNftDetailsPromises.push(nftDataPromise);
+      // }
+
+      // var listingStatusResults = await Promise.all(unlistedNftDetailsPromises); //wait for promises to resolve
+
+      // //transform data
+      // for (var i = 0; i < unlistedNfts.length; i++) {
+      //   unlistedNfts[i].data = listingStatusResults[i];
+      // }
+
+      // //IF IMAGES IS TOO SLOW
+      // //COMMENT OUT TO HERE!!!
+
+      //DO WHAT YOU NEED FROM HERE
+      res.render(
+        "views/models/bulk-list-modal.ejs",
+        {
+          nft: unlistedNfts,
+        },
+        async function (err, html) {
+          if (err) throw "Couldn't get NFTS\n" + err;
+          returnData.push(html);
+        }
+      );
+      res.send(returnData);
+    } catch (err) {
+      console.log(err)
+    } finally {
+      await clientMongo.close();
+    }
   }
 );
 server.get("/get-additional-listed-nfts", speedLimiter, async (req, res) => {
