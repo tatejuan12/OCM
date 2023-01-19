@@ -1013,6 +1013,24 @@ var methods = {
       await client.close();
     }
   },
+  getCollectionData: async function (address) {
+    const client = await getClient();
+    if (!client) return;
+    try {
+      const db = client.db('Additional-Traits');
+      let collection = db.collection('Collections');
+      let query = {
+        issuer: {$in: [address]}
+      };
+      const res = await collection.findOne(query);
+      console.log(res)
+      return res;
+    } catch (err) {
+
+    } finally {
+      await client.close();
+    }
+  },
   getCollectionFloorPrice: async function (collectionFamily, issuer) {
     const client = await getClient();
     if (!client) return;

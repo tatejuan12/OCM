@@ -278,6 +278,21 @@ server.get("/redeem-setup", speedLimiter, (req, res) => {
   defaultLocals(req, res);
   res.render("views/redeem-info");
 });
+server.get('/edit-collection', speedLimiter, async (req, res) => {
+  defaultLocals(req, res);
+  if (req.session.login) {
+    try {
+      let address = req.session.wallet;
+      console.log(address)
+      let collectionData = await mongoClient.query.getCollectionData(address);
+      let images = appendCollectionImages(collectionData);
+      console.log(images)
+      res.render('views/edit-collection', {collection: collectionData});
+    } catch (err) {
+      console.log(err)
+    }
+  }
+});
 server.get("/collection", speedLimiter, async (req, res) => {
   const page = parseInt(req.query.page);
   const wallet = req.session.wallet;
