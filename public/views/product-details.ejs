@@ -4,8 +4,16 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>OCM || Product Details</title>
-  <meta name="description" content="">
+  <title>OCM || <%= nft.uriMetadata.name%></title>
+  <meta property="og:title" content="OCM || <%= nft.uriMetadata.name%>">
+  <meta property="og:image" content="<%=nft.httpsImage%>">
+  <meta property="og:description" content="<%= nft.uriMetadata.description %>">
+  <meta property="og:url" content="https://onchainmarketplace.net/product-details?id=<%=nft.tokenID%>">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:site_name" content="OnChain Marketplace">
+  <meta name="twitter:image:alt" content="<%= nft.uriMetadata.name%>">
+  <meta name="twitter:site" content="@onchainmarket">
+  <meta name="description" content="<%= nft.uriMetadata.description %>">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="Cache-control" content="public">
 
