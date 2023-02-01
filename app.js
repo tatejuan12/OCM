@@ -931,7 +931,12 @@ server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
     } else {
       console.log(req.session.visitorId)
       const encUUID = await xumm.xrpl.encodeXummID(req.session.user_token);
-      const encDID = await xumm.xrpl.encodeXummID(req.body.visitorId);
+      let encDID;
+      if (req.body.visitorId == 'private') {
+        encDID = await xumm.xrpl.encodeXummID('8008135');
+      } else {
+        encDID = await xumm.xrpl.encodeXummID(req.body.visitorId);
+      } 
       const payload = await xumm.payloads.redeemNftPayload(
         req.session.wallet,
         req.useragent.isMobile,
