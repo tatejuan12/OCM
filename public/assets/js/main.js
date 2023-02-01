@@ -34,7 +34,6 @@
       imJs.unloadImage();
       imJs.unloadImage3();
       imJs.cookiesConsent();
-      imJs.exploreStyle();
     },
     cookiesConsent: function () {
       var acceptCookie = getCookie('cookieConsent');
