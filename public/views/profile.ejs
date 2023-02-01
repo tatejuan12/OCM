@@ -4,7 +4,23 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>OCM || Profile</title>
+  
+  <% if (!user.project) {%>
+    <title>OCM || Profile</title>
+    <meta property="og:title" content="OCM || <%=user.wallet%>">
+    <meta name="twitter:image:alt" content="<%=user.wallet%>'s profile">
+  <%} else {%>
+    <title>OCM || <%=user.project%></title>
+    <meta property="og:title" content="OCM || <%=user.project%>">
+    <meta name="twitter:image:alt" content="<%=user.project%>'s profile">
+  <%}%>
+  <meta property="og:image" content="<%=profile_pic%>">
+  <meta property="og:description" content="<%=user.bio%>">
+  <meta property="og:url" content="https://onchainmarketplace.net/profile?wallet=<%=user.wallet%>&page=0">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:site_name" content="OnChain Marketplace">
+  
+  <meta name="twitter:site" content="@onchainmarket">
   <meta name="robots" content="noindex, follow" />
   <meta name="description" content="Welcome to your Onchain Marketplace profile! Here, you can view and manage your on-chain assets, as well as your account information and transaction history. Our platform is built on top of the blockchain, which ensures that all your data is secure, transparent, and accessible only to you. You can easily buy and sell on-chain assets, such as NFTs, tokens, and digital collectibles, from your profile page. Start exploring your profile now and manage your on-chain assets with Onchain Marketplace.">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
