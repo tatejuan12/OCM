@@ -227,7 +227,7 @@ var methods = {
     } catch (err) {
       console.log("Database error" + err);
     } finally {
-      await client.close();
+      //await client.close();
     }
   },
   getOwnerNfts: async function (owner, nfts, numberOfNfts) {
