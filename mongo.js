@@ -758,28 +758,18 @@ var methods = {
             index: "NFT_Search",
             text: {
               query: searchQuery,
-              path: ['uriMetadata.name'],
+              path: 'uriMetadata.name',
             },
           },
         },
         { $addFields: {
           "score": {
-            "$meta": "searchScore"
+            "$meta": "textScore"
           }
         }},
         {
-          $addFields: {
-            searchScore: {
-              $multiply: [
-                '$score', 
-                '$views'
-              ]
-            }
-          }
-        },
-        {
           $sort: {
-            searchScore: -1
+            score: -1
           },
         },
         {
@@ -791,11 +781,15 @@ var methods = {
           $search: {
             index: "Account_Search",
             text: {
-              query: searchQuery,
-              path: ['project'],
+              query: `${searchQuery}*`,
+              path: ['project', 'wallet'],
             },
           },
         },
+        { $sort: {
+          score: { $meta: 'textScore' }
+        }},
+        { $limit: 10 }
       ];
       let queryVerifiedCol = [
         {
@@ -838,6 +832,7 @@ var methods = {
       res.nfts = promise[0];
       res.users = promise[1];
       res.collections = promise[2];
+      console.log(res);
       return res;
     } catch (err) {
       console.log("Database error: " + err);
