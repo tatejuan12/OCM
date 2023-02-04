@@ -324,7 +324,7 @@ var methods = {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
       var aggregateQuery = [{ $addFields: {} }, { $sort: { views: -1, "_id": -1, "uriMetadata.name": 1, }}]; //
-      if (filters) {
+      if (filters && filters.length > 0) {
         if (filters.sortLikes) {
           aggregateQuery[0].$addFields.likesLength = { $size: "$likes" };
           aggregateQuery.push({
@@ -394,7 +394,22 @@ var methods = {
         return await aggregate.toArray();
       } else {
         const aggregate = collection
-          .aggregate({ $sort: { views: -1, "_id": -1 } })
+          .aggregate([
+              {
+                  $addFields: {
+                      rank: {
+                          $cond: [
+                                  { $eq: [ { $multiply: [ "$views", { $size: "$likes" } ] }, 0 ] },
+                                  "$views",
+                                  { $divide: [ "$listingDate", { $multiply: [ "$views", { $size: "$likes" } ] } ] }
+                          ]
+                      }
+                  }
+              },
+              {
+                  $sort: { rank: -1, "_id": -1 }
+              }
+          ])
           .skip(NFTSPERPAGE * page)
           .limit(NFTSPERPAGE);
         return await aggregate.toArray();
