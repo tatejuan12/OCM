@@ -325,9 +325,7 @@ var methods = {
       let collection = db.collection("Eligible-Listings");
       var aggregateQuery = [{ $addFields: {} }, { $sort: { views: -1, "_id": -1, "uriMetadata.name": 1, }}]; //
       const values = Object.values(filters);
-      console.log(values)
       if (values.some(value => value != undefined)) {
-        console.log('filter query')
         if (filters.sortLikes) {
           aggregateQuery[0].$addFields.likesLength = { $size: "$likes" };
           aggregateQuery.push({

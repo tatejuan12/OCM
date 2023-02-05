@@ -1,5 +1,9 @@
 //* Main serverlication, run this to run the serverlication
 //! ---------------------Imports modules/packages--------------------------------//
+//DEV IMPORTS
+var livereload = require("livereload");
+var connectLiveReload = require("connect-livereload");
+
 require("dotenv").config();
 const express = require("express");
 const compression = require("compression");
@@ -117,6 +121,17 @@ server.use(
 );
 server.use(cors("*"));
 server.use(csrfProtection);
+
+//LIVE RELOAD
+
+const liveReloadServer = livereload.createServer();
+liveReloadServer.server.once("connection", () => {
+  setTimeout(() => {
+    liveReloadServer.refresh("/");
+  }, 100);
+});
+server.use(connectLiveReload());
+
 const blacklist = [];
 const authorizedIps = [];
 const authorizedAccounts = [
@@ -442,6 +457,10 @@ server.get("/create-collection", speedLimiter, async (req, res) => {
     }
   } else res.status(401).redirect("/");
 });
+server.get('/new-collection', speedLimiter, async (req, res) => {
+  defaultLocals(req,res);
+  res.render('views/new-collection');
+})
 server.get("/logout", speedLimiter, (req, res) => {
   req.session.destroy();
   defaultLocals(req, res);
