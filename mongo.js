@@ -324,7 +324,10 @@ var methods = {
       const db = client.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
       var aggregateQuery = [{ $addFields: {} }, { $sort: { views: -1, "_id": -1, "uriMetadata.name": 1, }}]; //
-      if (filters && filters.length > 0) {
+      const values = Object.values(filters);
+      console.log(values)
+      if (values.some(value => value != undefined)) {
+        console.log('filter query')
         if (filters.sortLikes) {
           aggregateQuery[0].$addFields.likesLength = { $size: "$likes" };
           aggregateQuery.push({
@@ -1279,6 +1282,23 @@ var methods = {
         { $inc: { views: 1 } },
         { upsert: true }
       );
+    } catch (err) {
+      console.log('searchSaver: '+err);
+    } finally {
+      await client.close();
+    }
+  },
+  newestItems: async function () {
+    const client = await getClient();
+    if (!client) return;
+    try {
+      const db = client.db('NFTokens');
+      let collection = db.collection('Eligible-Listings');
+      let sortQuery = {
+        listingDate: -1
+      }
+      let returnData = collection.find().sort(sortQuery).limit(5);
+      return await returnData.toArray();
     } catch (err) {
       console.log('searchSaver: '+err);
     } finally {

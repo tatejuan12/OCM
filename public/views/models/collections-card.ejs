@@ -5,7 +5,7 @@
               <img src="<%=collection.banner_url%>" alt="Nft_Profile">
           </div>
           <div class="collenction-small-thumbnail">
-            <%if (sampleImages.length != 3) {%>
+            <%if (!sampleImages && sampleImages.length < 3) {%>
               <img src="assets/images/collection/collection-place.jpg" alt="collection NFT image">
               <img src="assets/images/collection/collection-place.jpg" alt="collection NFT image">
               <img src="assets/images/collection/collection-place.jpg" alt="collection NFT image">

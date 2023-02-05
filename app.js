@@ -157,8 +157,54 @@ server.get("*", speedLimiter, (req, res, next) => {
 server.get("/", speedLimiter, async (req, res) => {
   defaultLocals(req, res);
   const mostViewedNFTs = await mongoClient.query.getMostViewed();
+  var collections = await mongoClient.query.getCollections(4);
+    var promisesArray = [];
+    for (var i = 0; i < collections.length; i++) {
+      var collectionsImagesPromise = new Promise(function (resolve, reject) {
+        var randomImages = mongoClient.query.getRandomCollectionImages(
+          collections[i].family,
+          collections[i].issuer
+        );
+        resolve(randomImages);
+      });
+      var collectionsTotalItemsListedPromise = new Promise(function (
+        resolve,
+        reject
+      ) {
+        var totalItemsListed = mongoClient.query.totalCollectionItems(
+          collections[i].family,
+          collections[i].issuer
+        );
+        resolve(totalItemsListed);
+      });
+      var collectionsTotalItemsUnlistedPromise = new Promise(function (
+        resolve,
+        reject
+      ) {
+        var totalItemsUnlisted = mongoClient.query.unlistedCollectionItems(
+          collections[i].family,
+          collections[i].issuer
+        );
+        resolve(totalItemsUnlisted);
+      });
+      promisesArray.push(collectionsImagesPromise);
+      promisesArray.push(collectionsTotalItemsListedPromise);
+      promisesArray.push(collectionsTotalItemsUnlistedPromise);
+    }
+    var collectionResults = await Promise.all(promisesArray);
+    for (var i = 0; i < collections.length; i++) {
+      collections[i].sampleImages = collectionResults[Number(i) * 3];
+      collections[i].numberOfNFTs =
+        Number(collectionResults[Number(i) * 3 + 1]) +
+        Number(collectionResults[Number(i) * 3 + 2]); //add the listed and unlisted values together
+    }
+    var returnHtml = [];
+    collections = appendColletionsImagesUrls(collections);
+    const newestItems = await mongoClient.query.newestItems();
   res.render("views/", {
     mostViewedNFTs: mostViewedNFTs,
+    topCollections: collections,
+    newestItems: newestItems
   });
 });
 server.get("/profile", speedLimiter, async (req, res) => {
