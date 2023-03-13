@@ -56,8 +56,45 @@
         </div>
     </div>
 
-    <section>
-        hello world
+    <section class="rn-section-gapTop">
+      <div class="container">
+        <div class="new-collection-wrapper">
+          <div class="user-avail-collections-cont">
+            <div class="user-avail-collections-wrap">
+              <h2 class="page-title">Choose A Collection</h2>
+              <div class="collection-chip-container">
+                <div class="loader-data"></div>
+              </div>
+            </div>
+          </div>
+          <div class="collection-details-container">
+            <div class="collection-details-wrap" style="display: none;">
+              <!-- <span id="goBack" style="cursor: pointer;">&lt;- go back</span> -->
+              <div class="details-inner">
+                <label for="logo-image">Logo Image</label>
+                <div class="logo-preview">
+                  <img id="logo-preview" src="https://via.placeholder.com/300" style="max-width: 150px;" alt="">
+                </div>
+                <input type="file" id="logo-image" accept="image/*">
+              </div>
+              <div class="details-inner">
+                <div class="input-container">
+                  <input type="text" id="displayName">
+                  <label for="displayName">Display Name</label>
+                </div>
+                <div class="input-container">
+                  <input type="text" id="twitterAt">
+                  <label for="twitterAt">Twitter</label>
+                </div>
+                <div class="description-input-container">
+                  <textarea placeholder="Description" class="description-input" maxlength="280" id="descriptionInput"></textarea>
+                  <div class="character-count">280</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
     <!-- End Create Collection -->
     <!-- Modal require -->

@@ -1302,6 +1302,54 @@ var methods = {
     } finally {
       await client.close();
     }
+  },
+  accountCollections: async function (user) {
+    const cli = await getClient();
+    if (!cli) return;
+    try {
+      const db = cli.db('NFTokens');
+      let collection = db.collection('Eligible-Listings');
+      let pipeline = [
+        { $match: { issuer: user } }, // Filter by issuer
+        {
+          $group: {
+            _id: '$uriMetadata.collection', // Group by collection
+            family: { $first: '$uriMetadata.collection.family' }, // Get the family
+            name: { $first: '$uriMetadata.collection.name' }, // Get the name
+          },
+        },
+      ];
+      let returnData = await collection.aggregate(pipeline).toArray();
+      return returnData;
+    } catch (err) {
+      console.log(err);
+      return;
+    } finally {
+      await cli.close();
+    }
+  },
+  userCollections: async function (dataArray) {
+    const cli = await getClient();
+    if (!cli) return;
+    try {
+      const db = cli.db('Additional-Traits');
+      let collection = db.collection('User-Collections');
+      const existingData = await collection.find({ $or: dataArray.map(data => (
+        {
+          family: data.family,
+          name: data.name 
+        }
+      ))}).toArray();
+  
+      const sanitizedData = dataArray.filter(data => !existingData.some(existing => existing.family === data.family && existing.name === data.name));
+      
+      return sanitizedData;
+    } catch (err) {
+      console.log(err);
+      return;
+    } finally {
+      await cli.close();
+    }
   }
 };
 

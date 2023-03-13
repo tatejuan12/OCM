@@ -1,9 +1,5 @@
 //* Main serverlication, run this to run the serverlication
 //! ---------------------Imports modules/packages--------------------------------//
-//DEV IMPORTS
-var livereload = require("livereload");
-var connectLiveReload = require("connect-livereload");
-
 require("dotenv").config();
 const express = require("express");
 const compression = require("compression");
@@ -29,6 +25,7 @@ const mongoClient = require("./mongo");
 const xumm = require("./xummFunctions");
 const { log, error } = require("console");
 const multer = require("multer");
+const axios = require('axios');
 const upload = multer({ 
   fileFilter: (req, file, cb) => {
     if (file.mimetype == "image/png" || file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg') {
@@ -121,16 +118,6 @@ server.use(
 );
 server.use(cors("*"));
 server.use(csrfProtection);
-
-//LIVE RELOAD
-
-const liveReloadServer = livereload.createServer();
-liveReloadServer.server.once("connection", () => {
-  setTimeout(() => {
-    liveReloadServer.refresh("/");
-  }, 100);
-});
-server.use(connectLiveReload());
 
 const blacklist = [];
 const authorizedIps = [];
@@ -459,7 +446,11 @@ server.get("/create-collection", speedLimiter, async (req, res) => {
 });
 server.get('/new-collection', speedLimiter, async (req, res) => {
   defaultLocals(req,res);
-  res.render('views/new-collection');
+  if (req.session.login) {
+    res.render('views/new-collection');
+  } else (
+    res.redirect('/connect')
+  )
 })
 server.get("/logout", speedLimiter, (req, res) => {
   req.session.destroy();
@@ -1326,6 +1317,28 @@ server.post("/list-nft-payload", async (req, res, next) => {
     };
     res.send(response);
   } else res.sendStatus(400);
+});
+server.get('/userIssuedCollections', speedLimiter, async (req, res) => {
+  try {
+    defaultLocals(req, res);
+    const user = req.session.wallet;
+    
+    //Get data on user minted and listed collections. This will only return the collections of items that are listed on OCM
+    let response =  await mongoClient.query.accountCollections(user);
+
+    //This sanitses the data to only return the ability to make collections that don't already exist on OCM
+    //it will sanitse the data if it is greater than 0 meaning something was returned. if not it sends a no data message.
+    if (response.length > 0) {
+      let sanitise = await mongoClient.query.userCollections(response);
+      res.send(sanitise);
+    } else {
+      //No collections response
+      res.send("No collections found.\nIf you have a collection and it's not showing here make sure the items are first listed on OCM. If they are, your metadata might be formatted incorrectly.")
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred');
+  }
 });
 server.post("/list-nft-payload-collection", async (req, res, next) => {
   if (req.session.login) {
