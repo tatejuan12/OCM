@@ -3,6 +3,7 @@ const { MongoDBNamespace, GridFSBucketReadStream } = require("mongodb");
 const { resolve } = require("path");
 const { resourceLimits } = require("worker_threads");
 const { XummSdk } = require("xumm-sdk");
+const { getDb } = require('./mongo-utils');
 
 const mongoClient = require("mongodb").MongoClient;
 
@@ -13,10 +14,8 @@ var methods = {
     }
   },
   updateMailingList: async function (wallet, email) {
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("Accounts");
+      const db = await getDb("Accounts");
 
       let collection = db.collection("Mailing-List");
 
@@ -30,15 +29,11 @@ var methods = {
       return res.modifiedCount > 0 ? true : false;
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      await client.close();
     }
   },
   updateUser: async function (wallet, project, email, bio, website) {
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("Accounts");
+      const db = await getDb("Accounts");
 
       let collection = db.collection("Elegible-Accounts");
 
@@ -57,15 +52,11 @@ var methods = {
       //   return res > 0 ? true : false;
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      await client.close();
     }
   },
   createCollection: async function (displayName, family, name, brand, url, issuer, description) {
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("Additional-Traits");
+      const db = await getDb("Additional-Traits");
 
       let collection = db.collection("Collections");
       var issuerArray = issuer.split(",");
@@ -85,16 +76,12 @@ var methods = {
       //   return res > 0 ? true : false;
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      await client.close();
-    }
+    } 
   },
   initiateUser: async function (wallet) {
     var checker = false;
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("Accounts");
+      const db = await getDb("Accounts");
 
       let collection = db.collection("Elegible-Accounts");
       const exists = await userExistsChecker(wallet);
@@ -109,15 +96,11 @@ var methods = {
       }
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      await client.close();
-    }
+    } 
   },
   logRecentSale: async function (details) {
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
       let collection = db.collection("Recently-Sold");
       let query = {
         details: details,
@@ -126,16 +109,12 @@ var methods = {
       let res = await collection.insertOne(query);
       return res;
     } catch (err) {
-    } finally {
-      await client.close();
     }
   },
   getUser: async function (wallet) {
     var result;
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("Accounts");
+      const db = await getDb("Accounts");
 
       let collection = db.collection("Elegible-Accounts");
 
@@ -148,16 +127,12 @@ var methods = {
       return res;
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      await client.close();
     }
   },
   checkQueue: async function (id) {
     var result;
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
       let collection = db.collection("Queued-Listings");
       let query = {
         NFTokenID: id,
@@ -166,15 +141,12 @@ var methods = {
       return res;
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      await client.close();
     }
   },
   checkBulkQueue: async function (id, client) {
     var result;
-    if (!client) return;
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
       let collection = db.collection("Queued-Listings");
       let query = {
         NFTokenID: id,
@@ -183,16 +155,12 @@ var methods = {
       return res;
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      //await client.close();
     }
   },
   getNft: async function (id) {
     var result;
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
 
       let collection = db.collection("Eligible-Listings");
 
@@ -205,15 +173,12 @@ var methods = {
       return res;
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      await client.close();
     }
   },
   getBulkNft: async function (id, client) {
     var result;
-    if (!client) return;
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
 
       let collection = db.collection("Eligible-Listings");
 
@@ -226,8 +191,6 @@ var methods = {
       return res;
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      //await client.close();
     }
   },
   getOwnerNfts: async function (owner, nfts, numberOfNfts) {
@@ -237,10 +200,8 @@ var methods = {
         tokenIds.push(nft.NFTokenID);
       });
       var result;
-      const client = await getClient();
-      if (!client) return;
       try {
-        const db = client.db("NFTokens");
+        const db = await getDb("NFTokens");
 
         let collection = db.collection("Eligible-Listings");
 
@@ -251,8 +212,6 @@ var methods = {
         return await cursor.toArray();
       } catch (err) {
         console.log("Database error" + err);
-      } finally {
-        await client.close();
       }
     } else return [];
   },
@@ -263,10 +222,8 @@ var methods = {
         tokenIds.push(nft.NFTokenID);
       });
       var result;
-      const client = await getClient();
-      if (!client) return;
       try {
-        const db = client.db("NFTokens");
+        const db = await getDb("NFTokens");
 
         let collection = db.collection("Eligible-Listings");
 
@@ -277,15 +234,12 @@ var methods = {
         return await cursor.toArray();
       } catch (err) {
         console.log("Database error" + err);
-      } finally {
-        await client.close();
       }
     } else return [];
   },
   relatedNfts: async function (issuer, nftsToReturn, nftID) {
-    const client = await getClient();
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
       let collection = db.collection("Eligible-Listings");
       var query = [
         {
@@ -313,15 +267,11 @@ var methods = {
       return aggregate;
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      await client.close();
     }
   },
   getNfts: async function (NFTSPERPAGE, page, filters) {
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
       let collection = db.collection("Eligible-Listings");
       var aggregateQuery = [{ $addFields: {} }, { $sort: { views: -1, "_id": -1, "uriMetadata.name": 1, }}]; //
       const values = Object.values(filters);
@@ -423,15 +373,11 @@ var methods = {
       //   .limit(NFTSPERPAGE);
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      await client.close();
     }
   },
   getNftsCollection: async function (collectionFamily, issuer) {
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("Additional-Traits");
+      const db = await getDb("Additional-Traits");
       let collection = db.collection("Collections");
       var issuerArray = issuer.split(",");
       var query = {
@@ -442,15 +388,11 @@ var methods = {
       return await results;
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      await client.close();
     }
   },
   verifiedChecker: async function (wallet) {
-    const client = await getClient();
-    if (!client) return;
     try{
-      const db = client.db('Additional-Traits')
+      const db = await getDb('Additional-Traits')
       let collection = db.collection('Verified-Issuers');
       var query = {
         issuingAccounts: {$eq: wallet}
@@ -462,9 +404,7 @@ var methods = {
       }
       return found;
     }catch (err) {
-
-    } finally {
-      await client.close()
+      console.log(err)
     }
   },
   getUnlistedCollectionNfts: async function (
@@ -473,10 +413,8 @@ var methods = {
     NFTSPERPAGE,
     page
   ) {
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
       let collection = db.collection("Expired-Listings");
       var issuerArray = issuer.split(",");
       var returnedName = collectionFamily.split(",");
@@ -503,8 +441,6 @@ var methods = {
       return await aggregate.toArray();
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      await client.close();
     }
   },
   getNftsByCollection: async function (
@@ -513,10 +449,8 @@ var methods = {
     NFTSPERPAGE,
     page
   ) {
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
       let collection = db.collection("Eligible-Listings");
       var returnedName = collectionName.replace(/_/g, " ");
       var issuerArray = issuer.split(",");
@@ -543,30 +477,22 @@ var methods = {
       return await aggregate.toArray();
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      await client.close();
     }
   },
   getAccountLikedNfts: async function (wallet) {
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
       let collection = db.collection("Eligible-Listings");
       const query = { likes: new RegExp(`.*${wallet}.*`, "i") };
       const result = await collection.find(query).limit(25);
       return await result.toArray();
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      await client.close();
     }
   },
   incrementView: async function (nftId) {
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
       let collection = db.collection("Eligible-Listings");
       await collection.updateOne(
         {
@@ -580,15 +506,11 @@ var methods = {
       );
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      await client.close();
     }
   },
   incrementViewCollection: async function (collectionFamily) {
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("Additional-Traits");
+      const db = await getDb("Additional-Traits");
       let collection = db.collection("Collections");
       await collection.updateOne(
         {
@@ -602,18 +524,14 @@ var methods = {
       );
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      await client.close();
     }
   },
   addLike: async function (body, wallet) {
     const id = body;
     const userWallet = wallet;
     var res;
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
 
       let collection = db.collection("Eligible-Listings");
 
@@ -632,19 +550,14 @@ var methods = {
       } else res = false;
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      await client.close();
-      return res;
     }
   },
   removeLike: async function (body, wallet) {
     const id = body;
     const userWallet = wallet;
     var res;
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
 
       let collection = db.collection("Eligible-Listings");
 
@@ -664,15 +577,12 @@ var methods = {
     } catch (err) {
       console.error("Database error" + err);
     } finally {
-      await client.close();
       return res;
     }
   },
   totalCollectionItems: async function (collectionName, issuer) {
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
       let collection = db.collection("Eligible-Listings");
       var returnedName = collectionName.replace("_", " ");
       let query = {
@@ -686,15 +596,11 @@ var methods = {
       return result;
     } catch (err) {
       console.error("Database error " + err);
-    } finally {
-      await client.close();
     }
   },
   unlistedCollectionItems: async function (collectionName, issuer) {
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
       let collection = db.collection("Expired-Listings");
       var returnedName = collectionName.replace("_", " ");
       let query = {
@@ -708,16 +614,12 @@ var methods = {
       return result;
     } catch (err) {
       console.error("Database error " + err);
-    } finally {
-      await client.close();
     }
   },
   reportNft: async function (id, message, login, wallet) {
     var res = false;
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
 
       let collection = db.collection("Eligible-Listings");
 
@@ -747,8 +649,6 @@ var methods = {
     } catch (err) {
       console.log("Database error" + err);
     } finally {
-      await client.close();
-
       return res;
     }
   },
@@ -758,12 +658,10 @@ var methods = {
       users: {},
       collections: {},
     };
-    const client = await getClient();
-    if (!client) return;
     try {
-      const dbNfts = client.db("NFTokens");
-      const dbAccounts = client.db("Accounts");
-      const dbCollections = client.db("Additional-Traits");
+      const dbNfts = await getDb("NFTokens");
+      const dbAccounts = await getDb("Accounts");
+      const dbCollections = await getDb("Additional-Traits");
 
       let nftDetailsCol = dbNfts.collection("Eligible-Listings");
       let usersCol = dbAccounts.collection("Elegible-Accounts");
@@ -853,17 +751,13 @@ var methods = {
     } catch (err) {
       console.log("Database error: " + err);
     } finally {
-      await client.close();
-
       return res;
     }
   },
   getCollections: async function (limit) {
     var result;
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("Additional-Traits");
+      const db = await getDb("Additional-Traits");
 
       let collection = db.collection("Collections");
 
@@ -873,15 +767,11 @@ var methods = {
       return array;
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      await client.close();
     }
   },
   getCollectionImageTaste: async function (issuer) {
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
       let collection = db.collection("Eligible-Listings");
       let query = {
         issuer: issuer,
@@ -890,8 +780,6 @@ var methods = {
       return res;
     } catch (err) {
       console.log("Database error: " + err);
-    } finally {
-      await client.close();
     }
   },
   addNftToQueried: async function (
@@ -902,11 +790,9 @@ var methods = {
     sessionWallet
   ) {
     var checker = false;
-    const client = await getClient();
     var payholder = sessionWallet;
-    if (!client) return;
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
 
       let collection = db.collection("Queued-Listings");
       const exists = await listQueryExistsChecker(NFTokenID);
@@ -928,15 +814,11 @@ var methods = {
       }
     } catch (err) {
       console.log("Database error: " + err);
-    } finally {
-      await client.close();
     }
   },
   bulkNFTList: async function (nftArray, wallet, permanent) {
     var checker = false;
-    const client = await getClient();
     var payholder = wallet;
-    if (!client) return;
     try {
       var bulkArray = [];
       for (a in nftArray) {
@@ -971,15 +853,11 @@ var methods = {
       return "success";
     } catch (err) {
       console.log("Database error: " + err);
-    } finally {
-      await client.close();
     }
   },
   getVerifiedIssuers: async function () {
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("Additional-Traits");
+      const db = await getDb("Additional-Traits");
 
       let collection = db.collection("Verified-Issuers");
 
@@ -990,28 +868,20 @@ var methods = {
       return await cursor.toArray();
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      await client.close();
     }
   },
   redeemAssets: async function () {
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("Redeem");
+      const db = await getDb("Redeem");
       let collection = db.collection("Assets");
       const res = collection.find().sort({"z-index": -1});
       return await res.toArray();
     } catch (err) {
-    } finally {
-      await client.close();
     }
   },
   getMostViewed: async function () {
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
       let collection = db.collection("Eligible-Listings");
       let sort = {
         views: -1,
@@ -1020,15 +890,11 @@ var methods = {
       return await res.toArray();
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      await client.close();
     }
   },
   getCollectionFloorPrice: async function (collectionFamily, issuer) {
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
       let collection = db.collection("Eligible-Listings");
       var returnedName = collectionFamily.replace("_", " ");
       let query01 = {
@@ -1056,15 +922,11 @@ var methods = {
       return result;
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      await client.close();
     }
   },
   getRandomCollectionImages: async function (collectionName, issuer) {
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
       let collection = db.collection("Eligible-Listings");
       var returnedName = collectionName.replace(/_/g, " ");
       var query = [
@@ -1081,21 +943,16 @@ var methods = {
         },
         { $sample: { size: 3 } },
         { $project: { pinkynail: 1 } },
-        { $unset: "_id" },
       ];
       const aggregate = await collection.aggregate(query).toArray();
       return aggregate;
     } catch (err) {
       console.log("Database error" + err);
-    } finally {
-      await client.close();
     }
   },
   filterOptions: async function () {
-    var client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
       let collection = db.collection("Eligible-Listings");
 
       var searchOptions = await collection
@@ -1126,15 +983,11 @@ var methods = {
     } catch (error) {
       console.log(error);
       return null;
-    } finally {
-      await client.close();
     }
   },
   listingStats: async function () {
-    var client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("NFTokens");
+      const db = await getDb("NFTokens");
       let collection = db.collection("Eligible-Listings");
 
       var output = await collection
@@ -1176,15 +1029,11 @@ var methods = {
     } catch (error) {
       console.log(error);
       return null;
-    } finally {
-      await client.close();
     }
   },
   verified: async function (wallet) {
-    var client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db("Additional-Traits");
+      const db = await getDb("Additional-Traits");
       let collection = db.collection("Verified-Issuers");
       let query = {
         issuingAccounts: wallet,
@@ -1194,8 +1043,6 @@ var methods = {
       return res;
     } catch (error) {
       console.log(error);
-    } finally {
-      await client.close();
     }
   },
   connectToMongo: async function () {
@@ -1209,11 +1056,9 @@ var methods = {
     return client;
   },
   recentlyRedeemed: async function (NFTokenID, wallet, permanent, issuer, sessionWallet) {
-    var client = await getClient()
-    if (!client) return;
     var payholder = sessionWallet;
     try{
-      const db = client.db("NFTokens")
+      const db = await getDb("NFTokens")
       let collection = db.collection("Queued-Listings")
       const exists = await listQueryExistsChecker(NFTokenID);
       if (!exists) {
@@ -1232,15 +1077,11 @@ var methods = {
       }
     } catch (error) {
       console.log(error)
-    } finally {
-      await client.close()
     }
   },
   queuedItemsCount: async function (address) {
-    const client = await getClient()
-    if (!client) return;
     try {
-      const db = client.db('NFTokens');
+      const db = await getDb('NFTokens');
       let collection = db.collection('Queued-Listings');
       let query = {
         knownHolder: address,
@@ -1249,15 +1090,11 @@ var methods = {
       return res;
     } catch (err) {
       console.log('queuedItemsCount: '+err)
-    } finally {
-      await client.close()
     }
   },
   findRedemptionAccountByProject: async function (project) {
-    const client = await getClient();
-    if (!client) return;
     try{
-      const db = client.db('Redeem')
+      const db = await getDb('Redeem')
       let collection = db.collection('Assets')
       query = {
         project: new RegExp(project, "i")
@@ -1266,15 +1103,11 @@ var methods = {
       return res;
     } catch(err){
       console.log('findRedemptionAccountByIP: '+err)
-    }finally{
-      await client.close()
     }
   },
   searchSaver: async function (query) {
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db('Data')
+      const db = await getDb('Data')
       await db.collection('Searches').updateOne(
         { query },
         { $inc: { views: 1 } },
@@ -1282,15 +1115,11 @@ var methods = {
       );
     } catch (err) {
       console.log('searchSaver: '+err);
-    } finally {
-      await client.close();
     }
   },
   newestItems: async function () {
-    const client = await getClient();
-    if (!client) return;
     try {
-      const db = client.db('NFTokens');
+      const db = await getDb('NFTokens');
       let collection = db.collection('Eligible-Listings');
       let sortQuery = {
         listingDate: -1
@@ -1299,8 +1128,6 @@ var methods = {
       return await returnData.toArray();
     } catch (err) {
       console.log('searchSaver: '+err);
-    } finally {
-      await client.close();
     }
   },
   accountCollections: async function (user) {
@@ -1366,22 +1193,10 @@ async function alreadyLiked(collection, id, wallet) {
   });
   return checker;
 }
-async function getClient() {
-  var client = await mongoClient
-    .connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  return client;
-}
 async function userExistsChecker(wallet) {
   var checker = false;
-  const client = await getClient();
-  if (!client) return;
   try {
-    const db = client.db("Accounts");
+    const db = await getDb("Accounts");
 
     let collection = db.collection("Elegible-Accounts");
     //Make a check later on for inelegible-accounts
@@ -1400,10 +1215,8 @@ async function userExistsChecker(wallet) {
 }
 async function listQueryExistsChecker(NFTokenID) {
   var checker = false;
-  const client = await getClient();
-  if (!client) return;
   try {
-    const db = client.db("NFTokens");
+    const db = await getDb("NFTokens");
 
     let collection = db.collection("Queued-Listings");
 

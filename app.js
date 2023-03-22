@@ -162,6 +162,7 @@ server.get("/", speedLimiter, async (req, res) => {
   var collections = await mongoClient.query.getCollections(4);
     var promisesArray = [];
     for (var i = 0; i < collections.length; i++) {
+
       var collectionsImagesPromise = new Promise(function (resolve, reject) {
         var randomImages = mongoClient.query.getRandomCollectionImages(
           collections[i].family,
@@ -169,6 +170,7 @@ server.get("/", speedLimiter, async (req, res) => {
         );
         resolve(randomImages);
       });
+      
       var collectionsTotalItemsListedPromise = new Promise(function (
         resolve,
         reject
@@ -179,6 +181,7 @@ server.get("/", speedLimiter, async (req, res) => {
         );
         resolve(totalItemsListed);
       });
+
       var collectionsTotalItemsUnlistedPromise = new Promise(function (
         resolve,
         reject
@@ -189,9 +192,11 @@ server.get("/", speedLimiter, async (req, res) => {
         );
         resolve(totalItemsUnlisted);
       });
+
       promisesArray.push(collectionsImagesPromise);
       promisesArray.push(collectionsTotalItemsListedPromise);
       promisesArray.push(collectionsTotalItemsUnlistedPromise);
+
     }
     var collectionResults = await Promise.all(promisesArray);
     for (var i = 0; i < collections.length; i++) {
