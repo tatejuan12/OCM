@@ -238,7 +238,6 @@ var methods = {
     } else return [];
   },
   relatedNfts: async function (issuer, nftsToReturn, nftID) {
-    const client = await getClient();
     try {
       const db = await getDb("NFTokens");
       let collection = db.collection("Eligible-Listings");
@@ -945,7 +944,6 @@ var methods = {
         },
         { $sample: { size: 3 } },
         { $project: { pinkynail: 1 } },
-        { $unset: "_id" },
       ];
       const aggregate = await collection.aggregate(query).toArray();
       return aggregate;
