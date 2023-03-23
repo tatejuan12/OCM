@@ -9,6 +9,7 @@
   "dependencies": {
     "aws-sdk": "^2.1222.0",
     "axios": "^1.3.2",
+    "bad-words": "^3.0.4",
     "compression": "^1.7.4",
     "connect-mongodb-session": "^3.1.1",
     "cookie-parser": "^1.4.6",
@@ -33,6 +34,7 @@
     "rotating-file-stream": "^3.0.4",
     "sharp": "^0.31.2",
     "tsscmp": "^1.0.6",
+    "uuid": "^9.0.0",
     "verify-xrpl-signature": "^0.4.0",
     "xrpl": "^2.2.3",
     "xrpl-txdata": "^1.2.1",

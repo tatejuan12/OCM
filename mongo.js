@@ -1131,51 +1131,62 @@ var methods = {
     }
   },
   accountCollections: async function (user) {
-    const cli = await getClient();
-    if (!cli) return;
     try {
-      const db = cli.db('NFTokens');
+      const db = await getDb('NFTokens');
       let collection = db.collection('Eligible-Listings');
       let pipeline = [
         { $match: { issuer: user } }, // Filter by issuer
         {
           $group: {
-            _id: '$uriMetadata.collection', // Group by collection
+            _id: {
+              family: '$uriMetadata.collection.family',
+              name: '$uriMetadata.collection.name',
+              taxon: '$taxon'
+            },
+            image: { $first: '$thumbnail'},
             family: { $first: '$uriMetadata.collection.family' }, // Get the family
             name: { $first: '$uriMetadata.collection.name' }, // Get the name
-          },
-        },
+            count: { $sum: 1 }
+          }
+        }
       ];
       let returnData = await collection.aggregate(pipeline).toArray();
       return returnData;
     } catch (err) {
       console.log(err);
       return;
-    } finally {
-      await cli.close();
     }
   },
   userCollections: async function (dataArray) {
-    const cli = await getClient();
-    if (!cli) return;
     try {
-      const db = cli.db('Additional-Traits');
+      const db = await getDb('Additional-Traits');
       let collection = db.collection('User-Collections');
+
       const existingData = await collection.find({ $or: dataArray.map(data => (
         {
           family: data.family,
-          name: data.name 
+          name: data.name ,
         }
       ))}).toArray();
-  
-      const sanitizedData = dataArray.filter(data => !existingData.some(existing => existing.family === data.family && existing.name === data.name));
+      const sanitizedData = dataArray.filter(data => !existingData.some(existing => existing.family === data.family && existing.name === data.name && existing.taxon === data._id.taxon.toString()));
       
       return sanitizedData;
     } catch (err) {
       console.log(err);
       return;
-    } finally {
-      await cli.close();
+    }
+  },
+  addUserCollection: async function (collectionData) {
+    try {
+      const db = await getDb('Additional-Traits');
+      let collection = db.collection('User-Collections');
+
+      await collection.insertOne(collectionData);
+
+      return true;
+    } catch (err) {
+      console.log(err)
+      return false;
     }
   }
 };

@@ -45,6 +45,8 @@ const slowDown = require("express-slow-down");
 const { send } = require("express/lib/response");
 const { rejects } = require("assert");
 const { resourceLimits } = require("worker_threads");
+const Filter = require('bad-words');
+const { v4: uuidv4 } = require('uuid');
 //const { finished } = require("stream/promises");
 const mongoStore = new MongoDBStore({
   uri: process.env.MONGO_URI,
@@ -1079,6 +1081,63 @@ server.post("/decrement-like", speedLimiter, async (req, res) => {
   } else success = false;
   success ? res.status(200).end() : res.status(406).end();
 });
+server.post("/08bf721e8493c66d402e1e4fad1525c0",
+  upload.fields([
+    {name: 'image', maxCount: 1}
+  ]),
+  speedLimiter,
+  async (req, res) => {
+    try {
+      const formDataBody = req.body;
+      const formDataFile = req.files;
+      if (req.fileValidationError) {
+        res.status(400).json({error: 'File is too large or the wrong format.'});
+        return;
+      }
+
+      //Check for profanity using npm bad-words
+      let filter = new Filter();
+      for (let item in formDataBody) {
+        let isClean = filter.isProfane(formDataBody[item]);
+        if (isClean) {
+          res.status(400).send({error: 'Profanity is not permitted'});
+          return;
+        }
+      }
+
+      const fileName = uuidv4();
+
+      //Upload image to DO collections logos
+      if (formDataFile) {
+        if (formDataFile['image']?.[0]){
+          const logoResult = await digitalOcean.functions.uploadCollectionLogo(
+            fileName,
+            formDataFile['image'][0]
+          );
+          if (logoResult) {
+            console.log('Uploaded Logo');
+          }
+        }
+      }
+
+      formDataBody.collectionLogo = `https://ocw-space.sgp1.digitaloceanspaces.com/collections/logo/${fileName}_logo.webp`;
+      formDataBody.date = Date.now();
+
+      let success = await mongoClient.query.addUserCollection(formDataBody);
+
+      if (success) {
+        res.status(200).send({success: 'Uploaded data to DB successfully.'});
+        return;
+      } else {
+        res.status(500).send({error: 'Failed to upload data to DB.'});
+        return;
+      }
+    } catch (err) {
+      console.error(err)
+      res.status(500).send({error: err});
+      return;
+    }
+  })
 server.post("/create-collection",
   upload.fields([
       { name: "collection-logo", maxCount: 1 },

@@ -25703,7 +25703,7 @@ Collection nav
   justify-content: space-evenly;
 }
 .collection-chip-container{
-  max-width: 400px;
+  max-width: 750px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -25713,13 +25713,31 @@ Collection nav
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 8px 12px;
+  padding: 12px 12px;
   border-radius: 15px;
   cursor: pointer;
   transition: all 0.25s ease;
-  max-width: 200px;
+  max-width: 170px;
   overflow: hidden;
   margin: 5px;
+}
+@media screen and (min-width: 768px) {
+  .chip{
+    max-width: 200px;
+  }
+}
+.chip img{
+  border-radius: 7.5px;
+  margin-bottom: 8px;
+  transition: var(--transition);
+}
+.chip:hover img{
+  transform: scale(1.05);
+}
+.chip .count{
+  margin-left: auto;
+  margin-top: 10px;
+  margin-bottom: -8px;
 }
 .active-dark-mode .chip{
   border: 2px solid #ffffff20;
@@ -25746,9 +25764,15 @@ Collection nav
 }
 .collection-details-wrap{
   display: flex;
-  flex-direction: row;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
+}
+@media screen and (min-width: 768px) {
+  .collection-details-wrap{
+    align-items: flex-start;  
+    flex-direction: row;
+  }
 }
 .details-inner{
   display: flex;
@@ -25767,10 +25791,20 @@ Collection nav
 .details-inner .input-container{
   position: relative;
 }
-.input-container input{
+.active-dark-mode .input-container input{
   background: var(--background-color-4);
   border-radius: 5px;
   color: var(--color-white);
+  font-size: 14px;
+  padding: 10px 20px;
+  border: 2px solid var(--color-border);
+  transition: 0.3s;
+  margin-top: 15px;
+}
+.active-light-mode .input-container input{
+  background: var(--color-white);
+  border-radius: 5px;
+  color: var(--color-light-body);
   font-size: 14px;
   padding: 10px 20px;
   border: 2px solid var(--color-border);
@@ -25821,6 +25855,16 @@ input#logo-image{
   background: var(--background-color-4);
   border-radius: 5px;
   color: var(--color-white);
+  font-size: 14px;
+  padding: 10px 20px;
+  border: 2px solid var(--color-border);
+  transition: 0.3s;
+  margin-top: 15px;
+}
+.active-light-mode .description-input-container textarea{
+  background: var(--color-white);
+  border-radius: 5px;
+  color: var(--color-body-light);
   font-size: 14px;
   padding: 10px 20px;
   border: 2px solid var(--color-border);

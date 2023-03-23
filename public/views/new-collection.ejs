@@ -21,6 +21,8 @@
   <link rel="stylesheet" href="assets/css/vendor/nice-select.css">
   <link rel="stylesheet" href="assets/css/plugins/feature.css">
   <link rel="stylesheet" href="assets/css/plugins/jquery-ui.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <!-- Style css -->
   <link rel="stylesheet" href="assets/css/style.css">
@@ -69,7 +71,7 @@
           </div>
           <div class="collection-details-container">
             <div class="collection-details-wrap" style="display: none;">
-              <!-- <span id="goBack" style="cursor: pointer;">&lt;- go back</span> -->
+              <!--<span id="goBack" style="cursor: pointer;">&lt;- go back</span>-->
               <div class="details-inner">
                 <label for="logo-image">Logo Image</label>
                 <div class="logo-preview">
@@ -77,18 +79,29 @@
                 </div>
                 <input type="file" id="logo-image" accept="image/*">
               </div>
-              <div class="details-inner">
+              <div class="details-inner" id="collectionData">
                 <div class="input-container">
+                  <div>Taxon: <span id="taxonNumber"></span></div>
+                  <input type="text" id="collectionFamily">
+                  <label for="collectionFamily">Collection Family</label>
+                  </div>
+                  <div class="input-container">
+                  <input type="text" id="collectionName">
+                  <label for="collectionName">Collection Name</label>
+                  </div>
+                  <div class="input-container">
                   <input type="text" id="displayName">
                   <label for="displayName">Display Name</label>
-                </div>
-                <div class="input-container">
+                  </div>
+                  <div class="input-container">
                   <input type="text" id="twitterAt">
                   <label for="twitterAt">Twitter</label>
-                </div>
-                <div class="description-input-container">
+                  </div>
+                  <div class="description-input-container">
                   <textarea placeholder="Description" class="description-input" maxlength="280" id="descriptionInput"></textarea>
                   <div class="character-count">280</div>
+                  <button style="margin-left: auto;" class="btn btn-secondary" id="goBack">Cancel</button>
+                  <button style="margin-left: auto;" class="btn btn-primary" id="createNewCollection">Create</button>
                 </div>
               </div>
             </div>
@@ -130,6 +143,7 @@
   <script src="assets/js/vendor/scrolltrigger.js"></script>
   <script src="assets/js/vendor/jquery.custom-file-input.js"></script>
   <script src="assets/js/vendor/savePopup.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
   <!-- main JS -->
   <script src="assets/js/main.js"></script>
   <script src="assets/js/vendor/newCollection.js"></script>
