@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const discordBOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
 
 var message = {
-    alertDiscord: async function (text) {
+    alertDiscord: async function (text, userName, userNumber) {
         try {
             var discordClient = new Discord.Client({
                 intents: [Discord.GatewayIntentBits.Guilds, Discord.GatewayIntentBits.GuildMessages],

@@ -18,7 +18,7 @@ const useragent = require("express-useragent");
 const verifySignature = new TxData();
 const cors = require("cors");
 const digitalOcean = require("./digitalOceanFunctions");
-//const discord = require('./discord')
+const discord = require('./discord');
 //Imports the mongo queries and code
 const mongoClient = require("./mongo");
 //Imports xumm code with queries and checks
@@ -306,6 +306,7 @@ server.get("/profile", speedLimiter, async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+    await discord.message.alertDiscord(err)
   }
   
 });
@@ -432,6 +433,7 @@ server.get("/collection", speedLimiter, async (req, res) => {
       });
     } else res.redirect("collections?page=0");
   } catch (err) {
+    await discord.message.alertDiscord(err)
     res.redirect("/collections")
   }
 });
@@ -717,6 +719,8 @@ server.post("/get-collections", speedLimiter, async (req, res, next) => {
     );
     res.send(returnHtml)
   } catch (err) {
+    await discord.message.alertDiscord(err)
+
     return next(err)
   }
 });
@@ -816,6 +820,8 @@ server.post("/get-profile-info", speedLimiter, async (req, res, next) => {
     returnHtml.push(isOwner);
     res.send(returnHtml);
   } catch (err) {
+    await discord.message.alertDiscord(err)
+
     return next(err);
   }
 });
@@ -869,6 +875,8 @@ server.get('/accountTransDataQuery', speedLimiter, async (req,res) => {
     }
     res.send(returnData);
   } catch (err) {
+    await discord.message.alertDiscord(err)
+
     res.status(400)
   }
 })
@@ -968,7 +976,7 @@ server.post("/sign-in-subscription", speedLimiter, async (req, res) => {
       var errorTxt = 'Fatal Error ln:827\nInitiating client to MDB\n  ERROR: '+ error+'\n  User: ' +req.session.wallet;
       console.log(errorTxt);
       fs.appendFileSync('logs/sign-in-sub-errors.log', '\r\n' + error, function (err) {console.log(err)})
-      // await discord.message.alertDiscord(errorTxt);
+      await discord.message.alertDiscord(errorTxt);
     }
   }
 });
@@ -1021,6 +1029,7 @@ server.post("/redeem-nft-payload", speedLimiter, async (req, res) => {
         if (payload instanceof Error) throw payload;
         res.status(200).send(payload);
       } catch (err) {
+        await discord.message.alertDiscord(err)
         console.log(err.toString());
         res.status(500).send(err.toString());
       }
@@ -1053,6 +1062,8 @@ server.post("/redeem-nft-subscription", speedLimiter, async (req, res) => {
         );
         complete = true;
       } catch (err) {
+        await discord.message.alertDiscord(err)
+
         console.log('Error sending NFT to DB: '+ err + '\n  COUNT: ' +counter)
         if (counter == 2 && !complete) {
           var error = err
@@ -1064,7 +1075,7 @@ server.post("/redeem-nft-subscription", speedLimiter, async (req, res) => {
       var errorTxt = 'Fatal Error ln:883\nPosting redemption listing to MDB\n  ERROR: '+ error+'\n  TokenID: '+ NFTokenID+'\n  User: ' +wallet;
       console.log(errorTxt);
       fs.appendFileSync('logs/redeem-nft-sub-errors.log', '\r\n' + error, function (err) {console.log(err)})
-      // await discord.message.alertDiscord(errorTxt);
+      await discord.message.alertDiscord(errorTxt);
     }
   }
 });
@@ -1163,6 +1174,8 @@ server.post("/08bf721e8493c66d402e1e4fad1525c0",
       }
     } catch (err) {
       console.error(err)
+      await discord.message.alertDiscord(err)
+
       res.status(500).send({error: err});
       return;
     }
@@ -1223,6 +1236,8 @@ server.post("/create-collection",
       result = true;
       result ? res.status(200).send("Modified") : res.status(500).send("Failed");        
     } catch (err) {
+      await discord.message.alertDiscord(err)
+
       res.status(400).send('error creating collections');
       return;
     }
@@ -1431,6 +1446,7 @@ server.get('/userIssuedCollections', speedLimiter, async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send('An error occurred');
+    await discord.message.alertDiscord('An error occured getting user issued collections: ' + error)
   }
 });
 server.get('/aaaab7bdafd53fc4193c0bbbe1e91f0c', speedLimiter, async (req, res) => {
@@ -1442,28 +1458,36 @@ server.get('/aaaab7bdafd53fc4193c0bbbe1e91f0c', speedLimiter, async (req, res) =
     let response =  await mongoClient.query.issuerCollections(user);
 
     res.send(response).status(200)
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    console.error(err);
+    await discord.message.alertDiscord(err)
+
     res.status(500).send('An error occurred');
   }
 });
 server.post("/list-nft-payload-collection", async (req, res, next) => {
   if (req.session.login) {
-    const payload = await xumm.payloads.listNftPayload(
-      process.env.XRPL_ISSUER_PAYMENT_ADDRESS,
-      req.body.holder,
-      process.env.LISTING_PRICE,
-      req.useragent.isMobile,
-      req.body.return_url
-    );
-    const response = {
-      payload: payload,
-      NFTokenID: req.body.NFTokenID,
-      holder: req.body.holder,
-      issuer: req.body.issuer,
-      fee: req.body.fee,
-    };
-    res.send(response);
+    try {
+      const payload = await xumm.payloads.listNftPayload(
+        process.env.XRPL_ISSUER_PAYMENT_ADDRESS,
+        req.body.holder,
+        process.env.LISTING_PRICE,
+        req.useragent.isMobile,
+        req.body.return_url
+      );
+      const response = {
+        payload: payload,
+        NFTokenID: req.body.NFTokenID,
+        holder: req.body.holder,
+        issuer: req.body.issuer,
+        fee: req.body.fee,
+      };
+      res.send(response);
+    } catch (err) {
+      console.error(err)
+      await discord.message.alertDiscord(err)
+      res.sendStatus(500)
+    }
   } else res.sendStatus(400);
 });
 server.post("/list-nft-subscription", async (req, res, next) => {
@@ -1494,7 +1518,7 @@ server.post("/list-nft-subscription", async (req, res, next) => {
       var errorTxt = 'Fatal Error ln:1174\nPosting listing to MDB\n  ERROR: '+ error+'\n  TokenID: '+ req.body.NFTokenID+'\n  User: ' +req.session.wallet;
       console.log(errorTxt);
       fs.appendFileSync('logs/list-nft-sub-errors.log', '\r\n' + error, function (err) {console.log(err)})
-      // await discord.message.alertDiscord(errorTxt);
+      await discord.message.alertDiscord(errorTxt);
     }
   }
 });
@@ -1528,7 +1552,7 @@ server.post("/list-nft-subscription-collection", async (req, res, next) => {
       var errorTxt = 'Fatal Error ln:1209\nPosting collection listing to MDB\n  ERROR: '+ error+'\n  TokenID: '+ req.body.NFTokenID+'\n  User: ' +req.session.wallet;
       console.log(errorTxt);
       fs.appendFileSync('logs/slist-nft-collection-sub-errors.log', '\r\n' + error, function (err) {console.log(err)})
-      // await discord.message.alertDiscord(errorTxt);
+      await discord.message.alertDiscord(errorTxt);
     }
   }
 });
@@ -1555,6 +1579,7 @@ server.post("/list-bulk-array",
         res.send(response).status(200);
       } else {
         res.status(400);
+        await discord.message.alertDiscord('error getting bulk listing payload: \nSAMPLE DATA: ' + nfts)
       }
     } else {
       res.status(400).send("no NFTs to list");
@@ -1593,7 +1618,7 @@ server.post("/list-bulk-subscription",
         var errorTxt = 'Fatal Error ln:1266\nPosting listing array to MDB\n  ERROR: '+ error+'\n  TokenID: '+ req.body.NFTokenID+'\n  User: ' +req.session.wallet;
         console.log(errorTxt);
         fs.appendFileSync('logs/list-bulk-sub-errors.log', '\r\n' + error, function (err) {console.log(err)})
-        // await discord.message.alertDiscord(errorTxt);
+        await discord.message.alertDiscord(errorTxt);
       }
     }
   }
@@ -1689,6 +1714,7 @@ server.get("/get-account-unlisted-nfts", speedLimiter, async (req, res) => {
     });
   } catch (error) {
     console.error(error);
+    await discord.message.alertDiscord('Error getting account unlisted NFTs: \n'+error)
   }
 });
 server.get("/get-additional-unlisted-nfts", speedLimiter, async (req, res) => {
@@ -1867,6 +1893,7 @@ server.get("/bulk-list-account-unlisted-nfts",
       res.send(returnData);
     } catch (err) {
       console.log(err)
+      await discord.message.alertDiscord(err)
     } finally {
       await clientMongo.close();
     }
@@ -2025,19 +2052,20 @@ server.listen(process.env.PORT, () => {
 });
 
 //! ---------------------Custom functions--------------------------------//
-function checkViews(req, next) {
+async function checkViews(req, next) {
   try {
     if (req.session && (!req.session.views || req.session.views == undefined))
       req.session.views = 1;
     else req.session.views += 1;
   } catch (err) {
     console.error("Error settings views:" + err);
+    await discord.message.alertDiscord("Error settings views:" + err)
   } finally {
     next();
   }
 }
 
-function defaultLocals(req, res) {
+async function defaultLocals(req, res) {
   try {
     var login =
       req.session.login != undefined && req.session ? req.session.login : false;
@@ -2059,6 +2087,7 @@ function defaultLocals(req, res) {
     }
   } catch (err) {
     console.error("Error settings locals: " + err);
+    await discord.message.alertDiscord("Error settings locals: " + err)
   } finally {
     return;
   }
