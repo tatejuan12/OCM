@@ -166,7 +166,6 @@
             image: $('#logo-image')[0].files[0],
             taxon: $('#taxonNumber').html()
           };
-          console.log(collectionData)
 
           let formData = await createFormData(collectionData);
 

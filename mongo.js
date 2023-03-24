@@ -1168,9 +1168,24 @@ var methods = {
           name: data.name ,
         }
       ))}).toArray();
+
       const sanitizedData = dataArray.filter(data => !existingData.some(existing => existing.family === data.family && existing.name === data.name && existing.taxon === data._id.taxon.toString()));
-      
       return sanitizedData;
+
+    } catch (err) {
+      console.log(err);
+      return;
+    }
+  },
+  issuerCollections: async function (user) {
+    try{
+      const db = await getDb('Additional-Traits');
+      let collection = db.collection('User-Collections');
+
+      const existingData = await collection.find({ issuer: user}).toArray();
+
+      return existingData;
+
     } catch (err) {
       console.log(err);
       return;
@@ -1186,6 +1201,55 @@ var methods = {
       return true;
     } catch (err) {
       console.log(err)
+      return false;
+    }
+  },
+  collectionExists: async function (uuid) {
+    try {
+      const db = await getDb('Additional-Traits');
+      let collection = db.collection('User-Collections');
+
+      let pipeline = [
+        {$match: {uuid: uuid}}
+      ];
+
+      let response = await collection.aggregate(pipeline).toArray();
+
+      if (response.length > 0) {
+        response = true;
+        return response;
+      } else {
+        response = false;
+        return response;
+      }
+    } catch (err) {
+      console.error(err)
+      return
+    }
+  },
+  updateUserCollection: async function (collectionData) {
+    try {
+      const db = await getDb('Additional-Traits');
+      let collection = db.collection('User-Collections');
+
+      const filter = { uuid: collectionData.uuid};
+
+      const updateDoc = {
+        $set: {
+          displayName: collectionData.displayName,
+          twitter: collectionData.twitter,
+          description: collectionData.description
+        }
+      }
+
+      const result = await collection.updateOne(filter, updateDoc)
+      if (result.modifiedCount == 1) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (err) {
+      console.error(err)
       return false;
     }
   }

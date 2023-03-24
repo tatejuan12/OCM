@@ -46,7 +46,8 @@ const { send } = require("express/lib/response");
 const { rejects } = require("assert");
 const { resourceLimits } = require("worker_threads");
 const Filter = require('bad-words');
-const { v4: uuidv4 } = require('uuid');
+const { v5: uuidv5 } = require('uuid');
+const MY_NAMESPACE = '84a4bdc2-99b7-48df-8034-428d42c62fba';
 //const { finished } = require("stream/promises");
 const mongoStore = new MongoDBStore({
   uri: process.env.MONGO_URI,
@@ -455,6 +456,14 @@ server.get('/new-collection', speedLimiter, async (req, res) => {
   defaultLocals(req,res);
   if (req.session.login) {
     res.render('views/new-collection');
+  } else (
+    res.redirect('/connect')
+  )
+})
+server.get('/edit-collection', speedLimiter, async (req, res) => {
+  defaultLocals(req,res);
+  if (req.session.login) {
+    res.render('views/edit-collection');
   } else (
     res.redirect('/connect')
   )
@@ -1090,6 +1099,7 @@ server.post("/08bf721e8493c66d402e1e4fad1525c0",
     try {
       const formDataBody = req.body;
       const formDataFile = req.files;
+      const user = req.session.wallet;
       if (req.fileValidationError) {
         res.status(400).json({error: 'File is too large or the wrong format.'});
         return;
@@ -1105,13 +1115,14 @@ server.post("/08bf721e8493c66d402e1e4fad1525c0",
         }
       }
 
-      const fileName = uuidv4();
+      //Make UUID from user wallet and Taxon number of collection
+      const uuid = uuidv5(`${user}${formDataBody.taxon}`, MY_NAMESPACE);
 
-      //Upload image to DO collections logos
+      //Upload image to Digital Ocean collections logos
       if (formDataFile) {
         if (formDataFile['image']?.[0]){
           const logoResult = await digitalOcean.functions.uploadCollectionLogo(
-            fileName,
+            uuid,
             formDataFile['image'][0]
           );
           if (logoResult) {
@@ -1120,17 +1131,35 @@ server.post("/08bf721e8493c66d402e1e4fad1525c0",
         }
       }
 
-      formDataBody.collectionLogo = `https://ocw-space.sgp1.digitaloceanspaces.com/collections/logo/${fileName}_logo.webp`;
-      formDataBody.date = Date.now();
+      const collectionExists = await mongoClient.query.collectionExists(uuid);
 
-      let success = await mongoClient.query.addUserCollection(formDataBody);
+      if (collectionExists) {
+        formDataBody.uuid = uuid;
 
-      if (success) {
-        res.status(200).send({success: 'Uploaded data to DB successfully.'});
-        return;
+        let success = await mongoClient.query.updateUserCollection(formDataBody);
+
+        if (success) {
+          res.status(200).send({success: 'Uploaded data to DB successfully.'});
+          return;
+        } else {
+          res.status(500).send({error: 'Failed to upload data to DB.'});
+          return;
+        }
       } else {
-        res.status(500).send({error: 'Failed to upload data to DB.'});
-        return;
+        formDataBody.uuid = uuid;
+        formDataBody.issuer = user;
+        formDataBody.collectionLogo = `https://ocw-space.sgp1.digitaloceanspaces.com/collections/logo/${uuid}_logo.webp`;
+        formDataBody.date = Date.now();
+
+        let success = await mongoClient.query.addUserCollection(formDataBody);
+
+        if (success) {
+          res.status(200).send({success: 'Uploaded data to DB successfully.'});
+          return;
+        } else {
+          res.status(500).send({error: 'Failed to upload data to DB.'});
+          return;
+        }
       }
     } catch (err) {
       console.error(err)
@@ -1399,6 +1428,20 @@ server.get('/userIssuedCollections', speedLimiter, async (req, res) => {
       //No collections response
       res.send("No collections found.\nIf you have a collection and it's not showing here make sure the items are first listed on OCM. If they are, your metadata might be formatted incorrectly.")
     }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred');
+  }
+});
+server.get('/aaaab7bdafd53fc4193c0bbbe1e91f0c', speedLimiter, async (req, res) => {
+  try {
+    defaultLocals(req, res);
+    const user = req.session.wallet;
+    
+    //Get data on user minted and listed collections. This will only return the collections of items that are listed on OCM
+    let response =  await mongoClient.query.issuerCollections(user);
+
+    res.send(response).status(200)
   } catch (error) {
     console.error(error);
     res.status(500).send('An error occurred');
