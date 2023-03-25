@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>OCM || Collections</title>
+  <title>OCM || All Collections</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -42,10 +42,10 @@
   <div class="collection-manager">
     <div class="collection-manager-container">
         <header>
-            <h1>Verified Collections</h1>
+            <h1>Public Collections</h1>
             <span>
                 <div>
-                    <p>View verified NFT collections on OCM</p>
+                    <p>View user created unverified NFT collections</p>
                 </div>
             </span>
         </header>
@@ -179,7 +179,7 @@
   <!-- main JS -->
   <script src="assets/js/main.js"></script>
   <script>
-    $.post("/get-collections", function(data) {
+    $.post("/5fcfafb1067923dfef89b1afff726b6e", function(data) {
       $(".CMC-collections").html(data[0]);
       const collections = document.getElementById("CMCCollections").querySelectorAll(".col-12");
       collections.forEach(element => {

@@ -441,6 +441,10 @@ server.get("/collections", speedLimiter, async (req, res) => {
   defaultLocals(req, res);
   res.render("views/collections");
 });
+server.get("/all-collections", speedLimiter, async (req, res) => {
+  defaultLocals(req, res);
+  res.render("views/collections-public");
+})
 server.get("/create-collection", speedLimiter, async (req, res) => {
   defaultLocals(req, res);
   if (req.session.login) {
@@ -724,6 +728,16 @@ server.post("/get-collections", speedLimiter, async (req, res, next) => {
     return next(err)
   }
 });
+//Get public collections
+server.post("/5fcfafb1067923dfef89b1afff726b6e", speedLimiter, async (req, res) => {
+  try {
+    
+  } catch (err) {
+    console.error(err);
+    await discord.message.alertDiscord(err);
+    res.status(500).send({error: 'failed to get collections'});
+  }
+})
 //"/explore-inoc" gets the initial NFTs for the explore page. Explore is rendered lightly with minimal added renders to speed up user viewable data. once loaded, site send a request to this query and then returned data gets inputted into #exploreNFTs on the HTMl.
 server.post("/explore-inoc", speedLimiter, async (req, res, next) => {
   defaultLocals(req,res)
