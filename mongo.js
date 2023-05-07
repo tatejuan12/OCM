@@ -8,31 +8,31 @@ const { getDb } = require('./mongo-utils');
 const { MongoClient } = require('mongodb');
 
 const uri = process.env.MONGO_URI;
-const options = { useNewUrlParser: true, useUnifiedTopology: true };
+const mongoClient = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  maxIdleTimeMS: 600000, // Set the max idle time to 10 minutes (600000 milliseconds)
+});
 
-let client;
-let clientPromise;
 
-// if (process.env.EXPRESS_ENV === 'development') {
-//   if (!global._mongoClientPromise) {
-//     client = new MongoClient(uri, options);
-//     global._mongoClientPromise = client.connect();
-//   }
-//   clientPromise = global._mongoClientPromise;
-// } else {
-//   client = new MongoClient(uri, options);
-//   clientPromise = client.connect();
-// }
+async function connectToMongo(retryCount = 0) {
+  try {
+    await mongoClient.connect();
+    console.log('Connected to MongoDB');
+  } catch (err) {
+    console.error('Error connecting to MongoDB:', err);
 
-// exports.getDb = async (dbName) => {
-//   const client = await clientPromise;
-//   return client.db(dbName);
-// };
+    if (retryCount < 5) {
+      console.log(`Retrying connection... Attempt ${retryCount + 1}`);
+      await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait for 5 seconds before retrying
+      await connectToMongo(retryCount + 1);
+    } else {
+      console.error('Failed to connect to MongoDB after 5 attempts');
+    }
+  }
+}
 
-MongoClient.connect(uri, options, function (err, db) {
-  assert.equal(null, err);
-  mongobd=db;
-})
+connectToMongo();
 
 var methods = {
   signinHandler: async function (id) {
@@ -42,7 +42,7 @@ var methods = {
   },
   updateMailingList: async function (wallet, email) {
     try {
-      const db = await getDb("Accounts");
+      const db = mongoClient.db("Accounts");
 
       let collection = db.collection("Mailing-List");
 
@@ -60,7 +60,7 @@ var methods = {
   },
   updateUser: async function (wallet, project, email, bio, website) {
     try {
-      const db = await getDb("Accounts");
+      const db = mongoClient.db("Accounts");
 
       let collection = db.collection("Elegible-Accounts");
 
@@ -83,7 +83,7 @@ var methods = {
   },
   createCollection: async function (displayName, family, name, brand, url, issuer, description) {
     try {
-      const db = await getDb("Additional-Traits");
+      const db = mongoClient.db("Additional-Traits");
 
       let collection = db.collection("Collections");
       var issuerArray = issuer.split(",");
@@ -108,7 +108,7 @@ var methods = {
   initiateUser: async function (wallet) {
     var checker = false;
     try {
-      const db = await getDb("Accounts");
+      const db = mongoClient.db("Accounts");
 
       let collection = db.collection("Elegible-Accounts");
       const exists = await userExistsChecker(wallet);
@@ -127,7 +127,7 @@ var methods = {
   },
   logRecentSale: async function (details) {
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
       let collection = db.collection("Recently-Sold");
       let query = {
         details: details,
@@ -141,7 +141,7 @@ var methods = {
   getUser: async function (wallet) {
     var result;
     try {
-      const db = await getDb("Accounts");
+      const db = mongoClient.db("Accounts");
 
       let collection = db.collection("Elegible-Accounts");
 
@@ -159,7 +159,7 @@ var methods = {
   checkQueue: async function (id) {
     var result;
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
       let collection = db.collection("Queued-Listings");
       let query = {
         NFTokenID: id,
@@ -173,7 +173,7 @@ var methods = {
   checkBulkQueue: async function (id, client) {
     var result;
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
       let collection = db.collection("Queued-Listings");
       let query = {
         NFTokenID: id,
@@ -187,7 +187,7 @@ var methods = {
   getNft: async function (id) {
     var result;
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
 
       let collection = db.collection("Eligible-Listings");
 
@@ -205,7 +205,7 @@ var methods = {
   getBulkNft: async function (id, client) {
     var result;
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
 
       let collection = db.collection("Eligible-Listings");
 
@@ -228,7 +228,7 @@ var methods = {
       });
       var result;
       try {
-        const db = await getDb("NFTokens");
+        const db = mongoClient.db("NFTokens");
 
         let collection = db.collection("Eligible-Listings");
 
@@ -250,7 +250,7 @@ var methods = {
       });
       var result;
       try {
-        const db = await getDb("NFTokens");
+        const db = mongoClient.db("NFTokens");
 
         let collection = db.collection("Eligible-Listings");
 
@@ -266,7 +266,7 @@ var methods = {
   },
   relatedNfts: async function (issuer, nftsToReturn, nftID) {
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
       var query = [
         {
@@ -298,7 +298,7 @@ var methods = {
   },
   getNfts: async function (NFTSPERPAGE, page, filters) {
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
       var aggregateQuery = [{ $addFields: {} }, { $sort: { views: -1, "_id": -1, "uriMetadata.name": 1, }}]; //
       const values = Object.values(filters);
@@ -405,7 +405,7 @@ var methods = {
   },
   getNftsCollection: async function (collectionFamily, issuer) {
     try {
-      const db = await getDb("Additional-Traits");
+      const db = mongoClient.db("Additional-Traits");
       let collection = db.collection("Collections");
       var issuerArray = issuer.split(",");
       var query = {
@@ -420,7 +420,7 @@ var methods = {
   },
   verifiedChecker: async function (wallet) {
     try{
-      const db = await getDb('Additional-Traits')
+      const db = mongoClient.db('Additional-Traits')
       let collection = db.collection('Verified-Issuers');
       var query = {
         issuingAccounts: {$eq: wallet}
@@ -442,7 +442,7 @@ var methods = {
     page
   ) {
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
       let collection = db.collection("Expired-Listings");
       var issuerArray = issuer.split(",");
       var returnedName = collectionFamily.split(",");
@@ -478,7 +478,7 @@ var methods = {
     page
   ) {
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
       var returnedName = collectionName.replace(/_/g, " ");
       var issuerArray = issuer.split(",");
@@ -509,7 +509,7 @@ var methods = {
   },
   getAccountLikedNfts: async function (wallet) {
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
       const query = { likes: new RegExp(`.*${wallet}.*`, "i") };
       const result = await collection.find(query).limit(25);
@@ -520,7 +520,7 @@ var methods = {
   },
   incrementView: async function (nftId) {
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
       await collection.updateOne(
         {
@@ -538,7 +538,7 @@ var methods = {
   },
   incrementViewCollection: async function (collectionFamily) {
     try {
-      const db = await getDb("Additional-Traits");
+      const db = mongoClient.db("Additional-Traits");
       let collection = db.collection("Collections");
       await collection.updateOne(
         {
@@ -559,7 +559,7 @@ var methods = {
     const userWallet = wallet;
     var res;
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
 
       let collection = db.collection("Eligible-Listings");
 
@@ -585,7 +585,7 @@ var methods = {
     const userWallet = wallet;
     var res;
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
 
       let collection = db.collection("Eligible-Listings");
 
@@ -610,7 +610,7 @@ var methods = {
   },
   totalCollectionItems: async function (collectionName, issuer) {
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
       var returnedName = collectionName.replace("_", " ");
       let query = {
@@ -628,7 +628,7 @@ var methods = {
   },
   unlistedCollectionItems: async function (collectionName, issuer) {
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
       let collection = db.collection("Expired-Listings");
       var returnedName = collectionName.replace("_", " ");
       let query = {
@@ -647,7 +647,7 @@ var methods = {
   reportNft: async function (id, message, login, wallet) {
     var res = false;
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
 
       let collection = db.collection("Eligible-Listings");
 
@@ -687,9 +687,9 @@ var methods = {
       collections: {},
     };
     try {
-      const dbNfts = await getDb("NFTokens");
-      const dbAccounts = await getDb("Accounts");
-      const dbCollections = await getDb("Additional-Traits");
+      const dbNfts = mongoClient.db("NFTokens");
+      const dbAccounts = mongoClient.db("Accounts");
+      const dbCollections = mongoClient.db("Additional-Traits");
 
       let nftDetailsCol = dbNfts.collection("Eligible-Listings");
       let usersCol = dbAccounts.collection("Elegible-Accounts");
@@ -785,7 +785,7 @@ var methods = {
   getCollections: async function (limit) {
     var result;
     try {
-      const db = await getDb("Additional-Traits");
+      const db = mongoClient.db("Additional-Traits");
 
       let collection = db.collection("Collections");
 
@@ -799,7 +799,7 @@ var methods = {
   },
   getCollectionImageTaste: async function (issuer) {
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
       let query = {
         issuer: issuer,
@@ -820,7 +820,7 @@ var methods = {
     var checker = false;
     var payholder = sessionWallet;
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
 
       let collection = db.collection("Queued-Listings");
       const exists = await listQueryExistsChecker(NFTokenID);
@@ -885,7 +885,7 @@ var methods = {
   },
   getVerifiedIssuers: async function () {
     try {
-      const db = await getDb("Additional-Traits");
+      const db = mongoClient.db("Additional-Traits");
 
       let collection = db.collection("Verified-Issuers");
 
@@ -900,7 +900,7 @@ var methods = {
   },
   redeemAssets: async function () {
     try {
-      const db = await getDb("Redeem");
+      const db = mongoClient.db("Redeem");
       let collection = db.collection("Assets");
       const res = collection.find().sort({"z-index": -1});
       return await res.toArray();
@@ -909,7 +909,7 @@ var methods = {
   },
   getMostViewed: async function () {
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
       let sort = {
         views: -1,
@@ -922,7 +922,7 @@ var methods = {
   },
   getCollectionFloorPrice: async function (collectionFamily, issuer) {
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
       var returnedName = collectionFamily.replace("_", " ");
       let query01 = {
@@ -954,7 +954,7 @@ var methods = {
   },
   getRandomCollectionImages: async function (collectionName, issuer) {
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
       var returnedName = collectionName.replace(/_/g, " ");
       var query = [
@@ -980,7 +980,7 @@ var methods = {
   },
   filterOptions: async function () {
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
 
       var searchOptions = await collection
@@ -1015,7 +1015,7 @@ var methods = {
   },
   listingStats: async function () {
     try {
-      const db = await getDb("NFTokens");
+      const db = mongoClient.db("NFTokens");
       let collection = db.collection("Eligible-Listings");
 
       var output = await collection
@@ -1061,7 +1061,7 @@ var methods = {
   },
   verified: async function (wallet) {
     try {
-      const db = await getDb("Additional-Traits");
+      const db = mongoClient.db("Additional-Traits");
       let collection = db.collection("Verified-Issuers");
       let query = {
         issuingAccounts: wallet,
@@ -1086,7 +1086,7 @@ var methods = {
   recentlyRedeemed: async function (NFTokenID, wallet, permanent, issuer, sessionWallet) {
     var payholder = sessionWallet;
     try{
-      const db = await getDb("NFTokens")
+      const db = mongoClient.db("NFTokens")
       let collection = db.collection("Queued-Listings")
       const exists = await listQueryExistsChecker(NFTokenID);
       if (!exists) {
@@ -1109,7 +1109,7 @@ var methods = {
   },
   queuedItemsCount: async function (address) {
     try {
-      const db = await getDb('NFTokens');
+      const db = mongoClient.db('NFTokens');
       let collection = db.collection('Queued-Listings');
       let query = {
         knownHolder: address,
@@ -1122,7 +1122,7 @@ var methods = {
   },
   findRedemptionAccountByProject: async function (project) {
     try{
-      const db = await getDb('Redeem')
+      const db = mongoClient.db('Redeem')
       let collection = db.collection('Assets')
       query = {
         project: new RegExp(project, "i")
@@ -1135,7 +1135,7 @@ var methods = {
   },
   searchSaver: async function (query) {
     try {
-      const db = await getDb('Data')
+      const db = mongoClient.db('Data')
       await db.collection('Searches').updateOne(
         { query },
         { $inc: { views: 1 } },
@@ -1147,7 +1147,7 @@ var methods = {
   },
   newestItems: async function () {
     try {
-      const db = await getDb('NFTokens');
+      const db = mongoClient.db('NFTokens');
       let collection = db.collection('Eligible-Listings');
       let sortQuery = {
         listingDate: -1
@@ -1176,7 +1176,7 @@ async function alreadyLiked(collection, id, wallet) {
 async function userExistsChecker(wallet) {
   var checker = false;
   try {
-    const db = await getDb("Accounts");
+    const db = mongoClient.db("Accounts");
 
     let collection = db.collection("Elegible-Accounts");
     //Make a check later on for inelegible-accounts
@@ -1196,7 +1196,7 @@ async function userExistsChecker(wallet) {
 async function listQueryExistsChecker(NFTokenID) {
   var checker = false;
   try {
-    const db = await getDb("NFTokens");
+    const db = mongoClient.db("NFTokens");
 
     let collection = db.collection("Queued-Listings");
 
