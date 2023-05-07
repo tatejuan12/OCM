@@ -22,6 +22,8 @@
                     <ul class="submenu">
                       <li><a href="explore">NFTokens <span class="icon i-gallery"></span></a></li>
                       <li><a href="collections">Collections <span class="icon i-box"></span></a></li>
+                      <li><a href="public-collections">Public Collections <span class="icon i-public"></span></a></li>
+                      <li><a href="<%login ? __append("new-collection") : __append('#')%>" <%if (!login) __append("onclick=\"customAlert.alert('Connect Wallet')\"")%>>Create Collection<span class="icon i-box-plus"></span></a></li>
                       <li><a href="<%login ? __append("redeem") : __append('#')%>" <%if (!login) __append("onclick=\"customAlert.alert('Connect Wallet to Redeem')\"")%>>Redeem <span class="icon i-redeem"></span></a></li>
       </ul>
       </li>
@@ -128,6 +130,8 @@
                 <ul class="submenu">
                   <li><a href="explore">NFTokens <span class="icon i-gallery"></span></a></li>
                   <li><a href="collections">Collections <span class="icon i-box"></span></a></li>
+                  <li><a href="public-collections">Public Collections <span class="icon i-public"></span></a></li>
+                  <li><a href="<%login ? __append("new-collection") : __append('#')%>" <%if (!login) __append("onclick=\"customAlert.alert('Connect Wallet')\"")%>>Create Collection<span class="icon i-box-plus"></span></a></li>
                   <li><a href="<%login ? __append("redeem") : __append('#')%>" <%if (!login) __append("onclick=\"customAlert.alert('Connect Wallet to Redeem')\"")%>>Redeem <span class="icon i-redeem"></span></a></li>
                 </ul>
               </li>

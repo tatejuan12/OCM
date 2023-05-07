@@ -2062,7 +2062,7 @@ server.use((err, req, res, next) => {
 });
 
 server.listen(process.env.PORT, () => {
-  console.log("Server Listening on Port 80");
+  console.log("Server Listening on Port 80 go to http://localhost- to view site");
 });
 
 //! ---------------------Custom functions--------------------------------//

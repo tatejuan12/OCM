@@ -633,6 +633,18 @@ var {
 .i-paper-plane{
   background-image: url(../images/icons/Favorites-light/icons8-paper-plane-48.png);
 }
+.active-light-mode .i-box-plus{
+  background-image: url(../images/icons/Favorites/create-icon.png);
+}
+.i-box-plus{
+  background-image: url(../images/icons/Favorites-light/create-icon.png);
+}
+.active-light-mode .i-public{
+  background-image: url(../images/icons/Favorites/public-dark.png);
+}
+.i-public{
+  background-image: url(../images/icons/Favorites-light/public-light.png);
+}
 .i-success{
   background-image: url(../images/icons/status-success.png);
 }
