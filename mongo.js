@@ -11,7 +11,6 @@ const uri = process.env.MONGO_URI;
 const mongoClient = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  maxIdleTimeMS: 600000, // Set the max idle time to 10 minutes (600000 milliseconds)
 });
 
 
@@ -841,6 +840,7 @@ var methods = {
         return;
       }
     } catch (err) {
+      console.log('here')
       console.log("Database error: " + err);
     }
   },
@@ -1209,8 +1209,6 @@ async function listQueryExistsChecker(NFTokenID) {
     return res > 0 ? true : false;
   } catch (err) {
     console.log("Database error" + err);
-  } finally {
-    await client.close();
   }
 }
 exports.query = methods;

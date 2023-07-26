@@ -11,6 +11,5 @@ if (cluster.isMaster) {
     cluster.fork();
   });
 } else {
-  //change this line to Your Node.js app entry point.
   require("./app.js");
 }

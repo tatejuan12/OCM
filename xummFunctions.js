@@ -1021,7 +1021,7 @@ var xrpls = {
     } finally {
         await client.disconnect();
     }
-},
+  },
   getcurrentNftHolder: async function (NFTokenID) {
     const lastKnownHolder = await getNft(NFTokenID).then((nft) => {
       return nft.currentOwner;
