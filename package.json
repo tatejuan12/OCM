@@ -32,7 +32,7 @@
     "rotating-file-stream": "^3.0.4",
     "sharp": "^0.31.2",
     "tsscmp": "^1.0.6",
-    "verify-xrpl-signature": "^0.4.0",
+    "verify-xrpl-signature": "^0.4.1",
     "xrpl": "^2.2.3",
     "xrpl-txdata": "^1.2.1",
     "xumm-sdk": "^1.1.3"
